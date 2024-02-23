@@ -1,6 +1,7 @@
 ﻿using AmongUs.GameOptions;
 using HarmonyLib;
 using LaunchpadReloaded.API.Roles;
+using Reactor.Utilities;
 
 namespace LaunchpadReloaded.API.Patches;
 
@@ -13,7 +14,8 @@ public static class RoleOptionsCollectionPatch
     {
         if (CustomRoleManager.GetCustomRoleBehaviour(roleType, out var customRole))
         {
-            __result = 100;
+            PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config.TryGetEntry<int>(customRole.ChanceConfigDefinition, out var entry);
+            __result = entry.Value;
             return false;
         }
 
@@ -26,7 +28,8 @@ public static class RoleOptionsCollectionPatch
     {
         if (CustomRoleManager.GetCustomRoleBehaviour(roleType, out var customRole))
         {
-            __result = 1;
+            PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config.TryGetEntry<int>(customRole.NumConfigDefinition, out var entry);
+            __result = entry.Value;
             return false;
         }
 

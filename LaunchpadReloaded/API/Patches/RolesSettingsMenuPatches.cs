@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
 using LaunchpadReloaded.API.Roles;
+using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -18,11 +19,11 @@ public static class RolesSettingsMenuPatches
     [HarmonyPatch("OnEnable")]
     public static void OnEnablePrefix(RolesSettingsMenu __instance)
     {
-        var originalOption = __instance.AllRoleSettings._items.FirstOrDefault();
+        var parent = __instance.AllRoleSettings._items.FirstOrDefault().transform.parent;
         foreach (var (key, role) in CustomRoleManager.CustomRoles)
         {
             if (__instance.AllRoleSettings.ToArray().Any(x => (ushort)x.Role.Role == key)) continue;
-            var newOption = Object.Instantiate(originalOption, originalOption.transform.parent);
+            var newOption = Object.Instantiate(__instance.SettingPrefab, parent);
             newOption.Role = role;
             __instance.AllRoleSettings.Add(newOption);
         }
@@ -31,14 +32,24 @@ public static class RolesSettingsMenuPatches
 
     [HarmonyPrefix]
     [HarmonyPatch("ValueChanged")]
-    public static void ValueChangedPrefix(RolesSettingsMenu __instance, [HarmonyArgument(0)] OptionBehaviour obj)
+    public static bool ValueChangedPrefix(RolesSettingsMenu __instance, [HarmonyArgument(0)] OptionBehaviour obj)
     {
         if (obj is RoleOptionSetting roleSetting)
         {
             if (roleSetting.Role is ICustomRole role)
             {
-                
+                Debug.LogError("SETTING ROLE CONFIG");
+                PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config.TryGetEntry<int>(role.NumConfigDefinition, out var numEntry);
+                numEntry.Value = roleSetting.RoleMaxCount;
+                PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config.TryGetEntry<int>(role.ChanceConfigDefinition, out var chanceEntry);
+                chanceEntry.Value = roleSetting.RoleChance;
+                roleSetting.UpdateValuesAndText(GameOptionsManager.Instance.CurrentGameOptions.RoleOptions);
             }
+            GameOptionsManager.Instance.GameHostOptions = GameOptionsManager.Instance.CurrentGameOptions;
+            
+            return false;
         }
+
+        return true;
     }
 }

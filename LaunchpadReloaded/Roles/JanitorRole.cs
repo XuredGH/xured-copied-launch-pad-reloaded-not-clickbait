@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using AmongUs.GameOptions;
+using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.Attributes;
 using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Roles;
@@ -16,6 +17,7 @@ public class JanitorRole : ImpostorRole, ICustomRole
 {
     public string RoleName => "Janitor";
     public string RoleDescription => "Help the impostor by\ndragging and hiding bodies";
+    public string RoleLongDescription => "Help the Impostor with your ability to move bodies around and bury them!";
     public Color RoleColor => Color.yellow;
     public RoleTeamTypes Team => RoleTeamTypes.Impostor;
     public CustomButton[] CustomButtons => [DragButton, BuryButton];

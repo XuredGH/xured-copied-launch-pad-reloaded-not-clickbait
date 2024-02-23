@@ -15,6 +15,6 @@ public static class GameStartupPatch
     {
         if (_runOnce) return;
         _runOnce = true;
-        CustomRoleManager.Register();
+        CustomRoleManager.RegisterInRoleManager();
     }
 }

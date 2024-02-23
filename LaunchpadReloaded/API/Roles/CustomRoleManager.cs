@@ -4,6 +4,7 @@ using System.Linq;
 using AmongUs.GameOptions;
 using BepInEx.Configuration;
 using Il2CppInterop.Runtime;
+using LaunchpadReloaded.Utilities;
 using Reactor.Localization.Utilities;
 using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
@@ -16,7 +17,7 @@ public static class CustomRoleManager
 {
     public static readonly Dictionary<ushort, RoleBehaviour> CustomRoles = [];
 
-    public static void Register()
+    public static void RegisterInRoleManager()
     {
         RoleManager.Instance.AllRoles = RoleManager.Instance.AllRoles.Concat(CustomRoles.Values).ToArray();
     }
@@ -47,13 +48,21 @@ public static class CustomRoleManager
             roleBehaviour.NameColor = customRole.RoleColor;
             roleBehaviour.StringName = CustomStringName.CreateAndRegister(customRole.RoleName);
             roleBehaviour.BlurbName = CustomStringName.CreateAndRegister(customRole.RoleDescription);
+            roleBehaviour.BlurbNameLong = CustomStringName.CreateAndRegister(customRole.RoleLongDescription);
             roleBehaviour.AffectedByLightAffectors = customRole.AffectedByLight;
             roleBehaviour.CanBeKilled = customRole.CanGetKilled;
             roleBehaviour.CanUseKillButton = customRole.CanUseKill;
             roleBehaviour.CanVent = customRole.CanUseVent;
             roleBehaviour.DefaultGhostRole = customRole.GhostRole;
             roleBehaviour.MaxCount = 15;
+            //var ability = ScriptableObject.CreateInstance<AbilityButtonSettings>();
+            //ability.Image = SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.report.png");
+            //roleBehaviour.Ability = ability;
             CustomRoles.Add(roleId,roleBehaviour);
+
+            var config = PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config;
+            config.Bind(customRole.NumConfigDefinition,1);
+            config.Bind(customRole.ChanceConfigDefinition, 100);
         }
         
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.Attributes;
 using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Roles;
@@ -15,6 +16,7 @@ public class CaptainRole : CrewmateRole, ICustomRole
 {
     public string RoleName => "Captain";
     public string RoleDescription => "Protect the crew with your abilities";
+    public string RoleLongDescription => "Use your zoom ability to keep an eye on the crew and call a meeting from any location!";
     public Color RoleColor => Color.gray;
     public RoleTeamTypes Team => RoleTeamTypes.Crewmate;
     public CustomButton[] CustomButtons => [ZoomButton, MeetingButton];
