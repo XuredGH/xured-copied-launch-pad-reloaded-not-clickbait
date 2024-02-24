@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections;
-using Il2CppInterop.Runtime;
-using Il2CppInterop.Runtime.Attributes;
+using BepInEx.Configuration;
 using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Roles;
-using LaunchpadReloaded.Utilities;
 using Reactor.Utilities;
 using Reactor.Utilities.Attributes;
 using UnityEngine;
@@ -20,13 +18,13 @@ public class CaptainRole : CrewmateRole, ICustomRole
     public Color RoleColor => Color.gray;
     public RoleTeamTypes Team => RoleTeamTypes.Crewmate;
     public CustomButton[] CustomButtons => [ZoomButton, MeetingButton];
-
+    public ConfigDefinition[] CustomRoleOptions => [ZoomButton.Cooldown.Definition, ZoomButton.EffectDuration.Definition,MeetingButton.Cooldown.Definition, MeetingButton.MaxUses.Definition];
     public override bool IsDead => false;
     
     public static readonly CustomButton ZoomButton = new (ZoomOutCoroutine, ZoomInCoroutine, "ZOOM", 5, 5,
         "LaunchpadReloaded.Resources.binoculars.png");
     public static readonly CustomButton MeetingButton = new (() => PlayerControl.LocalPlayer.CmdReportDeadBody(null), "CALL", 5,
-        "LaunchpadReloaded.Resources.report.png", maxUses:3);
+        "LaunchpadReloaded.Resources.report.png", 3);
 
     public CaptainRole()
     {

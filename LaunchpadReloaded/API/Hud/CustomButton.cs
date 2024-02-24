@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using AmongUs.GameOptions;
+using BepInEx.Configuration;
 using LaunchpadReloaded.Utilities;
+using Reactor.Utilities;
 using UnityEngine;
 using UnityEngine.Events;
 using Object = UnityEngine.Object;
@@ -12,13 +14,13 @@ namespace LaunchpadReloaded.API.Hud;
 public class CustomButton
 {
     public static readonly List<CustomButton> AllButtons = new ();
-
+    
     public readonly string Name;
-    public readonly float MaxTimer;
+    public ConfigEntry<float> Cooldown;
     public float Timer;
-    public readonly int MaxUses;
+    public ConfigEntry<int> MaxUses;
     public int UsesLeft;
-    public readonly float EffectDuration;
+    public ConfigEntry<float> EffectDuration;
     public readonly bool HasEffect;
     public bool IsEffectActive;
     public readonly string ResourcePath;
@@ -28,6 +30,7 @@ public class CustomButton
     public readonly Action OnClick;
     public readonly Action OnEnd;
 
+    
     public RoleTypes[] RoleTypes = [];
 
     public CustomButton(Action onClick, Action onEnd, string name, float cooldown, float duration, string resourcePath, int maxUses = 0)
@@ -35,14 +38,20 @@ public class CustomButton
         OnClick = onClick;
         OnEnd = onEnd;
         Name = name;
-        MaxTimer = cooldown;
-        Timer = MaxTimer;
-        EffectDuration = duration;
+        Cooldown = PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config.Bind(
+            new ConfigDefinition("Buttons", name + ".Cooldown"), cooldown,
+            new ConfigDescription($"Cooldown amount in seconds for {name} button"));
+        Timer = Cooldown.Value;
+        EffectDuration = PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config.Bind(
+            new ConfigDefinition("Buttons", name + ".Duration"), duration,
+            new ConfigDescription($"Duration of effect for {name} button"));;
         HasEffect = true;
         IsEffectActive = false;
         ResourcePath = resourcePath;
-        MaxUses = maxUses;
-        UsesLeft = MaxUses;
+        MaxUses = PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config.Bind(
+            new ConfigDefinition("Buttons", name + ".MaxUses"), maxUses,
+            new ConfigDescription($"Max number of uses per game for {name} button"));
+        UsesLeft = MaxUses.Value;
         AllButtons.Add(this);
     }
 
@@ -50,12 +59,16 @@ public class CustomButton
     {
         OnClick = onClick;
         Name = name;
-        MaxTimer = cooldown;
-        Timer = MaxTimer;
+        Cooldown = PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config.Bind(
+            new ConfigDefinition("Buttons", name + ".Cooldown"), cooldown,
+            new ConfigDescription($"Cooldown amount in seconds for {name} button"));
+        Timer = Cooldown.Value;
         HasEffect = false;
         ResourcePath = resourcePath;
-        MaxUses = maxUses;
-        UsesLeft = MaxUses;
+        MaxUses = PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config.Bind(
+            new ConfigDefinition("Buttons", name + ".MaxUses"), maxUses,
+            new ConfigDescription($"Max number of uses per game for {name} button"));
+        UsesLeft = MaxUses.Value;
         AllButtons.Add(this);
     }
     
@@ -63,15 +76,15 @@ public class CustomButton
     {
         if (Button) return;
         Button = Object.Instantiate(HudManager.Instance.AbilityButton, HudManager.Instance.AbilityButton.transform.parent);
-        Button.SetCoolDown(0, MaxTimer);
+        Button.SetCoolDown(0, Cooldown.Value);
         
         if (ResourcePath != null)
         {
             Button.graphic.sprite = SpriteTools.LoadSpriteFromPath(ResourcePath);
         }
 
-        Button.SetUsesRemaining(MaxUses);
-        if (MaxUses <= 0)
+        Button.SetUsesRemaining(MaxUses.Value);
+        if (MaxUses.Value <= 0)
         {
             Button.SetInfiniteUses();
         }
@@ -87,14 +100,14 @@ public class CustomButton
     {
         if (CanUse())
         {
-            Timer = MaxTimer;
+            Timer = Cooldown.Value;
             if (HasEffect)
             {
                 IsEffectActive = true;
-                Timer = EffectDuration;
+                Timer = EffectDuration.Value;
             }
 
-            if (MaxUses > 0)
+            if (MaxUses.Value > 0)
             {
                 UsesLeft--;
                 Button.SetUsesRemaining(UsesLeft);
@@ -111,7 +124,7 @@ public class CustomButton
     
     public bool CanUse()
     {
-        return Timer < 0f && (MaxUses <= 0 || UsesLeft > 0) && !IsEffectActive;
+        return Timer < 0f && (MaxUses.Value <= 0 || UsesLeft > 0) && !IsEffectActive;
     }
 
     public static void UpdateButtons()
@@ -144,7 +157,7 @@ public class CustomButton
             Button.SetEnabled();
             if (IsEffectActive)
             {
-                Timer = MaxTimer;
+                Timer = Cooldown.Value;
                 IsEffectActive = false;
                 OnEnd();
             }
@@ -162,6 +175,6 @@ public class CustomButton
                 Timer -= Time.deltaTime;
             }
         }
-        Button.SetCoolDown(Timer, MaxTimer);
+        Button.SetCoolDown(Timer, Cooldown.Value);
     }
 }

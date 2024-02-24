@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using AmongUs.GameOptions;
+using BepInEx.Configuration;
 using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.Attributes;
 using LaunchpadReloaded.API.Hud;
@@ -21,9 +22,10 @@ public class JanitorRole : ImpostorRole, ICustomRole
     public Color RoleColor => Color.yellow;
     public RoleTeamTypes Team => RoleTeamTypes.Impostor;
     public CustomButton[] CustomButtons => [DragButton, BuryButton];
-
+    public ConfigDefinition[] CustomRoleOptions => [BuryButton.Cooldown.Definition, BuryButton.MaxUses.Definition];
+    
     public static CustomButton DragButton = new CustomButton(ToggleDrag, "DRAG", 0, "LaunchpadReloaded.Resources.drag.png");
-    public static CustomButton BuryButton = new CustomButton(BuryBody, "BURY", 5, resourcePath:"LaunchpadReloaded.Resources.bury.png", maxUses:3);
+    public static CustomButton BuryButton = new CustomButton(BuryBody, "BURY", 5, "LaunchpadReloaded.Resources.bury.png", 3);
     
 
     private DeadBody _target;
