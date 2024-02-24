@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AmongUs.GameOptions;
 using HarmonyLib;
 using LaunchpadReloaded.API.Roles;
 using Reactor.Utilities;
@@ -19,7 +20,7 @@ public static class RolesSettingsMenuPatches
     [HarmonyPatch("OnEnable")]
     public static void OnEnablePrefix(RolesSettingsMenu __instance)
     {
-        var parent = __instance.AllRoleSettings._items.FirstOrDefault().transform.parent;
+        var parent = __instance.AllRoleSettings.ToArray()[0].transform.parent;
         foreach (var (key, role) in CustomRoleManager.CustomRoles)
         {
             if (__instance.AllRoleSettings.ToArray().Any(x => (ushort)x.Role.Role == key)) continue;
@@ -27,26 +28,21 @@ public static class RolesSettingsMenuPatches
             newOption.Role = role;
             __instance.AllRoleSettings.Add(newOption);
         }
-        
     }
 
     [HarmonyPrefix]
     [HarmonyPatch("ValueChanged")]
     public static bool ValueChangedPrefix(RolesSettingsMenu __instance, [HarmonyArgument(0)] OptionBehaviour obj)
     {
-        if (obj is RoleOptionSetting roleSetting)
+        if (obj is RoleOptionSetting { Role: ICustomRole role } roleSetting)
         {
-            if (roleSetting.Role is ICustomRole role)
-            {
-                Debug.LogError("SETTING ROLE CONFIG");
-                PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config.TryGetEntry<int>(role.NumConfigDefinition, out var numEntry);
-                numEntry.Value = roleSetting.RoleMaxCount;
-                PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config.TryGetEntry<int>(role.ChanceConfigDefinition, out var chanceEntry);
-                chanceEntry.Value = roleSetting.RoleChance;
-                roleSetting.UpdateValuesAndText(GameOptionsManager.Instance.CurrentGameOptions.RoleOptions);
-            }
+            Debug.LogError("SETTING ROLE CONFIG");
+            PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config.TryGetEntry<int>(role.NumConfigDefinition, out var numEntry);
+            numEntry.Value = roleSetting.RoleMaxCount;
+            PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config.TryGetEntry<int>(role.ChanceConfigDefinition, out var chanceEntry);
+            chanceEntry.Value = roleSetting.RoleChance;
+            roleSetting.UpdateValuesAndText(GameOptionsManager.Instance.CurrentGameOptions.RoleOptions);
             GameOptionsManager.Instance.GameHostOptions = GameOptionsManager.Instance.CurrentGameOptions;
-            
             return false;
         }
 
