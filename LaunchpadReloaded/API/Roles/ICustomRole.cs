@@ -15,7 +15,6 @@ public interface ICustomRole
     Color RoleColor { get; }
     RoleTeamTypes Team { get; }
     CustomButton[] CustomButtons { get; }
-    ConfigDefinition[] CustomRoleOptions { get; }
     ConfigDefinition NumConfigDefinition => new ("Roles",$"Num{RoleName}");
     ConfigDefinition ChanceConfigDefinition => new ("Roles",$"Chance{RoleName}");
     bool AffectedByLight => Team == RoleTeamTypes.Crewmate;

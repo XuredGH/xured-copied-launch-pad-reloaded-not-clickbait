@@ -18,7 +18,6 @@ public class CaptainRole : CrewmateRole, ICustomRole
     public Color RoleColor => Color.gray;
     public RoleTeamTypes Team => RoleTeamTypes.Crewmate;
     public CustomButton[] CustomButtons => [ZoomButton, MeetingButton];
-    public ConfigDefinition[] CustomRoleOptions => [ZoomButton.Cooldown.Definition, ZoomButton.EffectDuration.Definition,MeetingButton.Cooldown.Definition, MeetingButton.MaxUses.Definition];
     public override bool IsDead => false;
     
     public static readonly CustomButton ZoomButton = new (ZoomOutCoroutine, ZoomInCoroutine, "ZOOM", 5, 5,
