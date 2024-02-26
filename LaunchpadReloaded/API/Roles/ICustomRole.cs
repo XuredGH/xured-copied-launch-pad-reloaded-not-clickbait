@@ -3,6 +3,7 @@ using BepInEx.Configuration;
 using Il2CppInterop.Runtime.Attributes;
 using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.Utilities;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace LaunchpadReloaded.API.Roles;
@@ -14,7 +15,7 @@ public interface ICustomRole
     string RoleLongDescription { get; }
     Color RoleColor { get; }
     RoleTeamTypes Team { get; }
-    CustomButton[] CustomButtons { get; }
+    List<CustomButton> CustomButtons { get; }
     ConfigDefinition NumConfigDefinition => new ("Roles",$"Num{RoleName}");
     ConfigDefinition ChanceConfigDefinition => new ("Roles",$"Chance{RoleName}");
     bool AffectedByLight => Team == RoleTeamTypes.Crewmate;

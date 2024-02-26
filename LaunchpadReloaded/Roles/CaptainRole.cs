@@ -17,13 +17,15 @@ public class CaptainRole : CrewmateRole, ICustomRole
     public string RoleLongDescription => "Use your zoom ability to keep an eye on the crew and call a meeting from any location!";
     public Color RoleColor => Color.gray;
     public RoleTeamTypes Team => RoleTeamTypes.Crewmate;
-    public CustomButton[] CustomButtons => [ZoomButton, MeetingButton];
     public override bool IsDead => false;
-    
-    public static readonly CustomButton ZoomButton = new (ZoomOutCoroutine, ZoomInCoroutine, "ZOOM", 5, 5,
+
+    public static readonly CustomButton ZoomButton = new(ZoomOutCoroutine, ZoomInCoroutine, "ZOOM", 5, 5,
         "LaunchpadReloaded.Resources.binoculars.png");
-    public static readonly CustomButton MeetingButton = new (() => PlayerControl.LocalPlayer.CmdReportDeadBody(null), "CALL", 5,
+    public static readonly CustomButton MeetingButton = new(() => PlayerControl.LocalPlayer.CmdReportDeadBody(null), "CALL", 5,
         "LaunchpadReloaded.Resources.report.png", 3);
+
+    public CustomButton[] CustomButtons = new() { ZoomButton, MeetingButton };
+
 
     public CaptainRole()
     {

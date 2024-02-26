@@ -31,7 +31,7 @@ public class CustomButton
     public readonly Action OnEnd;
 
     
-    public RoleTypes[] RoleTypes = [];
+    public RoleTypes[] RoleTypes = { };
 
     public CustomButton(Action onClick, Action onEnd, string name, float cooldown, float duration, string resourcePath, int maxUses = 0)
     {
