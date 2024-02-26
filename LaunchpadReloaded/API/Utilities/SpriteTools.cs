@@ -33,6 +33,6 @@ public static class SpriteTools
             LoadImage(tex, buttonTexture, false);
         }
 
-        return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f), tex.width);
+        return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
     }
 }

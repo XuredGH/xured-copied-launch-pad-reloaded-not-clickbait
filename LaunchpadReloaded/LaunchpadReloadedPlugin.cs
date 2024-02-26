@@ -2,7 +2,9 @@
 using BepInEx;
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
+using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Roles;
+using LaunchpadReloaded.Buttons;
 using LaunchpadReloaded.Roles;
 using Reactor;
 using Reactor.Networking;
@@ -22,8 +24,12 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
     public override void Load()
     {
         Harmony.PatchAll();
+        
+        // TODO: CREATE ATTRIBUTE FOR THIS VVV
         CustomRoleManager.RegisterRole(typeof(CaptainRole));
         CustomRoleManager.RegisterRole(typeof(JanitorRole));
+        CustomButtonManager.RegisterButton(typeof(CallButton));
+        CustomButtonManager.RegisterButton(typeof(ZoomButton));
         Config.Save();
     }
 

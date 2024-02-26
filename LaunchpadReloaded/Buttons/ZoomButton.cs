@@ -1,36 +1,40 @@
-﻿using System;
-using System.Collections;
-using BepInEx.Configuration;
+﻿using System.Collections;
+using AmongUs.GameOptions;
 using LaunchpadReloaded.API.Hud;
-using LaunchpadReloaded.API.Roles;
+using LaunchpadReloaded.Roles;
+using LaunchpadReloaded.Utilities;
 using Reactor.Utilities;
-using Reactor.Utilities.Attributes;
 using UnityEngine;
 
-namespace LaunchpadReloaded.Roles;
+namespace LaunchpadReloaded.Buttons;
 
-[RegisterInIl2Cpp]
-public class CaptainRole : CrewmateRole, ICustomRole
+public class ZoomButton : CustomActionButton
 {
-    public string RoleName => "Captain";
-    public string RoleDescription => "Protect the crew with your abilities";
-    public string RoleLongDescription => "Use your zoom ability to keep an eye on the crew and call a meeting from any location!";
-    public Color RoleColor => Color.gray;
-    public RoleTeamTypes Team => RoleTeamTypes.Crewmate;
-    public override bool IsDead => false;
+    public override string Name => "";
+    public override float Cooldown => 10;
+    public override float EffectDuration => 5;
+    public override int MaxUses => 0;
+    public override Sprite Sprite => SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.Zoom.png");
     
-    public CaptainRole()
+    public override bool Enabled(RoleBehaviour role)
     {
-        Debug.LogError("CAPTAIN INIT");
+        return role is CaptainRole;
+    }
+    
+    protected override void OnClick()
+    {
+        ZoomOutCoroutine();
     }
 
-    public CaptainRole(IntPtr ptr) : base(ptr)
+    protected override void OnEffectEnd()
     {
+        base.OnEffectEnd();
+        ZoomInCoroutine();
     }
 
     private static IEnumerator ZoomOut()
     {
-        for (var ft = 3f; ft <= 13; ft += 0.5f)
+        for (var ft = 3f; ft <= 12; ft += 0.25f)
         {
             if (Camera.main is not null)
             {
@@ -45,7 +49,7 @@ public class CaptainRole : CrewmateRole, ICustomRole
 
     private static IEnumerator ZoomIn()
     {
-        for (var ft = 13f; ft >= 3; ft -= 0.5f)
+        for (var ft = 12f; ft >= 3; ft -= 0.25f)
         {
             if (Camera.main is not null)
             {

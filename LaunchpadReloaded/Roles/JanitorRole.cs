@@ -21,10 +21,6 @@ public class JanitorRole : ImpostorRole, ICustomRole
     public string RoleLongDescription => "Help the Impostor with your ability to move bodies around and bury them!";
     public Color RoleColor => Color.yellow;
     public RoleTeamTypes Team => RoleTeamTypes.Impostor;
-    public CustomButton[] CustomButtons => [DragButton, BuryButton];
-    
-    public static CustomButton DragButton = new CustomButton(ToggleDrag, "DRAG", 0, "LaunchpadReloaded.Resources.drag.png");
-    public static CustomButton BuryButton = new CustomButton(BuryBody, "BURY", 5, "LaunchpadReloaded.Resources.bury.png", 3);
     
     private DeadBody _target;
     private bool _dragging;
@@ -38,7 +34,7 @@ public class JanitorRole : ImpostorRole, ICustomRole
     {
     }
 
-    public void HudUpdate(HudManager hudManager)
+    /*public void HudUpdate(HudManager hudManager)
     {
         if (_target != null)
         {
@@ -125,5 +121,5 @@ public class JanitorRole : ImpostorRole, ICustomRole
             .Where(collider2D => collider2D.CompareTag("DeadBody"))
             .Select(collider2D => collider2D.GetComponent<DeadBody>()).FirstOrDefault(component => component && !component.Reported);
     }
-    
+    */
 }
