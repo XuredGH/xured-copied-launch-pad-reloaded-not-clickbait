@@ -4,7 +4,7 @@ using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using UnityEngine;
 
-namespace LaunchpadReloaded.Utilities;
+namespace LaunchpadReloaded.API.Utilities;
 
 public static class SpriteTools
 {
@@ -33,6 +33,6 @@ public static class SpriteTools
             LoadImage(tex, buttonTexture, false);
         }
 
-        return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f), tex.width);
+        return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
     }
 }
