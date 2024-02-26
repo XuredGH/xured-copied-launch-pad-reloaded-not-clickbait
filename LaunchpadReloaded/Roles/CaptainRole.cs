@@ -27,46 +27,4 @@ public class CaptainRole : CrewmateRole, ICustomRole
     public CaptainRole(IntPtr ptr) : base(ptr)
     {
     }
-
-    private static IEnumerator ZoomOut()
-    {
-        for (var ft = 3f; ft <= 13; ft += 0.5f)
-        {
-            if (Camera.main is not null)
-            {
-                Camera.main.orthographicSize = ft;
-                if (MeetingHud.Instance)
-                    Camera.main.orthographicSize = 3f;
-            }
-
-            yield return null;
-        }
-    }
-
-    private static IEnumerator ZoomIn()
-    {
-        for (var ft = 13f; ft >= 3; ft -= 0.5f)
-        {
-            if (Camera.main is not null)
-            {
-                Camera.main.orthographicSize = ft;
-                if (MeetingHud.Instance)
-                    Camera.main.orthographicSize = 3f;
-            }
-
-            yield return null;
-        }
-    }
-
-    private static void ZoomOutCoroutine()
-    {
-        Coroutines.Start(ZoomOut());
-        HudManager.Instance.ShadowQuad.gameObject.SetActive(false);
-    }
-
-    private static void ZoomInCoroutine()
-    {
-        Coroutines.Start(ZoomIn());
-        HudManager.Instance.ShadowQuad.gameObject.SetActive(true);
-    }
 }

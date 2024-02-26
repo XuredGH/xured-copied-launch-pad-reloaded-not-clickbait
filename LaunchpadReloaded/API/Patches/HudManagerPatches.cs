@@ -10,6 +10,8 @@ namespace LaunchpadReloaded.API.Patches;
 [HarmonyPatch(typeof(HudManager))]
 public static class HudManagerPatches
 {
+    private static GameObject _bottomLeft;
+    
     [HarmonyPostfix]
     [HarmonyPatch("Update")]
     public static void UpdatePostfix(HudManager __instance)
@@ -26,23 +28,23 @@ public static class HudManagerPatches
     [HarmonyPatch("Start")]
     public static void StartPostfix(HudManager __instance)
     {
-        var bottomLeft = Object.Instantiate(__instance.transform.Find("Buttons").Find("BottomRight").gameObject,__instance.transform.Find("Buttons"));
+        _bottomLeft ??= Object.Instantiate(__instance.transform.Find("Buttons").Find("BottomRight").gameObject,__instance.transform.Find("Buttons"));
 
-        foreach (var t in bottomLeft.GetComponentsInChildren<ActionButton>(true))
+        foreach (var t in _bottomLeft.GetComponentsInChildren<ActionButton>(true))
         {
             t.gameObject.Destroy();
         }
         
-        var gridArrange = bottomLeft.GetComponent<GridArrange>();
-        var aspectPosition = bottomLeft.GetComponent<AspectPosition>();
+        var gridArrange = _bottomLeft.GetComponent<GridArrange>();
+        var aspectPosition = _bottomLeft.GetComponent<AspectPosition>();
 
-        bottomLeft.name = "BottomLeft";
+        _bottomLeft.name = "BottomLeft";
         gridArrange.Alignment = GridArrange.StartAlign.Right;
         aspectPosition.Alignment = AspectPosition.EdgeAlignments.LeftBottom;
         
         foreach (var button in CustomButtonManager.CustomButtons)
         {
-            button.CreateButton(bottomLeft.transform);
+            button.CreateButton(_bottomLeft.transform);
         }
         
         gridArrange.Start();

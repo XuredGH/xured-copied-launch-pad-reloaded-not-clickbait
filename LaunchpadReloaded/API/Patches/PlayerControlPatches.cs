@@ -15,7 +15,7 @@ public static class PlayerControlPatches
 
         foreach (var button in CustomButtonManager.CustomButtons)
         {
-            button.Update();
+            button.Update(__instance);
         }
         
         if (__instance.Data.Role is ICustomRole customRole)

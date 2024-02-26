@@ -30,6 +30,7 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
         CustomRoleManager.RegisterRole(typeof(JanitorRole));
         CustomButtonManager.RegisterButton(typeof(CallButton));
         CustomButtonManager.RegisterButton(typeof(ZoomButton));
+        CustomButtonManager.RegisterButton(typeof(CleanButton));
         Config.Save();
     }
 

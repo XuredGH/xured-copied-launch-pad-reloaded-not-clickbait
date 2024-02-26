@@ -101,25 +101,5 @@ public class JanitorRole : ImpostorRole, ICustomRole
             role._dragging = !role._dragging;
         }
     }
-
-    private static void BuryBody()
-    {
-        if (PlayerControl.LocalPlayer.Data.Role is JanitorRole role)
-        {
-            role._target.Reported = true;
-            foreach (var bodyRenderer in role._target.bodyRenderers)
-            {
-                bodyRenderer.enabled = false;
-            }
-        }
-    }
-    
-    public static DeadBody NearestDeadBody()
-    {
-        return Physics2D
-            .OverlapCircleAll(PlayerControl.LocalPlayer.transform.position, 1f, ~LayerMask.GetMask(new[] {"Ship"}))
-            .Where(collider2D => collider2D.CompareTag("DeadBody"))
-            .Select(collider2D => collider2D.GetComponent<DeadBody>()).FirstOrDefault(component => component && !component.Reported);
-    }
     */
 }

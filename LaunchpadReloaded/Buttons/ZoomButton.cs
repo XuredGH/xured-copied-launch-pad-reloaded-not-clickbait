@@ -5,6 +5,7 @@ using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace LaunchpadReloaded.Buttons;
 
@@ -23,54 +24,53 @@ public class ZoomButton : CustomActionButton
     
     protected override void OnClick()
     {
-        ZoomOutCoroutine();
+        ZoomOut();
     }
 
     protected override void OnEffectEnd()
     {
         base.OnEffectEnd();
-        ZoomInCoroutine();
+        ZoomIn();
     }
 
-    private static IEnumerator ZoomOut()
+    private static IEnumerator ZoomOutCoroutine()
     {
-        for (var ft = 3f; ft <= 12; ft += 0.25f)
+        if (Camera.main is not null)
         {
-            if (Camera.main is not null)
+            for (var ft = Camera.main.orthographicSize; ft < 12; ft += 0.1f)
             {
                 Camera.main.orthographicSize = ft;
                 if (MeetingHud.Instance)
                     Camera.main.orthographicSize = 3f;
+                yield return null;
             }
-
-            yield return null;
         }
     }
 
-    private static IEnumerator ZoomIn()
+    private static IEnumerator ZoomInCoroutine()
     {
-        for (var ft = 12f; ft >= 3; ft -= 0.25f)
+        if (Camera.main is not null)
         {
-            if (Camera.main is not null)
+            for (var ft = Camera.main.orthographicSize; ft > 3; ft -= 0.1f)
             {
                 Camera.main.orthographicSize = ft;
                 if (MeetingHud.Instance)
                     Camera.main.orthographicSize = 3f;
+                yield return null;
             }
-
-            yield return null;
         }
+        
     }
 
-    private static void ZoomOutCoroutine()
+    private static void ZoomOut()
     {
-        Coroutines.Start(ZoomOut());
+        Coroutines.Start(ZoomOutCoroutine());
         HudManager.Instance.ShadowQuad.gameObject.SetActive(false);
     }
 
-    private static void ZoomInCoroutine()
+    private static void ZoomIn()
     {
-        Coroutines.Start(ZoomIn());
+        Coroutines.Start(ZoomInCoroutine());
         HudManager.Instance.ShadowQuad.gameObject.SetActive(true);
     }
 }

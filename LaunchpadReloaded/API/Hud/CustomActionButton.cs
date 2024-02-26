@@ -64,12 +64,11 @@ public abstract class CustomActionButton
         _button.ToggleVisible(visible && Enabled(role));
     }
     
-    public virtual void Update()
+    public virtual void Update(PlayerControl playerControl)
     {
         if (_timer > 0)
         {
             _timer -= Time.deltaTime;
-            _button.SetDisabled();
         }
         else
         {
@@ -77,10 +76,15 @@ public abstract class CustomActionButton
             {
                 OnEffectEnd();
             }
-            else
-            {
-                _button.SetEnabled();
-            }
+        }
+
+        if (CanUse())
+        {
+            _button.SetEnabled();
+        }
+        else
+        {
+            _button.SetDisabled();
         }
         _button.SetCoolDown(_timer, _effectActive ? EffectDuration : Cooldown);
     }
@@ -89,7 +93,11 @@ public abstract class CustomActionButton
     {
         if (!CanUse()) return;
 
-        if (LimitedUses) _usesLeft--;
+        if (LimitedUses)
+        {
+            _usesLeft--;
+            _button.SetUsesRemaining(_usesLeft);
+        }
         
         OnClick();
         _button.SetDisabled();
