@@ -1,5 +1,4 @@
-﻿using AmongUs.GameOptions;
-using BepInEx;
+﻿using BepInEx;
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using LaunchpadReloaded.API.Hud;
@@ -9,7 +8,6 @@ using LaunchpadReloaded.Roles;
 using Reactor;
 using Reactor.Networking;
 using Reactor.Networking.Attributes;
-using Reactor.Utilities.Extensions;
 
 namespace LaunchpadReloaded;
 

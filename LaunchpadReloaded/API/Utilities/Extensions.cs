@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using UnityEngine;
 
-namespace LaunchpadReloaded.Utilities;
+namespace LaunchpadReloaded.API.Utilities;
 
 public static class Extensions
 {

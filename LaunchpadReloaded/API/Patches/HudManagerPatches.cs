@@ -1,7 +1,6 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Roles;
-using LaunchpadReloaded.Buttons;
 using Reactor.Utilities.Extensions;
 using UnityEngine;
 
@@ -52,10 +51,9 @@ public static class HudManagerPatches
         
         aspectPosition.AdjustPosition();
     }
-    
+
     [HarmonyPostfix]
-    [HarmonyPatch("SetHudActive")]
-    [HarmonyPatch([typeof(PlayerControl), typeof(RoleBehaviour), typeof(bool)])]
+    [HarmonyPatch("SetHudActive",typeof(PlayerControl), typeof(RoleBehaviour), typeof(bool))]
     public static void SetHudActivePostfix(HudManager __instance, [HarmonyArgument(1)] RoleBehaviour roleBehaviour, [HarmonyArgument(2)] bool isActive)
     {
         foreach (var button in CustomButtonManager.CustomButtons)

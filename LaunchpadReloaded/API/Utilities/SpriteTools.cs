@@ -4,7 +4,7 @@ using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using UnityEngine;
 
-namespace LaunchpadReloaded.Utilities;
+namespace LaunchpadReloaded.API.Utilities;
 
 public static class SpriteTools
 {

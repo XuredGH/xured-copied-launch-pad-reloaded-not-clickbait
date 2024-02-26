@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using AmongUs.GameOptions;
-using BepInEx.Configuration;
 using Il2CppInterop.Runtime;
-using LaunchpadReloaded.Utilities;
 using Reactor.Localization.Utilities;
 using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
 using UnityEngine;
-using Object = System.Object;
 
 namespace LaunchpadReloaded.API.Roles;
 
