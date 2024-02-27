@@ -9,11 +9,11 @@ namespace LaunchpadReloaded.Buttons;
 
 public class ZoomButton : CustomActionButton
 {
-    public override string Name => "";
+    public override string Name => "ZOOM";
     public override float Cooldown => 10;
     public override float EffectDuration => 5;
     public override int MaxUses => 0;
-    public override Sprite Sprite => SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.Zoom.png");
+    public override string SpritePath => "Zoom.png";
     
     public override bool Enabled(RoleBehaviour role)
     {

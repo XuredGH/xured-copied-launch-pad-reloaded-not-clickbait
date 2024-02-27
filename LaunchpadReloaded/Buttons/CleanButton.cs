@@ -8,11 +8,11 @@ namespace LaunchpadReloaded.Buttons;
 
 public class CleanButton : CustomActionButton
 {
-    public override string Name => "";
+    public override string Name => "CLEAN";
     public override float Cooldown => 5;
     public override float EffectDuration => 0;
     public override int MaxUses => 0;
-    public override Sprite Sprite => SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.Clean.png");
+    public override string SpritePath => "Clean.png";
 
     private DeadBody _target;
 

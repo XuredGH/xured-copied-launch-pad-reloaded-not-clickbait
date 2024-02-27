@@ -1,17 +1,18 @@
 ﻿using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Utilities;
 using LaunchpadReloaded.Roles;
+using Reactor.Utilities;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
 
 public class CallButton : CustomActionButton
 {
-    public override string Name => "";
+    public override string Name => "CALL";
     public override float Cooldown => 5;
     public override float EffectDuration => 0;
     public override int MaxUses => 3;
-    public override Sprite Sprite => SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.CallMeeting.png");
+    public override string SpritePath => "CallMeeting.png";
     
     public override bool Enabled(RoleBehaviour role)
     {

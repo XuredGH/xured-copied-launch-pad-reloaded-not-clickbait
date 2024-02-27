@@ -6,7 +6,7 @@
         <VersionPrefix>1.0.0</VersionPrefix>
         <VersionSuffix>dev</VersionSuffix>
         <Description>Launchpad Mod for new roles and gamemodes</Description>
-        <Authors>XtraCube</Authors>
+        <Authors>XtraCube, angxlwtf</Authors>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -27,16 +27,8 @@
     </ItemGroup>
     
     <ItemGroup>
-      <EmbeddedResource Include="Resources\Drop.png" />
-      <EmbeddedResource Include="Resources\Clean.png" />
-      <EmbeddedResource Include="Resources\CallMeeting.png" />
-      <EmbeddedResource Include="Resources\Drag.png" />
-      <EmbeddedResource Include="Resources\Zoom.png" />
-      <EmbeddedResource Include="Resources\Revive.png" />
-    </ItemGroup>
-    
-    <ItemGroup>
       <Folder Include="Patches\" />
+      <EmbeddedResource Include="Resources\assets-win-x86.bundle" />
     </ItemGroup>
 
     <Target Name="Copy" AfterTargets="Build" Condition="'$(AmongUs)' != ''">

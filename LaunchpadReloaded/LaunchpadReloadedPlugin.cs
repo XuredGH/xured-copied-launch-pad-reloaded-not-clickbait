@@ -8,6 +8,9 @@ using LaunchpadReloaded.Roles;
 using Reactor;
 using Reactor.Networking;
 using Reactor.Networking.Attributes;
+using Reactor.Utilities;
+using Reactor.Utilities.Extensions;
+using UnityEngine;
 
 namespace LaunchpadReloaded;
 
@@ -19,9 +22,13 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
 {
     public Harmony Harmony { get; } = new(Id);
 
+    public static AssetBundle Bundle;
+    
     public override void Load()
     {
         Harmony.PatchAll();
+
+        Bundle = AssetBundleManager.Load("assets");
         
         // TODO: CREATE ATTRIBUTE FOR THIS VVV
         CustomRoleManager.RegisterRole(typeof(CaptainRole));
@@ -29,6 +36,8 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
         CustomButtonManager.RegisterButton(typeof(CallButton));
         CustomButtonManager.RegisterButton(typeof(ZoomButton));
         CustomButtonManager.RegisterButton(typeof(CleanButton));
+        CustomButtonManager.RegisterButton(typeof(DragButton));
+        CustomButtonManager.RegisterButton(typeof(ReviveButton));
         Config.Save();
     }
 

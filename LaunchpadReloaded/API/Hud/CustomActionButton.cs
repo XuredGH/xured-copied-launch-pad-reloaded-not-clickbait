@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Reactor.Utilities.Extensions;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace LaunchpadReloaded.API.Hud;
@@ -9,7 +10,7 @@ public abstract class CustomActionButton
     public abstract float Cooldown { get; }
     public abstract float EffectDuration { get; }
     public abstract int MaxUses { get; }
-    public abstract Sprite Sprite { get; }
+    public abstract string SpritePath { get; }
     private bool HasEffect => EffectDuration > 0;
     private bool LimitedUses => MaxUses > 0;
     
@@ -23,17 +24,14 @@ public abstract class CustomActionButton
         if (_button) return;
 
         _usesLeft = MaxUses;
-        _timer = Cooldown;
+        _timer = 0;
         _effectActive = false;
         
         _button = Object.Instantiate(HudManager.Instance.AbilityButton, parent);
         _button.name = Name + "Button";
         _button.OverrideText(Name);
         
-        if (Sprite != null)
-        {
-            _button.graphic.sprite = Sprite;
-        }
+        _button.graphic.sprite = LaunchpadReloadedPlugin.Bundle.LoadAsset<Sprite>(SpritePath);
 
         _button.SetUsesRemaining(MaxUses);
         if (MaxUses <= 0)
@@ -55,7 +53,16 @@ public abstract class CustomActionButton
     {
         return _timer <= 0 && !_effectActive;
     }
-    
+
+    public void OverrideSprite(string path)
+    {
+        _button.graphic.sprite = LaunchpadReloadedPlugin.Bundle.LoadAsset<Sprite>(path);
+    }
+
+    public void OverrideName(string name)
+    {
+        _button.OverrideText(name);
+    }
     
     public virtual void SetActive(bool visible, RoleBehaviour role)
     {
@@ -64,7 +71,7 @@ public abstract class CustomActionButton
     
     public virtual void Update(PlayerControl playerControl)
     {
-        if (_timer > 0)
+        if (_timer >= 0)
         {
             _timer -= Time.deltaTime;
         }
