@@ -24,22 +24,7 @@ public class CleanButton : CustomActionButton
     public override void Update(PlayerControl playerControl)
     {
         base.Update(playerControl);
-        foreach (var body in Object.FindObjectsOfType<DeadBody>())
-        {
-            foreach (var bodyRenderer in body.bodyRenderers)
-            {
-                bodyRenderer.SetOutline(null);
-            }
-        }
-        
-        _target = playerControl.NearestDeadBody();
-        if (_target is not null)
-        {
-            foreach (var renderer in _target.bodyRenderers)
-            {
-                renderer.SetOutline(Color.yellow);
-            }
-        }
+        playerControl.UpdateBodies(Color.yellow, ref _target);
     }
 
     protected override bool CanUse()

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Reactor.Utilities.Extensions;
 using UnityEngine;
 
 namespace LaunchpadReloaded.API.Utilities;
@@ -8,6 +9,27 @@ public static class Extensions
     public static bool ButtonTimerEnabled(this PlayerControl playerControl)
     {
         return (playerControl.moveable || playerControl.petting) && !playerControl.inVent && !playerControl.shapeshifting && (!DestroyableSingleton<HudManager>.InstanceExists || !DestroyableSingleton<HudManager>.Instance.IsIntroDisplayed) && !MeetingHud.Instance && !PlayerCustomizationMenu.Instance && !ExileController.Instance && !IntroCutscene.Instance;
+    }
+
+    public static void UpdateBodies(this PlayerControl playerControl, Color outlineColor, ref DeadBody target)
+    {
+        
+        foreach (var body in Object.FindObjectsOfType<DeadBody>())
+        {
+            foreach (var bodyRenderer in body.bodyRenderers)
+            {
+                bodyRenderer.SetOutline(null);
+            }
+        }
+        
+        target = playerControl.NearestDeadBody();
+        if (target is not null)
+        {
+            foreach (var renderer in target.bodyRenderers)
+            {
+                renderer.SetOutline(Color.red);
+            }
+        }
     }
     
     public static DeadBody NearestDeadBody(this PlayerControl playerControl)
