@@ -13,7 +13,8 @@ public static class CustomButtonManager
         {
             return;
         }
-        
-        CustomButtons.Add((CustomActionButton)Activator.CreateInstance(buttonType));
+
+        var button = (CustomActionButton)Activator.CreateInstance(buttonType);
+        CustomButtons.Add(button);
     }
 }

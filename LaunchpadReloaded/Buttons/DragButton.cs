@@ -9,9 +9,8 @@ public class DragButton : CustomActionButton
     public override float EffectDuration => 0;
     public override int MaxUses => 0;
     public override string SpritePath => "Drag.png";
-
     private bool _isDragging;
-    
+
     protected override void OnClick()
     {
         _isDragging = !_isDragging;

@@ -44,7 +44,8 @@ public class CleanButton : CustomActionButton
 
     protected override bool CanUse()
     {
-        return base.CanUse() && _target is not null;
+        var playerCounts = GameManager.Instance.LogicFlow.GetPlayerCounts();
+        return base.CanUse() && _target is not null && (playerCounts.Item3 == 1 || playerCounts.Item2 > 1);
     }
 
     protected override void OnClick()
