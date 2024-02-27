@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using AmongUs.GameOptions;
 using Il2CppInterop.Runtime;
 using Reactor.Localization.Utilities;
@@ -17,6 +18,17 @@ public static class CustomRoleManager
     public static void RegisterInRoleManager()
     {
         RoleManager.Instance.AllRoles = RoleManager.Instance.AllRoles.Concat(CustomRoles.Values).ToArray();
+    }
+
+    public static void RegisterAllRoles()
+    {
+        foreach (var type in Assembly.GetCallingAssembly().GetTypes())
+        {
+            if (type.IsAssignableTo(typeof(ICustomRole)))
+            {
+                RegisterRole(type);
+            }
+        }
     }
     
     public static void RegisterRole(Type roleType)

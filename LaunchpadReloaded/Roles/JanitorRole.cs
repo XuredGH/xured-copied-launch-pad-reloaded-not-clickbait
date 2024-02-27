@@ -6,7 +6,7 @@ using UnityEngine;
 namespace LaunchpadReloaded.Roles;
 
 [RegisterInIl2Cpp]
-public class JanitorRole : ImpostorRole, ICustomRole
+public class JanitorRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
 {
     public string RoleName => "Janitor";
     public string RoleDescription => "Help the impostor by\ndragging and hiding bodies";
@@ -16,15 +16,6 @@ public class JanitorRole : ImpostorRole, ICustomRole
     
     private DeadBody _target;
     private bool _dragging;
-
-    public JanitorRole()
-    {
-        Debug.LogError("JANITOR INIT");
-    }
-    
-    public JanitorRole(IntPtr ptr) : base(ptr)
-    {
-    }
 
     /*public void HudUpdate(HudManager hudManager)
     {

@@ -31,13 +31,8 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
         Bundle = AssetBundleManager.Load("assets");
         
         // TODO: CREATE ATTRIBUTE FOR THIS VVV
-        CustomRoleManager.RegisterRole(typeof(CaptainRole));
-        CustomRoleManager.RegisterRole(typeof(JanitorRole));
-        CustomButtonManager.RegisterButton(typeof(CallButton));
-        CustomButtonManager.RegisterButton(typeof(ZoomButton));
-        CustomButtonManager.RegisterButton(typeof(CleanButton));
-        CustomButtonManager.RegisterButton(typeof(DragButton));
-        CustomButtonManager.RegisterButton(typeof(ReviveButton));
+        CustomRoleManager.RegisterAllRoles();
+        CustomButtonManager.RegisterAllButtons();
         Config.Save();
     }
 

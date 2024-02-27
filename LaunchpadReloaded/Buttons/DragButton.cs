@@ -1,5 +1,6 @@
 ﻿using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Utilities;
+using LaunchpadReloaded.Roles;
 using Reactor.Utilities.Extensions;
 using UnityEngine;
 
@@ -15,10 +16,20 @@ public class DragButton : CustomActionButton
     private bool _isDragging;
     private DeadBody _target;
 
+    public override bool Enabled(RoleBehaviour role)
+    {
+        return role is HitmanRole;
+    }
+
+    protected override bool CanUse()
+    {
+        return _target is not null;
+    }
+
     public override void Update(PlayerControl playerControl)
     {
         base.Update(playerControl);
-        playerControl.UpdateBodies(Color.red, ref _target);
+        playerControl.UpdateBodies(new Color(125,40,40), ref _target);
     }
     
     protected override void OnClick()
@@ -35,4 +46,7 @@ public class DragButton : CustomActionButton
             OverrideSprite("Drag.png");
         }
     }
+    
+    
+    
 }
