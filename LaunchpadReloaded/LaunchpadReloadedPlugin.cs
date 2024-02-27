@@ -2,7 +2,9 @@
 using BepInEx;
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
+using LaunchpadReloaded.API.Options;
 using LaunchpadReloaded.API.Roles;
+using LaunchpadReloaded.Misc.CustomOptions;
 using LaunchpadReloaded.Roles;
 using Reactor;
 using Reactor.Networking;
@@ -24,8 +26,8 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
         Harmony.PatchAll();
         CustomRoleManager.RegisterRole(typeof(CaptainRole));
         CustomRoleManager.RegisterRole(typeof(JanitorRole));
+        CustomOptionsManager.RegisterCustomOption(typeof(SabotageShake));
+        CustomOptionsManager.RegisterCustomOption(typeof(Test));
         Config.Save();
     }
-
-
 }
