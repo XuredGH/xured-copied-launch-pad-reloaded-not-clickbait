@@ -26,30 +26,32 @@ public static class CustomOptionsManager
         CustomOptions.Add(opt);
     }
 
-    private static OptionsMenuBehaviour optionsMenu;
+    private static OptionsMenuBehaviour _optionsMenu;
 
-    public static void Start(OptionsMenuBehaviour optionsMenu)
+    public static void Start(OptionsMenuBehaviour optMenu)
     {
-        CustomOptionsManager.optionsMenu = optionsMenu;
+        _optionsMenu = optMenu;
         CreateTab();
     }
 
     public static void CreateTab() 
     {
         // replace help tab (its unusued in game iirc)
-        foreach (TabGroup tab in optionsMenu.Tabs)
+
+        var startX = HudManager.InstanceExists ? -1.65f : -2.45f;
+        var yOffset = HudManager.InstanceExists ? .1f : 0;
+        for (int i = 0; i < _optionsMenu.Tabs.Count; i++)
         {
-            var tabButton = tab.gameObject;
-            tabButton.transform.localPosition -= new Vector3(0.8f, 0, 0);
+            var pos = _optionsMenu.Tabs[i].transform.localPosition; 
+            _optionsMenu.Tabs[i].transform.localPosition = new Vector3(startX + i*1.65f, pos.y+yOffset, pos.z);
         }
 
-        var newTabButton = optionsMenu.Tabs.Last();
+        var newTabButton = _optionsMenu.Tabs.Last();
         var newTabButtonText = newTabButton.GetComponentInChildren<TextMeshPro>();
         newTabButton.GetComponentInChildren<TextTranslatorTMP>().Destroy();
         newTabButton.name = "LaunchpadButton";
         newTabButtonText.text = "Launchpad";
         newTabButton.gameObject.SetActive(true);
-        newTabButton.transform.localPosition += new Vector3(0.93f, 0, 0);
 
         LaunchpadTab = newTabButton.Content;
         LaunchpadTab.name = "LaunchpadTab";
@@ -62,9 +64,9 @@ public static class CustomOptionsManager
         gridArrange.MaxColumns = 2;
 
         var transforms = new List<Transform>();
-        foreach (CustomOption customOption in CustomOptions)
+        foreach (var customOption in CustomOptions)
         {
-            transforms.Add(customOption.CreateButton(optionsMenu, LaunchpadTab.transform).transform);
+            transforms.Add(customOption.CreateButton(_optionsMenu, LaunchpadTab.transform).transform);
         }
 
         aspectPosition.updateAlways = true;
