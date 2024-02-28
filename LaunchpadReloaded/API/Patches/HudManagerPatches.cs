@@ -27,7 +27,7 @@ public static class HudManagerPatches
     [HarmonyPatch("Start")]
     public static void StartPostfix(HudManager __instance)
     {
-        _bottomLeft ??= Object.Instantiate(__instance.transform.Find("Buttons").Find("BottomRight").gameObject,__instance.transform.Find("Buttons"));
+        if (!_bottomLeft) _bottomLeft = Object.Instantiate(__instance.transform.Find("Buttons").Find("BottomRight").gameObject,__instance.transform.Find("Buttons"));
 
         foreach (var t in _bottomLeft.GetComponentsInChildren<ActionButton>(true))
         {
