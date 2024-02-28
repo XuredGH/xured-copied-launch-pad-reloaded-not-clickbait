@@ -2,12 +2,11 @@
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
         <LangVersion>latest</LangVersion>
-        <DebugType>embedded</DebugType>
-        
+        <DebugType>embedded</DebugType>        
         <VersionPrefix>1.0.0</VersionPrefix>
         <VersionSuffix>dev</VersionSuffix>
         <Description>Launchpad Mod for new roles and gamemodes</Description>
-        <Authors>XtraCube</Authors>
+        <Authors>XtraCube, angxlwtf</Authors>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -28,14 +27,8 @@
     </ItemGroup>
     
     <ItemGroup>
-      <None Remove="Resources\binoculars.png" />
-      <EmbeddedResource Include="Resources\binoculars.png" />
-      <None Remove="Resources\report.png" />
-      <EmbeddedResource Include="Resources\report.png" />
-    </ItemGroup>
-    
-    <ItemGroup>
       <Folder Include="Patches\" />
+      <EmbeddedResource Include="Resources\assets-win-x86.bundle" />
     </ItemGroup>
 
     <Target Name="Copy" AfterTargets="Build" Condition="'$(AmongUs)' != ''">

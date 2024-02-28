@@ -1,8 +1,5 @@
 ﻿using AmongUs.GameOptions;
 using BepInEx.Configuration;
-using Il2CppInterop.Runtime.Attributes;
-using LaunchpadReloaded.API.Hud;
-using LaunchpadReloaded.Utilities;
 using UnityEngine;
 
 namespace LaunchpadReloaded.API.Roles;
@@ -14,7 +11,6 @@ public interface ICustomRole
     string RoleLongDescription { get; }
     Color RoleColor { get; }
     RoleTeamTypes Team { get; }
-    CustomButton[] CustomButtons { get; }
     ConfigDefinition NumConfigDefinition => new ("Roles",$"Num{RoleName}");
     ConfigDefinition ChanceConfigDefinition => new ("Roles",$"Chance{RoleName}");
     bool AffectedByLight => Team == RoleTeamTypes.Crewmate;

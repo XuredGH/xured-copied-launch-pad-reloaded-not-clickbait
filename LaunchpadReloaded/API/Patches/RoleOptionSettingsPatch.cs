@@ -1,6 +1,6 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.API.Roles;
-using LaunchpadReloaded.Utilities;
+using LaunchpadReloaded.API.Utilities;
 using UnityEngine;
 
 namespace LaunchpadReloaded.API.Patches;

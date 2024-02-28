@@ -1,25 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using AmongUs.GameOptions;
-using BepInEx.Configuration;
 using Il2CppInterop.Runtime;
-using LaunchpadReloaded.Utilities;
 using Reactor.Localization.Utilities;
 using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
 using UnityEngine;
-using Object = System.Object;
 
 namespace LaunchpadReloaded.API.Roles;
 
 public static class CustomRoleManager
 {
     public static readonly Dictionary<ushort, RoleBehaviour> CustomRoles = [];
-
+    
     public static void RegisterInRoleManager()
     {
         RoleManager.Instance.AllRoles = RoleManager.Instance.AllRoles.Concat(CustomRoles.Values).ToArray();
+    }
+
+    public static void RegisterAllRoles()
+    {
+        foreach (var type in Assembly.GetCallingAssembly().GetTypes())
+        {
+            if (type.IsAssignableTo(typeof(ICustomRole)))
+            {
+                RegisterRole(type);
+            }
+        }
     }
     
     public static void RegisterRole(Type roleType)
@@ -39,10 +48,6 @@ public static class CustomRoleManager
         if (roleBehaviour is ICustomRole customRole)
         {
             var roleId = (ushort)(Enum.GetNames<RoleTypes>().Length + CustomRoles.Count);
-            foreach (var customButton in customRole.CustomButtons)
-            {
-                customButton.RoleTypes = [(RoleTypes)roleId];
-            }
             roleBehaviour.Role = (RoleTypes)roleId;
             roleBehaviour.TeamType = customRole.Team;
             roleBehaviour.NameColor = customRole.RoleColor;
@@ -55,9 +60,6 @@ public static class CustomRoleManager
             roleBehaviour.CanVent = customRole.CanUseVent;
             roleBehaviour.DefaultGhostRole = customRole.GhostRole;
             roleBehaviour.MaxCount = 15;
-            //var ability = ScriptableObject.CreateInstance<AbilityButtonSettings>();
-            //ability.Image = SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.report.png");
-            //roleBehaviour.Ability = ability;
             CustomRoles.Add(roleId,roleBehaviour);
 
             var config = PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config;
