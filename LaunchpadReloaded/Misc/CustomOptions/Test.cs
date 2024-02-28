@@ -14,6 +14,5 @@ public class Test : CustomOption
 
     public override void OnClick()
     {
-        base.OnClick();
     }
 }

@@ -10,12 +10,11 @@ namespace LaunchpadReloaded.Misc.CustomOptions;
 
 public class SabotageShake : CustomOption
 {
-    public override string Text => "Sabotage Camera Shake";
+    public override string Text => "Sabotage Shake";
     public override string Id => "SabShake";
 
     public override void OnClick()
     {
-        base.OnClick();
         Debug.Log(this.Enabled);
     }
 }

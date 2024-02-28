@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Reactor.Localization.Utilities;
 using TMPro;
 using UnityEngine;
 
@@ -19,7 +20,9 @@ public static class CustomOptionsManager
             return;
         }
 
-        CustomOptions.Add((CustomOption)Activator.CreateInstance(buttonType));
+        var opt = (CustomOption)Activator.CreateInstance(buttonType);
+        opt.StringName = CustomStringName.CreateAndRegister(opt.Text);
+        CustomOptions.Add(opt);
     }
 
     private static OptionsMenuBehaviour optionsMenu;
