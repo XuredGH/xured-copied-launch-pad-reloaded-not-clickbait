@@ -17,6 +17,6 @@ public static class OptionsMenuPatches
     [HarmonyPatch(nameof(OptionsMenuBehaviour.Start))]
     public static void StartPostfix(OptionsMenuBehaviour __instance)
     {
-        CustomOptionsManager.Start(__instance);
+        CustomOptionsManager.CreateTab(__instance);
     }
 }

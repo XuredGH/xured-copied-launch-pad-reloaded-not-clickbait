@@ -12,7 +12,6 @@ namespace LaunchpadReloaded.API.Options;
 public static class CustomOptionsManager
 {
     public static readonly List<CustomOption> CustomOptions = new();
-    public static GameObject LaunchpadTab;
 
     public static void RegisterCustomOption(Type buttonType)
     {
@@ -26,15 +25,7 @@ public static class CustomOptionsManager
         CustomOptions.Add(opt);
     }
 
-    private static OptionsMenuBehaviour _optionsMenu;
-
-    public static void Start(OptionsMenuBehaviour optMenu)
-    {
-        _optionsMenu = optMenu;
-        CreateTab();
-    }
-
-    public static void CreateTab() 
+    public static void CreateTab(OptionsMenuBehaviour _optionsMenu) 
     {
         // replace help tab (its unusued in game iirc)
 
@@ -53,11 +44,11 @@ public static class CustomOptionsManager
         newTabButtonText.text = "Launchpad";
         newTabButton.gameObject.SetActive(true);
 
-        LaunchpadTab = newTabButton.Content;
-        LaunchpadTab.name = "LaunchpadTab";
-        LaunchpadTab.transform.DestroyChildren();
-        var gridArrange = LaunchpadTab.AddComponent<GridArrange>();
-        var aspectPosition = LaunchpadTab.AddComponent<AspectPosition>();
+        var launchpadTab = newTabButton.Content;
+        launchpadTab.name = "LaunchpadTab";
+        launchpadTab.transform.DestroyChildren();
+        var gridArrange = launchpadTab.AddComponent<GridArrange>();
+        var aspectPosition = launchpadTab.AddComponent<AspectPosition>();
         gridArrange.Alignment = GridArrange.StartAlign.Left;
         aspectPosition.Alignment = AspectPosition.EdgeAlignments.Top;
         gridArrange.CellSize = new Vector2(2.6f, 0.5f);
@@ -66,7 +57,7 @@ public static class CustomOptionsManager
         var transforms = new List<Transform>();
         foreach (var customOption in CustomOptions)
         {
-            transforms.Add(customOption.CreateButton(_optionsMenu, LaunchpadTab.transform).transform);
+            transforms.Add(customOption.CreateButton(_optionsMenu, launchpadTab.transform).transform);
         }
 
         aspectPosition.updateAlways = true;
