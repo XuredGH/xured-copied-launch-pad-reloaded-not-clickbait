@@ -13,9 +13,6 @@ public class JanitorRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
     public string RoleLongDescription => "Help the Impostor with your ability to move bodies around and bury them!";
     public Color RoleColor => Color.yellow;
     public RoleTeamTypes Team => RoleTeamTypes.Impostor;
-    
-    private DeadBody _target;
-    private bool _dragging;
 
     /*public void HudUpdate(HudManager hudManager)
     {

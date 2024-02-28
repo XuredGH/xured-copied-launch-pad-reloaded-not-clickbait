@@ -21,10 +21,13 @@ public abstract class CustomActionButton
 
     public void CreateButton(Transform parent)
     {
-        if (_button) return;
+        if (_button)
+        {
+            return;
+        }
 
         _usesLeft = MaxUses;
-        _timer = 0;
+        _timer = Cooldown;
         _effectActive = false;
         
         _button = Object.Instantiate(HudManager.Instance.AbilityButton, parent);
