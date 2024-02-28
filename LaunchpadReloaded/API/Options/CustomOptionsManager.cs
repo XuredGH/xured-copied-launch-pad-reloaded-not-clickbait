@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Reactor.Localization.Utilities;
+using Reactor.Utilities.Extensions;
 using TMPro;
 using UnityEngine;
 
@@ -44,7 +45,7 @@ public static class CustomOptionsManager
 
         var newTabButton = optionsMenu.Tabs.Last();
         var newTabButtonText = newTabButton.GetComponentInChildren<TextMeshPro>();
-        GameObject.Destroy(newTabButton.GetComponentInChildren<TextTranslatorTMP>());
+        newTabButton.GetComponentInChildren<TextTranslatorTMP>().Destroy();
         newTabButton.name = "LaunchpadButton";
         newTabButtonText.text = "Launchpad";
         newTabButton.gameObject.SetActive(true);
