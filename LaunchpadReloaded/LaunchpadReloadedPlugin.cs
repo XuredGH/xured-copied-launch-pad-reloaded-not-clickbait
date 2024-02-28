@@ -30,8 +30,6 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
     public override void Load()
     {
         Harmony.PatchAll();
-        CustomRoleManager.RegisterRole(typeof(CaptainRole));
-        CustomRoleManager.RegisterRole(typeof(JanitorRole));
         CustomOptionsManager.RegisterCustomOption(typeof(SabotageShake));
         CustomOptionsManager.RegisterCustomOption(typeof(Test));
 
