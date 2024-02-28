@@ -15,9 +15,9 @@ public abstract class CustomActionButton
     private bool LimitedUses => MaxUses > 0;
     
     private bool _effectActive;
-    private float _timer;
+    protected float _timer;
     private int _usesLeft;
-    private ActionButton _button;
+    protected ActionButton _button;
 
     public void CreateButton(Transform parent)
     {
