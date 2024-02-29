@@ -11,8 +11,14 @@ using UnityEngine;
 namespace LaunchpadReloaded.API.Options;
 public static class CustomOptionsManager
 {
-    public static readonly List<CustomOption> CustomOptions = new();
+    public static readonly Dictionary<string, CustomOption> CustomOptions = new();
 
+    public static bool GetOption(string id)
+    {
+        CustomOptions.TryGetValue(id, out var val);
+        return val is not null && val.Enabled;
+    }
+    
     public static void RegisterCustomOption(Type buttonType)
     {
         if (!typeof(CustomOption).IsAssignableFrom(buttonType))
@@ -22,7 +28,7 @@ public static class CustomOptionsManager
 
         var opt = (CustomOption)Activator.CreateInstance(buttonType);
         opt.StringName = CustomStringName.CreateAndRegister(opt.Text);
-        CustomOptions.Add(opt);
+        CustomOptions.Add(opt.Id, opt);
     }
 
     public static void CreateTab(OptionsMenuBehaviour _optionsMenu) 
@@ -54,10 +60,9 @@ public static class CustomOptionsManager
         gridArrange.CellSize = new Vector2(2.6f, 0.5f);
         gridArrange.MaxColumns = 2;
 
-        var transforms = new List<Transform>();
-        foreach (var customOption in CustomOptions)
+        foreach (var customOption in CustomOptions.Values)
         {
-            transforms.Add(customOption.CreateButton(_optionsMenu, launchpadTab.transform).transform);
+            customOption.CreateButton(_optionsMenu, launchpadTab.transform);
         }
 
         aspectPosition.updateAlways = true;

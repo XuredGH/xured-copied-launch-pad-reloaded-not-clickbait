@@ -30,7 +30,7 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
     public override void Load()
     {
         Harmony.PatchAll();
-        CustomOptionsManager.RegisterCustomOption(typeof(SabotageShake));
+        CustomOptionsManager.RegisterCustomOption(typeof(FixedCamera));
         CustomOptionsManager.RegisterCustomOption(typeof(Test));
 
         Bundle = AssetBundleManager.Load("assets");

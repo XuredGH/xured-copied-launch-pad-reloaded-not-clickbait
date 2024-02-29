@@ -8,10 +8,10 @@ using UnityEngine;
 
 namespace LaunchpadReloaded.Misc.CustomOptions;
 
-public class SabotageShake : CustomOption
+public class FixedCamera : CustomOption
 {
-    public override string Text => "Sabotage Shake";
-    public override string Id => "SabShake";
+    public override string Text => "Fixed Camera";
+    public override string Id => "FixCam";
 
     public override void OnClick()
     {
