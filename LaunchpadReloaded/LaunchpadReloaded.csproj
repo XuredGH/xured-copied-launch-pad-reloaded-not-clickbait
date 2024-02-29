@@ -13,6 +13,10 @@
         <GamePlatform Condition="'$(GamePlatform)' == ''">Steam</GamePlatform>
         <GameVersion Condition="'$(GamePlatform)' == 'Steam'">2023.11.28</GameVersion>
     </PropertyGroup>
+
+    <ItemGroup>
+      <None Remove="Resources\Node.png" />
+    </ItemGroup>
     
     <ItemGroup>
         <PackageReference Include="Reactor" Version="2.2.0" />
@@ -29,6 +33,13 @@
     <ItemGroup>
       <Folder Include="Patches\" />
       <EmbeddedResource Include="Resources\assets-win-x86.bundle" />
+      <EmbeddedResource Include="Resources\Node.png" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <None Update="Resources\Revive.png">
+        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <Target Name="Copy" AfterTargets="Build" Condition="'$(AmongUs)' != ''">

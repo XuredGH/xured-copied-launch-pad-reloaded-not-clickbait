@@ -2,9 +2,9 @@
 using Il2CppInterop.Runtime;
 using Il2CppSystem.Text.Json;
 using LaunchpadReloaded.API.Hud;
+using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Roles;
-using LaunchpadReloaded.Tasks;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities.Extensions;
 using System;
@@ -14,51 +14,26 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using static GameData;
+using static UnityEngine.GraphicsBuffer;
 
 namespace LaunchpadReloaded.Buttons;
 public class HackButton : CustomActionButton
 {
     public override string Name => "HACK";
-    public override float Cooldown => 5;
-    public override float EffectDuration => 5;
-    public override int MaxUses => 3;
+    public override float Cooldown => 60;
+    public override float EffectDuration => 0;
+    public override int MaxUses => 2;
     public override string SpritePath => "Zoom.png";
-
-    public static List<PlayerInfo> HackedPlayers = new List<PlayerInfo>();
-
-    [MethodRpc((uint)LaunchpadRPC.HackPlayer)]
-    public static void RpcHackPlayer(PlayerControl player)
-    {
-        Debug.Log(player.Data.PlayerName + " is being hacked on local client.");
-        HackedPlayers.Add(player.Data);
-        player.RawSetName("<b><i>???</b></i>");
-        player.RawSetColor(15);
-
-        var task = PlayerTask.GetOrCreateTask<HackSabotage>(player);
-        task.Id = 255U;
-        task.Owner = player;
-    }
-
-    [MethodRpc((uint)LaunchpadRPC.UnhackPlayer)]
-    public static void RpcUnhackPlayer(PlayerControl player)
-    {
-        HackedPlayers.Remove(player.Data);
-        player.SetName(player.Data.PlayerName);
-        player.SetColor((byte)player.Data.DefaultOutfit.ColorId);
-    }
-
-    public override bool Enabled(RoleBehaviour role)
-    {
-        return role is HackerRole;
-    }
+    public override bool Enabled(RoleBehaviour role) =>  role is HackerRole;
+    protected override bool CanUse() => !HackingManager.AnyActiveNodes();
 
     protected override void OnClick()
     {
-        Debug.Log("Button clicked");
-        ShipStatus.Instance.RpcUpdateSystem(SystemTypes.Comms, 128);
         foreach (PlayerControl player in PlayerControl.AllPlayerControls)
         {
-            RpcHackPlayer(player);
+            HackingManager.RpcHackPlayer(player);
         }
+
+        HackingManager.RpcToggleNode(ShipStatus.Instance, HackingManager.Nodes.Random().Id, true);
     }
 }

@@ -9,4 +9,6 @@ public enum LaunchpadRPC : uint
 {
     HackPlayer = 0,
     UnhackPlayer = 1,
+    CreateNodes = 2,
+    ToggleNode = 3,
 }

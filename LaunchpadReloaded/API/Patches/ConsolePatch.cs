@@ -1,7 +1,7 @@
 ﻿using AmongUs.GameOptions;
 using HarmonyLib;
 using LaunchpadReloaded.Buttons;
-using LaunchpadReloaded.Tasks;
+using LaunchpadReloaded.Features;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +18,7 @@ public static class ConsolePatch
     [HarmonyPatch(typeof(Console), nameof(Console.CanUse))]
     public static bool CanUsePatch(Console __instance, [HarmonyArgument(0)] GameData.PlayerInfo pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse)
     {
-        if(HackButton.HackedPlayers.Contains(pc) & !__instance.TaskTypes.Contains(TaskTypes.FixComms)) {
+        if(HackingManager.HackedPlayers.Contains(pc.PlayerId)) {
             canUse = false;
             couldUse = false;
             return false; 
@@ -33,7 +33,7 @@ public static class ConsolePatch
     [HarmonyPatch(typeof(SystemConsole), nameof(SystemConsole.CanUse))]
     public static bool SystemCanUsePatch([HarmonyArgument(0)] GameData.PlayerInfo pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse)
     {
-        if (HackButton.HackedPlayers.Contains(pc))
+        if (HackingManager.HackedPlayers.Contains(pc.PlayerId))
         {
             canUse = false;
             couldUse = false;
