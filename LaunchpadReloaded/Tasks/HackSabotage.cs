@@ -41,14 +41,18 @@ public class HackSabotage(System.IntPtr ptr) : HudOverrideTask(ptr)
 
     public override void Initialize()
     {
+        Debug.Log("Initialize is being called on local client.");
         PlayerTask originalTask = ShipStatus.Instance.GetSabotageTask(SystemTypes.Comms);
         ShipStatus instance = ShipStatus.Instance;
         this.system = instance.Systems[SystemTypes.Comms].Cast<HudOverrideSystemType>();
         this.MinigamePrefab = originalTask.GetMinigamePrefab();
 
-        CreateArrow(originalTask, this.transform);
-        arrow.target = FindConsoles()[0].transform.position;
-        arrow.gameObject.SetActive(true);
+        if(base.Owner && base.Owner.AmOwner)
+        {
+            CreateArrow(originalTask, this.transform);
+            arrow.target = FindConsoles()[0].transform.position;
+            arrow.gameObject.SetActive(true);
+        }
     }
 
     public override void AppendTaskText(Il2CppSystem.Text.StringBuilder sb)
@@ -59,7 +63,9 @@ public class HackSabotage(System.IntPtr ptr) : HudOverrideTask(ptr)
         sb.Append("Comms Hacked\n");
         sb.Append("You will not be able to complete tasks until comms is fixed.\n");
         sb.Append("</color>");
-        arrow.image.color = color;
+
+        if(arrow != null)
+            arrow.image.color = color;
     }
 
     public override void Complete()

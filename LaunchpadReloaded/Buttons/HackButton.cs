@@ -29,19 +29,14 @@ public class HackButton : CustomActionButton
     [MethodRpc((uint)LaunchpadRPC.HackPlayer)]
     public static void RpcHackPlayer(PlayerControl player)
     {
+        Debug.Log(player.Data.PlayerName + " is being hacked on local client.");
         HackedPlayers.Add(player.Data);
         player.RawSetName("<b><i>???</b></i>");
         player.RawSetColor(15);
 
-        if (GameData.Instance.GetHost() == player.Data)
-        {
-            ShipStatus.Instance.RpcUpdateSystem(SystemTypes.Comms, 128);
-        }
-
         var task = PlayerTask.GetOrCreateTask<HackSabotage>(player);
         task.Id = 255U;
         task.Owner = player;
-        task.Initialize();
     }
 
     [MethodRpc((uint)LaunchpadRPC.UnhackPlayer)]
@@ -59,6 +54,8 @@ public class HackButton : CustomActionButton
 
     protected override void OnClick()
     {
+        Debug.Log("Button clicked");
+        ShipStatus.Instance.RpcUpdateSystem(SystemTypes.Comms, 128);
         foreach (PlayerControl player in PlayerControl.AllPlayerControls)
         {
             RpcHackPlayer(player);
