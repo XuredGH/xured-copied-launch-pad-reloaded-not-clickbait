@@ -15,7 +15,7 @@ public class ReviveButton : CustomActionButton
         return false;
     }
 
-    override protected void OnClick()
+    protected override void OnClick()
     {
     }
 }

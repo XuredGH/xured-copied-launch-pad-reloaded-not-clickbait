@@ -7,126 +7,140 @@ namespace LaunchpadReloaded.API.Hud;
 public abstract class CustomActionButton
 {
     public abstract string Name { get; }
-    public abstract float Cooldown { get; }
-    public abstract float EffectDuration { get; }
-    public abstract int MaxUses { get; }
-    public abstract string SpritePath { get; }
-    private bool HasEffect => EffectDuration > 0;
-    private bool LimitedUses => MaxUses > 0;
     
-    private bool _effectActive;
-    private float _timer;
-    private int _usesLeft;
-    protected ActionButton _button;
+    public abstract float Cooldown { get; }
+    
+    public abstract float EffectDuration { get; }
+    
+    public abstract int MaxUses { get; }
+    
+    public abstract string SpritePath { get; }
+    
+    public bool HasEffect => EffectDuration > 0;
+    
+    public bool LimitedUses => MaxUses > 0;
+
+    protected bool EffectActive;
+    
+    protected float Timer;
+    
+    protected int UsesLeft;
+    
+    protected ActionButton Button;
 
     public void CreateButton(Transform parent)
     {
-        if (_button) return;
-
-        _usesLeft = MaxUses;
-        _timer = 0;
-        _effectActive = false;
-        
-        _button = Object.Instantiate(HudManager.Instance.AbilityButton, parent);
-        _button.name = Name + "Button";
-        _button.OverrideText(Name);
-        
-        _button.graphic.sprite = LaunchpadReloadedPlugin.Bundle.LoadAsset<Sprite>(SpritePath);
-
-        _button.SetUsesRemaining(MaxUses);
-        if (MaxUses <= 0)
+        if (Button)
         {
-            _button.SetInfiniteUses();
+            return;
         }
 
-        var pb = _button.GetComponent<PassiveButton>();
+        UsesLeft = MaxUses;
+        Timer = 0;
+        EffectActive = false;
+        
+        Button = Object.Instantiate(HudManager.Instance.AbilityButton, parent);
+        Button.name = Name + "Button";
+        Button.OverrideText(Name);
+        
+        Button.graphic.sprite = LaunchpadReloadedPlugin.Bundle.LoadAsset<Sprite>(SpritePath);
+
+        Button.SetUsesRemaining(MaxUses);
+        if (MaxUses <= 0)
+        {
+            Button.SetInfiniteUses();
+        }
+
+        var pb = Button.GetComponent<PassiveButton>();
         pb.OnClick.RemoveAllListeners();
         pb.OnClick.AddListener((UnityAction)ClickHandler);
     }
 
-    public virtual bool Enabled(RoleBehaviour role)
-    {
-        return true;
-    }
-
-    protected virtual bool CanUse()
-    {
-        return _timer <= 0 && !_effectActive;
-    }
-
     public void OverrideSprite(string path)
     {
-        _button.graphic.sprite = LaunchpadReloadedPlugin.Bundle.LoadAsset<Sprite>(path);
+        Button.graphic.sprite = LaunchpadReloadedPlugin.Bundle.LoadAsset<Sprite>(path);
     }
 
     public void OverrideName(string name)
     {
-        _button.OverrideText(name);
+        Button.OverrideText(name);
+    }
+    
+    protected virtual void FixedUpdate(PlayerControl playerControl) { }
+
+    protected abstract void OnClick();
+    
+    public abstract bool Enabled(RoleBehaviour role);
+    
+    protected virtual void OnEffectEnd() { }
+
+    public virtual bool CanUse()
+    {
+        return Timer <= 0 && !EffectActive && (!LimitedUses || MaxUses > 0);
     }
     
     public virtual void SetActive(bool visible, RoleBehaviour role)
     {
-        _button.ToggleVisible(visible && Enabled(role));
+        Button.ToggleVisible(visible && Enabled(role));
     }
-
-    public void Update(PlayerControl playerControl)
+    
+    private void ClickHandler()
     {
-        if (_timer >= 0)
+        if (!CanUse())
         {
-            _timer -= Time.deltaTime;
+            return;
+        }
+
+        if (LimitedUses)
+        {
+            UsesLeft--;
+            Button.SetUsesRemaining(UsesLeft);
+        }
+        
+        OnClick();
+        Button.SetDisabled();
+        if (HasEffect)
+        {
+            EffectActive = true;
+            Timer = EffectDuration;
         }
         else
         {
-            if (HasEffect && _effectActive)
+            Timer = Cooldown;
+        }
+    }
+    
+    public void UpdateHandler(PlayerControl playerControl)
+    {
+        if (Timer >= 0)
+        {
+            Timer -= Time.deltaTime;
+        }
+        else
+        {
+            if (HasEffect && EffectActive)
             {
-                OnEffectEnd();
+                EffectEndHandler();
             }
         }
 
         if (CanUse())
         {
-            _button.SetEnabled();
+            Button.SetEnabled();
         }
         else
         {
-            _button.SetDisabled();
+            Button.SetDisabled();
         }
-        _button.SetCoolDown(_timer, _effectActive ? EffectDuration : Cooldown);
+        Button.SetCoolDown(Timer, EffectActive ? EffectDuration : Cooldown);
         
         FixedUpdate(playerControl);
     }
 
-    protected virtual void FixedUpdate(PlayerControl playerControl) { }
-    
-    private void ClickHandler()
+    private void EffectEndHandler()
     {
-        if (!CanUse()) return;
-
-        if (LimitedUses)
-        {
-            _usesLeft--;
-            _button.SetUsesRemaining(_usesLeft);
-        }
-        
-        OnClick();
-        _button.SetDisabled();
-        if (HasEffect)
-        {
-            _effectActive = true;
-            _timer = EffectDuration;
-        }
-        else
-        {
-            _timer = Cooldown;
-        }
+        EffectActive = false;
+        Timer = Cooldown;
+        OnEffectEnd();
     }
-
-    protected abstract void OnClick();
-    
-    protected virtual void OnEffectEnd()
-    {
-        _effectActive = false;
-        _timer = Cooldown;
-    }
-
 }

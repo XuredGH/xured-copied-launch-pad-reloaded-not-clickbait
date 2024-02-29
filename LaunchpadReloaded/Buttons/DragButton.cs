@@ -22,17 +22,17 @@ public class DragButton : CustomActionButton
         return role is HitmanRole;
     }
 
-    override protected bool CanUse()
+    public override bool CanUse()
     {
         return _target is not null;
     }
 
-    override protected void FixedUpdate(PlayerControl playerControl)
+    protected override void FixedUpdate(PlayerControl playerControl)
     {
         playerControl.UpdateBodies(new Color(125,40,40), ref _target);
     }
     
-    override protected void OnClick()
+    protected override void OnClick()
     {
         _dragging = !_dragging;
         if (_dragging)

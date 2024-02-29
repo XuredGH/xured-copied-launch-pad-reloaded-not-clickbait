@@ -13,13 +13,13 @@ public class CallButton : CustomActionButton
     public override float EffectDuration => 0;
     public override int MaxUses => 3;
     public override string SpritePath => "CallMeeting.png";
-    
+
     public override bool Enabled(RoleBehaviour role)
     {
         return role is CaptainRole;
     }
 
-    override protected void OnClick()
+    protected override void OnClick()
     {
         PlayerControl.LocalPlayer.CmdReportDeadBody(null);
     }

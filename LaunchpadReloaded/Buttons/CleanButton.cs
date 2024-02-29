@@ -21,18 +21,18 @@ public class CleanButton : CustomActionButton
         return role is JanitorRole;
     }
 
-    override protected void FixedUpdate(PlayerControl playerControl)
+    protected override void FixedUpdate(PlayerControl playerControl)
     {
         playerControl.UpdateBodies(Color.yellow, ref _target);
     }
 
-    override protected bool CanUse()
+    public override bool CanUse()
     {
         var playerCounts = GameManager.Instance.LogicFlow.GetPlayerCounts();
         return base.CanUse() && _target is not null && (playerCounts.Item3 == 1 || playerCounts.Item2 > 1);
     }
 
-    override protected void OnClick()
+    protected override void OnClick()
     {
         _target.Reported = true;
         _target.enabled = false;
