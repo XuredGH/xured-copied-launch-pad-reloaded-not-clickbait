@@ -24,28 +24,30 @@ public class HackButton : CustomActionButton
     public override int MaxUses => 3;
     public override string SpritePath => "Zoom.png";
 
-    public static List<PlayerControl> HackedPlayers = new List<PlayerControl>();
+    public static List<PlayerInfo> HackedPlayers = new List<PlayerInfo>();
 
     [MethodRpc((uint)LaunchpadRPC.HackPlayer)]
     public static void RpcHackPlayer(PlayerControl player)
     {
-        HackedPlayers.Add(player);
+        HackedPlayers.Add(player.Data);
         player.RawSetName("<b><i>???</b></i>");
         player.RawSetColor(15);
 
-        if(player.AmOwner)
+        if (GameData.Instance.GetHost() == player.Data)
         {
-            var task = PlayerTask.GetOrCreateTask<HackSabotage>(player);
-            task.Id = 255U;
-            task.Owner = player;
-            task.Initialize();
+            ShipStatus.Instance.RpcUpdateSystem(SystemTypes.Comms, 128);
         }
+
+        var task = PlayerTask.GetOrCreateTask<HackSabotage>(player);
+        task.Id = 255U;
+        task.Owner = player;
+        task.Initialize();
     }
 
     [MethodRpc((uint)LaunchpadRPC.UnhackPlayer)]
     public static void RpcUnhackPlayer(PlayerControl player)
     {
-        HackedPlayers.Remove(player);
+        HackedPlayers.Remove(player.Data);
         player.SetName(player.Data.PlayerName);
         player.SetColor((byte)player.Data.DefaultOutfit.ColorId);
     }
