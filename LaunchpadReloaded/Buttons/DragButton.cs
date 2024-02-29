@@ -1,5 +1,6 @@
 ﻿using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Utilities;
+using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
 using Reactor.Utilities.Extensions;
 using UnityEngine;
@@ -13,7 +14,7 @@ public class DragButton : CustomActionButton
     public override float EffectDuration => 0;
     public override int MaxUses => 0;
     public override string SpritePath => "Drag.png";
-    private bool _isDragging;
+    private bool _dragging;
     private DeadBody _target;
 
     public override bool Enabled(RoleBehaviour role)
@@ -21,29 +22,30 @@ public class DragButton : CustomActionButton
         return role is HitmanRole;
     }
 
-    protected override bool CanUse()
+    override protected bool CanUse()
     {
         return _target is not null;
     }
 
-    public override void Update(PlayerControl playerControl)
+    override protected void FixedUpdate(PlayerControl playerControl)
     {
-        base.Update(playerControl);
         playerControl.UpdateBodies(new Color(125,40,40), ref _target);
     }
     
-    protected override void OnClick()
+    override protected void OnClick()
     {
-        _isDragging = !_isDragging;
-        if (_isDragging)
+        _dragging = !_dragging;
+        if (_dragging)
         {
             OverrideName("DROP");
             OverrideSprite("Drop.png");
+            DragManager.RpcStartDragging(PlayerControl.LocalPlayer, _target.ParentId);
         }
         else
         {
             OverrideName("DRAG");
             OverrideSprite("Drag.png");
+            DragManager.RpcStopDragging(PlayerControl.LocalPlayer);
         }
     }
     

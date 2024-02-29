@@ -17,7 +17,7 @@ public abstract class CustomActionButton
     private bool _effectActive;
     private float _timer;
     private int _usesLeft;
-    private ActionButton _button;
+    protected ActionButton _button;
 
     public void CreateButton(Transform parent)
     {
@@ -68,8 +68,8 @@ public abstract class CustomActionButton
     {
         _button.ToggleVisible(visible && Enabled(role));
     }
-    
-    public virtual void Update(PlayerControl playerControl)
+
+    public void Update(PlayerControl playerControl)
     {
         if (_timer >= 0)
         {
@@ -92,7 +92,11 @@ public abstract class CustomActionButton
             _button.SetDisabled();
         }
         _button.SetCoolDown(_timer, _effectActive ? EffectDuration : Cooldown);
+        
+        FixedUpdate(playerControl);
     }
+
+    protected virtual void FixedUpdate(PlayerControl playerControl) { }
     
     private void ClickHandler()
     {

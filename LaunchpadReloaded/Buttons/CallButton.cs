@@ -19,7 +19,7 @@ public class CallButton : CustomActionButton
         return role is CaptainRole;
     }
 
-    protected override void OnClick()
+    override protected void OnClick()
     {
         PlayerControl.LocalPlayer.CmdReportDeadBody(null);
     }

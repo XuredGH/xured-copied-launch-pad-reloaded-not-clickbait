@@ -20,12 +20,12 @@ public class ZoomButton : CustomActionButton
         return role is CaptainRole;
     }
     
-    protected override void OnClick()
+    override protected void OnClick()
     {
         ZoomOut();
     }
 
-    protected override void OnEffectEnd()
+    override protected void OnEffectEnd()
     {
         base.OnEffectEnd();
         ZoomIn();
