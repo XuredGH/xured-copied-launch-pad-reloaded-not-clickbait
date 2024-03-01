@@ -18,7 +18,10 @@ public static class PlayerControlPatches
 
         foreach (var button in CustomButtonManager.CustomButtons)
         {
-            button.UpdateHandler(__instance);
+            if (button.Enabled(__instance.Data.Role))
+            {
+                button.UpdateHandler(__instance);
+            }
         }
         
         if (__instance.Data.Role is ICustomRole customRole)

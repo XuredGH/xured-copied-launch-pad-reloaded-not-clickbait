@@ -8,18 +8,18 @@ namespace LaunchpadReloaded.Features;
 
 public static class DragManager
 {
-    public static readonly Dictionary<byte, byte> DraggingPlayers = new();
+    public static readonly Dictionary<PlayerControl, byte> DraggingPlayers = new();
 
     [MethodRpc((uint)LaunchpadRPC.StartDrag)]
     public static void RpcStartDragging(PlayerControl playerControl, byte bodyId)
     {
-        DraggingPlayers.Add(playerControl.PlayerId, bodyId);
+        DraggingPlayers.Add(playerControl, bodyId);
     }
     
     [MethodRpc((uint)LaunchpadRPC.StopDrag)]
     public static void RpcStopDragging(PlayerControl playerControl)
     {
-        DraggingPlayers.Remove(playerControl.PlayerId);
+        DraggingPlayers.Remove(playerControl);
     }
     
     public static DeadBody GetBodyById(byte id)

@@ -11,10 +11,15 @@ public static class HudManagerPatches
     [HarmonyPatch("Update")]
     public static void UpdatePostfix(HudManager __instance)
     {
-        if (DragManager.DraggingPlayers.TryGetValue(PlayerControl.LocalPlayer.PlayerId, out var bodyId))
+        if (!PlayerControl.LocalPlayer)
+        {
+            return;
+        }
+
+        foreach (var (player, bodyId) in DragManager.DraggingPlayers)
         {
             var bodyById = DragManager.GetBodyById(bodyId);
-            bodyById.transform.position = Vector3.Lerp(bodyById.transform.position, __instance.transform.position, 5f * Time.deltaTime);
+            bodyById.transform.position = Vector3.Lerp(bodyById.transform.position, player.transform.position, 5f * Time.deltaTime);
         }
     }
 }
