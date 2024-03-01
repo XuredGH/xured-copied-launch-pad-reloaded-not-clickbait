@@ -23,7 +23,23 @@ public static class HackingManager
             new Vector3(-3.9285f, 5.6983f, 0.0057f),
             new Vector3(12.1729f, -6.5887f, -0.0066f),
             new Vector3(-19.7123f, -6.8006f, -0.0068f),
-            new Vector3(-12.3633f, -14.6075f, -0.0146f) ]
+            new Vector3(-12.3633f, -14.6075f, -0.0146f) ],
+        [MapType.Pb] = [
+            new Vector3(3.5599f, -7.584f, -0.0076f),
+            new Vector3(22.1169f, -25.0981f, -0.0251f),
+            new Vector3(37.3687f, -21.9697f, -0.022f),
+            new Vector3(40.6573f, -7.9562f, -0.008f) ],
+        [MapType.Hq] = [
+            new Vector3(11.5355f, 10.3573f, 0.0104f),
+            new Vector3(-3.063f, 3.8147f, 0.0038f),
+            new Vector3(16.6542f, 25.3223f, 0.0253f),
+            new Vector3(19.5728f, 17.4778f, 0.0175f) ],
+        [MapType.Fungle] = [
+            new Vector3(-22.4063f, -1.6647f, -0.0017f),
+            new Vector3(-11.0019f, 12.6502f, 0.0127f),
+            new Vector3(24.3133f, 14.628f, 0.0146f),
+            new Vector3(7.6678f, -9.9008f, -0.0099f)
+            ]
     };
 
     public static bool AnyActiveNodes()
