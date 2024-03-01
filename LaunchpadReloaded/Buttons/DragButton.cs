@@ -14,8 +14,8 @@ public class DragButton : CustomActionButton
     public override float EffectDuration => 0;
     public override int MaxUses => 0;
     public override string SpritePath => "Drag.png";
+    
     private bool _dragging;
-    private DeadBody _target;
 
     public override bool Enabled(RoleBehaviour role)
     {
@@ -24,14 +24,23 @@ public class DragButton : CustomActionButton
 
     public override bool CanUse()
     {
-        return _target is not null;
+        return DeadBodyTarget is not null;
     }
 
     protected override void FixedUpdate(PlayerControl playerControl)
     {
-        playerControl.UpdateBodies(new Color(125,40,40), ref _target);
+        if (_dragging)
+        {
+            HudManager.Instance.KillButton.SetDisabled();
+            HudManager.Instance.ReportButton.SetDisabled();
+            HudManager.Instance.UseButton.SetDisabled();
+            HudManager.Instance.SabotageButton.SetDisabled();
+            HudManager.Instance.ImpostorVentButton.SetDisabled();
+            HudManager.Instance.AdminButton.SetDisabled();
+            HudManager.Instance.ReportButton.SetDisabled();
+        }
     }
-    
+
     protected override void OnClick()
     {
         _dragging = !_dragging;
@@ -39,7 +48,7 @@ public class DragButton : CustomActionButton
         {
             OverrideName("DROP");
             OverrideSprite("Drop.png");
-            DragManager.RpcStartDragging(PlayerControl.LocalPlayer, _target.ParentId);
+            DragManager.RpcStartDragging(PlayerControl.LocalPlayer, DeadBodyTarget.ParentId);
         }
         else
         {

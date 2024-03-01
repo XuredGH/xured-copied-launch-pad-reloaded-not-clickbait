@@ -13,30 +13,23 @@ public class CleanButton : CustomActionButton
     public override float EffectDuration => 0;
     public override int MaxUses => 0;
     public override string SpritePath => "Clean.png";
-
-    private DeadBody _target;
-
+    
     public override bool Enabled(RoleBehaviour role)
     {
         return role is JanitorRole;
     }
-
-    protected override void FixedUpdate(PlayerControl playerControl)
-    {
-        playerControl.UpdateBodies(Color.yellow, ref _target);
-    }
-
+    
     public override bool CanUse()
     {
         var playerCounts = GameManager.Instance.LogicFlow.GetPlayerCounts();
-        return base.CanUse() && _target is not null && (playerCounts.Item3 == 1 || playerCounts.Item2 > 1);
+        return base.CanUse() && DeadBodyTarget is not null && (playerCounts.Item3 == 1 || playerCounts.Item2 > 1);
     }
 
     protected override void OnClick()
     {
-        _target.Reported = true;
-        _target.enabled = false;
-        foreach (var bodyRenderer in _target.bodyRenderers)
+        DeadBodyTarget.Reported = true;
+        DeadBodyTarget.enabled = false;
+        foreach (var bodyRenderer in DeadBodyTarget.bodyRenderers)
         {
             bodyRenderer.enabled = false;
         }
