@@ -6,7 +6,7 @@ namespace LaunchpadReloaded.API.Utilities;
 
 public static class Extensions
 {
-    private static readonly ContactFilter2D Filter = ContactFilter2D.CreateLegacyFilter(~LayerMask.GetMask(new []{"Ship"}.ToArray()), float.MinValue, float.MaxValue);
+    private static readonly ContactFilter2D Filter = ContactFilter2D.CreateLegacyFilter(Constants.NotShipMask, float.MinValue, float.MaxValue);
     
     public static bool ButtonTimerEnabled(this PlayerControl playerControl)
     {
