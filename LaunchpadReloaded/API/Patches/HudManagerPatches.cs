@@ -1,7 +1,9 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Roles;
+using LaunchpadReloaded.Features;
 using Reactor.Utilities.Extensions;
+using System.Drawing;
 using UnityEngine;
 
 namespace LaunchpadReloaded.API.Patches;
@@ -10,6 +12,32 @@ namespace LaunchpadReloaded.API.Patches;
 public static class HudManagerPatches
 {
     private static GameObject _bottomLeft;
+    
+    [HarmonyPostfix]
+    [HarmonyPatch("Update")]
+    public static void UpdatePostfix(HudManager __instance)
+    {
+        if (!PlayerControl.LocalPlayer) return;
+
+        if(HackingManager.HackedPlayers.Contains(PlayerControl.LocalPlayer.PlayerId))
+        {
+            __instance.tasksString.Clear();
+            __instance.tasksString.Append(UnityEngine.Color.green.ToTextColor());
+            __instance.tasksString.Append("You have been hacked!\n");
+            __instance.tasksString.Append("You are unable to complete tasks or call meetings.\n");
+            __instance.tasksString.Append("Find an active node to reverse the hack!.\n");
+            __instance.tasksString.Append("</color>");
+
+            __instance.TaskPanel.SetTaskText(__instance.tasksString.ToString());
+        }
+
+        if (PlayerControl.LocalPlayer.Data.Role is ICustomRole customRole)
+        {
+            customRole.HudUpdate(__instance);
+        }
+
+        if (HackingManager.AnyActiveNodes()) __instance.ReportButton.SetDisabled();
+    }
     
     [HarmonyPostfix]
     [HarmonyPatch("Start")]
@@ -56,21 +84,6 @@ public static class HudManagerPatches
         foreach (var button in CustomButtonManager.CustomButtons)
         {
             button.SetActive(isActive, roleBehaviour);
-        }
-    }
-    
-    [HarmonyPostfix]
-    [HarmonyPatch("Update")]
-    public static void UpdatePostfix(HudManager __instance)
-    {
-        if (!PlayerControl.LocalPlayer)
-        {
-            return;
-        }
-
-        if (PlayerControl.LocalPlayer.Data.Role is ICustomRole customRole)
-        {
-            customRole.HudUpdate(__instance);
         }
     }
 }

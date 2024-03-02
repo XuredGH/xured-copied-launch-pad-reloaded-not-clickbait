@@ -13,7 +13,7 @@ public class DragButton : CustomActionButton
     public override float Cooldown => 0;
     public override float EffectDuration => 0;
     public override int MaxUses => 0;
-    public override string SpritePath => "Drag.png";
+    public override Sprite Sprite => LaunchpadReloadedPlugin.Bundle.LoadAsset<Sprite>("Drag.png");
     
     private bool _dragging;
 

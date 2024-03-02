@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using LaunchpadReloaded.Features;
 using Reactor.Utilities.Extensions;
 using UnityEngine;
 
@@ -11,6 +12,11 @@ public static class Extensions
     public static bool ButtonTimerEnabled(this PlayerControl playerControl)
     {
         return (playerControl.moveable || playerControl.petting) && !playerControl.inVent && !playerControl.shapeshifting && (!DestroyableSingleton<HudManager>.InstanceExists || !DestroyableSingleton<HudManager>.Instance.IsIntroDisplayed) && !MeetingHud.Instance && !PlayerCustomizationMenu.Instance && !ExileController.Instance && !IntroCutscene.Instance;
+    }
+
+    public static bool IsHacked(this GameData.PlayerInfo playerInfo)
+    {
+        return HackingManager.HackedPlayers.Contains(playerInfo.PlayerId);
     }
 
     public static void UpdateBodies(this PlayerControl playerControl, Color outlineColor, ref DeadBody target)
