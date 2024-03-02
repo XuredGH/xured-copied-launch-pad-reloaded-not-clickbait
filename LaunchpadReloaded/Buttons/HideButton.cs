@@ -5,6 +5,7 @@ using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Roles;
+using Reactor.Utilities.Extensions;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
@@ -15,7 +16,7 @@ public class HideButton : CustomActionButton
     public override float Cooldown => 5;
     public override float EffectDuration => 0;
     public override int MaxUses => 3;
-    public override string SpritePath => "Clean.png";
+    public override Sprite Sprite => LaunchpadReloadedPlugin.Bundle.LoadAsset<Sprite>("Clean.png");
 
     private Vent VentTarget => HudManager.Instance.ImpostorVentButton.currentTarget;
     
