@@ -59,9 +59,12 @@ public abstract class CustomActionButton
         pb.OnClick.AddListener((UnityAction)ClickHandler);
     }
 
-    public void OverrideSprite(string path)
+    public void OverrideSprite(string path, bool useAssetBundle = true)
     {
-        Button.graphic.sprite = LaunchpadReloadedPlugin.Bundle.LoadAsset<Sprite>(path);
+        var sprite = useAssetBundle
+            ? LaunchpadReloadedPlugin.Bundle.LoadAsset<Sprite>(path)
+            : SpriteTools.LoadSpriteFromPath(path);
+        Button.graphic.sprite = sprite;
     }
 
     public void OverrideName(string name)

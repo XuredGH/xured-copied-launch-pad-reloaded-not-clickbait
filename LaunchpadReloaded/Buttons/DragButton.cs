@@ -63,11 +63,11 @@ public class DragButton : CustomActionButton
     {
         if (DragManager.IsDragging(PlayerControl.LocalPlayer.PlayerId))
         {
-            DeadBodyManager.RpcStopDragging(PlayerControl.LocalPlayer);
+            DragManager.RpcStopDragging(PlayerControl.LocalPlayer);
         }
         else
         {
-            DeadBodyManager.RpcStartDragging(PlayerControl.LocalPlayer, DeadBodyTarget.ParentId);
+            DragManager.RpcStartDragging(PlayerControl.LocalPlayer, DeadBodyTarget.ParentId);
         }
     }
     

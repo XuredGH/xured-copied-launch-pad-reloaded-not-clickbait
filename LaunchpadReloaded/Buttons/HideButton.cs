@@ -28,7 +28,7 @@ public class HideButton : CustomActionButton
 
     protected override void OnClick()
     {
-        DeadBodyManager.RpcStopDragging(PlayerControl.LocalPlayer);
+        DragManager.RpcStopDragging(PlayerControl.LocalPlayer);
         DeadBodyManager.RpcHideBodyInVent(ShipStatus.Instance, DeadBodyTarget.ParentId, VentTarget.Id);
     }
 

@@ -10,32 +10,9 @@ namespace LaunchpadReloaded.Features;
 
 public static class DeadBodyManager
 {
-    
     public static DeadBody GetBodyById(byte id)
     {
         return Object.FindObjectsOfType<DeadBody>().FirstOrDefault(body => body.ParentId == id);
-    }
-    
-    [MethodRpc((uint)LaunchpadRPC.StartDrag)]
-    public static void RpcStartDragging(PlayerControl playerControl, byte bodyId)
-    {
-        DragManager.DraggingPlayers.Add(playerControl.PlayerId, bodyId);
-        playerControl.MyPhysics.Speed /= 2;
-        if (playerControl.AmOwner)
-        {
-            DragButton.Instance.SetDrop();
-        }
-    }
-    
-    [MethodRpc((uint)LaunchpadRPC.StopDrag)]
-    public static void RpcStopDragging(PlayerControl playerControl)
-    {
-        DragManager.DraggingPlayers.Remove(playerControl.PlayerId);
-        playerControl.MyPhysics.Speed *= 2;
-        if (playerControl.AmOwner)
-        {
-            DragButton.Instance.SetDrag();
-        }
     }
 
     [MethodRpc((uint)LaunchpadRPC.HideBodyInVent)]
