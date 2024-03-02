@@ -1,21 +1,9 @@
-﻿using AmongUs.Data.Player;
-using Il2CppInterop.Runtime;
-using Il2CppSystem.Text.Json;
-using LaunchpadReloaded.API.Hud;
+﻿using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Utilities;
 using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Roles;
-using Reactor.Networking.Attributes;
 using Reactor.Utilities.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
-using static GameData;
-using static UnityEngine.GraphicsBuffer;
 
 namespace LaunchpadReloaded.Buttons;
 public class HackButton : CustomActionButton
@@ -29,7 +17,7 @@ public class HackButton : CustomActionButton
     public override bool CanUse() => !HackingManager.AnyActiveNodes();
     protected override void OnClick()
     {
-        foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+        foreach (var player in PlayerControl.AllPlayerControls)
         {
             HackingManager.RpcHackPlayer(player);
         }

@@ -1,16 +1,7 @@
 ﻿using HarmonyLib;
-using LaunchpadReloaded.API.Utilities;
-using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
-using Reactor.Utilities.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
 
-namespace LaunchpadReloaded.API.Patches;
+namespace LaunchpadReloaded.Patches;
 [HarmonyPatch(typeof(ShipStatus))]
 public static class ShipStatusPatch
 {

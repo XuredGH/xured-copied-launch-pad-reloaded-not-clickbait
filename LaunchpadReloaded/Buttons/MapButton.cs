@@ -1,21 +1,7 @@
-﻿using AmongUs.Data.Player;
-using Il2CppInterop.Runtime;
-using Il2CppSystem.Text.Json;
-using LaunchpadReloaded.API.Hud;
+﻿using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Utilities;
-using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Roles;
-using Reactor.Networking.Attributes;
-using Reactor.Utilities.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
-using static GameData;
-using static UnityEngine.GraphicsBuffer;
 
 namespace LaunchpadReloaded.Buttons;
 public class MapButton : CustomActionButton
@@ -26,7 +12,7 @@ public class MapButton : CustomActionButton
     public override int MaxUses => 0;
     public override Sprite Sprite => SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.Map.png");
 
-    private MapOptions _mapOptions = new MapOptions()
+    private MapOptions _mapOptions = new()
     {
         IncludeDeadBodies = true,
         AllowMovementWhileMapOpen = true,

@@ -1,20 +1,28 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using LaunchpadReloaded.Buttons;
 using LaunchpadReloaded.Networking;
 using Reactor.Networking.Attributes;
-using UnityEngine;
 
 namespace LaunchpadReloaded.Features;
 
 public static class DragManager
 {
     public static readonly Dictionary<byte, byte> DraggingPlayers = new();
+
+    public static bool IsDragging(byte playerId)
+    {
+        return DraggingPlayers.ContainsKey(playerId);
+    }
     
     [MethodRpc((uint)LaunchpadRPC.StartDrag)]
     public static void RpcStartDragging(PlayerControl playerControl, byte bodyId)
     {
         DraggingPlayers.Add(playerControl.PlayerId, bodyId);
         playerControl.MyPhysics.Speed /= 2;
+        if (playerControl.AmOwner)
+        {
+            DragButton.Instance.SetDrop();
+        }
     }
     
     [MethodRpc((uint)LaunchpadRPC.StopDrag)]
@@ -22,11 +30,10 @@ public static class DragManager
     {
         DraggingPlayers.Remove(playerControl.PlayerId);
         playerControl.MyPhysics.Speed *= 2;
-    }
-    
-    public static DeadBody GetBodyById(byte id)
-    {
-        return Object.FindObjectsOfType<DeadBody>().FirstOrDefault(body => body.ParentId == id);
+        if (playerControl.AmOwner)
+        {
+            DragButton.Instance.SetDrag();
+        }
     }
 
 }
