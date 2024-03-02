@@ -77,9 +77,14 @@ public abstract class CustomActionButton
     
     protected virtual void OnEffectEnd() { }
 
+    public bool CanUseHandler()
+    {
+        return Timer <= 0 && !EffectActive && (!LimitedUses || UsesLeft > 0) && CanUse();
+    }
+
     public virtual bool CanUse()
     {
-        return Timer <= 0 && !EffectActive && (!LimitedUses || MaxUses > 0);
+        return true;
     }
     
     public virtual void SetActive(bool visible, RoleBehaviour role)
@@ -89,7 +94,7 @@ public abstract class CustomActionButton
     
     private void ClickHandler()
     {
-        if (!CanUse())
+        if (!CanUseHandler())
         {
             return;
         }
@@ -127,7 +132,7 @@ public abstract class CustomActionButton
             }
         }
 
-        if (CanUse())
+        if (CanUseHandler())
         {
             Button.SetEnabled();
         }

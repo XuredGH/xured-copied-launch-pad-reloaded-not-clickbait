@@ -22,7 +22,7 @@ public class CleanButton : CustomActionButton
     public override bool CanUse()
     {
         var playerCounts = GameManager.Instance.LogicFlow.GetPlayerCounts();
-        return base.CanUse() && DeadBodyTarget is not null && (playerCounts.Item3 == 1 || playerCounts.Item2 > 1);
+        return DeadBodyTarget is not null && (playerCounts.Item3 == 1 || playerCounts.Item2 > 1);
     }
 
     protected override void OnClick()

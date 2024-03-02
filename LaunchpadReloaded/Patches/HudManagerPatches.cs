@@ -11,7 +11,7 @@ public static class HudManagerPatches
     [HarmonyPatch("Update")]
     public static void UpdatePostfix(HudManager __instance)
     {
-        if (!PlayerControl.LocalPlayer)
+        if (!PlayerControl.LocalPlayer || MeetingHud.Instance)
         {
             return;
         }
@@ -19,7 +19,7 @@ public static class HudManagerPatches
         foreach (var (player, bodyId) in DragManager.DraggingPlayers)
         {
             var bodyById = DragManager.GetBodyById(bodyId);
-            bodyById.transform.position = Vector3.Lerp(bodyById.transform.position, player.transform.position, 5f * Time.deltaTime);
+            bodyById.transform.position = Vector3.Lerp(bodyById.transform.position, GameData.Instance.GetPlayerById(player).Object.transform.position, 5f * Time.deltaTime);
         }
     }
 }

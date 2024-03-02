@@ -16,7 +16,9 @@ public class HideButton : CustomActionButton
 
     public override bool CanUse()
     {
-        return DeadBodyTarget is not null && DragManager.DraggingPlayers.ContainsKey(PlayerControl.LocalPlayer);
+        return DeadBodyTarget is not null && 
+               DragManager.DraggingPlayers.ContainsKey(PlayerControl.LocalPlayer.PlayerId) &&
+               HudManager.Instance.ImpostorVentButton.currentTarget;
     }
 
     protected override void OnClick()
