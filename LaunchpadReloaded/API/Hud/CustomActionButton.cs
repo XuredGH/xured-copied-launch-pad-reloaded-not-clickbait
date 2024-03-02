@@ -10,7 +10,7 @@ public abstract class CustomActionButton
     public abstract float Cooldown { get; }
     public abstract float EffectDuration { get; }
     public abstract int MaxUses { get; }
-    public abstract string SpritePath { get; }
+    public abstract Sprite Sprite { get; }
     private bool HasEffect => EffectDuration > 0;
     private bool LimitedUses => MaxUses > 0;
     
@@ -31,7 +31,7 @@ public abstract class CustomActionButton
         _button.name = Name + "Button";
         _button.OverrideText(Name);
         
-        _button.graphic.sprite = LaunchpadReloadedPlugin.Bundle.LoadAsset<Sprite>(SpritePath);
+        _button.graphic.sprite = Sprite;
 
         _button.SetUsesRemaining(MaxUses);
         if (MaxUses <= 0)

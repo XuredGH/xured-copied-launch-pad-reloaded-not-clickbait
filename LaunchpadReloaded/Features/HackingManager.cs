@@ -39,8 +39,18 @@ public static class HackingManager
             new Vector3(-11.0019f, 12.6502f, 0.0127f),
             new Vector3(24.3133f, 14.628f, 0.0146f),
             new Vector3(7.6678f, -9.9008f, -0.0099f)
-            ]
+            ],
     };
+
+    private static Vector3[] AirshipPositions = [
+        new Vector3(-5.0792f, 10.9539f, 0.011f),
+        new Vector3(16.856f, 14.7769f, 0.0148f),
+        new Vector3(37.3283f, -3.7612f, -0.0038f),
+        new Vector3(19.8862f, -3.9247f, -0.0039f),
+        new Vector3(-13.1688f, -14.4867f, -0.0145f),
+        new Vector3(-14.2747f, -4.8171f, -0.0048f),
+        new Vector3(1.4743f, -2.5041f, -0.0025f),
+    ];
 
     public static bool AnyActiveNodes()
     {
@@ -71,6 +81,8 @@ public static class HackingManager
         nodesParent.transform.SetParent(shipStatus.transform);
 
         Vector3[] nodePositions = MapNodePositions[shipStatus.Type];
+        if (shipStatus.TryCast<AirshipStatus>()) nodePositions = AirshipPositions;
+
         for (int i = 0; i < nodePositions.Length; i++)
         {
             Vector3 nodePos = nodePositions[i];

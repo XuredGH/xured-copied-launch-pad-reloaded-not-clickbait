@@ -2,6 +2,7 @@
 using Il2CppInterop.Runtime;
 using Il2CppSystem.Text.Json;
 using LaunchpadReloaded.API.Hud;
+using LaunchpadReloaded.API.Utilities;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Roles;
@@ -23,7 +24,7 @@ public class HackButton : CustomActionButton
     public override float Cooldown => 60;
     public override float EffectDuration => 0;
     public override int MaxUses => 2;
-    public override string SpritePath => "Zoom.png";
+    public override Sprite Sprite => SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.Hack.png");
     public override bool Enabled(RoleBehaviour role) =>  role is HackerRole;
     protected override bool CanUse() => !HackingManager.AnyActiveNodes();
 

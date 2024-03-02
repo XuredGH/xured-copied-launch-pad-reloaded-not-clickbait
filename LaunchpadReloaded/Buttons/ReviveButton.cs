@@ -1,4 +1,6 @@
 ﻿using LaunchpadReloaded.API.Hud;
+using Reactor.Utilities.Extensions;
+using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
 
@@ -8,7 +10,7 @@ public class ReviveButton : CustomActionButton
     public override float Cooldown => 10;
     public override float EffectDuration => 0;
     public override int MaxUses => 5;
-    public override string SpritePath => "Revive.png";
+    public override Sprite Sprite => LaunchpadReloadedPlugin.Bundle.LoadAsset<Sprite>("Revive.png");
     protected override void OnClick()
     {
     }

@@ -12,7 +12,7 @@ public class CleanButton : CustomActionButton
     public override float Cooldown => 5;
     public override float EffectDuration => 0;
     public override int MaxUses => 0;
-    public override string SpritePath => "Clean.png";
+    public override Sprite Sprite => LaunchpadReloadedPlugin.Bundle.LoadAsset<Sprite>("Clean.png");
 
     private DeadBody _target;
 
