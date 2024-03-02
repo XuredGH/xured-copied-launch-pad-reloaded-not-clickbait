@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,4 +11,6 @@ public enum LaunchpadRPC : uint
     UnhackPlayer = 1,
     CreateNodes = 2,
     ToggleNode = 3,
+    StartDrag = 3,
+    StopDrag = 4,
 }

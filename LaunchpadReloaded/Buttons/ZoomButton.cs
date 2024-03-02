@@ -28,7 +28,6 @@ public class ZoomButton : CustomActionButton
 
     protected override void OnEffectEnd()
     {
-        base.OnEffectEnd();
         ZoomIn();
     }
 
@@ -40,7 +39,10 @@ public class ZoomButton : CustomActionButton
             {
                 Camera.main.orthographicSize = ft;
                 if (MeetingHud.Instance)
+                {
                     Camera.main.orthographicSize = 3f;
+                }
+
                 yield return null;
             }
         }
@@ -54,7 +56,10 @@ public class ZoomButton : CustomActionButton
             {
                 Camera.main.orthographicSize = ft;
                 if (MeetingHud.Instance)
+                {
                     Camera.main.orthographicSize = 3f;
+                }
+
                 yield return null;
             }
         }

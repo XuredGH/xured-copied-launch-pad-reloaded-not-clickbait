@@ -13,6 +13,8 @@ namespace LaunchpadReloaded.API.Patches;
 [HarmonyPatch(typeof(RolesSettingsMenu))]
 public static class RolesSettingsMenuPatches
 {
+    
+    // TODO: Add advanced role option settings
     [HarmonyPrefix]
     [HarmonyPatch("Start")]
     public static void StartPrefix(RolesSettingsMenu __instance)
@@ -20,8 +22,11 @@ public static class RolesSettingsMenuPatches
         var tabPrefab = __instance.AllAdvancedSettingTabs.ToArray()[1].Tab;
         foreach (var (key, role) in CustomRoleManager.CustomRoles)
         {
-            if (__instance.AllAdvancedSettingTabs.ToArray().Any(x => (ushort)x.Type == key)) continue;
-            
+            if (__instance.AllAdvancedSettingTabs.ToArray().Any(x => (ushort)x.Type == key))
+            {
+                continue;
+            }
+
             var newTab = Object.Instantiate(tabPrefab, __instance.AdvancedRolesSettings.transform);
             newTab.name = role.NiceName + " Settings";
             foreach (var option in newTab.GetComponentsInChildren<OptionBehaviour>())
@@ -53,7 +58,11 @@ public static class RolesSettingsMenuPatches
         var parent = __instance.ItemParent;
         foreach (var (key, role) in CustomRoleManager.CustomRoles)
         {
-            if (__instance.AllRoleSettings.ToArray().Any(x => (ushort)x.Role.Role == key)) continue;
+            if (__instance.AllRoleSettings.ToArray().Any(x => (ushort)x.Role.Role == key))
+            {
+                continue;
+            }
+
             var newOption = Object.Instantiate(__instance.SettingPrefab, parent);
             newOption.Role = role;
             __instance.AllRoleSettings.Add(newOption);
@@ -69,9 +78,12 @@ public static class RolesSettingsMenuPatches
             Debug.LogError("SETTING ROLE CONFIG");
             PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config.TryGetEntry<int>(role.NumConfigDefinition, out var numEntry);
             numEntry.Value = roleSetting.RoleMaxCount;
+            
             PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config.TryGetEntry<int>(role.ChanceConfigDefinition, out var chanceEntry);
             chanceEntry.Value = roleSetting.RoleChance;
+            
             roleSetting.UpdateValuesAndText(GameOptionsManager.Instance.CurrentGameOptions.RoleOptions);
+            
             GameOptionsManager.Instance.GameHostOptions = GameOptionsManager.Instance.CurrentGameOptions;
             return false;
         }

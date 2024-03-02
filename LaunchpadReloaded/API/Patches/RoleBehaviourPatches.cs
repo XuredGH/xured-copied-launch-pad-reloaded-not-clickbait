@@ -11,7 +11,11 @@ public static class RoleBehaviourPatches
     [HarmonyPatch(nameof(RoleBehaviour.TeamColor), MethodType.Getter)]
     public static bool PrefixTeamColorGetter(RoleBehaviour __instance, ref Color __result)
     {
-        if (__instance is not ICustomRole behaviour) return true;
+        if (__instance is not ICustomRole behaviour)
+        {
+            return true;
+        }
+
         __result = behaviour.RoleColor;
         return false;
     }

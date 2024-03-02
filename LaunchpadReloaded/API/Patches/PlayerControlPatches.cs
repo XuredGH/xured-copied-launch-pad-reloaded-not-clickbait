@@ -14,11 +14,17 @@ public static class PlayerControlPatches
     [HarmonyPatch("FixedUpdate")]
     public static void FixedUpdatePostfix(PlayerControl __instance)
     {
-        if (!__instance.AmOwner || MeetingHud.Instance) return;
+        if (!__instance.AmOwner || MeetingHud.Instance)
+        {
+            return;
+        }
 
         foreach (var button in CustomButtonManager.CustomButtons)
         {
-            button.Update(__instance);
+            if (button.Enabled(__instance.Data.Role))
+            {
+                button.UpdateHandler(__instance);
+            }
         }
         
         if (__instance.Data.Role is ICustomRole customRole)

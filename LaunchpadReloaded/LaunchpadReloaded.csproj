@@ -33,7 +33,6 @@
     </ItemGroup>
     
     <ItemGroup>
-      <Folder Include="Patches\" />
       <EmbeddedResource Include="Resources\assets-win-x86.bundle" />
       <EmbeddedResource Include="Resources\Hack.png" />
       <EmbeddedResource Include="Resources\Map.png" />

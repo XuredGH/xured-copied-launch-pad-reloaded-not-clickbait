@@ -1,4 +1,5 @@
-﻿using Reactor.Utilities.Extensions;
+﻿using LaunchpadReloaded.API.Utilities;
+using Reactor.Utilities.Extensions;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -7,122 +8,148 @@ namespace LaunchpadReloaded.API.Hud;
 public abstract class CustomActionButton
 {
     public abstract string Name { get; }
-    public abstract float Cooldown { get; }
-    public abstract float EffectDuration { get; }
-    public abstract int MaxUses { get; }
-    public abstract Sprite Sprite { get; }
-    private bool HasEffect => EffectDuration > 0;
-    private bool LimitedUses => MaxUses > 0;
     
-    private bool _effectActive;
-    protected float _timer;
-    private int _usesLeft;
-    protected ActionButton _button;
+    public abstract float Cooldown { get; }
+    
+    public abstract float EffectDuration { get; }
+    
+    public abstract int MaxUses { get; }
+    
+    public abstract Sprite Sprite { get; }
+    
+    public bool HasEffect => EffectDuration > 0;
+    
+    public bool LimitedUses => MaxUses > 0;
 
+    protected bool EffectActive;
+    
+    protected float Timer;
+    
+    protected int UsesLeft;
+    
+    protected ActionButton Button;
+
+    protected DeadBody DeadBodyTarget;
+    
     public void CreateButton(Transform parent)
     {
-        if (_button) return;
-
-        _usesLeft = MaxUses;
-        _timer = 0;
-        _effectActive = false;
-        
-        _button = Object.Instantiate(HudManager.Instance.AbilityButton, parent);
-        _button.name = Name + "Button";
-        _button.OverrideText(Name);
-        
-        _button.graphic.sprite = Sprite;
-
-        _button.SetUsesRemaining(MaxUses);
-        if (MaxUses <= 0)
+        if (Button)
         {
-            _button.SetInfiniteUses();
+            return;
         }
 
-        var pb = _button.GetComponent<PassiveButton>();
+        UsesLeft = MaxUses;
+        Timer = 0;
+        EffectActive = false;
+        
+        Button = Object.Instantiate(HudManager.Instance.AbilityButton, parent);
+        Button.name = Name + "Button";
+        Button.OverrideText(Name);
+        
+        Button.graphic.sprite = Sprite;
+
+        Button.SetUsesRemaining(MaxUses);
+        if (MaxUses <= 0)
+        {
+            Button.SetInfiniteUses();
+        }
+
+        var pb = Button.GetComponent<PassiveButton>();
         pb.OnClick.RemoveAllListeners();
         pb.OnClick.AddListener((UnityAction)ClickHandler);
     }
 
-    public virtual bool Enabled(RoleBehaviour role)
-    {
-        return true;
-    }
-
-    protected virtual bool CanUse()
-    {
-        return _timer <= 0 && !_effectActive;
-    }
-
     public void OverrideSprite(string path)
     {
-        _button.graphic.sprite = LaunchpadReloadedPlugin.Bundle.LoadAsset<Sprite>(path);
+        Button.graphic.sprite = LaunchpadReloadedPlugin.Bundle.LoadAsset<Sprite>(path);
     }
 
     public void OverrideName(string name)
     {
-        _button.OverrideText(name);
+        Button.OverrideText(name);
+    }
+    
+    protected virtual void FixedUpdate(PlayerControl playerControl) { }
+
+    protected abstract void OnClick();
+    
+    public abstract bool Enabled(RoleBehaviour role);
+    
+    protected virtual void OnEffectEnd() { }
+
+    public bool CanUseHandler()
+    {
+        return Timer <= 0 && !EffectActive && (!LimitedUses || UsesLeft > 0) && CanUse();
+    }
+
+    public virtual bool CanUse()
+    {
+        return true;
     }
     
     public virtual void SetActive(bool visible, RoleBehaviour role)
     {
-        _button.ToggleVisible(visible && Enabled(role));
-    }
-    
-    public virtual void Update(PlayerControl playerControl)
-    {
-        if (_timer >= 0)
-        {
-            _timer -= Time.deltaTime;
-        }
-        else
-        {
-            if (HasEffect && _effectActive)
-            {
-                OnEffectEnd();
-            }
-        }
-
-        if (CanUse())
-        {
-            _button.SetEnabled();
-        }
-        else
-        {
-            _button.SetDisabled();
-        }
-        _button.SetCoolDown(_timer, _effectActive ? EffectDuration : Cooldown);
+        Button.ToggleVisible(visible && Enabled(role));
     }
     
     private void ClickHandler()
     {
-        if (!CanUse()) return;
+        if (!CanUseHandler())
+        {
+            return;
+        }
 
         if (LimitedUses)
         {
-            _usesLeft--;
-            _button.SetUsesRemaining(_usesLeft);
+            UsesLeft--;
+            Button.SetUsesRemaining(UsesLeft);
         }
         
         OnClick();
-        _button.SetDisabled();
+        Button.SetDisabled();
         if (HasEffect)
         {
-            _effectActive = true;
-            _timer = EffectDuration;
+            EffectActive = true;
+            Timer = EffectDuration;
         }
         else
         {
-            _timer = Cooldown;
+            Timer = Cooldown;
         }
     }
-
-    protected abstract void OnClick();
     
-    protected virtual void OnEffectEnd()
+    public void UpdateHandler(PlayerControl playerControl)
     {
-        _effectActive = false;
-        _timer = Cooldown;
+        if (Timer >= 0)
+        {
+            Timer -= Time.deltaTime;
+        }
+        else
+        {
+            if (HasEffect && EffectActive)
+            {
+                EffectEndHandler();
+            }
+        }
+
+        if (CanUseHandler())
+        {
+            Button.SetEnabled();
+        }
+        else
+        {
+            Button.SetDisabled();
+        }
+        Button.SetCoolDown(Timer, EffectActive ? EffectDuration : Cooldown);
+        
+        playerControl.UpdateBodies(playerControl.Data.Role.TeamColor, ref DeadBodyTarget);
+        FixedUpdate(playerControl);
     }
 
+    private void EffectEndHandler()
+    {
+        EffectActive = false;
+        Timer = Cooldown;
+        OnEffectEnd();
+    }
 }

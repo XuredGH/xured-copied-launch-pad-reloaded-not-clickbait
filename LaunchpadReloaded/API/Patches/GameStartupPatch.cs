@@ -13,7 +13,11 @@ public static class GameStartupPatch
     [HarmonyPatch(nameof(MainMenuManager.Start))]
     public static void Postfix()
     {
-        if (_runOnce) return;
+        if (_runOnce)
+        {
+            return;
+        }
+
         _runOnce = true;
         CustomRoleManager.RegisterInRoleManager();
     }
