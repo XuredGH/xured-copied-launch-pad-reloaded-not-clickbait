@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using LaunchpadReloaded.API.Roles;
 using Reactor.Utilities.Attributes;
 using UnityEngine;
@@ -9,9 +9,9 @@ namespace LaunchpadReloaded.Roles;
 public class JanitorRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
 {
     public string RoleName => "Janitor";
-    public string RoleDescription => "Help the impostor by\ndragging and hiding bodies";
-    public string RoleLongDescription => "Help the Impostor with your ability to move bodies around and bury them!";
+    public string RoleDescription => "Drag bodies and hide them in vents";
+    public string RoleLongDescription => "The Janitor is an impostor with the ability to drag bodies! The Janitor can stash bodies in vents, disabling them in the process! Cleaning vents will expose the body!";
     public Color RoleColor => Color.yellow;
     public RoleTeamTypes Team => RoleTeamTypes.Impostor;
-    
+    public bool TargetsBodies => true;
 }
