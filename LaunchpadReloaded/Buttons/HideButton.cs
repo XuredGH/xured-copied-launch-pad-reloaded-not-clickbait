@@ -2,6 +2,7 @@
 using LaunchpadReloaded.API.Utilities;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
+using Reactor.Utilities.Extensions;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
@@ -12,7 +13,7 @@ public class HideButton : CustomActionButton
     public override float Cooldown => 5;
     public override float EffectDuration => 0;
     public override int MaxUses => 3;
-    public override string SpritePath => "Clean.png";
+    public override Sprite Sprite => LaunchpadReloadedPlugin.Bundle.LoadAsset<Sprite>("Clean.png");
 
     public override bool CanUse()
     {

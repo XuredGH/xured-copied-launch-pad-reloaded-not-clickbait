@@ -26,8 +26,7 @@ public class HackButton : CustomActionButton
     public override int MaxUses => 2;
     public override Sprite Sprite => SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.Hack.png");
     public override bool Enabled(RoleBehaviour role) =>  role is HackerRole;
-    protected override bool CanUse() => !HackingManager.AnyActiveNodes();
-
+    public override bool CanUse() => !HackingManager.AnyActiveNodes();
     protected override void OnClick()
     {
         foreach (PlayerControl player in PlayerControl.AllPlayerControls)
