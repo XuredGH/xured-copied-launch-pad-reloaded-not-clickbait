@@ -86,19 +86,4 @@ public static class HudManagerPatches
             button.SetActive(isActive, roleBehaviour);
         }
     }
-    
-    [HarmonyPostfix]
-    [HarmonyPatch("Update")]
-    public static void UpdatePostfix(HudManager __instance)
-    {
-        if (!PlayerControl.LocalPlayer)
-        {
-            return;
-        }
-
-        if (PlayerControl.LocalPlayer.Data.Role is ICustomRole customRole)
-        {
-            customRole.HudUpdate(__instance);
-        }
-    }
 }
