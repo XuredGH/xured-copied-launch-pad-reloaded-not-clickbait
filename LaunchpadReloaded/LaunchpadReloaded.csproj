@@ -16,6 +16,7 @@
 
     <ItemGroup>
       <None Remove="Resources\Hack.png" />
+      <None Remove="Resources\Investigate.png" />
       <None Remove="Resources\Map.png" />
       <None Remove="Resources\Node.png" />
     </ItemGroup>
@@ -35,6 +36,7 @@
     <ItemGroup>
       <EmbeddedResource Include="Resources\assets-win-x86.bundle" />
       <EmbeddedResource Include="Resources\Hack.png" />
+      <EmbeddedResource Include="Resources\Investigate.png" />
       <EmbeddedResource Include="Resources\Map.png" />
       <EmbeddedResource Include="Resources\Node.png" />
     </ItemGroup>
