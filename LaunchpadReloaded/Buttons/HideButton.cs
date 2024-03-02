@@ -35,6 +35,6 @@ public class HideButton : CustomActionButton
 
     public override bool Enabled(RoleBehaviour role)
     {
-        return role is HitmanRole;
+        return role is JanitorRole;
     }
 }

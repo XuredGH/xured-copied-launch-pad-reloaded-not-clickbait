@@ -14,7 +14,7 @@ public class DragButton : CustomActionButton
     public override float Cooldown => 0;
     public override float EffectDuration => 0;
     public override int MaxUses => 0;
-    public override string SpritePath => "Drag.png";
+    public override Sprite Sprite => LaunchpadReloadedPlugin.Bundle.LoadAsset<Sprite>("Drag.png");
 
     public static DragButton Instance;
 
@@ -25,7 +25,7 @@ public class DragButton : CustomActionButton
     
     public override bool Enabled(RoleBehaviour role)
     {
-        return role is HitmanRole;
+        return role is JanitorRole;
     }
 
     public override bool CanUse()
