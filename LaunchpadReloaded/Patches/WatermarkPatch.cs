@@ -24,7 +24,8 @@ public static class WatermarkPatch
         __instance.text.richText = true;
         __instance.text.text = "<color=#FF4050FF>All Of Us:</color> Launchpad \n<color=#7785CC>dsc.gg/allofus</color>";
 
-        aspectPos.DistanceFromEdge = new Vector3(4, 0.1f, 0);
+        float x = HudManager.Instance.gameObject.GetComponentInChildren<FriendsListButton>() != null ? 4 : 2.3f;
+        aspectPos.DistanceFromEdge = new Vector3(x, 0.1f, 0);
 
         return false;
     }
