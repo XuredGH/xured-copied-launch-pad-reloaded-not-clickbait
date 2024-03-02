@@ -29,12 +29,11 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
     public override void Load()
     {
         Harmony.PatchAll();
-        CustomOptionsManager.RegisterCustomOption(typeof(FixedCamera));
-        CustomOptionsManager.RegisterCustomOption(typeof(Test));
 
         Bundle = AssetBundleManager.Load("assets");
-        
+
         // TODO: CREATE ATTRIBUTE FOR THIS VVV
+        CustomOptionsManager.RegisterAllOptions();
         CustomRoleManager.RegisterAllRoles();
         CustomButtonManager.RegisterAllButtons();
         Config.Save();

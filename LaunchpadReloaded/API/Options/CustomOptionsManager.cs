@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using LaunchpadReloaded.API.Hud;
 using Reactor.Localization.Utilities;
 using Reactor.Utilities.Extensions;
 using TMPro;
@@ -12,6 +14,17 @@ namespace LaunchpadReloaded.API.Options;
 public static class CustomOptionsManager
 {
     public static readonly Dictionary<string, CustomOption> CustomOptions = new();
+
+    public static void RegisterAllOptions()
+    {
+        foreach (var type in Assembly.GetCallingAssembly().GetTypes())
+        {
+            if (type.IsAssignableTo(typeof(CustomOption)) && !type.IsAbstract)
+            {
+                RegisterCustomOption(type);
+            }
+        }
+    }
 
     public static bool GetOption(string id)
     {
