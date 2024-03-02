@@ -31,6 +31,7 @@ public class HackNodeComponent(IntPtr ptr) : MonoBehaviour(ptr)
 
     public void Use()
     {
+        SoundManager.Instance.PlaySound(LaunchpadReloadedPlugin.Bundle.LoadAsset<AudioClip>("Beep.wav"), false, 0.5f, null);
         HackingManager.RpcUnhackPlayer(PlayerControl.LocalPlayer);
         if(HackingManager.HackedPlayers.Count <= 0)
         {

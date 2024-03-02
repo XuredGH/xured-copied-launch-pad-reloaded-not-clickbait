@@ -49,4 +49,29 @@ public static class Extensions
             .Select(collider2D => collider2D.GetComponent<DeadBody>())
             .FirstOrDefault(component => component && !component.Reported);
     }
+
+    public static PlayerControl GetClosestPlayer(this PlayerControl playerControl, bool includeImpostors, float distance)
+    {
+        PlayerControl result = null;
+        if (!ShipStatus.Instance) return null;
+
+        var truePosition = playerControl.GetTruePosition();
+
+        foreach (var playerInfo in GameData.Instance.AllPlayers)
+        {
+            if (playerInfo.Disconnected || playerInfo.PlayerId == playerControl.PlayerId ||
+                playerInfo.IsDead || (!includeImpostors && playerInfo.Role.IsImpostor)) continue;
+
+            var @object = playerInfo.Object;
+            if (!@object) continue;
+            var vector = @object.GetTruePosition() - truePosition;
+            var magnitude = vector.magnitude;
+            if (!(magnitude <= distance) || PhysicsHelpers.AnyNonTriggersBetween(truePosition,
+                vector.normalized,
+                magnitude, LayerMask.GetMask(new string[2] { "Ship", "Objects" }))) continue;
+            result = @object;
+            distance = magnitude;
+        }
+        return result;
+    }
 }
