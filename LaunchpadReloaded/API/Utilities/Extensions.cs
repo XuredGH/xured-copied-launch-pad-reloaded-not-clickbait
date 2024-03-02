@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Features;
 using Reactor.Utilities.Extensions;
 using UnityEngine;
@@ -41,7 +42,6 @@ public static class Extensions
     
     public static void UpdateBodies(this PlayerControl playerControl, Color outlineColor, ref DeadBody target)
     {
-        
         foreach (var body in Object.FindObjectsOfType<DeadBody>())
         {
             foreach (var bodyRenderer in body.bodyRenderers)
@@ -49,7 +49,12 @@ public static class Extensions
                 bodyRenderer.SetOutline(null);
             }
         }
-        
+
+        if (playerControl.Data.Role is not ICustomRole { TargetsBodies: true })
+        {
+            return;
+        }
+
         target = playerControl.NearestDeadBody();
         if (target is not null)
         {
@@ -58,6 +63,7 @@ public static class Extensions
                 renderer.SetOutline(outlineColor);
             }
         }
+
     }
     
     public static DeadBody NearestDeadBody(this PlayerControl playerControl)

@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using LaunchpadReloaded.API.Utilities;
-using LaunchpadReloaded.Buttons;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Networking;
 using Reactor.Networking.Attributes;

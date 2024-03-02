@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.API.Utilities;
 
-namespace LaunchpadReloaded.API.Patches;
+namespace LaunchpadReloaded.Patches;
 
 
 [HarmonyPatch]

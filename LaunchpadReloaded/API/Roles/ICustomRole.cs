@@ -27,6 +27,8 @@ public interface ICustomRole
     bool CanUseKill => Team == RoleTeamTypes.Impostor;
     
     bool CanUseVent => Team == RoleTeamTypes.Impostor;
+
+    bool TargetsBodies => false;
     
     RoleTypes GhostRole => Team == RoleTeamTypes.Crewmate ? RoleTypes.CrewmateGhost : RoleTypes.ImpostorGhost;
     

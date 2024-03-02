@@ -1,5 +1,4 @@
 ﻿using HarmonyLib;
-using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Utilities;
 
 namespace LaunchpadReloaded.Patches;
