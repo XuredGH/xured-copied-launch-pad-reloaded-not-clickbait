@@ -1,7 +1,9 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Roles;
+using LaunchpadReloaded.Features;
 using Reactor.Utilities.Extensions;
+using System.Drawing;
 using UnityEngine;
 
 namespace LaunchpadReloaded.API.Patches;
@@ -17,17 +19,35 @@ public static class HudManagerPatches
     {
         if (!PlayerControl.LocalPlayer) return;
 
+        if(HackingManager.HackedPlayers.Contains(PlayerControl.LocalPlayer.PlayerId))
+        {
+            __instance.tasksString.Clear();
+            __instance.tasksString.Append(UnityEngine.Color.green.ToTextColor());
+            __instance.tasksString.Append("You have been hacked!\n");
+            __instance.tasksString.Append("You are unable to complete tasks or call meetings.\n");
+            __instance.tasksString.Append("Find an active node to reverse the hack!.\n");
+            __instance.tasksString.Append("</color>");
+
+            __instance.TaskPanel.SetTaskText(__instance.tasksString.ToString());
+        }
+
         if (PlayerControl.LocalPlayer.Data.Role is ICustomRole customRole)
         {
             customRole.HudUpdate(__instance);
         }
+
+        if (HackingManager.AnyActiveNodes()) __instance.ReportButton.SetDisabled();
     }
     
     [HarmonyPostfix]
     [HarmonyPatch("Start")]
     public static void StartPostfix(HudManager __instance)
     {
-        if (!_bottomLeft) _bottomLeft = Object.Instantiate(__instance.transform.Find("Buttons").Find("BottomRight").gameObject,__instance.transform.Find("Buttons"));
+        if (!_bottomLeft)
+        {
+            var buttons = __instance.transform.Find("Buttons");
+            _bottomLeft = Object.Instantiate(buttons.Find("BottomRight").gameObject,buttons);
+        }
 
         foreach (var t in _bottomLeft.GetComponentsInChildren<ActionButton>(true))
         {
@@ -54,8 +74,13 @@ public static class HudManagerPatches
 
     [HarmonyPostfix]
     [HarmonyPatch("SetHudActive",typeof(PlayerControl), typeof(RoleBehaviour), typeof(bool))]
-    public static void SetHudActivePostfix(HudManager __instance, [HarmonyArgument(1)] RoleBehaviour roleBehaviour, [HarmonyArgument(2)] bool isActive)
+    public static void SetHudActivePostfix(HudManager __instance, [HarmonyArgument(0)] PlayerControl player, [HarmonyArgument(1)] RoleBehaviour roleBehaviour, [HarmonyArgument(2)] bool isActive)
     {
+        if (player.Data == null)
+        {
+            return;
+        }
+
         foreach (var button in CustomButtonManager.CustomButtons)
         {
             button.SetActive(isActive, roleBehaviour);

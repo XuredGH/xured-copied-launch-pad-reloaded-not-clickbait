@@ -8,6 +8,8 @@ namespace LaunchpadReloaded.API.Patches;
 [HarmonyPatch(typeof(RoleOptionsCollectionV07))]
 public static class RoleOptionsCollectionPatch
 {
+    //TODO: Create new options system
+    
     [HarmonyPrefix]
     [HarmonyPatch(nameof(RoleOptionsCollectionV07.GetChancePerGame))]
     public static bool GetChancePrefix([HarmonyArgument(0)]RoleTypes roleType, ref int __result)

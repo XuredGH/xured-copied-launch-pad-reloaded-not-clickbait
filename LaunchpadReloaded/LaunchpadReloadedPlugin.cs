@@ -26,7 +26,6 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
     public Harmony Harmony { get; } = new(Id);
 
     public static AssetBundle Bundle;
-    
     public override void Load()
     {
         Harmony.PatchAll();
