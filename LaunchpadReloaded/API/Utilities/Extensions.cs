@@ -13,6 +13,26 @@ public static class Extensions
         return (playerControl.moveable || playerControl.petting) && !playerControl.inVent && !playerControl.shapeshifting && (!DestroyableSingleton<HudManager>.InstanceExists || !DestroyableSingleton<HudManager>.Instance.IsIntroDisplayed) && !MeetingHud.Instance && !PlayerCustomizationMenu.Instance && !ExileController.Instance && !IntroCutscene.Instance;
     }
 
+    public static void HideBody(this DeadBody body)
+    {
+        body.Reported = true;
+        body.enabled = false;
+        foreach (var spriteRenderer in body.bodyRenderers)
+        {
+            spriteRenderer.enabled = false;
+        }
+    }
+
+    public static void ShowBody(this DeadBody body, bool reported)
+    {
+        body.Reported = reported;
+        body.enabled = true;
+        foreach (var spriteRenderer in body.bodyRenderers)
+        {
+            spriteRenderer.enabled = true;
+        }
+    }
+    
     public static void UpdateBodies(this PlayerControl playerControl, Color outlineColor, ref DeadBody target)
     {
         

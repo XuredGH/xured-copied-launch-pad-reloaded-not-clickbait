@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Networking;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Patches;
@@ -18,7 +19,7 @@ public static class HudManagerPatches
 
         foreach (var (player, bodyId) in DragManager.DraggingPlayers)
         {
-            var bodyById = DragManager.GetBodyById(bodyId);
+            var bodyById = DeadBodyManager.GetBodyById(bodyId);
             bodyById.transform.position = Vector3.Lerp(bodyById.transform.position, GameData.Instance.GetPlayerById(player).Object.transform.position, 5f * Time.deltaTime);
         }
     }

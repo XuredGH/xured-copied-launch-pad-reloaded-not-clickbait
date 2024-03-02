@@ -6,6 +6,6 @@ public static class Helpers
 {
     public static bool ShouldCancelClick()
     {
-        return DragManager.DraggingPlayers.ContainsKey(PlayerControl.LocalPlayer.PlayerId);
+        return DragManager.IsDragging(PlayerControl.LocalPlayer.PlayerId);
     }
 }

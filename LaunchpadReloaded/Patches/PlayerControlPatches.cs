@@ -15,7 +15,7 @@ public static class PlayerControlPatches
         switch (__instance.Data.Role)
         {
             case HitmanRole:
-                __result = __result && !DragManager.DraggingPlayers.ContainsKey(__instance.PlayerId);
+                __result = __result && !DragManager.IsDragging(__instance.PlayerId);
                 break;
         }
     }

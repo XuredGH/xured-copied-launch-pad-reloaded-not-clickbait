@@ -1,6 +1,7 @@
 ﻿using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Utilities;
 using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Roles;
 using Reactor.Utilities.Extensions;
 using UnityEngine;
@@ -14,9 +15,14 @@ public class DragButton : CustomActionButton
     public override float EffectDuration => 0;
     public override int MaxUses => 0;
     public override string SpritePath => "Drag.png";
-    
-    private bool _dragging;
 
+    public static DragButton Instance;
+
+    public DragButton()
+    {
+        Instance = this;
+    }
+    
     public override bool Enabled(RoleBehaviour role)
     {
         return role is HitmanRole;
@@ -24,12 +30,12 @@ public class DragButton : CustomActionButton
 
     public override bool CanUse()
     {
-        return DeadBodyTarget is not null;
+        return DeadBodyTarget is not null && PlayerControl.LocalPlayer.CanMove && !PlayerControl.LocalPlayer.inVent;
     }
 
     protected override void FixedUpdate(PlayerControl playerControl)
     {
-        if (_dragging)
+        if (DragManager.IsDragging(playerControl.PlayerId))
         {
             HudManager.Instance.KillButton.SetDisabled();
             HudManager.Instance.ReportButton.SetDisabled();
@@ -41,20 +47,27 @@ public class DragButton : CustomActionButton
         }
     }
 
+    public void SetDrag()
+    {
+        OverrideName("DRAG");
+        OverrideSprite("Drag.png");
+    }
+
+    public void SetDrop()
+    {
+        OverrideName("DROP");
+        OverrideSprite("Drop.png");
+    }
+
     protected override void OnClick()
     {
-        _dragging = !_dragging;
-        if (_dragging)
+        if (DragManager.IsDragging(PlayerControl.LocalPlayer.PlayerId))
         {
-            OverrideName("DROP");
-            OverrideSprite("Drop.png");
-            DragManager.RpcStartDragging(PlayerControl.LocalPlayer, DeadBodyTarget.ParentId);
+            DeadBodyManager.RpcStopDragging(PlayerControl.LocalPlayer);
         }
         else
         {
-            OverrideName("DRAG");
-            OverrideSprite("Drag.png");
-            DragManager.RpcStopDragging(PlayerControl.LocalPlayer);
+            DeadBodyManager.RpcStartDragging(PlayerControl.LocalPlayer, DeadBodyTarget.ParentId);
         }
     }
     

@@ -1,5 +1,6 @@
 ﻿using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Utilities;
+using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
 using Reactor.Utilities.Extensions;
 using UnityEngine;
@@ -27,11 +28,6 @@ public class CleanButton : CustomActionButton
 
     protected override void OnClick()
     {
-        DeadBodyTarget.Reported = true;
-        DeadBodyTarget.enabled = false;
-        foreach (var bodyRenderer in DeadBodyTarget.bodyRenderers)
-        {
-            bodyRenderer.enabled = false;
-        }
+        DeadBodyManager.RpcHideBody(ShipStatus.Instance, DeadBodyTarget.ParentId);
     }
 }
