@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using AmongUs.GameOptions;
 using HarmonyLib;
+using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
 using Reactor.Localization.Utilities;
 using Reactor.Utilities;

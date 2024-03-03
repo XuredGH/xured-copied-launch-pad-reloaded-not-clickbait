@@ -1,6 +1,7 @@
 ﻿using BepInEx;
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
+using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Roles;
 using Reactor;
@@ -29,6 +30,11 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
         // TODO: CREATE ATTRIBUTE FOR THIS VVV
         CustomRoleManager.RegisterAllRoles();
         CustomButtonManager.RegisterAllButtons();
+        
+        CustomGameOptionsManager.CreateNumberOption("Test",10,5,15,1,NumberSuffixes.None);
+        CustomGameOptionsManager.CreateToggleOption("Test Two", false);
+        
+        
         Config.Save();
     }
 
