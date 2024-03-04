@@ -7,6 +7,7 @@ using Il2CppInterop.Runtime;
 using Reactor.Localization.Utilities;
 using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
+using TMPro;
 using UnityEngine;
 
 namespace LaunchpadReloaded.API.Roles;
@@ -81,4 +82,36 @@ public static class CustomRoleManager
         result = null;
         return false;
     }
+
+    public static TaskPanelBehaviour CreateRoleTab(ICustomRole role)
+    {
+        TaskPanelBehaviour ogPanel = HudManager.Instance.TaskStuff.transform.FindChild("TaskPanel").gameObject.GetComponent<TaskPanelBehaviour>();
+        GameObject clonePanel = GameObject.Instantiate(ogPanel.gameObject, ogPanel.transform.parent);
+        clonePanel.name = "RolePanel";
+
+        TaskPanelBehaviour newPanel = clonePanel.GetComponent<TaskPanelBehaviour>();
+        newPanel.open = false;
+
+        GameObject tab = newPanel.tab.gameObject;
+        tab.GetComponentInChildren<TextTranslatorTMP>().Destroy();
+
+        newPanel.transform.localPosition = ogPanel.transform.localPosition - new Vector3(0, 1, 0);
+
+        UpdateRoleTab(newPanel, role);
+        return newPanel;
+    }
+
+    public static void UpdateRoleTab(TaskPanelBehaviour panel, ICustomRole role)
+    {
+        TextMeshPro tabText = panel.tab.gameObject.GetComponentInChildren<TextMeshPro>();
+        TaskPanelBehaviour ogPanel = HudManager.Instance.TaskStuff.transform.FindChild("TaskPanel").gameObject.GetComponent<TaskPanelBehaviour>();
+        if (tabText.text != role.RoleName) tabText.text = role.RoleName;
+
+        float y = ogPanel.taskText.textBounds.size.y + 1;
+        panel.closedPosition = new Vector3(ogPanel.closedPosition.x, ogPanel.open ? y + 0.2f : 2f, ogPanel.closedPosition.z);
+        panel.openPosition = new Vector3(ogPanel.openPosition.x, ogPanel.open ? y : 2f, ogPanel.openPosition.z);
+
+        panel.SetTaskText(role.SetTabText().ToString());
+    }
+
 }

@@ -20,7 +20,7 @@ public class TrackButton : CustomActionButton
     public override float Cooldown => 0;
     public override float EffectDuration => 0;
     public override int MaxUses => 1;
-    public override Sprite Sprite => SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.Investigate.png");
+    public override Sprite Sprite => SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.Track.png");
     public PlayerControl CurrentTarget = null;
 
     public override bool Enabled(RoleBehaviour role) => role is TrackerRole;

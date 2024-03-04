@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Reflection;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Features;
 using Reactor.Utilities.Extensions;
@@ -39,7 +40,10 @@ public static class Extensions
             spriteRenderer.enabled = true;
         }
     }
-    
+    public static bool IsOverride(this MethodInfo methodInfo)
+    {
+        return (methodInfo.GetBaseDefinition() != methodInfo);
+    }
     public static void UpdateBodies(this PlayerControl playerControl, Color outlineColor, ref DeadBody target)
     {
         foreach (var body in Object.FindObjectsOfType<DeadBody>())
