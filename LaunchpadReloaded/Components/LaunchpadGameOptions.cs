@@ -8,9 +8,8 @@ public class LaunchpadGameOptions
 {
     public static LaunchpadGameOptions Instance { get; private set; }
     
-    [ToggleOption("Friendly Fire")] public bool FriendlyFireOn { get; set; }
+    public CustomToggleOption FriendlyFire { get; }
     
-    [NumberOption("Test",0,10,1,NumberSuffixes.Seconds)] public float Test { get; set; }
     
     public LaunchpadGameOptions()
     {
@@ -19,7 +18,7 @@ public class LaunchpadGameOptions
             throw new Exception("Can't have more than one Launchpad Options");
         }
 
-        
+        FriendlyFire = new CustomToggleOption("Friendly Fire", false);
 
         Instance = this;
     }

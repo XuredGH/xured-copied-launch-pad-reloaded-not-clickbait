@@ -9,7 +9,7 @@ public static class ImpostorRoleFriendlyFirePatch
 {
     public static bool Prefix(ImpostorRole __instance, [HarmonyArgument(0)] GameData.PlayerInfo target, ref bool __result)
     {
-        if (LaunchpadGameOptions.Instance.FriendlyFireOn)
+        if (LaunchpadGameOptions.Instance.FriendlyFire.Value)
         {
             // cant be arsed to use a reverse patch, so this is copied from mono VVV
             __result = target is { Disconnected: false, IsDead: false } &&

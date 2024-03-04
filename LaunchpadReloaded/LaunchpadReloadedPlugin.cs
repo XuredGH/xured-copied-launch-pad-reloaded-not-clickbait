@@ -31,9 +31,8 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
         // TODO: CREATE ATTRIBUTE FOR THIS VVV
         CustomRoleManager.RegisterAllRoles();
         CustomButtonManager.RegisterAllButtons();
-
         
-        CustomGameOptionsManager.RegisterOptions<LaunchpadGameOptions>();
+        new LaunchpadGameOptions();
         
         Config.Save();
     }
