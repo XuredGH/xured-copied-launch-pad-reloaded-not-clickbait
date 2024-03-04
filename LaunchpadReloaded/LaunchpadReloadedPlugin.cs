@@ -4,6 +4,7 @@ using HarmonyLib;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Roles;
+using LaunchpadReloaded.Components;
 using Reactor;
 using Reactor.Networking;
 using Reactor.Networking.Attributes;
@@ -30,10 +31,9 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
         // TODO: CREATE ATTRIBUTE FOR THIS VVV
         CustomRoleManager.RegisterAllRoles();
         CustomButtonManager.RegisterAllButtons();
+
         
-        CustomGameOptionsManager.CreateNumberOption("Test",10,5,15,1,NumberSuffixes.None);
-        CustomGameOptionsManager.CreateToggleOption("Test Two", false);
-        
+        CustomGameOptionsManager.RegisterOptions<LaunchpadGameOptions>();
         
         Config.Save();
     }

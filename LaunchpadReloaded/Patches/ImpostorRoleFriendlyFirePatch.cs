@@ -1,16 +1,15 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.API.GameOptions;
+using LaunchpadReloaded.Components;
 
 namespace LaunchpadReloaded.Patches;
 
 [HarmonyPatch(typeof(ImpostorRole),nameof(ImpostorRole.IsValidTarget))]
 public static class ImpostorRoleFriendlyFirePatch
 {
-    public static CustomToggleOption FriendlyFireOption = new ("Friendly Fire",false);
-    
     public static bool Prefix(ImpostorRole __instance, [HarmonyArgument(0)] GameData.PlayerInfo target, ref bool __result)
     {
-        if (FriendlyFireOption.Value)
+        if (LaunchpadGameOptions.Instance.FriendlyFireOn)
         {
             // cant be arsed to use a reverse patch, so this is copied from mono VVV
             __result = target is { Disconnected: false, IsDead: false } &&
