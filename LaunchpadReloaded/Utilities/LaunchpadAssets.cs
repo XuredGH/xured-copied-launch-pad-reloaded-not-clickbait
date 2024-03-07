@@ -11,51 +11,25 @@ using UnityEngine;
 namespace LaunchpadReloaded.Utilities;
 public static class LaunchpadAssets
 {
-    public static AssetBundle Bundle;
+    public static AssetBundle Bundle = AssetBundleManager.Load("assets");
 
-    #region Button Sprites
-    public static Sprite CallButton;
-    public static Sprite DragButton;
-    public static Sprite DropButton;
-    public static Sprite HackButton;
-    public static Sprite HideButton;
-    public static Sprite MapButton;
-    public static Sprite ReviveButton;
-    public static Sprite ScannerButton;
-    public static Sprite TrackButton;
-    public static Sprite ZoomButton;
-    #endregion
-    #region Object Sprites
-    public static Sprite ScannerSprite;
-    public static Sprite NodeSprite;
-    #endregion
-    #region Sounds
-    public static AudioClip BeepSound;
-    public static AudioClip PingSound;
-    #endregion
+    // Button Sprites
+    public static Sprite CallButton = Bundle.LoadAsset<Sprite>("CallMeeting.png");
+    public static Sprite DragButton = Bundle.LoadAsset<Sprite>("Drag.png");
+    public static Sprite DropButton = Bundle.LoadAsset<Sprite>("Drop.png");
+    public static Sprite ZoomButton = Bundle.LoadAsset<Sprite>("Zoom.png");
+    public static Sprite ReviveButton = Bundle.LoadAsset<Sprite>("Revive.png");
+    public static Sprite HideButton = Bundle.LoadAsset<Sprite>("Clean.png");
+    public static Sprite HackButton = SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.Hack.png");
+    public static Sprite MapButton = SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.Map.png");
+    public static Sprite ScannerButton = SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.Place_Scanner.png");
+    public static Sprite TrackButton = SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.Track.png");
 
-    public static void Load()
-    {
-        Bundle = AssetBundleManager.Load("assets");
+    // Object Sprites
+    public static Sprite ScannerSprite = SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.Scanner.png");
+    public static Sprite NodeSprite = SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.Node.png");
 
-        // Asset Bundle
-        CallButton = Bundle.LoadAsset<Sprite>("CallMeeting.png");
-        DragButton = Bundle.LoadAsset<Sprite>("Drag.png");
-        DropButton = Bundle.LoadAsset<Sprite>("Drop.png");
-        ZoomButton = Bundle.LoadAsset<Sprite>("Zoom.png");
-        ReviveButton = Bundle.LoadAsset<Sprite>("Revive.png");
-        HideButton = Bundle.LoadAsset<Sprite>("Clean.png");
-
-        // Resources
-        HackButton = SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.Hack.png");
-        MapButton = SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.Map.png");
-        ScannerButton = SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.Place_Scanner.png");
-        TrackButton = SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.Track.png");
-        ScannerSprite = SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.Scanner.png");
-        NodeSprite = SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.Node.png");
-
-        // Sounds
-        BeepSound = Bundle.LoadAsset<AudioClip>("Beep.wav");
-        PingSound = Bundle.LoadAsset<AudioClip>("Ping.mp3");
-    }
+    // Sounds
+    public static AudioClip BeepSound = Bundle.LoadAsset<AudioClip>("Beep.wav");
+    public static AudioClip PingSound = Bundle.LoadAsset<AudioClip>("Ping.mp3");
 }

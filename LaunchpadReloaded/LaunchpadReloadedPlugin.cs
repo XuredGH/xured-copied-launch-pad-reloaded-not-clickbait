@@ -19,10 +19,10 @@ namespace LaunchpadReloaded;
 public partial class LaunchpadReloadedPlugin : BasePlugin
 {
     public Harmony Harmony { get; } = new(Id);
+
     public override void Load()
     {
         Harmony.PatchAll();
-        LaunchpadAssets.Load();
 
         // TODO: CREATE ATTRIBUTE FOR THIS VVV
         CustomRoleManager.RegisterAllRoles();
