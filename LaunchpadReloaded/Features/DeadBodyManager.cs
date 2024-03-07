@@ -38,8 +38,8 @@ public static class DeadBodyManager
         ventBody.deadBody = body;
     }
 
-    [MethodRpc((uint)LaunchpadRPC.HideBody)]
-    public static void RpcHideBody(ShipStatus shipStatus, byte bodyId)
+    [MethodRpc((uint)LaunchpadRPC.RemoveBody)]
+    public static void RpcRemoveBody(ShipStatus shipStatus, byte bodyId)
     {
         var body = GetBodyById(bodyId);
         
