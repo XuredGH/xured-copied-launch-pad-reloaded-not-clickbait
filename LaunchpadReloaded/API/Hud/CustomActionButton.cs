@@ -1,4 +1,5 @@
 ﻿using LaunchpadReloaded.API.Utilities;
+using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Extensions;
 using UnityEngine;
 using UnityEngine.Events;
@@ -59,11 +60,8 @@ public abstract class CustomActionButton
         pb.OnClick.AddListener((UnityAction)ClickHandler);
     }
 
-    public void OverrideSprite(string path, bool useAssetBundle = true)
+    public void OverrideSprite(Sprite sprite)
     {
-        var sprite = useAssetBundle
-            ? LaunchpadReloadedPlugin.Bundle.LoadAsset<Sprite>(path)
-            : SpriteTools.LoadSpriteFromPath(path);
         Button.graphic.sprite = sprite;
     }
 

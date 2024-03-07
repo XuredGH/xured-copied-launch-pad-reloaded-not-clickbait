@@ -4,6 +4,7 @@ using LaunchpadReloaded.API.Utilities;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
+using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Extensions;
 using System;
 using System.Collections.Generic;
@@ -17,18 +18,19 @@ public class ScannerButton : CustomActionButton
 {
     public override string Name => "Deploy Scanner";
 
-    public override float Cooldown => 10;
+    public override float Cooldown => 5;
 
     public override float EffectDuration => 0;
 
-    public override int MaxUses => 2;
+    public override int MaxUses => 3;
 
-    public override Sprite Sprite => LaunchpadReloadedPlugin.Bundle.LoadAsset<Sprite>("CallMeeting.png");
+    public override Sprite Sprite => LaunchpadAssets.ScannerButton;
 
     public override bool Enabled(RoleBehaviour role) => role is TrackerRole;
 
     protected override void OnClick()
     {
-        ScannerManager.RpcCreateScanner(PlayerControl.LocalPlayer);
+        ScannerManager.RpcCreateScanner(PlayerControl.LocalPlayer, 
+            PlayerControl.LocalPlayer.GetTruePosition().x, PlayerControl.LocalPlayer.GetTruePosition().y);
     }
 }

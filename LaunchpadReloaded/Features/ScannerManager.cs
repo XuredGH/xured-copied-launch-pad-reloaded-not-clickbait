@@ -2,45 +2,58 @@
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Roles;
+using LaunchpadReloaded.Utilities;
 using Reactor.Networking.Attributes;
+using Reactor.Utilities.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using static ShipStatus;
 
 namespace LaunchpadReloaded.Features;
-public static class ScannerManager
+[RegisterInIl2Cpp]
+public class ScannerManager(IntPtr ptr) : MonoBehaviour(ptr)
 {
-    public static List<ScannerComponent> Scanners = new();
+    public static ScannerManager Instance;
+    public List<ScannerComponent> Scanners = new();
 
-    [MethodRpc((uint)LaunchpadRPC.CreateScanner)]
-    public static void RpcCreateScanner(PlayerControl playerControl)
+    private void Awake()
     {
-        Scanners.Add(CreateScanner(playerControl));
+        Instance = this;
     }
 
-    public static ScannerComponent CreateScanner(PlayerControl playerControl)
+    [MethodRpc((uint)LaunchpadRPC.CreateScanner)]
+    public static void RpcCreateScanner(PlayerControl playerControl, float x, float y)
+    {
+        ScannerComponent newScanner = Instance.CreateScanner(playerControl, new Vector3(x, y, 0.0057f));
+        Instance.Scanners.Add(newScanner);
+    }
+
+    public ScannerComponent CreateScanner(PlayerControl playerControl, Vector3 pos)
     {
         var scanner = new GameObject("Scanner");
-        scanner.transform.localPosition = PlayerControl.LocalPlayer.transform.localPosition;
+        scanner.transform.position = pos;
+        scanner.transform.SetParent(ShipStatus.Instance.transform);
 
         var sprite = scanner.AddComponent<SpriteRenderer>();
-        sprite.sprite = SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.Scanner.png");
-        scanner.layer = LayerMask.NameToLayer("ShortObjects");
-        sprite.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
-        sprite.material = ShipStatus.Instance.AllConsoles[0].gameObject.GetComponent<SpriteRenderer>().material;
+        sprite.sprite = LaunchpadAssets.ScannerSprite;
+        scanner.layer = LayerMask.NameToLayer("Ship");
+        sprite.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
 
         var collider = scanner.AddComponent<CircleCollider2D>();
-        collider.radius = 3.5f;
+        collider.radius = 2f;
         collider.isTrigger = true;
+
+        var realCollision = scanner.AddComponent<CircleCollider2D>();
+        realCollision.radius = 0.6f;
+        realCollision.offset = new Vector2(0, -0.2f);
 
         var component = scanner.AddComponent<ScannerComponent>();
         component.PlacedBy = playerControl;
         component.Id = (byte)(Scanners.Count + 1);
 
         scanner.SetActive(true);
-
-        if (playerControl.Data.Role is TrackerRole trackerRole) trackerRole.PlacedScanners.Add(component);
 
         Debug.Log($"Scanner {component.Id} placed by {playerControl.Data.PlayerName}");
         return component;

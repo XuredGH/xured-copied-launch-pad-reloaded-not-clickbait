@@ -1,4 +1,6 @@
-﻿using LaunchpadReloaded.Features;
+﻿using LaunchpadReloaded.API.Utilities;
+using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Attributes;
 using Reactor.Utilities.Extensions;
 using System;
@@ -25,9 +27,9 @@ public class HackNodeComponent(IntPtr ptr) : MonoBehaviour(ptr)
 
     public void Use()
     {
-        SoundManager.Instance.PlaySound(LaunchpadReloadedPlugin.Bundle.LoadAsset<AudioClip>("Beep.wav"), false, 0.5f, null);
+        SoundManager.Instance.PlaySound(LaunchpadAssets.BeepSound, false, 0.5f, null);
         HackingManager.RpcUnhackPlayer(PlayerControl.LocalPlayer);
-        if(HackingManager.HackedPlayers.Count <= 0)
+        if(HackingManager.Instance.HackedPlayers.Count <= 0)
         {
             HackingManager.RpcToggleNode(ShipStatus.Instance, this.Id, false);
         }
@@ -37,7 +39,7 @@ public class HackNodeComponent(IntPtr ptr) : MonoBehaviour(ptr)
     {
         var num = float.MaxValue;
         var @object = pc.Object;
-        couldUse = (!pc.IsDead && @object.CanMove && IsActive && HackingManager.HackedPlayers.Contains(pc.PlayerId));
+        couldUse = (!pc.IsDead && @object.CanMove && IsActive && pc.IsHacked());
         canUse = couldUse;
         if (canUse)
         {

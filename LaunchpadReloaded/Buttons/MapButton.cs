@@ -1,6 +1,7 @@
 ﻿using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Utilities;
 using LaunchpadReloaded.Roles;
+using LaunchpadReloaded.Utilities;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
@@ -10,7 +11,7 @@ public class MapButton : CustomActionButton
     public override float Cooldown => 10;
     public override float EffectDuration => 3;
     public override int MaxUses => 0;
-    public override Sprite Sprite => SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.Map.png");
+    public override Sprite Sprite => LaunchpadAssets.MapButton;
 
     private MapOptions _mapOptions = new()
     {

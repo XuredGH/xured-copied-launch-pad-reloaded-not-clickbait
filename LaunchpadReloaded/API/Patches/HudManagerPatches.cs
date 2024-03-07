@@ -30,13 +30,12 @@ public static class HudManagerPatches
             __instance.tasksString.Append("You are unable to complete tasks or call meetings.\n");
             __instance.tasksString.Append("Find an active node to reverse the hack!.\n");
             __instance.tasksString.Append("</color>");
-
             __instance.TaskPanel.SetTaskText(__instance.tasksString.ToString());
 
             if (_roleTab != null) _roleTab.gameObject.Destroy();
         }
 
-        if (HackingManager.AnyActiveNodes()) __instance.ReportButton.SetDisabled();
+        if (HackingManager.Instance && HackingManager.Instance.AnyActiveNodes()) __instance.ReportButton.SetDisabled();
 
         if (PlayerControl.LocalPlayer.Data.Role is ICustomRole customRole)
         {
@@ -104,6 +103,8 @@ public static class HudManagerPatches
         {
             return;
         }
+
+        if (_roleTab) _roleTab.gameObject.SetActive(isActive);
 
         foreach (var button in CustomButtonManager.CustomButtons)
         {

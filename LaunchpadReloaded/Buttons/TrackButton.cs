@@ -20,7 +20,7 @@ public class TrackButton : CustomActionButton
     public override float Cooldown => 0;
     public override float EffectDuration => 0;
     public override int MaxUses => 1;
-    public override Sprite Sprite => SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.Track.png");
+    public override Sprite Sprite => LaunchpadAssets.TrackButton;
     public PlayerControl CurrentTarget = null;
 
     public override bool Enabled(RoleBehaviour role) => role is TrackerRole;
@@ -29,9 +29,9 @@ public class TrackButton : CustomActionButton
     {
         base.FixedUpdate(playerControl);
 
-        if (TrackingManager.TrackedPlayer && !TrackingManager.TrackerDisconnected && !HackingManager.HackedPlayers.Contains(PlayerControl.LocalPlayer.PlayerId))
+        if (TrackingManager.Instance.TrackedPlayer && !TrackingManager.Instance.TrackerDisconnected && !PlayerControl.LocalPlayer.Data.IsHacked())
         {
-            TrackingManager.TrackingUpdate();
+            TrackingManager.Instance.TrackingUpdate();
             return;
         }
 
@@ -57,7 +57,7 @@ public class TrackButton : CustomActionButton
 
     protected override void OnClick()
     {
-        TrackingManager.TrackedPlayer = CurrentTarget; 
+        TrackingManager.Instance.TrackedPlayer = CurrentTarget; 
         CurrentTarget = null;
     }
 }

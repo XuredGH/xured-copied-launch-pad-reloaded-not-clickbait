@@ -1,6 +1,8 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Roles;
+using LaunchpadReloaded.API.Utilities;
+using LaunchpadReloaded.Utilities;
 
 namespace LaunchpadReloaded.API.Patches;
 
@@ -11,10 +13,16 @@ public static class PlayerControlPatches
     [HarmonyPatch("FixedUpdate")]
     public static void FixedUpdatePostfix(PlayerControl __instance)
     {
-        if (!__instance.AmOwner || MeetingHud.Instance)
+        if (MeetingHud.Instance) return;
+
+        if (__instance.Data.IsHacked())
         {
-            return;
+            string randomString = Helpers.RandomString(Helpers.Random.Next(4, 6), "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#!?$(???#@)$@@@@0000");
+            __instance.cosmetics.SetName(randomString);
+            __instance.cosmetics.SetNameMask(true);
         }
+
+        if (!__instance.AmOwner) return;
 
         foreach (var button in CustomButtonManager.CustomButtons)
         {

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.Roles;
+using LaunchpadReloaded.Utilities;
 using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
 using UnityEngine;
@@ -13,7 +14,7 @@ public class ZoomButton : CustomActionButton
     public override float Cooldown => 10;
     public override float EffectDuration => 5;
     public override int MaxUses => 0;
-    public override Sprite Sprite => LaunchpadReloadedPlugin.Bundle.LoadAsset<Sprite>("Zoom.png");
+    public override Sprite Sprite => LaunchpadAssets.ZoomButton;
 
     public override bool Enabled(RoleBehaviour role)
     {

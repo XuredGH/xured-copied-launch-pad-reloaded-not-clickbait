@@ -18,7 +18,8 @@ public static class Extensions
 
     public static bool IsHacked(this GameData.PlayerInfo playerInfo)
     {
-        return HackingManager.HackedPlayers.Contains(playerInfo.PlayerId);
+        if (!HackingManager.Instance) return false;
+        return HackingManager.Instance.HackedPlayers.Contains(playerInfo.PlayerId);
     }
 
     public static void HideBody(this DeadBody body)
