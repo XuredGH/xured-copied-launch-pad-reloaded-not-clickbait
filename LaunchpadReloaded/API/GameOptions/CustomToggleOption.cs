@@ -4,14 +4,14 @@ using UnityEngine;
 
 namespace LaunchpadReloaded.API.GameOptions;
 
-public class CustomToggleOption : CustomGameOption
+public class CustomToggleOption : AbstractGameOption
 {
     public bool Value { get; private set; }
 
     public CustomToggleOption(string title, bool defaultValue) : base(title)
     {
         Value = defaultValue;
-        CustomGameOptionsManager.CustomToggleOptions.Add(this);
+        CustomOptionsManager.CustomToggleOptions.Add(this);
     }
     
     public void SetValue(bool newValue)

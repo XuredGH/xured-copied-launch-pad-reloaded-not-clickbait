@@ -12,29 +12,19 @@ public static class ToHudStringPatch
     
     public static void Postfix(IGameOptions __instance, ref string __result)
     {
-        var baseText = "";
-        if (ShowCustom)
+        var sb = new StringBuilder("\n<size=125%><color=orange><b>Custom Game Options:</color></b></size>\n");
+
+        foreach (var numberOption in CustomOptionsManager.CustomNumberOptions)
         {
-            baseText = "<size=125%><b>Normal Game Options:</b></size><color=\"green\">Press TAB to see vanilla settings\n";
-
-            var sb = new StringBuilder("<size=125%><b>Normal Game Options:</b></size>");
-
-            foreach (var numberOption in CustomGameOptionsManager.CustomNumberOptions)
-            {
-                sb.AppendLine(numberOption.Title+": "+numberOption.Value);
-            }
-
-            foreach (var toggleOption in CustomGameOptionsManager.CustomToggleOptions)
-            {
-                sb.AppendLine(toggleOption.Title+": "+toggleOption.Value);
-            }
-
-        }
-        else
-        {
-            baseText = "<size=125%><b>Normal Game Options:</b></size>\n<color=\"green\">Press TAB to custom settings\n";
+            sb.AppendLine(numberOption.Title+": "+numberOption.Value);
         }
 
-        __result = baseText + __result;
+        foreach (var toggleOption in CustomOptionsManager.CustomToggleOptions)
+        {
+            sb.AppendLine(toggleOption.Title+": "+toggleOption.Value);
+        }
+    
+
+        __result = "<size=125%><b>Normal Game Options:</b></size>\n" + __result + sb;
     }
 }

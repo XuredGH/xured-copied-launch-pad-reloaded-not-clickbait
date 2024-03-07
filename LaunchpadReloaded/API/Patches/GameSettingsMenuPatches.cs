@@ -12,9 +12,9 @@ public static class GameSettingsMenuPatches
 {
     public static void Prefix(GameSettingMenu __instance)
     {
-        var numberOpt = CustomGameOptionsManager.NumberOptionPrefab ??= __instance.RegularGameSettings.GetComponentInChildren<NumberOption>();
-        var toggleOpt = CustomGameOptionsManager.ToggleOptionPrefab ??= Object.FindObjectOfType<ToggleOption>(); 
-        var stringOpt = CustomGameOptionsManager.StringOptionPrefab ??= __instance.RegularGameSettings.GetComponentInChildren<StringOption>(); 
+        var numberOpt = __instance.RegularGameSettings.GetComponentInChildren<NumberOption>();
+        var toggleOpt = Object.FindObjectOfType<ToggleOption>(); 
+        var stringOpt = __instance.RegularGameSettings.GetComponentInChildren<StringOption>(); 
         
         if (!numberOpt || !toggleOpt || !stringOpt)
         {
@@ -22,7 +22,7 @@ public static class GameSettingsMenuPatches
             return;
         }
 
-        foreach (var customToggleOption in CustomGameOptionsManager.CustomToggleOptions)
+        foreach (var customToggleOption in CustomOptionsManager.CustomToggleOptions)
         {
             if (customToggleOption.OptionBehaviour && __instance.AllItems.Contains(customToggleOption.OptionBehaviour.transform)) continue;
 
@@ -37,7 +37,7 @@ public static class GameSettingsMenuPatches
             __instance.AllItems = __instance.AllItems.AddItem(newOpt.transform).ToArray();
         }
         
-        foreach (var customNumberOption in CustomGameOptionsManager.CustomNumberOptions)
+        foreach (var customNumberOption in CustomOptionsManager.CustomNumberOptions)
         {
             if (customNumberOption.OptionBehaviour && __instance.AllItems.Contains(customNumberOption.OptionBehaviour.transform)) continue;
             
@@ -47,6 +47,7 @@ public static class GameSettingsMenuPatches
             newOpt.Value = customNumberOption.Value;    
             newOpt.Increment = customNumberOption.Increment;
             newOpt.SuffixType = customNumberOption.SuffixType;
+            newOpt.FormatString = customNumberOption.NumberFormat;
             newOpt.ValidRange = new FloatRange(customNumberOption.MinValue, customNumberOption.MaxValue);
             newOpt.OnEnable();
             customNumberOption.OptionBehaviour = newOpt;

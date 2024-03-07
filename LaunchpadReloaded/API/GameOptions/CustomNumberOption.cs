@@ -6,23 +6,24 @@ using UnityEngine;
 
 namespace LaunchpadReloaded.API.GameOptions;
 
-public class CustomNumberOption : CustomGameOption
+public class CustomNumberOption : AbstractGameOption
 {
     public float Value { get; private set; }
     public float MinValue { get; }
     public float MaxValue { get; }
     public float Increment { get; }
     public NumberSuffixes SuffixType { get; }
-    
-    public CustomNumberOption(string title, float defaultValue, float minValue, float maxValue, float increment, NumberSuffixes suffixType) : base(title)
+    public string NumberFormat { get; }
+
+    public CustomNumberOption(string title, float defaultValue, float minValue, float maxValue, float increment, NumberSuffixes suffixType, string numberFormat="0") : base(title)
     {
         Value = defaultValue;
         MinValue = minValue;
         MaxValue = maxValue;
         Increment = increment;
         SuffixType = suffixType;
-        
-        CustomGameOptionsManager.CustomNumberOptions.Add(this);
+        NumberFormat = numberFormat;
+        CustomOptionsManager.CustomNumberOptions.Add(this);
     }
 
     public void SetValue(float newValue)
@@ -33,6 +34,5 @@ public class CustomNumberOption : CustomGameOption
     protected override void OnValueChanged(OptionBehaviour optionBehaviour)
     {
         Value = Mathf.Clamp(optionBehaviour.GetFloat(), MinValue, MaxValue);
-        Debug.LogError(Value);
     }
 }

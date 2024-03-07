@@ -11,7 +11,7 @@ public static class GameOptionsMenuPatch
     [HarmonyPatch("Start")]
     public static void StartPostfix(GameOptionsMenu __instance)
     {
-        foreach (var customOption in CustomGameOptionsManager.CustomOptions)
+        foreach (var customOption in CustomOptionsManager.CustomOptions)
         {
             customOption.OptionBehaviour.OnValueChanged = (Action<OptionBehaviour>)customOption.ValueChanged;
         }

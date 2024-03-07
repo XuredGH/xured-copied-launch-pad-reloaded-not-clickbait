@@ -5,7 +5,7 @@ using Reactor.Networking.Rpc;
 
 namespace LaunchpadReloaded.API.GameOptions;
 
-public abstract class CustomGameOption
+public abstract class AbstractGameOption
 {    
     public string Title { get; }
     public StringNames StringName { get; }
@@ -14,16 +14,16 @@ public abstract class CustomGameOption
     public void ValueChanged(OptionBehaviour optionBehaviour)
     {
         OnValueChanged(optionBehaviour);
-        CustomGameOptionsManager.RpcSyncOptions();
+        CustomOptionsManager.SyncOptions();
     }
 
     protected abstract void OnValueChanged(OptionBehaviour optionBehaviour);
 
-    protected CustomGameOption(string title)
+    protected AbstractGameOption(string title)
     {
         Title = title;
         StringName = CustomStringName.CreateAndRegister(Title);
         
-        CustomGameOptionsManager.CustomOptions.Add(this);
+        CustomOptionsManager.CustomOptions.Add(this);
     }
 }
