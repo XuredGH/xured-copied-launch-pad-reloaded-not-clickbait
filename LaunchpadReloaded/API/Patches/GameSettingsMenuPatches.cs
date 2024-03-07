@@ -24,34 +24,21 @@ public static class GameSettingsMenuPatches
 
         foreach (var customToggleOption in CustomOptionsManager.CustomToggleOptions)
         {
-            if (customToggleOption.OptionBehaviour && __instance.AllItems.Contains(customToggleOption.OptionBehaviour.transform)) continue;
+            if (customToggleOption.AdvancedRole is not null || (customToggleOption.OptionBehaviour && __instance.AllItems.Contains(customToggleOption.OptionBehaviour.transform))) continue;
 
             var newOpt = Object.Instantiate(toggleOpt, toggleOpt.transform.parent);
-            newOpt.name = customToggleOption.Title;
-            newOpt.Title = customToggleOption.StringName;
-            newOpt.CheckMark.enabled = customToggleOption.Value;
-            newOpt.OnEnable();
-
-            customToggleOption.OptionBehaviour = newOpt;
+            customToggleOption.CreateToggleOption(newOpt);
             
             __instance.AllItems = __instance.AllItems.AddItem(newOpt.transform).ToArray();
         }
         
         foreach (var customNumberOption in CustomOptionsManager.CustomNumberOptions)
         {
-            if (customNumberOption.OptionBehaviour && __instance.AllItems.Contains(customNumberOption.OptionBehaviour.transform)) continue;
+            if (customNumberOption.AdvancedRole is not null || (customNumberOption.OptionBehaviour && __instance.AllItems.Contains(customNumberOption.OptionBehaviour.transform))) continue;
             
             var newOpt = Object.Instantiate(numberOpt, numberOpt.transform.parent);
-            newOpt.name = customNumberOption.Title;
-            newOpt.Title = customNumberOption.StringName;
-            newOpt.Value = customNumberOption.Value;    
-            newOpt.Increment = customNumberOption.Increment;
-            newOpt.SuffixType = customNumberOption.SuffixType;
-            newOpt.FormatString = customNumberOption.NumberFormat;
-            newOpt.ValidRange = new FloatRange(customNumberOption.MinValue, customNumberOption.MaxValue);
-            newOpt.OnEnable();
-            customNumberOption.OptionBehaviour = newOpt;
-
+            customNumberOption.CreateNumberOption(newOpt);
+            
             __instance.AllItems = __instance.AllItems.AddItem(newOpt.transform).ToArray();
         }
     

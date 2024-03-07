@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using AmongUs.GameOptions;
 using HarmonyLib;
+using Il2CppSystem;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
 using Reactor.Localization.Utilities;
@@ -30,17 +31,41 @@ public static class RolesSettingsMenuPatches
 
             var newTab = Object.Instantiate(tabPrefab, __instance.AdvancedRolesSettings.transform);
             newTab.name = role.NiceName + " Settings";
+            var toggleSet = Object.Instantiate(newTab.GetComponentInChildren<ToggleOption>(true));
+            var numberSet = Object.Instantiate(newTab.GetComponentInChildren<NumberOption>(true));
+            
             foreach (var option in newTab.GetComponentsInChildren<OptionBehaviour>())
             {
                 option.gameObject.Destroy();
             }
 
+            var numOptsAdded = 0;
+            foreach (var customOption in CustomOptionsManager.CustomOptions)
+            {
+                if (customOption.AdvancedRole is not null && customOption.AdvancedRole == role.GetType())
+                {
+                    switch (customOption)
+                    {
+                        case CustomNumberOption numberOption:
+                            var numOpt = Object.Instantiate(numberSet, newTab.transform);
+                            numOpt.transform.localPosition -= new Vector3(0, .5f*numOptsAdded++, 0);
+                            numberOption.CreateNumberOption(numOpt);
+                            
+                            break;
+                        
+                        case CustomToggleOption toggleOption:
+                            var togOpt = Object.Instantiate(toggleSet, newTab.transform);
+                            togOpt.transform.localPosition -= new Vector3(0, .5f*numOptsAdded++, 0);
+                            toggleOption.CreateToggleOption(togOpt);
+                            
+                            break;
+                    }
+                }
+            }
+            
             var tmp = newTab.GetComponentInChildren<TextTranslatorTMP>();
             tmp.defaultStr = role.NiceName;
             tmp.TargetText = role.StringName;
-            
-            var newOpt = Object.Instantiate(tabPrefab.GetComponentInChildren<NumberOption>(true),newTab.transform);
-            newOpt.Title = CustomStringName.CreateAndRegister("Testing");
             
             var newAdvSet = new AdvancedRoleSettingsButton()
             {
@@ -49,6 +74,19 @@ public static class RolesSettingsMenuPatches
             };
             
             __instance.AllAdvancedSettingTabs.Add(newAdvSet);
+        }
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch("Start")]
+    public static void StartPostfix(RolesSettingsMenu __instance)
+    {
+        foreach (var customOption in CustomOptionsManager.CustomOptions)
+        {
+            if (customOption.AdvancedRole is not null)
+            {
+                customOption.OptionBehaviour.OnValueChanged = (Action<OptionBehaviour>)customOption.ValueChanged;
+            }
         }
     }
     

@@ -13,6 +13,7 @@ public static class GameOptionsMenuPatch
     {
         foreach (var customOption in CustomOptionsManager.CustomOptions)
         {
+            if (customOption.AdvancedRole is not null) continue;
             customOption.OptionBehaviour.OnValueChanged = (Action<OptionBehaviour>)customOption.ValueChanged;
         }
     }
