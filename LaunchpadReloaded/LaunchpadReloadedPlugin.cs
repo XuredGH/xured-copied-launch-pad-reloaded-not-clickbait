@@ -5,17 +5,11 @@ using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Components;
-<<<<<<< HEAD
-using LaunchpadReloaded.API.Options;
-=======
->>>>>>> parent of e3c5263 (Squashed commit of the following:)
 using Reactor;
 using Reactor.Networking;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities;
 using UnityEngine;
-using CustomOptionsManager = LaunchpadReloaded.API.Options.CustomOptionsManager;
-
 namespace LaunchpadReloaded;
 
 [BepInAutoPlugin]
