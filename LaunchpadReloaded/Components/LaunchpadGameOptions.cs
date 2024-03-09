@@ -12,7 +12,8 @@ public class LaunchpadGameOptions
     public CustomToggleOption FriendlyFire { get; }
     public CustomNumberOption CaptainMeetingCooldown { get; }
     public CustomNumberOption CaptainMeetingCount { get; }
-    
+    public CustomStringOption Gamemodes { get; }
+
     public LaunchpadGameOptions()
     {
         if (Instance != null)
@@ -37,7 +38,6 @@ public class LaunchpadGameOptions
             1,
             NumberSuffixes.None,
             role: typeof(CaptainRole));
-        
         
         Instance = this;
     }

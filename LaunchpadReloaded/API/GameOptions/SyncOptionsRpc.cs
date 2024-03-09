@@ -20,11 +20,13 @@ public class SyncOptionsRpc : PlayerCustomRpc<LaunchpadReloadedPlugin, SyncOptio
         public readonly bool[] Toggles;
 
         public readonly float[] Numbers;
+        public readonly string[] Strings;
 
-        public Data(bool[] toggles, float[] numbers)
+        public Data(bool[] toggles, float[] numbers, string[] strings)
         {
             Toggles = toggles;
             Numbers = numbers;
+            Strings = strings;
         }
     }
 
@@ -38,6 +40,12 @@ public class SyncOptionsRpc : PlayerCustomRpc<LaunchpadReloadedPlugin, SyncOptio
         
         writer.WritePacked((uint)data.Numbers.Length);
         foreach (var n in data.Numbers)
+        {
+            writer.Write(n);
+        }
+
+        writer.WritePacked((uint)data.Strings.Length);
+        foreach (var n in data.Strings)
         {
             writer.Write(n);
         }
@@ -57,12 +65,18 @@ public class SyncOptionsRpc : PlayerCustomRpc<LaunchpadReloadedPlugin, SyncOptio
             numbers[i] = reader.ReadSingle();
         }
 
+        var strings = new string[reader.ReadPackedUInt32()];
+        for (var i = 0; i < strings.Length; i++)
+        {
+            strings[i] = reader.ReadString();
+        }
 
-        return new Data(toggles, numbers);
+
+        return new Data(toggles, numbers, strings);
     }
 
     public override void Handle(PlayerControl player, Data data)
     {
-        CustomOptionsManager.HandleOptionsSync(data.Toggles,data.Numbers);
+        CustomOptionsManager.HandleOptionsSync(data.Toggles,data.Numbers, data.Strings);
     }
 }

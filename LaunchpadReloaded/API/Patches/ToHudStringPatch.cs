@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Linq;
+using System.Text;
 using AmongUs.GameOptions;
 using HarmonyLib;
 using LaunchpadReloaded.API.GameOptions;
@@ -23,7 +24,11 @@ public static class ToHudStringPatch
         {
             sb.AppendLine(toggleOption.Title+": "+toggleOption.Value);
         }
-    
+
+        foreach(var stringOption in CustomOptionsManager.CustomStringOptions)
+        {
+            sb.AppendLine(stringOption.Title + ": " + stringOption.Value);
+        }
 
         __result = "<size=125%><b>Normal Game Options:</b></size>\n" + __result + sb;
     }
