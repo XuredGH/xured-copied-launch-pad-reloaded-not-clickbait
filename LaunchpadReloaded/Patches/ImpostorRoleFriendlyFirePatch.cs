@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using LaunchpadReloaded.API.Gamemodes;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.Components;
 
@@ -9,7 +10,7 @@ public static class ImpostorRoleFriendlyFirePatch
 {
     public static bool Prefix(ImpostorRole __instance, [HarmonyArgument(0)] GameData.PlayerInfo target, ref bool __result)
     {
-        if (LaunchpadGameOptions.Instance.FriendlyFire.Value)
+        if (LaunchpadGameOptions.Instance.FriendlyFire.Value || CustomGamemodeManager.ActiveMode.CanKill(target.Object))
         {
             // cant be arsed to use a reverse patch, so this is copied from mono VVV
             __result = target is { Disconnected: false, IsDead: false } &&

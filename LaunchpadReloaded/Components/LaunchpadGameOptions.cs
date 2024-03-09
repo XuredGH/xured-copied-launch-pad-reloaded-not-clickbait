@@ -45,7 +45,7 @@ public class LaunchpadGameOptions
 
         Action<int> changed = i =>
         {
-            CustomGamemodeManager.SetGamemode(i);
+            CustomGamemodeManager.RpcSetGamemode(PlayerControl.LocalPlayer, i);
         };
 
         Gamemodes = new CustomStringOption("Gamemode", ["Default", "Battle Royale"], changed);

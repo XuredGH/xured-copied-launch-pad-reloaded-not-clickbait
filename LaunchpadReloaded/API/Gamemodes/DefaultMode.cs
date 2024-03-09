@@ -15,9 +15,4 @@ public class DefaultMode : CustomGamemode
     public override string Description => "Default Among Us Gamemode";
 
     public override int Id => 0;
-
-    public override void Begin()
-    {
-
-    }
 }

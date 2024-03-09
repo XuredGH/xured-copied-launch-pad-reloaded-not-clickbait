@@ -1,4 +1,9 @@
-﻿using LaunchpadReloaded.API.Hud;
+﻿using InnerNet;
+using LaunchpadReloaded.API.GameOptions;
+using LaunchpadReloaded.API.Hud;
+using LaunchpadReloaded.Components;
+using LaunchpadReloaded.Networking;
+using Reactor.Networking.Attributes;
 using Rewired.UI.ControlMapper;
 using System;
 using System.Collections.Generic;
@@ -22,6 +27,13 @@ public static class CustomGamemodeManager
                 RegisterGamemode(type);
             }
         }
+    }
+
+    [MethodRpc((uint)LaunchpadRPC.SetGamemode)]
+    public static void RpcSetGamemode(PlayerControl player, int id)
+    {
+        SetGamemode(id);
+        LaunchpadGameOptions.Instance.Gamemodes.SetValue(id);
     }
 
     public static void SetGamemode(int id)

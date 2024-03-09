@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using InnerNet;
 using LaunchpadReloaded.API.Gamemodes;
 using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Roles;
@@ -18,6 +19,7 @@ public static class HudManagerPatches
     public static void UpdatePostfix(HudManager __instance)
     {
         if (!PlayerControl.LocalPlayer) return;
+        if (AmongUsClient.Instance.GameState != InnerNetClient.GameStates.Started && !ShipStatus.Instance) return;
 
         CustomGamemodeManager.ActiveMode.HudUpdate(__instance);
 
@@ -40,7 +42,14 @@ public static class HudManagerPatches
 
         if (HackingManager.AnyActiveNodes()) __instance.ReportButton.SetDisabled();
     }
-    
+
+    [HarmonyPostfix]
+    [HarmonyPatch("OnGameStart")]
+    public static void GameStartPatch(HudManager __instance)
+    {
+        CustomGamemodeManager.ActiveMode.HudStart(__instance);
+    }
+
     [HarmonyPostfix]
     [HarmonyPatch("Start")]
     public static void StartPostfix(HudManager __instance)

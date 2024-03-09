@@ -27,18 +27,18 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
         Harmony.PatchAll();
 
         Bundle = AssetBundleManager.Load("assets");
-        
+
         // TODO: CREATE ATTRIBUTE FOR THIS VVV
+        CustomGamemodeManager.RegisterAllGamemodes();
+        CustomGamemodeManager.SetGamemode(0);
         CustomRoleManager.RegisterAllRoles();
         CustomButtonManager.RegisterAllButtons();
-        CustomGamemodeManager.RegisterAllGamemodes(); 
 
         new LaunchpadGameOptions();
         
         Config.Save();
 
         // Set to default mode
-        CustomGamemodeManager.SetGamemode(0);
     }
 
 

@@ -20,9 +20,9 @@ public static class GameLogicPatches
 
     [HarmonyPrefix]
     [HarmonyPatch(typeof(LogicRoleSelectionNormal), nameof(LogicRoleSelectionNormal.AssignRolesFromList))]
-    public static bool AssignRolesPatch(LogicRoleSelectionNormal __instance, [HarmonyArgument(0)] List<GameData.PlayerInfo> players)
+    public static bool AssignRolesPatch(LogicRoleSelectionNormal __instance)
     {
-        CustomGamemodeManager.ActiveMode.AssignRoles(out bool runOriginal, players, __instance);
+        CustomGamemodeManager.ActiveMode.AssignRoles(out bool runOriginal, __instance);
         return runOriginal;
     }
 }

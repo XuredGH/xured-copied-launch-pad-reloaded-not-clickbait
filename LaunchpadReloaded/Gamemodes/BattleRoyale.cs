@@ -1,8 +1,10 @@
 ﻿using AmongUs.Data;
 using AmongUs.GameOptions;
 using HarmonyLib;
+using InnerNet;
 using LaunchpadReloaded.API.Gamemodes;
 using LaunchpadReloaded.Components;
+using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Extensions;
 using System;
 using System.Collections.Generic;
@@ -11,22 +13,41 @@ using System.Text;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using static GameData;
 
 namespace LaunchpadReloaded.Gamemodes;
 public class BattleRoyale : CustomGamemode
 {
     public override string Name => "Battle Royale";
-    public override string Description => "Everyone can kill. <b><i>Last one standing wins.</b></i>";
+    public override string Description => "Everyone can kill.\n<b><i>Last one standing wins.</b></i>";
 
     public override int Id => 1;
+    public TextMeshPro PlayerCount;
 
-    public override void Begin()
+    public override void Initialize()
     {
+        var tasks = PlayerControl.LocalPlayer.myTasks;
+        tasks.Clear();
 
+        Transform random = ShipStatus.Instance.DummyLocations.Random();
+        PlayerControl.LocalPlayer.transform.position = random.position;
     }
+
+    public override void HudStart(HudManager instance)
+    {
+        PlayerCount = Helpers.CreateTextLabel("BR_PlayerCounter", instance.transform, AspectPosition.EdgeAlignments.Top, new Vector3(0, 0.25f, 0));
+    }
+
     public override void HudUpdate(HudManager instance)
     {
+        if(PlayerCount)
+        {
+            var alivePlayers = GameData.Instance.AllPlayers.ToArray().Where(player => !player.Disconnected && !player.IsDead);
+            PlayerCount.text = $"<size=75%>{Palette.ImpostorRed.ToTextColor()}Battle Royale</size></color>\n{alivePlayers.Count()} Players Remaining.";
+        }
+
+        instance.TaskStuff.gameObject.SetActive(false);
         instance.AbilityButton.gameObject.SetActive(false);
         instance.UseButton.gameObject.SetActive(false);
         instance.ReportButton.gameObject.SetActive(false);
@@ -36,19 +57,36 @@ public class BattleRoyale : CustomGamemode
         instance.KillButton.transform.position = instance.UseButton.transform.position;
     }
 
+    public override List<PlayerInfo> CalculateWinners()
+    {
+        List<PlayerInfo> alivePlayers = GameData.Instance.AllPlayers.ToArray().Where(player => !player.Disconnected && !player.IsDead).ToList();
+        return alivePlayers;
+    }
+    public override bool ShowCustomRoleScreen() => true;
+    public override bool CanKill(PlayerControl target) => true;
+    public override bool CanReport(DeadBody body) => false;
+    public override bool CanVent(Vent vent, PlayerInfo playerInfo) => false;
+    public override bool ShouldShowSabotageMap(MapBehaviour map) => false;
+    public override bool CanUseConsole(Console console) => false;
+    public override bool CanUseMapConsole(MapConsole console) => false;
+    public override bool CanUseSystemConsole(SystemConsole console) => false;
     public override void CheckGameEnd(out bool runOriginal, LogicGameFlowNormal instance)
     {
         runOriginal = true;
-/*        var alivePlayers = GameData.Instance.AllPlayers.ToArray()
-            .Where(player => !player.Disconnected && !player.IsDead);
+/*        runOriginal = false;
+        var alivePlayers = GameData.Instance.AllPlayers.ToArray().Where(player => !player.Disconnected && !player.IsDead);
         if (alivePlayers.Count() == 1)
         {
             instance.Manager.RpcEndGame(GameOverReason.ImpostorByKill, false);
         }*/
     }
 
-    public override void AssignRoles(out bool runOriginal, List<PlayerInfo> players, LogicRoleSelectionNormal instance)
+    public override void AssignRoles(out bool runOriginal, LogicRoleSelectionNormal instance)
     {
-        runOriginal = false;
+        runOriginal = false; 
+        foreach(var player in GameData.Instance.AllPlayers)
+        {
+            player.Object.RpcSetRole(RoleTypes.Impostor);
+        }
     }
 }

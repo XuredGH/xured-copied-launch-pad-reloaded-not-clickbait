@@ -10,5 +10,6 @@ public enum LaunchpadRPC : uint
     RemoveBody = 5,
     HideBodyInVent = 6,
     ExposeBody = 7,
-    SyncGameOptions = 8
+    SyncGameOptions = 8,
+    SetGamemode = 9,
 }
