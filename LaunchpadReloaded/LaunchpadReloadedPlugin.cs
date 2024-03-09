@@ -1,12 +1,14 @@
-﻿using AmongUs.GameOptions;
-using BepInEx;
+﻿using BepInEx;
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Components;
+<<<<<<< HEAD
 using LaunchpadReloaded.API.Options;
+=======
+>>>>>>> parent of e3c5263 (Squashed commit of the following:)
 using Reactor;
 using Reactor.Networking;
 using Reactor.Networking.Attributes;
@@ -30,9 +32,8 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
         Harmony.PatchAll();
 
         Bundle = AssetBundleManager.Load("assets");
-
+        
         // TODO: CREATE ATTRIBUTE FOR THIS VVV
-        CustomOptionsManager.RegisterAllOptions();
         CustomRoleManager.RegisterAllRoles();
         CustomButtonManager.RegisterAllButtons();
         
