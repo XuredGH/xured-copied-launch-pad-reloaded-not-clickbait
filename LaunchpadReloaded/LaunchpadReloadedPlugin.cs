@@ -6,14 +6,13 @@ using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Components;
-using LaunchpadReloaded.Misc.CustomOptions;
-using LaunchpadReloaded.Buttons;
-using LaunchpadReloaded.Roles;
+using LaunchpadReloaded.API.Options;
 using Reactor;
 using Reactor.Networking;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities;
 using UnityEngine;
+using CustomOptionsManager = LaunchpadReloaded.API.Options.CustomOptionsManager;
 
 namespace LaunchpadReloaded;
 
