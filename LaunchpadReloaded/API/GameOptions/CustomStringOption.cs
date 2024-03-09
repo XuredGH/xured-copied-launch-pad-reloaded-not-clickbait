@@ -12,11 +12,12 @@ public class CustomStringOption : AbstractGameOption
 {
     public string Value { get; private set; }
     public string[] Options { get; private set; }
-
-    public CustomStringOption(string title, string[] options, Type role = null) : base(title, role)
+    private Action<int> _changedEvent;
+    public CustomStringOption(string title, string[] options, Action<int> changedEvent = null, Type role = null) : base(title, role)
     {
         Value = options[0];
         Options = options;
+        _changedEvent = changedEvent;
         CustomOptionsManager.CustomStringOptions.Add(this);
     }
 
@@ -33,6 +34,7 @@ public class CustomStringOption : AbstractGameOption
     protected override void OnValueChanged(OptionBehaviour optionBehaviour)
     {
         SetValue(optionBehaviour.GetInt());
+        if (_changedEvent != null) _changedEvent.Invoke(optionBehaviour.GetInt());
     }
 
     public void CreateStringOption(StringOption stringOption)

@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using LaunchpadReloaded.API.Gamemodes;
 using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Features;
@@ -18,7 +19,9 @@ public static class HudManagerPatches
     {
         if (!PlayerControl.LocalPlayer) return;
 
-        if(HackingManager.HackedPlayers.Contains(PlayerControl.LocalPlayer.PlayerId))
+        CustomGamemodeManager.ActiveMode.HudUpdate(__instance);
+
+        if (HackingManager.HackedPlayers.Contains(PlayerControl.LocalPlayer.PlayerId))
         {
             __instance.tasksString.Clear();
             __instance.tasksString.Append(UnityEngine.Color.green.ToTextColor());
