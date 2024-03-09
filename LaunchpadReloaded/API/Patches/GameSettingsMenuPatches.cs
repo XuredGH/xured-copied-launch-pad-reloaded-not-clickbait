@@ -41,6 +41,16 @@ public static class GameSettingsMenuPatches
             
             __instance.AllItems = __instance.AllItems.AddItem(newOpt.transform).ToArray();
         }
+
+        foreach(var customStringOption in CustomOptionsManager.CustomStringOptions)
+        {
+            if (customStringOption.AdvancedRole is not null || (customStringOption.OptionBehaviour && __instance.AllItems.Contains(customStringOption.OptionBehaviour.transform))) continue;
+
+            var newOpt = Object.Instantiate(stringOpt, stringOpt.transform.parent);
+            customStringOption.CreateStringOption(newOpt);
+
+            __instance.AllItems = __instance.AllItems.AddItem(newOpt.transform).ToArray();
+        }
     
     }
     
