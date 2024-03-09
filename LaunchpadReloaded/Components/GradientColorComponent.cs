@@ -15,7 +15,6 @@ public class GradientColorComponent(IntPtr ptr) : MonoBehaviour(ptr)
 {
     public SpriteRenderer renderer;
     public Material mat;
-    private bool _init;
 
     public readonly int ShaderWidth = Shader.PropertyToID("_Width");
     public readonly int ShaderHeight = Shader.PropertyToID("_Height");
@@ -29,13 +28,12 @@ public class GradientColorComponent(IntPtr ptr) : MonoBehaviour(ptr)
     
     public void SetColor(int color1, int color2 = 0)
     {
-        if (!GetComponent<SpriteRenderer>())
-        {
-            this.DestroyImmediate();
-        }
-
         renderer = GetComponent<SpriteRenderer>();
-        var rect = renderer.sprite.rect;
+        if (!renderer)
+        {
+            this.Destroy();
+            return;
+        }
         
         renderer.material = LaunchpadReloadedPlugin.Mat;
         mat = renderer.material;
@@ -46,8 +44,17 @@ public class GradientColorComponent(IntPtr ptr) : MonoBehaviour(ptr)
         mat.SetColor(Back2,Palette.ShadowColors[color2]);
         mat.SetFloat(GradStrength, strength);
         mat.SetVector(GradOffset, offset);
-        mat.SetFloat(ShaderWidth, rect.width);
-        mat.SetFloat(ShaderHeight, rect.height);
-        _init = true;
+        
+    }
+
+    public void Update()
+    {
+        if (renderer && renderer.sprite)
+        {
+            var rect = renderer.sprite.rect;
+            mat.SetFloat(ShaderWidth, rect.width);
+            mat.SetFloat(ShaderHeight, rect.height);
+        }
+        
     }
 }

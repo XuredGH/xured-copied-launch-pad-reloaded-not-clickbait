@@ -29,7 +29,7 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
 
         Bundle = AssetBundleManager.Load("assets");
 
-        Mat = Bundle.LoadAsset<Material>("PlayerMaterial").DontUnload();
+        Mat = Bundle.LoadAsset<Material>("GradientPlayerMaterial").DontUnload();
         
         // TODO: CREATE ATTRIBUTE FOR THIS VVV
         CustomRoleManager.RegisterAllRoles();
