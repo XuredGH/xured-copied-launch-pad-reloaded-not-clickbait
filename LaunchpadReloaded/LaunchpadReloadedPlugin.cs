@@ -1,10 +1,14 @@
-﻿using BepInEx;
+﻿using AmongUs.GameOptions;
+using BepInEx;
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Components;
+using LaunchpadReloaded.Misc.CustomOptions;
+using LaunchpadReloaded.Buttons;
+using LaunchpadReloaded.Roles;
 using Reactor;
 using Reactor.Networking;
 using Reactor.Networking.Attributes;
@@ -27,8 +31,9 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
         Harmony.PatchAll();
 
         Bundle = AssetBundleManager.Load("assets");
-        
+
         // TODO: CREATE ATTRIBUTE FOR THIS VVV
+        CustomOptionsManager.RegisterAllOptions();
         CustomRoleManager.RegisterAllRoles();
         CustomButtonManager.RegisterAllButtons();
         
