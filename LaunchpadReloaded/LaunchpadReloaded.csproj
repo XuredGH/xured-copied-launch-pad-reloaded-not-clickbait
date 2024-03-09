@@ -11,7 +11,7 @@
 
     <PropertyGroup>
         <GamePlatform Condition="'$(GamePlatform)' == ''">Steam</GamePlatform>
-        <GameVersion Condition="'$(GamePlatform)' == 'Steam'">2023.11.28</GameVersion>
+        <GameVersion Condition="'$(GamePlatform)' == 'Steam'">2024.3.5</GameVersion>
     </PropertyGroup>
 
     <ItemGroup>
