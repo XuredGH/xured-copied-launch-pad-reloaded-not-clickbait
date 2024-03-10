@@ -12,4 +12,6 @@ public enum LaunchpadRPC : uint
     ExposeBody = 7,
     SyncGameOptions = 8,
     SetGamemode = 9,
+    SetPlayerPosition = 10,
+    SetBodyType = 11,
 }

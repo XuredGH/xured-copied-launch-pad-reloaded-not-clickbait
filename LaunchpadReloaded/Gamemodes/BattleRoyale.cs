@@ -4,6 +4,7 @@ using HarmonyLib;
 using InnerNet;
 using LaunchpadReloaded.API.Gamemodes;
 using LaunchpadReloaded.Components;
+using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Extensions;
 using System;
@@ -31,7 +32,9 @@ public class BattleRoyale : CustomGamemode
         tasks.Clear();
 
         Transform random = ShipStatus.Instance.DummyLocations.Random();
-        PlayerControl.LocalPlayer.transform.position = random.position;
+
+        GenericRPC.RpcSetPlayerPosition(PlayerControl.LocalPlayer, random.position.x, random.position.y, random.position.z);
+        GenericRPC.RpcSetBodyType(PlayerControl.LocalPlayer, 2);
     }
 
     public override void HudStart(HudManager instance)
