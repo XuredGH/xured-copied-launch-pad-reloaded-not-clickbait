@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.Components;
+using LaunchpadReloaded.Features;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Patches;
@@ -14,39 +15,32 @@ public static class PlayerMaterialPatch
             return;
         }
 
-        var color2 = 0;
+        var color2 = GradientColorManager.Instance.LocalColorId;
 
-        if (GameData.Instance && GameData.Instance.GetComponent<CustomGameData>())
+        if (GameData.Instance)
         {
-            var customData = GameData.Instance.GetComponent<CustomGameData>();
-         
             if (renderer.GetComponentInParent<PlayerControl>())
             {
                 var pc = renderer.GetComponentInParent<PlayerControl>();
-                color2 = customData.GetCustomInfo(pc.PlayerId).SecondColorId;
+                color2 = GradientColorManager.Instance.Gradients[pc.PlayerId];
                 Debug.LogError("player found");
             }
 
             if (renderer.GetComponent<DeadBody>())
             {
                 var db = renderer.GetComponent<DeadBody>();
-                color2 = customData.GetCustomInfo(db.ParentId).SecondColorId;
+                color2 = GradientColorManager.Instance.Gradients[db.ParentId];
                 Debug.LogError("dead body found");
             }
-
-            if (renderer.GetComponent<PetBehaviour>())
-            {
-                var pb = renderer.GetComponent<PetBehaviour>();
-                color2 = customData.GetCustomInfo(pb.TargetPlayer.PlayerId).SecondColorId;
-            }
         }
         
-        if (!renderer.gameObject.GetComponent<GradientColorComponent>())
+        var gradColor = renderer.GetComponent<GradientColorComponent>();
+        if (!gradColor)
         {
-            renderer.gameObject.AddComponent<GradientColorComponent>();
+            gradColor = renderer.gameObject.AddComponent<GradientColorComponent>();
         }
         
-        renderer.gameObject.GetComponent<GradientColorComponent>().SetColor(colorId, color2);
+        gradColor.SetColor(colorId, color2);
         
     }
 }

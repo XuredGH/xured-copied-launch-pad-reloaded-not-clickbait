@@ -3,6 +3,7 @@ using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Roles;
+using LaunchpadReloaded.Features;
 using Reactor;
 using Reactor.Networking;
 using Reactor.Networking.Attributes;
@@ -22,6 +23,7 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
 
     public static AssetBundle Bundle;
     public static Material Mat;
+    public static Sprite BlankButton;
     
     public override void Load()
     {
@@ -30,6 +32,9 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
         Bundle = AssetBundleManager.Load("assets");
 
         Mat = Bundle.LoadAsset<Material>("GradientPlayerMaterial").DontUnload();
+        BlankButton = Bundle.LoadAsset<Sprite>("BlankButton").DontUnload();
+
+        new GradientColorManager();
         
         // TODO: CREATE ATTRIBUTE FOR THIS VVV
         CustomRoleManager.RegisterAllRoles();
