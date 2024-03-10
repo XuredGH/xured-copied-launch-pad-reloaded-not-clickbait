@@ -15,11 +15,13 @@ public static class PlayerTabPatches
 {
     private static bool _selectGradient;
     private static ColorChip _switchButton;
-    
+    private static TextMeshPro _titleText;
+
     private static void SwitchSelector(PlayerTab instance)
     {
         _selectGradient = !_selectGradient;
-        _switchButton.GetComponentInChildren<TextMeshPro>().text = _selectGradient ? "Gradient" : "Base Color";
+
+        _switchButton.GetComponentInChildren<TextMeshPro>().text = _selectGradient ? "Base Color" : "Secondary\nColor";
         if (_selectGradient)
         {
             instance.currentColor = GradientColorManager.Instance.LocalColorId;
@@ -37,6 +39,7 @@ public static class PlayerTabPatches
     {
         if (!_switchButton)
         {
+            __instance.transform.FindChild("Text").GetComponent<TextMeshPro>().text = "Main Color: ";
             _switchButton = Object.Instantiate(__instance.ColorTabPrefab, __instance.ColorTabArea);
         
             var spriteRenderer = _switchButton.GetComponent<SpriteRenderer>();
@@ -52,7 +55,7 @@ public static class PlayerTabPatches
             
             var tmp = buttonText.GetComponent<TextMeshPro>();
             tmp.alignment = TextAlignmentOptions.Center;
-            tmp.text = _selectGradient ? "Gradient" : "Base Color";
+            tmp.text = _selectGradient ? "Main Color" : "Secondary\nColor";
             tmp.fontSize = tmp.fontSizeMax = 4;
         
             _switchButton.Button.OnClick.RemoveAllListeners();
@@ -69,6 +72,7 @@ public static class PlayerTabPatches
                 __instance.SelectColor(_selectGradient ? GradientColorManager.Instance.LocalColorId : DataManager.Player.Customization.Color);
             }));
         }
+        _titleText = __instance.transform.FindChild("Text").GetComponent<TextMeshPro>();
     }
 
     [HarmonyPrefix]
@@ -124,6 +128,7 @@ public static class PlayerTabPatches
     [HarmonyPatch(nameof(PlayerTab.Update))]
     public static void UpdatePostfix(PlayerTab __instance)
     {
+        if(_titleText) _titleText.text = _selectGradient ? "Secondary Color: " : "Main Color: ";
         if (_selectGradient)
         {
             __instance.currentColorIsEquipped = __instance.currentColor == GradientColorManager.Instance.LocalColorId;
