@@ -24,6 +24,10 @@ public static class PlayerTabPatches
         {
             instance.currentColor = GradientColorManager.Instance.LocalColorId;
         }
+        else
+        {
+            instance.currentColor = DataManager.Player.Customization.Color;
+        }
     }
     
     
@@ -57,14 +61,21 @@ public static class PlayerTabPatches
             _switchButton.Button.OnClick.AddListener((UnityAction)(() => { SwitchSelector(__instance); }));
         }
 
-
+        foreach (var colorChip in __instance.ColorChips)
+        {
+            colorChip.Button.OnMouseOut.RemoveAllListeners();
+            colorChip.Button.OnMouseOut.AddListener((UnityAction)(() =>
+            {
+                __instance.SelectColor(_selectGradient ? GradientColorManager.Instance.LocalColorId : DataManager.Player.Customization.Color);
+            }));
+        }
     }
 
     [HarmonyPrefix]
     [HarmonyPatch(nameof(PlayerTab.ClickEquip))]
     public static bool ClickPrefix(PlayerTab __instance)
     {
-        if (_selectGradient)
+        if (_selectGradient && __instance.AvailableColors.Remove(__instance.currentColor))
         {
             GradientColorManager.Instance.LocalColorId = __instance.currentColor;
             __instance.PlayerPreview.UpdateFromDataManager(PlayerMaterial.MaskType.None);
@@ -87,10 +98,6 @@ public static class PlayerTabPatches
         {
             __instance.UpdateAvailableColors();
             __instance.currentColor = colorId;
-            if (colorId == DataManager.Player.Customization.Color)
-            {
-                __instance.currentColor = GradientColorManager.Instance.LocalColorId;
-            }
             var colorName = Palette.GetColorName(colorId);
             PlayerCustomizationMenu.Instance.SetItemName(colorName);
             __instance.PlayerPreview.UpdateFromDataManager(PlayerMaterial.MaskType.None);
@@ -134,6 +141,8 @@ public static class PlayerTabPatches
                 __instance.AvailableColors.Add(i);
             }
             
+            
+            // VERY BUGGY NEEDS TO BE REWRITTEN
             if (GameData.Instance)
             {
                 var allPlayers = GameData.Instance.AllPlayers.ToArray();

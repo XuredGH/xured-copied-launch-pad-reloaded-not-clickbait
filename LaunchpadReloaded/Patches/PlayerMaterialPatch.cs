@@ -23,7 +23,6 @@ public static class PlayerMaterialPatch
             {
                 var pc = renderer.GetComponentInParent<PlayerControl>();
                 color2 = GradientColorManager.Instance.Gradients[pc.PlayerId];
-                Debug.LogError("player found");
             }
 
             if (renderer.GetComponent<DeadBody>())
