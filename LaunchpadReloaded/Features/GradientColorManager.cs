@@ -20,5 +20,17 @@ public class GradientColorManager
     public static void RpcSetGradient(PlayerControl pc, int colorId)
     {
         Instance.Gradients[pc.PlayerId] = colorId;
+        if (pc.Data is not null)
+        {
+            pc.SetColor(pc.Data.DefaultOutfit.ColorId);
+        }
+    }
+
+    [MethodRpc((uint)LaunchpadRPC.RequestGradient)]
+    public static void RpcRequestGradient(PlayerControl pc)
+    {
+        if (!pc.AmOwner) return;
+        
+        RpcSetGradient(pc,Instance.LocalGradientId);
     }
 }

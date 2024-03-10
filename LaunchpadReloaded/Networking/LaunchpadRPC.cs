@@ -10,5 +10,6 @@ public enum LaunchpadRPC : uint
     HideBody = 5,
     HideBodyInVent = 6,
     ExposeBody = 7,
-    SyncGradient = 8
+    SyncGradient = 8,
+    RequestGradient = 9
 }

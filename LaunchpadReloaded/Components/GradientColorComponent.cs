@@ -26,7 +26,7 @@ public class GradientColorComponent(IntPtr ptr) : MonoBehaviour(ptr)
     public Vector4 offset = new (0, .35f, .5f, 1); 
     public float strength = 125;
     
-    public void SetColor(int color1, int color2 = 0)
+    public void SetColor(int color1 = 0, int color2 = 0)
     {
         renderer = GetComponent<SpriteRenderer>();
         if (!renderer)

@@ -1,27 +1,25 @@
 ﻿using AmongUs.Data;
 using HarmonyLib;
-using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Extensions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace LaunchpadReloaded.Patches;
+namespace LaunchpadReloaded.Patches.GradientColor;
 
 [HarmonyPatch(typeof(PlayerTab))]
 public static class PlayerTabPatches
 {
-    private static bool _selectGradient;
+    public static bool SelectGradient;
     private static ColorChip _switchButton;
     private static TextMeshPro _titleText;
 
     private static void SwitchSelector(PlayerTab instance)
     {
-        _selectGradient = !_selectGradient;
-        _titleText.text = _selectGradient ? "Secondary Color: " : "Main Color: ";
-        instance.currentColor = _selectGradient ? GradientColorManager.Instance.LocalGradientId : DataManager.Player.Customization.Color;
+        SelectGradient = !SelectGradient;
+        _titleText.text = SelectGradient ? "Secondary Color: " : "Main Color: ";
+        instance.currentColor = SelectGradient ? GradientColorManager.Instance.LocalGradientId : DataManager.Player.Customization.Color;
     }
     
     
@@ -47,7 +45,7 @@ public static class PlayerTabPatches
             
             _titleText = buttonText.GetComponent<TextMeshPro>();
             _titleText.alignment = TextAlignmentOptions.Center;
-            _titleText.text = _selectGradient ? "Main Color" : "Secondary\nColor";
+            _titleText.text = SelectGradient ? "Main Color" : "Secondary\nColor";
             _titleText.fontSize = _titleText.fontSizeMax = 4;
         
             _switchButton.Button.OnClick.RemoveAllListeners();
@@ -61,7 +59,7 @@ public static class PlayerTabPatches
             colorChip.Button.OnMouseOut.RemoveAllListeners();
             colorChip.Button.OnMouseOut.AddListener((UnityAction)(() =>
             {
-                __instance.SelectColor(_selectGradient ? GradientColorManager.Instance.LocalGradientId : DataManager.Player.Customization.Color);
+                __instance.SelectColor(SelectGradient ? GradientColorManager.Instance.LocalGradientId : DataManager.Player.Customization.Color);
             }));
         }
     }
@@ -70,7 +68,7 @@ public static class PlayerTabPatches
     [HarmonyPatch(nameof(PlayerTab.ClickEquip))]
     public static bool ClickPrefix(PlayerTab __instance)
     {
-        if (_selectGradient && __instance.AvailableColors.Remove(__instance.currentColor))
+        if (SelectGradient && __instance.AvailableColors.Remove(__instance.currentColor))
         {
             GradientColorManager.Instance.LocalGradientId = __instance.currentColor;
             __instance.PlayerPreview.UpdateFromDataManager(PlayerMaterial.MaskType.None);
@@ -89,7 +87,7 @@ public static class PlayerTabPatches
     [HarmonyPatch(nameof(PlayerTab.SelectColor))]
     public static bool SelectPrefix(PlayerTab __instance, [HarmonyArgument(0)] int colorId)
     {
-        if (_selectGradient)
+        if (SelectGradient)
         {
             __instance.UpdateAvailableColors();
             __instance.currentColor = colorId;
@@ -106,7 +104,7 @@ public static class PlayerTabPatches
     [HarmonyPatch(nameof(PlayerTab.GetCurrentColorId))]
     public static bool GetCurrentColorPrefix(PlayerTab __instance, ref int __result)
     {
-        if (_selectGradient)
+        if (SelectGradient)
         {
             __result = GradientColorManager.Instance.LocalGradientId;
             return false;
@@ -119,8 +117,8 @@ public static class PlayerTabPatches
     [HarmonyPatch(nameof(PlayerTab.Update))]
     public static void UpdatePostfix(PlayerTab __instance)
     {
-        if(_titleText) _titleText.text = _selectGradient ? "Secondary Color: " : "Main Color: ";
-        if (_selectGradient)
+        if(_titleText) _titleText.text = SelectGradient ? "Secondary Color: " : "Main Color: ";
+        if (SelectGradient)
         {
             __instance.currentColorIsEquipped = __instance.currentColor == GradientColorManager.Instance.LocalGradientId;
         }
@@ -145,7 +143,7 @@ public static class PlayerTabPatches
             {
                 var data = allPlayers[j];
 
-                if (_selectGradient)
+                if (SelectGradient)
                 {
                     __instance.AvailableColors.Remove(grads[data.PlayerId]);
                 }
