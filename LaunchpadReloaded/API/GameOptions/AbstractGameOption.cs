@@ -10,6 +10,7 @@ public abstract class AbstractGameOption
     public StringNames StringName { get; }
     public OptionBehaviour OptionBehaviour { get; set; }
     public Type AdvancedRole { get; set; }
+    public CustomOptionGroup Group = null;
     
     public void ValueChanged(OptionBehaviour optionBehaviour)
     {
