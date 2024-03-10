@@ -138,6 +138,7 @@ public static class PlayerTabPatches
         if (GameData.Instance)
         {
             var allPlayers = GameData.Instance.AllPlayers.ToArray();
+            var grads = GradientColorManager.Instance.Gradients;
             var localGradId = GradientColorManager.Instance.LocalGradientId;
             var localColorId = PlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId;
             for (var j = 0; j < allPlayers.Count; j++)
@@ -146,7 +147,7 @@ public static class PlayerTabPatches
 
                 if (_selectGradient)
                 {
-                    __instance.AvailableColors.Remove(data.Object.GetComponent<CustomPlayerData>().colorId2);
+                    __instance.AvailableColors.Remove(grads[data.PlayerId]);
                 }
                 else
                 {

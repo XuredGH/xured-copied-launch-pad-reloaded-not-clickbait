@@ -8,9 +8,8 @@ namespace LaunchpadReloaded.Features;
 public class GradientColorManager
 {
     public static GradientColorManager Instance;
-    public int LocalColorId { get; set; }
-
     public int LocalGradientId { get; set; }
+    public Dictionary<byte, int> Gradients = new();
     
     public GradientColorManager()
     {

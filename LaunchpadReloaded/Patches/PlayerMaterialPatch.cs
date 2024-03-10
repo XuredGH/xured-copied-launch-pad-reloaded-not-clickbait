@@ -15,7 +15,7 @@ public static class PlayerMaterialPatch
             return;
         }
 
-        var color2 = GradientColorManager.Instance.LocalColorId;
+        var color2 = GradientColorManager.Instance.LocalGradientId;
 
         if (GameData.Instance)
         {
