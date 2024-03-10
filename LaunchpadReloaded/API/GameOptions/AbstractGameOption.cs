@@ -10,12 +10,19 @@ public abstract class AbstractGameOption
     public StringNames StringName { get; }
     public OptionBehaviour OptionBehaviour { get; set; }
     public Type AdvancedRole { get; set; }
-    
+    private bool Show = true;
     public void ValueChanged(OptionBehaviour optionBehaviour)
     {
         OnValueChanged(optionBehaviour);
         CustomOptionsManager.SyncOptions();
     }
+
+    public void ToggleVisibility(bool value)
+    {
+        Show = value;
+        if (OptionBehaviour) OptionBehaviour.gameObject.SetActive(value);
+    }
+    public bool IsVisible() => Show;
 
     protected abstract void OnValueChanged(OptionBehaviour optionBehaviour);
 

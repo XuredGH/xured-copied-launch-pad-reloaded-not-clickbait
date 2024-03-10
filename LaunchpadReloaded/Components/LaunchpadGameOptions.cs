@@ -2,6 +2,7 @@
 using System.Linq;
 using LaunchpadReloaded.API.Gamemodes;
 using LaunchpadReloaded.API.GameOptions;
+using LaunchpadReloaded.Gamemodes;
 using LaunchpadReloaded.Roles;
 using Reactor.Utilities.Attributes;
 using UnityEngine;
@@ -12,10 +13,10 @@ namespace LaunchpadReloaded.Components;
 public class LaunchpadGameOptions
 {
     public static LaunchpadGameOptions Instance { get; private set; }
-    
     public CustomToggleOption FriendlyFire { get; }
     public CustomNumberOption CaptainMeetingCooldown { get; }
     public CustomNumberOption CaptainMeetingCount { get; }
+    public CustomToggleOption SeekerBody { get; }
     public CustomStringOption Gamemodes { get; }
 
     public LaunchpadGameOptions()
@@ -46,9 +47,15 @@ public class LaunchpadGameOptions
         Action<int> changed = i =>
         {
             CustomGamemodeManager.RpcSetGamemode(PlayerControl.LocalPlayer, i);
+            if (CustomGamemodeManager.ActiveMode is BattleRoyale)
+                SeekerBody.ToggleVisibility(true);
+            else
+                SeekerBody.ToggleVisibility(false);
         };
 
         Gamemodes = new CustomStringOption("Gamemode", ["Default", "Battle Royale"], changed);
+
+        SeekerBody = new CustomToggleOption("Use Seeker Body Type for BR", true, defaultShow: false);
 
         Instance = this;
     }

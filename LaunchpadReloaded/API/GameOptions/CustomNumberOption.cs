@@ -15,7 +15,7 @@ public class CustomNumberOption : AbstractGameOption
     public NumberSuffixes SuffixType { get; }
     public string NumberFormat { get; }
 
-    public CustomNumberOption(string title, float defaultValue, float minValue, float maxValue, float increment, NumberSuffixes suffixType, string numberFormat="0", Type role=null) : base(title, role)
+    public CustomNumberOption(string title, float defaultValue, float minValue, float maxValue, float increment, NumberSuffixes suffixType, string numberFormat="0", Type role=null, bool defaultShow = true) : base(title, role)
     {
         Value = defaultValue;
         MinValue = minValue;
@@ -24,6 +24,7 @@ public class CustomNumberOption : AbstractGameOption
         SuffixType = suffixType;
         NumberFormat = numberFormat;
         CustomOptionsManager.CustomNumberOptions.Add(this);
+        ToggleVisibility(defaultShow);
     }
 
     public void SetValue(float newValue)
@@ -43,6 +44,7 @@ public class CustomNumberOption : AbstractGameOption
         numberOption.OnValueChanged = (Il2CppSystem.Action<OptionBehaviour>)ValueChanged;
         numberOption.OnEnable();
         OptionBehaviour = numberOption;
+        OptionBehaviour.gameObject.SetActive(IsVisible());
     }
     
     protected override void OnValueChanged(OptionBehaviour optionBehaviour)

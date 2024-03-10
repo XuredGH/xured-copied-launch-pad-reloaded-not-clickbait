@@ -3,11 +3,15 @@ using AmongUs.GameOptions;
 using HarmonyLib;
 using InnerNet;
 using LaunchpadReloaded.API.Gamemodes;
+using LaunchpadReloaded.API.Utilities;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Utilities;
+using PowerTools;
+using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,7 +29,7 @@ public class BattleRoyale : CustomGamemode
 
     public override int Id => 1;
     public TextMeshPro PlayerCount;
-
+    public TextMeshPro DeathNotif;
     public override void Initialize()
     {
         var tasks = PlayerControl.LocalPlayer.myTasks;
@@ -33,13 +37,30 @@ public class BattleRoyale : CustomGamemode
 
         Transform random = ShipStatus.Instance.DummyLocations.Random();
 
-        GenericRPC.RpcSetPlayerPosition(PlayerControl.LocalPlayer, random.position.x, random.position.y, random.position.z);
-        GenericRPC.RpcSetBodyType(PlayerControl.LocalPlayer, 2);
+        PlayerControl.LocalPlayer.NetTransform.RpcSnapTo(random.position);
+        GenericRPC.RpcSetBodyType(PlayerControl.LocalPlayer, 6);
     }
 
+    public IEnumerator DeathNotification(PlayerControl player)
+    {
+        string text = $"{player.Data.Color.ToTextColor()}{player.Data.PlayerName}</color> has <b>{Palette.ImpostorRed.ToTextColor()}DIED.</b></color>";
+        DeathNotif.text = text;
+        DeathNotif.gameObject.SetActive(true);
+        yield return new WaitForSeconds(3f);
+        DeathNotif.gameObject.SetActive(false);
+    }
+    public override void OnDeath(PlayerControl player)
+    {
+        player.transform.FindChild("BodyForms/Seeker/KnifeHand").gameObject.Destroy();
+        Coroutines.Start(DeathNotification(player));
+    }
     public override void HudStart(HudManager instance)
     {
+        DeathNotif = Helpers.CreateTextLabel("BR_DeathNotif", instance.transform, AspectPosition.EdgeAlignments.Bottom, new Vector3(0, 1f, 0));
         PlayerCount = Helpers.CreateTextLabel("BR_PlayerCounter", instance.transform, AspectPosition.EdgeAlignments.Top, new Vector3(0, 0.25f, 0));
+
+        DeathNotif.text = "Death";
+        DeathNotif.gameObject.SetActive(false);
     }
 
     public override void HudUpdate(HudManager instance)

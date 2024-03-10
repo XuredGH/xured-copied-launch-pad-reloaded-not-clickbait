@@ -17,17 +17,17 @@ public static class ToHudStringPatch
     {
         var sb = new StringBuilder("\n<size=125%><color=orange><b>Custom Game Options:</color></b></size>\n");
 
-        foreach (var numberOption in CustomOptionsManager.CustomNumberOptions)
+        foreach (var numberOption in CustomOptionsManager.CustomNumberOptions.Where(option => option.IsVisible()))
         {
             sb.AppendLine(numberOption.Title+": "+numberOption.Value);
         }
 
-        foreach (var toggleOption in CustomOptionsManager.CustomToggleOptions)
+        foreach (var toggleOption in CustomOptionsManager.CustomToggleOptions.Where(option => option.IsVisible()))
         {
             sb.AppendLine(toggleOption.Title+": "+toggleOption.Value);
         }
 
-        foreach(var stringOption in CustomOptionsManager.CustomStringOptions)
+        foreach(var stringOption in CustomOptionsManager.CustomStringOptions.Where(option => option.IsVisible()))
         {
             sb.AppendLine(stringOption.Title + ": " + stringOption.Value);
         }

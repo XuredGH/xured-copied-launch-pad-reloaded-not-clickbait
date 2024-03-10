@@ -23,12 +23,12 @@ public static class Helpers
         var pingTracker = HudManager.Instance.gameObject.GetComponentInChildren<PingTracker>();
         var textMeshPro = textObj.AddComponent<TextMeshPro>();
         textMeshPro.fontSize = fontSize;
-        textMeshPro.alignment = TextAlignmentOptions.Center;
+        textMeshPro.alignment = textAlignment;
         textMeshPro.fontMaterial = pingTracker.text.fontMaterial;
 
         var aspectPosition = textObj.AddComponent<AspectPosition>();
-        aspectPosition.Alignment = AspectPosition.EdgeAlignments.Top;
-        aspectPosition.DistanceFromEdge = new Vector3(0, 0.25f, 0);
+        aspectPosition.Alignment = alignment;
+        aspectPosition.DistanceFromEdge = distance;
         aspectPosition.AdjustPosition();
 
         return textMeshPro;

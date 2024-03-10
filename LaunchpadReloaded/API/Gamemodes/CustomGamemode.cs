@@ -15,6 +15,7 @@ public abstract class CustomGamemode
     public virtual void Initialize() { }
     public virtual void HudStart(HudManager instance) { }
     public virtual void HudUpdate(HudManager instance) { }
+    public virtual void OnDeath(PlayerControl player) { }
     public virtual void CheckGameEnd(out bool runOriginal, LogicGameFlowNormal instance)
     {
         runOriginal = true;

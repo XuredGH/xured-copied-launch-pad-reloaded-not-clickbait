@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using LaunchpadReloaded.API.Gamemodes;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
 
@@ -17,5 +18,12 @@ public static class PlayerControlPatches
                 __result = __result && !DragManager.IsDragging(__instance.PlayerId);
                 break;
         }
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(PlayerControl.Die))]
+    public static void OnPlayerDie(PlayerControl __instance)
+    {
+        CustomGamemodeManager.ActiveMode.OnDeath(__instance);
     }
 }

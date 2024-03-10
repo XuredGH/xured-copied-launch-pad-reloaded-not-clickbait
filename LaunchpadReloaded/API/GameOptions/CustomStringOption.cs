@@ -13,12 +13,13 @@ public class CustomStringOption : AbstractGameOption
     public string Value { get; private set; }
     public string[] Options { get; private set; }
     private Action<int> _changedEvent;
-    public CustomStringOption(string title, string[] options, Action<int> changedEvent = null, Type role = null) : base(title, role)
+    public CustomStringOption(string title, string[] options, Action<int> changedEvent = null, Type role = null, bool defaultShow = true) : base(title, role)
     {
         Value = options[0];
         Options = options;
         _changedEvent = changedEvent;
         CustomOptionsManager.CustomStringOptions.Add(this);
+        ToggleVisibility(defaultShow);
     }
 
     public void SetValue(int newValue)
@@ -52,5 +53,6 @@ public class CustomStringOption : AbstractGameOption
         stringOption.OnValueChanged = (Il2CppSystem.Action<OptionBehaviour>)ValueChanged;
         stringOption.OnEnable();
         OptionBehaviour = stringOption;
+        OptionBehaviour.gameObject.SetActive(IsVisible());
     }
 }
