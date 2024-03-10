@@ -139,17 +139,36 @@ public static class PlayerTabPatches
             var grads = GradientColorManager.Instance.Gradients;
             var localGradId = GradientColorManager.Instance.LocalGradientId;
             var localColorId = PlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId;
-            for (var j = 0; j < allPlayers.Count; j++)
+            foreach (var data in allPlayers)
             {
-                var data = allPlayers[j];
-
                 if (SelectGradient)
                 {
-                    __instance.AvailableColors.Remove(grads[data.PlayerId]);
+                    var isSame = data.DefaultOutfit.ColorId == localColorId;
+                    var isOpposite = grads[data.PlayerId] == localColorId;
+                    if (isSame)
+                    {
+                        __instance.AvailableColors.Remove(grads[data.PlayerId]);
+                    }
+
+                    if (isOpposite)
+                    {
+                        __instance.AvailableColors.Remove(data.DefaultOutfit.ColorId);
+                    }
                 }
                 else
                 {
-                    __instance.AvailableColors.Remove(data.DefaultOutfit.ColorId);
+                    var isSame = grads[data.PlayerId] == localGradId;
+                    var isOpposite = data.DefaultOutfit.ColorId == localGradId;
+                    if (isSame)
+                    {
+                        __instance.AvailableColors.Remove(data.DefaultOutfit.ColorId);
+                    }
+
+                    if (isOpposite)
+                    {
+                        __instance.AvailableColors.Remove(grads[data.PlayerId]);
+                    }
+                    
                 }
             }
         }
