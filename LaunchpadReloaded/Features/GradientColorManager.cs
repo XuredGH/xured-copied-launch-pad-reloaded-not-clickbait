@@ -10,7 +10,7 @@ public class GradientColorManager
     public static GradientColorManager Instance;
     public int LocalColorId { get; set; }
 
-    public readonly Dictionary<byte, int> Gradients = new();
+    public int LocalGradientId { get; set; }
     
     public GradientColorManager()
     {

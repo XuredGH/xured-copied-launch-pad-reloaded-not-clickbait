@@ -20,16 +20,8 @@ public static class PlayerTabPatches
     private static void SwitchSelector(PlayerTab instance)
     {
         _selectGradient = !_selectGradient;
-
-        _switchButton.GetComponentInChildren<TextMeshPro>().text = _selectGradient ? "Base Color" : "Secondary\nColor";
-        if (_selectGradient)
-        {
-            instance.currentColor = GradientColorManager.Instance.LocalColorId;
-        }
-        else
-        {
-            instance.currentColor = DataManager.Player.Customization.Color;
-        }
+        _titleText.text = _selectGradient ? "Secondary Color: " : "Main Color: ";
+        instance.currentColor = _selectGradient ? GradientColorManager.Instance.LocalGradientId : DataManager.Player.Customization.Color;
     }
     
     
@@ -53,10 +45,10 @@ public static class PlayerTabPatches
             buttonText.transform.localPosition = new Vector3(0, 0, 0);
             buttonText.GetComponent<TextTranslatorTMP>().Destroy();
             
-            var tmp = buttonText.GetComponent<TextMeshPro>();
-            tmp.alignment = TextAlignmentOptions.Center;
-            tmp.text = _selectGradient ? "Main Color" : "Secondary\nColor";
-            tmp.fontSize = tmp.fontSizeMax = 4;
+            _titleText = buttonText.GetComponent<TextMeshPro>();
+            _titleText.alignment = TextAlignmentOptions.Center;
+            _titleText.text = _selectGradient ? "Main Color" : "Secondary\nColor";
+            _titleText.fontSize = _titleText.fontSizeMax = 4;
         
             _switchButton.Button.OnClick.RemoveAllListeners();
             _switchButton.Button.OnMouseOut.RemoveAllListeners();
@@ -69,10 +61,9 @@ public static class PlayerTabPatches
             colorChip.Button.OnMouseOut.RemoveAllListeners();
             colorChip.Button.OnMouseOut.AddListener((UnityAction)(() =>
             {
-                __instance.SelectColor(_selectGradient ? GradientColorManager.Instance.LocalColorId : DataManager.Player.Customization.Color);
+                __instance.SelectColor(_selectGradient ? GradientColorManager.Instance.LocalGradientId : DataManager.Player.Customization.Color);
             }));
         }
-        _titleText = __instance.transform.FindChild("Text").GetComponent<TextMeshPro>();
     }
 
     [HarmonyPrefix]
@@ -81,7 +72,7 @@ public static class PlayerTabPatches
     {
         if (_selectGradient && __instance.AvailableColors.Remove(__instance.currentColor))
         {
-            GradientColorManager.Instance.LocalColorId = __instance.currentColor;
+            GradientColorManager.Instance.LocalGradientId = __instance.currentColor;
             __instance.PlayerPreview.UpdateFromDataManager(PlayerMaterial.MaskType.None);
             if (__instance.HasLocalPlayer())
             {
@@ -117,7 +108,7 @@ public static class PlayerTabPatches
     {
         if (_selectGradient)
         {
-            __result = GradientColorManager.Instance.LocalColorId;
+            __result = GradientColorManager.Instance.LocalGradientId;
             return false;
         }
 
@@ -131,7 +122,7 @@ public static class PlayerTabPatches
         if(_titleText) _titleText.text = _selectGradient ? "Secondary Color: " : "Main Color: ";
         if (_selectGradient)
         {
-            __instance.currentColorIsEquipped = __instance.currentColor == GradientColorManager.Instance.LocalColorId;
+            __instance.currentColorIsEquipped = __instance.currentColor == GradientColorManager.Instance.LocalGradientId;
         }
     }
 
@@ -139,45 +130,31 @@ public static class PlayerTabPatches
     [HarmonyPatch(nameof(PlayerTab.UpdateAvailableColors))]
     public static bool UpdateColorsPrefix(PlayerTab __instance)
     {
-        if (_selectGradient)
+        for (var i = 0; i < Palette.PlayerColors.Length; i++)
         {
-            for (var i = 0; i < Palette.PlayerColors.Length; i++)
+            __instance.AvailableColors.Add(i);
+        }
+        // VERY BUGGY NEEDS TO BE REWRITTEN
+        if (GameData.Instance)
+        {
+            var allPlayers = GameData.Instance.AllPlayers.ToArray();
+            var localGradId = GradientColorManager.Instance.LocalGradientId;
+            var localColorId = PlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId;
+            for (var j = 0; j < allPlayers.Count; j++)
             {
-                __instance.AvailableColors.Add(i);
-            }
-            
-            
-            // VERY BUGGY NEEDS TO BE REWRITTEN
-            if (GameData.Instance)
-            {
-                var allPlayers = GameData.Instance.AllPlayers.ToArray();
-                var grads = GradientColorManager.Instance.Gradients;
-                var localGradId = GradientColorManager.Instance.LocalColorId;
-                var localColorId = PlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId;
-                for (var j = 0; j < allPlayers.Count; j++)
+                var data = allPlayers[j];
+
+                if (_selectGradient)
                 {
-                    var data = allPlayers[j];
-                    var oppositeUsed = data.DefaultOutfit.ColorId == localGradId && grads[data.PlayerId] == j;
-                    var sameUsed = data.DefaultOutfit.ColorId == localColorId && grads[data.PlayerId]==j;
-
-                    var noGrad = data.DefaultOutfit.ColorId == grads[data.PlayerId] && grads[data.PlayerId] == j;
-
-                    if (noGrad)
-                    {
-                        __instance.AvailableColors.Remove(data.DefaultOutfit.ColorId);
-                    }
-                    
-                    if (oppositeUsed||sameUsed)
-                    {
-                        __instance.AvailableColors.Remove(data.DefaultOutfit.ColorId);
-                        __instance.AvailableColors.Remove(GradientColorManager.Instance.Gradients[data.PlayerId]);
-                    }
+                    __instance.AvailableColors.Remove(data.Object.GetComponent<CustomPlayerData>().colorId2);
+                }
+                else
+                {
+                    __instance.AvailableColors.Remove(data.DefaultOutfit.ColorId);
                 }
             }
-            
-            return false;
         }
         
-        return true;
+        return false;
     }
 }
