@@ -1,9 +1,12 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Roles;
+using LaunchpadReloaded.API.Utilities;
 using LaunchpadReloaded.Features;
 using Reactor.Utilities.Extensions;
+using TMPro;
 using UnityEngine;
+using static UnityEngine.RemoteConfigSettingsHelper;
 
 namespace LaunchpadReloaded.API.Patches;
 
@@ -11,14 +14,15 @@ namespace LaunchpadReloaded.API.Patches;
 public static class HudManagerPatches
 {
     private static GameObject _bottomLeft;
-    
+    private static TaskPanelBehaviour _roleTab;
+
     [HarmonyPostfix]
     [HarmonyPatch("Update")]
     public static void UpdatePostfix(HudManager __instance)
     {
         if (!PlayerControl.LocalPlayer) return;
 
-        if(HackingManager.HackedPlayers.Contains(PlayerControl.LocalPlayer.PlayerId))
+        if(PlayerControl.LocalPlayer.Data.IsHacked())
         {
             __instance.tasksString.Clear();
             __instance.tasksString.Append(UnityEngine.Color.green.ToTextColor());
@@ -26,16 +30,36 @@ public static class HudManagerPatches
             __instance.tasksString.Append("You are unable to complete tasks or call meetings.\n");
             __instance.tasksString.Append("Find an active node to reverse the hack!.\n");
             __instance.tasksString.Append("</color>");
-
             __instance.TaskPanel.SetTaskText(__instance.tasksString.ToString());
+
+            if (_roleTab != null) _roleTab.gameObject.Destroy();
         }
+
+        if (HackingManager.Instance && HackingManager.Instance.AnyActiveNodes()) __instance.ReportButton.SetDisabled();
 
         if (PlayerControl.LocalPlayer.Data.Role is ICustomRole customRole)
         {
             customRole.HudUpdate(__instance);
-        }
 
-        if (HackingManager.AnyActiveNodes()) __instance.ReportButton.SetDisabled();
+            if (PlayerControl.LocalPlayer.Data.IsHacked())
+            {
+                if(_roleTab) _roleTab.gameObject.Destroy();
+                return;
+            }
+
+            if (customRole.SetTabText() != null)
+            {
+                if (_roleTab == null)
+                    _roleTab = CustomRoleManager.CreateRoleTab(customRole);
+                else
+                    CustomRoleManager.UpdateRoleTab(_roleTab, customRole);
+            }
+        }
+        else
+        {
+            // If not custom role and roleTab exists delete roletab (could happen in freeplay mode if switching roles)
+            if (_roleTab != null) _roleTab.gameObject.Destroy();
+        }
     }
     
     [HarmonyPostfix]
@@ -79,6 +103,8 @@ public static class HudManagerPatches
         {
             return;
         }
+
+        if (_roleTab) _roleTab.gameObject.SetActive(isActive);
 
         foreach (var button in CustomButtonManager.CustomButtons)
         {

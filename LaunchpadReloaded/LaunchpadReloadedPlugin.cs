@@ -3,6 +3,7 @@ using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Roles;
+using LaunchpadReloaded.Utilities;
 using Reactor;
 using Reactor.Networking;
 using Reactor.Networking.Attributes;
@@ -19,13 +20,10 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
 {
     public Harmony Harmony { get; } = new(Id);
 
-    public static AssetBundle Bundle;
     public override void Load()
     {
         Harmony.PatchAll();
 
-        Bundle = AssetBundleManager.Load("assets");
-        
         // TODO: CREATE ATTRIBUTE FOR THIS VVV
         CustomRoleManager.RegisterAllRoles();
         CustomButtonManager.RegisterAllButtons();

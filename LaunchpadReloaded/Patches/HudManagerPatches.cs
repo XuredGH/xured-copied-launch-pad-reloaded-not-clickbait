@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using LaunchpadReloaded.API.Utilities;
 using LaunchpadReloaded.Features;
 using UnityEngine;
 
@@ -16,7 +17,7 @@ public static class HudManagerPatches
             return;
         }
 
-        if(HackingManager.HackedPlayers.Contains(PlayerControl.LocalPlayer.PlayerId))
+        if(PlayerControl.LocalPlayer.Data.IsHacked())
         {
             __instance.tasksString.Clear();
             __instance.tasksString.Append(UnityEngine.Color.green.ToTextColor());
@@ -28,7 +29,7 @@ public static class HudManagerPatches
             __instance.TaskPanel.SetTaskText(__instance.tasksString.ToString());
         }
 
-        if (HackingManager.AnyActiveNodes()) __instance.ReportButton.SetDisabled();
+        if (HackingManager.Instance && HackingManager.Instance.AnyActiveNodes()) __instance.ReportButton.SetDisabled();
 
         foreach (var (player, bodyId) in DragManager.DraggingPlayers)
         {
