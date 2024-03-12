@@ -1,5 +1,7 @@
 ﻿using AmongUs.GameOptions;
 using BepInEx.Configuration;
+using LaunchpadReloaded.API.Utilities;
+using LaunchpadReloaded.Utilities;
 using System.Text;
 using UnityEngine;
 
@@ -8,15 +10,16 @@ namespace LaunchpadReloaded.API.Roles;
 public interface ICustomRole
 {
     string RoleName { get; }
-    
+
     string RoleDescription { get; }
-    
+
     string RoleLongDescription { get; }
-    
+
     Color RoleColor { get; }
-    
+
     RoleTeamTypes Team { get; }
-    
+    Sprite Icon => LaunchpadAssets.NoImage;
+ 
     ConfigDefinition NumConfigDefinition => new ("Roles",$"Num{RoleName}");
     
     ConfigDefinition ChanceConfigDefinition => new ("Roles",$"Chance{RoleName}");

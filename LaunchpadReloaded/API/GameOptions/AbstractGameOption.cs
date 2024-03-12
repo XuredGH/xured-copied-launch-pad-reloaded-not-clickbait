@@ -1,12 +1,11 @@
-﻿using System;
-using LaunchpadReloaded.API.Roles;
+﻿using LaunchpadReloaded.API.Roles;
 using Reactor.Localization.Utilities;
-using UnityEngine;
+using System;
 
 namespace LaunchpadReloaded.API.GameOptions;
 
 public abstract class AbstractGameOption
-{    
+{
     public string Title { get; }
     public StringNames StringName { get; }
     public OptionBehaviour OptionBehaviour { get; set; }

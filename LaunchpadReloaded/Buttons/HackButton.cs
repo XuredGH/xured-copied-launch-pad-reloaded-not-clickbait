@@ -1,5 +1,6 @@
 ﻿using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Utilities;
+using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
@@ -10,9 +11,9 @@ namespace LaunchpadReloaded.Buttons;
 public class HackButton : CustomActionButton
 {
     public override string Name => "HACK";
-    public override float Cooldown => 60;
+    public override float Cooldown => (int)LaunchpadGameOptions.Instance.HackCooldown.Value;
     public override float EffectDuration => 0;
-    public override int MaxUses => 2;
+    public override int MaxUses => (int)LaunchpadGameOptions.Instance.HackUses.Value;
     public override Sprite Sprite => LaunchpadAssets.HackButton;
     public override bool Enabled(RoleBehaviour role) =>  role is HackerRole;
     public override bool CanUse() => !HackingManager.Instance.AnyActiveNodes();

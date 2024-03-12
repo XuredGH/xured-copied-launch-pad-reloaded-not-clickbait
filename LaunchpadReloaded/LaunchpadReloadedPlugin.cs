@@ -20,9 +20,11 @@ namespace LaunchpadReloaded;
 public partial class LaunchpadReloadedPlugin : BasePlugin
 {
     public Harmony Harmony { get; } = new(Id);
+    public static LaunchpadReloadedPlugin Instance { get; private set; }
 
     public override void Load()
     {
+        Instance = this;
         Harmony.PatchAll();
 
         // TODO: CREATE ATTRIBUTE FOR THIS VVV

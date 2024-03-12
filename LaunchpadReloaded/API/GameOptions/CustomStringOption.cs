@@ -1,34 +1,40 @@
-﻿using System;
+﻿using BepInEx.Configuration;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
+using Reactor.Localization.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Il2CppInterop.Runtime.InteropTypes.Arrays;
-using LaunchpadReloaded.Components;
-using Reactor.Localization.Utilities;
-using UnityEngine;
 
 namespace LaunchpadReloaded.API.GameOptions;
 
 public class CustomStringOption : AbstractGameOption
 {
     public string Value { get; private set; }
+    public int Default { get; }
     public string[] Options { get; private set; }
+    public ConfigEntry<int> Config { get; }
 
-    public CustomStringOption(string title, string[] options, Type role = null) : base(title, role)
+    public CustomStringOption(string title, int defaultValue, string[] options, Type role = null) : base(title, role)
     {
-        Value = options[0];
+        Value = options[defaultValue];
         Options = options;
+        Default = defaultValue;
         CustomOptionsManager.CustomStringOptions.Add(this);
+
+        Config = LaunchpadReloadedPlugin.Instance.Config.Bind("String Options", title, defaultValue);
+        SetValue(Config.Value);
     }
 
     public void SetValue(int newValue)
     {
+        Config.Value = newValue;
         Value = Options[newValue];
+
+        StringOption behaviour = (StringOption)OptionBehaviour;
+        if (behaviour) behaviour.Value = newValue;
     }
 
-    public void SetValue(string newValue)
-    {
-        Value = newValue;
-    }
+    public void SetValue(string newValue) => SetValue(Options.ToList().IndexOf(newValue));
 
     protected override void OnValueChanged(OptionBehaviour optionBehaviour)
     {
@@ -45,8 +51,8 @@ public class CustomStringOption : AbstractGameOption
 
         stringOption.name = Title;
         stringOption.Title = StringName;
-        stringOption.Value = Options.ToList().IndexOf(Value);
-        stringOption.Values = (Il2CppStructArray<StringNames>)values.ToArray(); 
+        stringOption.Value = Config.Value;
+        stringOption.Values = (Il2CppStructArray<StringNames>)values.ToArray();
         stringOption.OnValueChanged = (Il2CppSystem.Action<OptionBehaviour>)ValueChanged;
         stringOption.OnEnable();
         OptionBehaviour = stringOption;

@@ -18,11 +18,11 @@ public class ScannerButton : CustomActionButton
 {
     public override string Name => "Deploy Scanner";
 
-    public override float Cooldown => 5;
+    public override float Cooldown => (int)LaunchpadGameOptions.Instance.ScannerCooldown.Value;
 
     public override float EffectDuration => 0;
 
-    public override int MaxUses => 3;
+    public override int MaxUses => (int)LaunchpadGameOptions.Instance.MaxScanners.Value;
 
     public override Sprite Sprite => LaunchpadAssets.ScannerButton;
 

@@ -2,6 +2,7 @@
 using LaunchpadReloaded.Networking;
 using Reactor.Networking.Attributes;
 using Reactor.Networking.Rpc;
+using UnityEngine;
 
 namespace LaunchpadReloaded.API.GameOptions;
 

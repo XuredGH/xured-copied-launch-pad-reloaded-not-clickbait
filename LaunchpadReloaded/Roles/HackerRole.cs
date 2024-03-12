@@ -20,7 +20,7 @@ public class HackerRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
     public Color RoleColor => LaunchpadPalette.HackerColor;
     public RoleTeamTypes Team => RoleTeamTypes.Impostor;
     public override bool IsDead => false;
-
+    public Sprite Icon => LaunchpadAssets.HackButton;
     public StringBuilder SetTabText()
     {
         StringBuilder taskStringBuilder = Helpers.CreateForRole(this);

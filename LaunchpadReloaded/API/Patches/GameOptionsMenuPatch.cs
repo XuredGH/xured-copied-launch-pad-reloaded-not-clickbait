@@ -1,10 +1,8 @@
 ﻿using HarmonyLib;
 using Il2CppSystem;
 using LaunchpadReloaded.API.GameOptions;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static Il2CppSystem.Uri;
 
 namespace LaunchpadReloaded.API.Patches;
 
@@ -29,11 +27,13 @@ public static class GameOptionsMenuPatch
         GameSettingMenu menu = GameObject.FindObjectsOfType<GameSettingMenu>().First();
         if (menu.RegularGameSettings.active || menu.RolesSettings.gameObject.active) return;
 
-        float startOffset = 2.75f;
+        float startOffset = 2.15f;
         __instance.GetComponentInParent<Scroller>().ContentYBounds.max = startOffset + __instance.Children.Count * 0.5f;
 
         foreach (CustomOptionGroup group in CustomOptionsManager.CustomGroups.Where(group => group.AdvancedRole == null))
         {
+            if (group.Header == null) continue;
+
             group.Header.SetActive(!group.Hidden());
             startOffset -= 0.5f;
             group.Header.transform.localPosition = new Vector3(group.Header.transform.localPosition.x, startOffset, group.Header.transform.localPosition.z);

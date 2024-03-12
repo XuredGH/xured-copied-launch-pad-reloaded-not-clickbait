@@ -19,6 +19,7 @@ public class JanitorRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
     public RoleTeamTypes Team => RoleTeamTypes.Impostor;
     public override bool IsDead => false;
     public bool TargetsBodies => true;
+    public Sprite Icon => LaunchpadAssets.DragButton;
 
     public StringBuilder SetTabText()
     {

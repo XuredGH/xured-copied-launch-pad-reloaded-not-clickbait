@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using Reactor.Networking.Rpc;
+using System.Collections.Generic;
 using System.Linq;
-using Reactor.Networking.Rpc;
 
 namespace LaunchpadReloaded.API.GameOptions;
 
 public static class CustomOptionsManager
 {
-    public static readonly List<AbstractGameOption> CustomOptions = new ();
+    public static readonly List<AbstractGameOption> CustomOptions = new();
     public static readonly List<CustomNumberOption> CustomNumberOptions = new();
     public static readonly List<CustomToggleOption> CustomToggleOptions = new();
     public static readonly List<CustomStringOption> CustomStringOptions = new();
@@ -16,8 +16,15 @@ public static class CustomOptionsManager
         var toggles = CustomToggleOptions.Select(x => x.Value).ToArray();
         var numbers = CustomNumberOptions.Select(x => x.Value).ToArray();
         var strings = CustomStringOptions.Select(x => x.Value).ToArray();
-        
-        Rpc<SyncOptionsRpc>.Instance.Send(new SyncOptionsRpc.Data(toggles,numbers, strings));
+
+        Rpc<SyncOptionsRpc>.Instance.Send(new SyncOptionsRpc.Data(toggles, numbers, strings));
+    }
+
+    public static void ResetToDefault()
+    {
+        foreach (CustomNumberOption numberOpt in CustomNumberOptions) numberOpt.SetValue(numberOpt.Default);
+        foreach (CustomStringOption stringOpt in CustomStringOptions) stringOpt.SetValue(stringOpt.Default);
+        foreach (CustomToggleOption toggleOpt in CustomToggleOptions) toggleOpt.SetValue(toggleOpt.Default);
     }
 
     public static void HandleOptionsSync(bool[] toggles, float[] numbers, string[] strings)
@@ -35,5 +42,5 @@ public static class CustomOptionsManager
             CustomStringOptions[i].SetValue(strings[i]);
         }
     }
-    
+
 }

@@ -1,28 +1,29 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using AmongUs.GameOptions;
+﻿using AmongUs.GameOptions;
 using HarmonyLib;
 using LaunchpadReloaded.API.GameOptions;
+using LaunchpadReloaded.Utilities;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace LaunchpadReloaded.API.Patches;
 
-[HarmonyPatch(typeof(IGameOptionsExtensions),nameof(IGameOptionsExtensions.ToHudString))]
+[HarmonyPatch(typeof(IGameOptionsExtensions), nameof(IGameOptionsExtensions.ToHudString))]
 public static class ToHudStringPatch
 {
     public static bool ShowCustom = false;
-    
+
     public static void AddOptions(StringBuilder sb,
         IEnumerable<CustomNumberOption> numberOptions, IEnumerable<CustomStringOption> stringOptions, IEnumerable<CustomToggleOption> toggleOptions)
     {
         foreach (var numberOption in numberOptions)
         {
-            sb.AppendLine(numberOption.Title + ": " + numberOption.Value);
+            sb.AppendLine(numberOption.Title + ": " + numberOption.Value + Helpers.GetSuffix(numberOption.SuffixType));
         }
 
         foreach (var toggleOption in toggleOptions)
         {
-            sb.AppendLine(toggleOption.Title + ": " + toggleOption.Value);
+            sb.AppendLine(toggleOption.Title + ": " + (toggleOption.Value ? "On" : "Off"));
         }
 
         foreach (var stringOption in stringOptions)
@@ -33,9 +34,7 @@ public static class ToHudStringPatch
 
     public static void Postfix(IGameOptions __instance, ref string __result)
     {
-        if (GameManager.Instance.IsHideAndSeek()) return;
-
-        if(ShowCustom)
+        if (ShowCustom)
         {
             var sb = new StringBuilder("<size=125%><b>Launchpad Options:</b></size>\n");
             var groupsWithRoles = CustomOptionsManager.CustomGroups.Where(group => group.AdvancedRole != null);
@@ -49,7 +48,7 @@ public static class ToHudStringPatch
                 AddOptions(sb, group.CustomNumberOptions, group.CustomStringOptions, group.CustomToggleOptions);
                 sb.Append("\n");
             }
-            if(groupsWithRoles.Count() > 0) sb.AppendLine($"<size=120%><b>Roles</b></size>");
+            if (groupsWithRoles.Count() > 0) sb.AppendLine($"<size=120%><b>Roles</b></size>");
             foreach (var group in groupsWithRoles)
             {
                 if (group.Hidden()) continue;

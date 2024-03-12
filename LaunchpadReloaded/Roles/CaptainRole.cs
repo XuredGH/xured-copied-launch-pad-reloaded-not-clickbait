@@ -16,6 +16,7 @@ public class CaptainRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
     public Color RoleColor => LaunchpadPalette.CaptainColor;
     public RoleTeamTypes Team => RoleTeamTypes.Crewmate;
     public override bool IsDead => false;
+    public Sprite Icon => LaunchpadAssets.ZoomButton;
 
     public StringBuilder SetTabText()
     {

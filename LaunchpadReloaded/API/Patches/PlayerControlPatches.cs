@@ -4,20 +4,13 @@ using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.API.Utilities;
 using LaunchpadReloaded.Utilities;
+using UnityEngine;
 
 namespace LaunchpadReloaded.API.Patches;
 
 [HarmonyPatch(typeof(PlayerControl))]
 public static class PlayerControlPatches
-{
-    [HarmonyPostfix]
-    [HarmonyPatch("RpcSyncSettings")]
-    public static void RpcSyncSettingsPostfix(PlayerControl __instance)
-    {
-        CustomOptionsManager.SyncOptions();
-    }
-    
-    
+{      
     [HarmonyPostfix]
     [HarmonyPatch("FixedUpdate")]
     public static void FixedUpdatePostfix(PlayerControl __instance)

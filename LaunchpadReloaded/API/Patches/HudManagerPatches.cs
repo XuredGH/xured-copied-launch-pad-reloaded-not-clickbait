@@ -4,9 +4,7 @@ using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.API.Utilities;
 using LaunchpadReloaded.Features;
 using Reactor.Utilities.Extensions;
-using TMPro;
 using UnityEngine;
-using static UnityEngine.RemoteConfigSettingsHelper;
 
 namespace LaunchpadReloaded.API.Patches;
 
@@ -20,7 +18,7 @@ public static class HudManagerPatches
     [HarmonyPatch("Update")]
     public static void UpdatePostfix(HudManager __instance)
     {
-        if(!ShipStatus.Instance)
+        if (!ShipStatus.Instance)
         {
             if (Input.GetKeyDown(KeyCode.Tab))
                 ToHudStringPatch.ShowCustom = !ToHudStringPatch.ShowCustom;
@@ -31,7 +29,7 @@ public static class HudManagerPatches
 
         if (!PlayerControl.LocalPlayer) return;
 
-        if(PlayerControl.LocalPlayer.Data.IsHacked())
+        if (PlayerControl.LocalPlayer.Data.IsHacked())
         {
             __instance.tasksString.Clear();
             __instance.tasksString.Append(UnityEngine.Color.green.ToTextColor());
@@ -52,7 +50,7 @@ public static class HudManagerPatches
 
             if (PlayerControl.LocalPlayer.Data.IsHacked())
             {
-                if(_roleTab) _roleTab.gameObject.Destroy();
+                if (_roleTab) _roleTab.gameObject.Destroy();
                 return;
             }
 
@@ -70,7 +68,7 @@ public static class HudManagerPatches
             if (_roleTab != null) _roleTab.gameObject.Destroy();
         }
     }
-    
+
     [HarmonyPostfix]
     [HarmonyPatch("Start")]
     public static void StartPostfix(HudManager __instance)
@@ -78,34 +76,34 @@ public static class HudManagerPatches
         if (!_bottomLeft)
         {
             var buttons = __instance.transform.Find("Buttons");
-            _bottomLeft = Object.Instantiate(buttons.Find("BottomRight").gameObject,buttons);
+            _bottomLeft = Object.Instantiate(buttons.Find("BottomRight").gameObject, buttons);
         }
 
         foreach (var t in _bottomLeft.GetComponentsInChildren<ActionButton>(true))
         {
             t.gameObject.Destroy();
         }
-        
+
         var gridArrange = _bottomLeft.GetComponent<GridArrange>();
         var aspectPosition = _bottomLeft.GetComponent<AspectPosition>();
 
         _bottomLeft.name = "BottomLeft";
         gridArrange.Alignment = GridArrange.StartAlign.Right;
         aspectPosition.Alignment = AspectPosition.EdgeAlignments.LeftBottom;
-        
+
         foreach (var button in CustomButtonManager.CustomButtons)
         {
             button.CreateButton(_bottomLeft.transform);
         }
-        
+
         gridArrange.Start();
         gridArrange.ArrangeChilds();
-        
+
         aspectPosition.AdjustPosition();
     }
 
     [HarmonyPostfix]
-    [HarmonyPatch("SetHudActive",typeof(PlayerControl), typeof(RoleBehaviour), typeof(bool))]
+    [HarmonyPatch("SetHudActive", typeof(PlayerControl), typeof(RoleBehaviour), typeof(bool))]
     public static void SetHudActivePostfix(HudManager __instance, [HarmonyArgument(0)] PlayerControl player, [HarmonyArgument(1)] RoleBehaviour roleBehaviour, [HarmonyArgument(2)] bool isActive)
     {
         if (player.Data == null)
