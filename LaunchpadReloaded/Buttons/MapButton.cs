@@ -1,5 +1,4 @@
 ﻿using LaunchpadReloaded.API.Hud;
-using LaunchpadReloaded.API.Utilities;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using UnityEngine;
@@ -11,7 +10,7 @@ public class MapButton : CustomActionButton
     public override float Cooldown => 10;
     public override float EffectDuration => 3;
     public override int MaxUses => 0;
-    public override Sprite Sprite => LaunchpadAssets.MapButton;
+    public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.MapButton;
 
     private MapOptions _mapOptions = new()
     {
@@ -21,7 +20,7 @@ public class MapButton : CustomActionButton
         Mode = MapOptions.Modes.CountOverlay,
     };
 
-    public override bool Enabled(RoleBehaviour role) =>  role is HackerRole;
+    public override bool Enabled(RoleBehaviour role) => role is HackerRole;
 
     protected override void OnClick()
     {

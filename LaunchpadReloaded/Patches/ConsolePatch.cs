@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.API.Utilities;
+using LaunchpadReloaded.Features;
 
 namespace LaunchpadReloaded.Patches;
 
@@ -32,6 +33,6 @@ public static class ConsolePatch
     [HarmonyPatch(typeof(MapConsole), nameof(MapConsole.CanUse))]
     public static bool SystemCanUsePatch([HarmonyArgument(0)] GameData.PlayerInfo pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse)
     {
-        return canUse = couldUse = !pc.IsHacked();
+        return canUse = couldUse = !HackingManager.Instance.AnyActiveNodes();
     }
 }

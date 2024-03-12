@@ -1,6 +1,6 @@
-﻿using LaunchpadReloaded.API.Utilities;
-using LaunchpadReloaded.Components;
+﻿using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Networking;
+using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities.Attributes;
@@ -20,7 +20,7 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
 
     private Dictionary<MapType, Vector3[]> MapNodePositions = new()
     {
-        [MapType.Ship] = [ 
+        [MapType.Ship] = [
             new Vector3(-3.9285f, 5.6983f, 0.0057f),
             new Vector3(12.1729f, -6.5887f, -0.0066f),
             new Vector3(-19.7123f, -6.8006f, -0.0068f),
@@ -78,6 +78,7 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
         Instance.HackedPlayers.Remove(player.PlayerId);
         player.SetName(player.Data.PlayerName);
         player.SetColor((byte)player.Data.DefaultOutfit.ColorId);
+        player.cosmetics.gameObject.SetActive(true);
     }
 
     [MethodRpc((uint)LaunchpadRPC.CreateNodes)]
@@ -101,7 +102,17 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
     {
         var node = Instance.Nodes.Find(node => node.Id == nodeId);
         Debug.Log(node.gameObject.transform.position.ToString());
-        node.IsActive = value;  
+        node.IsActive = value;
+        IEnumerable<GameData.PlayerInfo> hacker = GameData.Instance.AllPlayers.ToArray().Where(player => player.Role is HackerRole);
+        foreach (GameData.PlayerInfo player in hacker)
+        {
+            player.Object.SetName(player.PlayerName);
+
+            if (!value) player.Object.SetColor((byte)player.DefaultOutfit.ColorId);
+            else player.Object.RawSetColor(15);
+
+            player.Object.cosmetics.gameObject.SetActive(!value);
+        }
     }
 
     public HackNodeComponent CreateNode(ShipStatus shipStatus, int id, Transform parent, Vector3 position)
@@ -111,7 +122,7 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
         node.transform.localPosition = position;
 
         var sprite = node.AddComponent<SpriteRenderer>();
-        sprite.sprite = LaunchpadAssets.NodeSprite;
+        sprite.sprite = LaunchpadAssets.NodeSprite.LoadAsset();
         node.layer = LayerMask.NameToLayer("ShortObjects");
         sprite.transform.localScale = new Vector3(1, 1, 1);
 

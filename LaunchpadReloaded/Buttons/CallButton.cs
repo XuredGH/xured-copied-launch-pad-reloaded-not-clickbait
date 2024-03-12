@@ -1,7 +1,6 @@
 ﻿using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
-using Reactor.Utilities.Extensions;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
@@ -12,7 +11,7 @@ public class CallButton : CustomActionButton
     public override float Cooldown => 5;
     public override float EffectDuration => 0;
     public override int MaxUses => 3;
-    public override Sprite Sprite => LaunchpadAssets.CallButton;
+    public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.CallButton;
 
     public override bool Enabled(RoleBehaviour role)
     {
