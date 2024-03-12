@@ -12,7 +12,7 @@ public class LaunchpadGameOptions
     public CustomToggleOption FriendlyFire;
     public CustomNumberOption CaptainMeetingCooldown;
     public CustomNumberOption CaptainMeetingCount;
-    public CustomStringOption Gamemodes;;
+    public CustomStringOption Gamemodes;
     public CustomOptionGroup GeneralGroup;
     public CustomOptionGroup CaptainGroup;
     public CustomOptionGroup BattleRoyaleGroup;
