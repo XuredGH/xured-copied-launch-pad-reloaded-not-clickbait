@@ -2,6 +2,7 @@
 using LaunchpadReloaded.API.Utilities;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
+using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Extensions;
 using UnityEngine;
 
@@ -12,9 +13,9 @@ public class HackButton : CustomActionButton
     public override float Cooldown => 60;
     public override float EffectDuration => 0;
     public override int MaxUses => 2;
-    public override Sprite Sprite => SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.Hack.png");
+    public override Sprite Sprite => LaunchpadAssets.HackButton;
     public override bool Enabled(RoleBehaviour role) =>  role is HackerRole;
-    public override bool CanUse() => !HackingManager.AnyActiveNodes();
+    public override bool CanUse() => !HackingManager.Instance.AnyActiveNodes();
     protected override void OnClick()
     {
         foreach (var player in PlayerControl.AllPlayerControls)
@@ -22,6 +23,6 @@ public class HackButton : CustomActionButton
             HackingManager.RpcHackPlayer(player);
         }
 
-        HackingManager.RpcToggleNode(ShipStatus.Instance, HackingManager.Nodes.Random().Id, true);
+        HackingManager.RpcToggleNode(ShipStatus.Instance, HackingManager.Instance.Nodes.Random().Id, true);
     }
 }

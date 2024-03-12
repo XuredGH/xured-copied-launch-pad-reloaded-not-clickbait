@@ -1,6 +1,7 @@
 ﻿using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
+using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Extensions;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ public class DragButton : CustomActionButton
     public override float Cooldown => 0;
     public override float EffectDuration => 0;
     public override int MaxUses => 0;
-    public override Sprite Sprite => LaunchpadReloadedPlugin.Bundle.LoadAsset<Sprite>("Drag.png");
+    public override Sprite Sprite => LaunchpadAssets.DragButton;
 
     public static DragButton Instance;
 
@@ -48,13 +49,13 @@ public class DragButton : CustomActionButton
     public void SetDrag()
     {
         OverrideName("DRAG");
-        OverrideSprite("Drag.png");
+        OverrideSprite(LaunchpadAssets.DragButton);
     }
 
     public void SetDrop()
     {
         OverrideName("DROP");
-        OverrideSprite("Drop.png");
+        OverrideSprite(LaunchpadAssets.DropButton);
     }
 
     protected override void OnClick()

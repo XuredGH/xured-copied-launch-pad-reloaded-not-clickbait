@@ -1,19 +1,24 @@
 ﻿using LaunchpadReloaded.API.Utilities;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Networking;
+using LaunchpadReloaded.Utilities;
 using Reactor.Networking.Attributes;
+using Reactor.Utilities.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using static ShipStatus;
 
 namespace LaunchpadReloaded.Features;
-public static class HackingManager
+[RegisterInIl2Cpp]
+public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
 {
-    public static List<byte> HackedPlayers = new();
-    public static List<HackNodeComponent> Nodes = new();
+    public static HackingManager? Instance;
+    public List<byte> HackedPlayers = new();
+    public List<HackNodeComponent> Nodes = new();
 
-    private static Dictionary<MapType, Vector3[]> MapNodePositions = new()
+    private Dictionary<MapType, Vector3[]> MapNodePositions = new()
     {
         [MapType.Ship] = [ 
             new Vector3(-3.9285f, 5.6983f, 0.0057f),
@@ -38,7 +43,7 @@ public static class HackingManager
             ],
     };
 
-    private static Vector3[] AirshipPositions = [
+    private Vector3[] AirshipPositions = [
         new Vector3(-5.0792f, 10.9539f, 0.011f),
         new Vector3(16.856f, 14.7769f, 0.0148f),
         new Vector3(37.3283f, -3.7612f, -0.0038f),
@@ -48,7 +53,12 @@ public static class HackingManager
         new Vector3(1.4743f, -2.5041f, -0.0025f),
     ];
 
-    public static bool AnyActiveNodes()
+    private void Awake()
+    {
+        Instance = this;
+    }
+
+    public bool AnyActiveNodes()
     {
         return Nodes.Count(node => node.IsActive) > 0;
     }
@@ -57,7 +67,7 @@ public static class HackingManager
     public static void RpcHackPlayer(PlayerControl player)
     {
         Debug.Log(player.Data.PlayerName + " is being hacked on local client.");
-        HackedPlayers.Add(player.PlayerId);
+        Instance.HackedPlayers.Add(player.PlayerId);
         player.RawSetName("<b><i>???</b></i>");
         player.RawSetColor(15);
     }
@@ -65,7 +75,7 @@ public static class HackingManager
     [MethodRpc((uint)LaunchpadRPC.UnhackPlayer)]
     public static void RpcUnhackPlayer(PlayerControl player)
     {
-        HackedPlayers.Remove(player.PlayerId);
+        Instance.HackedPlayers.Remove(player.PlayerId);
         player.SetName(player.Data.PlayerName);
         player.SetColor((byte)player.Data.DefaultOutfit.ColorId);
     }
@@ -76,32 +86,32 @@ public static class HackingManager
         var nodesParent = new GameObject("Nodes");
         nodesParent.transform.SetParent(shipStatus.transform);
 
-        var nodePositions = MapNodePositions[shipStatus.Type];
-        if (shipStatus.TryCast<AirshipStatus>()) nodePositions = AirshipPositions;
+        var nodePositions = Instance.MapNodePositions[shipStatus.Type];
+        if (shipStatus.TryCast<AirshipStatus>()) nodePositions = Instance.AirshipPositions;
 
         for (var i = 0; i < nodePositions.Length; i++)
         {
             var nodePos = nodePositions[i];
-            CreateNode(shipStatus, i, nodesParent.transform, nodePos);
+            Instance.CreateNode(shipStatus, i, nodesParent.transform, nodePos);
         }
     }
 
     [MethodRpc((uint)LaunchpadRPC.ToggleNode)]
     public static void RpcToggleNode(ShipStatus shipStatus, int nodeId, bool value)
     {
-        var node = Nodes.Find(node => node.Id == nodeId);
+        var node = Instance.Nodes.Find(node => node.Id == nodeId);
         Debug.Log(node.gameObject.transform.position.ToString());
         node.IsActive = value;  
     }
 
-    public static HackNodeComponent CreateNode(ShipStatus shipStatus, int id, Transform parent, Vector3 position)
+    public HackNodeComponent CreateNode(ShipStatus shipStatus, int id, Transform parent, Vector3 position)
     {
         var node = new GameObject("Node");
         node.transform.SetParent(parent, false);
         node.transform.localPosition = position;
 
         var sprite = node.AddComponent<SpriteRenderer>();
-        sprite.sprite = SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.Node.png");
+        sprite.sprite = LaunchpadAssets.NodeSprite;
         node.layer = LayerMask.NameToLayer("ShortObjects");
         sprite.transform.localScale = new Vector3(1, 1, 1);
 

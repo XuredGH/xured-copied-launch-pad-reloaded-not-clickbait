@@ -10,6 +10,6 @@ public static class DeadBodyPatch
     [HarmonyPatch(nameof(DeadBody.OnClick))]
     public static bool OnClickPatch()
     {
-        return !HackingManager.AnyActiveNodes();
+        return !HackingManager.Instance.AnyActiveNodes();
     }
 }

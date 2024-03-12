@@ -1,6 +1,7 @@
 ﻿using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Roles;
+using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Extensions;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ public class CallButton : CustomActionButton
     public override float Cooldown => LaunchpadGameOptions.Instance.CaptainMeetingCooldown.Value;
     public override float EffectDuration => 0;
     public override int MaxUses => (int)LaunchpadGameOptions.Instance.CaptainMeetingCount.Value;
-    public override Sprite Sprite => LaunchpadReloadedPlugin.Bundle.LoadAsset<Sprite>("CallMeeting.png");
+    public override Sprite Sprite => LaunchpadAssets.CallButton;
 
     public override bool Enabled(RoleBehaviour role)
     {

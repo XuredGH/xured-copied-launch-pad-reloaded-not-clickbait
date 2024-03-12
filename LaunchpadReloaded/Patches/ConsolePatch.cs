@@ -29,6 +29,7 @@ public static class ConsolePatch
 
     [HarmonyPrefix]
     [HarmonyPatch(typeof(SystemConsole), nameof(SystemConsole.CanUse))]
+    [HarmonyPatch(typeof(MapConsole), nameof(MapConsole.CanUse))]
     public static bool SystemCanUsePatch([HarmonyArgument(0)] GameData.PlayerInfo pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse)
     {
         return canUse = couldUse = !pc.IsHacked();

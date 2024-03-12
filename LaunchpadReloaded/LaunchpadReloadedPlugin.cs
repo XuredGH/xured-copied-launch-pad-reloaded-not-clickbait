@@ -21,13 +21,10 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
 {
     public Harmony Harmony { get; } = new(Id);
 
-    public static AssetBundle Bundle;
     public override void Load()
     {
         Harmony.PatchAll();
 
-        Bundle = AssetBundleManager.Load("assets");
-        
         // TODO: CREATE ATTRIBUTE FOR THIS VVV
         CustomRoleManager.RegisterAllRoles();
         CustomButtonManager.RegisterAllButtons();
@@ -36,6 +33,4 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
         
         Config.Save();
     }
-
-
 }

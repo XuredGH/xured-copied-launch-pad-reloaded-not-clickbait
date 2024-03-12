@@ -16,8 +16,12 @@
 
     <ItemGroup>
       <None Remove="Resources\Hack.png" />
+      <None Remove="Resources\Investigate.png" />
       <None Remove="Resources\Map.png" />
       <None Remove="Resources\Node.png" />
+      <None Remove="Resources\Place_Scanner.png" />
+      <None Remove="Resources\Scanner.png" />
+      <None Remove="Resources\Track.png" />
     </ItemGroup>
     
     <ItemGroup>
@@ -35,8 +39,12 @@
     <ItemGroup>
       <EmbeddedResource Include="Resources\assets-win-x86.bundle" />
       <EmbeddedResource Include="Resources\Hack.png" />
+      <EmbeddedResource Include="Resources\Investigate.png" />
       <EmbeddedResource Include="Resources\Map.png" />
       <EmbeddedResource Include="Resources\Node.png" />
+      <EmbeddedResource Include="Resources\Place_Scanner.png" />
+      <EmbeddedResource Include="Resources\Scanner.png" />
+      <EmbeddedResource Include="Resources\Track.png" />
     </ItemGroup>
     
     <ItemGroup>
