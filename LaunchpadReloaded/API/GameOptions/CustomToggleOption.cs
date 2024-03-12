@@ -21,6 +21,7 @@ public class CustomToggleOption : AbstractGameOption
     
     protected override void OnValueChanged(OptionBehaviour optionBehaviour)
     {
+        Debug.Log($"{optionBehaviour.name} changed modified");
         SetValue(optionBehaviour.GetBool());
     }
 
