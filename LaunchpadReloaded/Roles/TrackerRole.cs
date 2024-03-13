@@ -26,6 +26,7 @@ public class TrackerRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
     public Color RoleColor => LaunchpadPalette.TrackerColor;
 
     public RoleTeamTypes Team => RoleTeamTypes.Crewmate;
+    public Sprite Icon => LaunchpadAssets.TrackButton;
 
     public StringBuilder SetTabText()
     {

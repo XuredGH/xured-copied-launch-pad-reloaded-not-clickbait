@@ -20,6 +20,15 @@ public static class HudManagerPatches
     [HarmonyPatch("Update")]
     public static void UpdatePostfix(HudManager __instance)
     {
+        if (!ShipStatus.Instance)
+        {
+            if (Input.GetKeyDown(KeyCode.Tab))
+                ToHudStringPatch.ShowCustom = !ToHudStringPatch.ShowCustom;
+
+            var numPlayers = GameData.Instance ? GameData.Instance.PlayerCount : 10;
+            HudManager.Instance.GameSettings.text = GameOptionsManager.Instance.CurrentGameOptions.ToHudString(numPlayers);
+        }
+
         if (!PlayerControl.LocalPlayer) return;
 
         if (PlayerControl.LocalPlayer.Data.IsHacked())

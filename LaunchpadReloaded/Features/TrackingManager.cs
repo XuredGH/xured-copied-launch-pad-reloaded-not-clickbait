@@ -1,3 +1,5 @@
+﻿using LaunchpadReloaded.Components;
+using LaunchpadReloaded.Roles;
 ﻿using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Attributes;
 using System;
@@ -32,7 +34,7 @@ public class TrackingManager(IntPtr ptr) : MonoBehaviour(ptr)
             // Stop pinging when player dies
             if (TrackedPlayer.Data.IsDead || TrackedPlayer.Data.Disconnected) TrackerDisconnected = true;
 
-            Timer = 7f;
+            Timer = LaunchpadGameOptions.Instance.TrackerPingTimer.Value;
         }
         else
         {

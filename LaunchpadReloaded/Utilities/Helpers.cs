@@ -23,6 +23,21 @@ public static class Helpers
             .Select(s => s[Random.Next(s.Length)]).ToArray());
     }
 
+    public static string GetSuffix(NumberSuffixes suffix)
+    {
+        switch (suffix)
+        {
+            case NumberSuffixes.None:
+                return String.Empty;
+            case NumberSuffixes.Multiplier:
+                return "x";
+            case NumberSuffixes.Seconds:
+                return "s";
+        }
+
+        return String.Empty;
+    }
+
     public static void SendNotification(string text, Color textColor, float duration = 2f, float fontSize = 3f)
     {
         NotificationPopper notifs = HudManager.Instance.Notifier.transform.parent.FindChild("LaunchpadNotifications").GetComponent<NotificationPopper>();
