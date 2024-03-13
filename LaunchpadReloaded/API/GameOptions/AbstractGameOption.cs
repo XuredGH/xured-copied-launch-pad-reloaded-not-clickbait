@@ -1,28 +1,23 @@
-﻿using System;
-using LaunchpadReloaded.API.Roles;
+﻿using LaunchpadReloaded.API.Roles;
 using Reactor.Localization.Utilities;
+using System;
 
 namespace LaunchpadReloaded.API.GameOptions;
 
 public abstract class AbstractGameOption
-{    
+{
     public string Title { get; }
     public StringNames StringName { get; }
     public OptionBehaviour OptionBehaviour { get; set; }
     public Type AdvancedRole { get; set; }
-    private bool Show = true;
+    public CustomOptionGroup Group = null;
+    public Func<bool> Hidden { get; set; }
+
     public void ValueChanged(OptionBehaviour optionBehaviour)
     {
         OnValueChanged(optionBehaviour);
         CustomOptionsManager.SyncOptions();
     }
-
-    public void ToggleVisibility(bool value)
-    {
-        Show = value;
-        if (OptionBehaviour) OptionBehaviour.gameObject.SetActive(value);
-    }
-    public bool IsVisible() => Show;
 
     protected abstract void OnValueChanged(OptionBehaviour optionBehaviour);
 
@@ -34,7 +29,8 @@ public abstract class AbstractGameOption
         {
             AdvancedRole = roleType;
         }
-        
+
+        Hidden = () => false;
         CustomOptionsManager.CustomOptions.Add(this);
     }
 }

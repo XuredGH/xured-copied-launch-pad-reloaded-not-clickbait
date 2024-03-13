@@ -1,37 +1,72 @@
-﻿using System.Linq;
-using System.Text;
 using AmongUs.GameOptions;
 using HarmonyLib;
-using LaunchpadReloaded.API.Gamemodes;
 using LaunchpadReloaded.API.GameOptions;
-using LaunchpadReloaded.Gamemodes;
+using LaunchpadReloaded.Utilities;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace LaunchpadReloaded.API.Patches;
 
-[HarmonyPatch(typeof(IGameOptionsExtensions),nameof(IGameOptionsExtensions.ToHudString))]
+[HarmonyPatch(typeof(IGameOptionsExtensions), nameof(IGameOptionsExtensions.ToHudString))]
 public static class ToHudStringPatch
 {
     public static bool ShowCustom = false;
-    
-    public static void Postfix(IGameOptions __instance, ref string __result)
+
+    public static void AddOptions(StringBuilder sb,
+        IEnumerable<CustomNumberOption> numberOptions, IEnumerable<CustomStringOption> stringOptions, IEnumerable<CustomToggleOption> toggleOptions)
     {
-        var sb = new StringBuilder("\n<size=125%><color=orange><b>Custom Game Options:</color></b></size>\n");
-
-        foreach (var numberOption in CustomOptionsManager.CustomNumberOptions.Where(option => option.IsVisible()))
+        foreach (var numberOption in numberOptions)
         {
-            sb.AppendLine(numberOption.Title+": "+numberOption.Value);
+            sb.AppendLine(numberOption.Title + ": " + numberOption.Value + Helpers.GetSuffix(numberOption.SuffixType));
         }
 
-        foreach (var toggleOption in CustomOptionsManager.CustomToggleOptions.Where(option => option.IsVisible()))
+        foreach (var toggleOption in toggleOptions)
         {
-            sb.AppendLine(toggleOption.Title+": "+toggleOption.Value);
+            sb.AppendLine(toggleOption.Title + ": " + (toggleOption.Value ? "On" : "Off"));
         }
 
-        foreach(var stringOption in CustomOptionsManager.CustomStringOptions.Where(option => option.IsVisible()))
+        foreach (var stringOption in stringOptions)
         {
             sb.AppendLine(stringOption.Title + ": " + stringOption.Value);
         }
+    }
 
-        __result = "<size=125%><b>Normal Game Options:</b></size>\n" + __result + sb;
+    public static void Postfix(IGameOptions __instance, ref string __result)
+    {
+        if (ShowCustom)
+        {
+            var sb = new StringBuilder("<size=125%><b>Launchpad Options:</b></size>\n");
+            var groupsWithRoles = CustomOptionsManager.CustomGroups.Where(group => group.AdvancedRole != null);
+            var groupsWithoutRoles = CustomOptionsManager.CustomGroups.Where(group => group.AdvancedRole == null);
+
+            foreach (var group in groupsWithoutRoles)
+            {
+                if (group.Hidden()) continue;
+
+                sb.AppendLine($"<size=110%><b>{group.Title}</b></size>");
+                AddOptions(sb, group.CustomNumberOptions, group.CustomStringOptions, group.CustomToggleOptions);
+                sb.Append("\n");
+            }
+            if (groupsWithRoles.Count() > 0) sb.AppendLine($"<size=120%><b>Roles</b></size>");
+            foreach (var group in groupsWithRoles)
+            {
+                if (group.Hidden()) continue;
+
+                sb.AppendLine($"<size=90%><b>{group.Title}</b></size><size=70%>");
+                AddOptions(sb, group.CustomNumberOptions, group.CustomStringOptions, group.CustomToggleOptions);
+                sb.Append("</size>\n");
+            }
+
+            AddOptions(sb,
+                CustomOptionsManager.CustomNumberOptions.Where(option => option.Group == null && !option.Hidden()),
+                CustomOptionsManager.CustomStringOptions.Where(option => option.Group == null && !option.Hidden()),
+                CustomOptionsManager.CustomToggleOptions.Where(option => option.Group == null && !option.Hidden()));
+
+            __result = sb.ToString() + "\nPress <b>Tab</b> to view Normal Options";
+            return;
+        }
+
+        __result = "<size=125%><b>Normal Options:</b></size>\n" + __result + "\nPress <b>Tab</b> to view Launchpad Options";
     }
 }

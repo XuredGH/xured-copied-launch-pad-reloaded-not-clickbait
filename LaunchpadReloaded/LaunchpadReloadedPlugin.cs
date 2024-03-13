@@ -20,14 +20,13 @@ namespace LaunchpadReloaded;
 public partial class LaunchpadReloadedPlugin : BasePlugin
 {
     public Harmony Harmony { get; } = new(Id);
+    public static LaunchpadReloadedPlugin Instance { get; private set; }
 
-    public static AssetBundle Bundle;
     public override void Load()
     {
+        Instance = this;
         Harmony.PatchAll();
-
-        Bundle = AssetBundleManager.Load("assets");
-
+        
         // TODO: CREATE ATTRIBUTE FOR THIS VVV
         CustomGamemodeManager.RegisterAllGamemodes();
         CustomGamemodeManager.SetGamemode(0);
@@ -40,6 +39,4 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
 
         // Set to default mode
     }
-
-
 }

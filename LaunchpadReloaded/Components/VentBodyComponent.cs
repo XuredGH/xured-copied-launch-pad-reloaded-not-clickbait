@@ -1,18 +1,19 @@
-﻿using System;
-using LaunchpadReloaded.API.Utilities;
+﻿using LaunchpadReloaded.API.Utilities;
 using Reactor.Utilities.Attributes;
+using Reactor.Utilities.Extensions;
+using System;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Components;
 
 [RegisterInIl2Cpp]
-public class VentBodyComponent (IntPtr ptr) : MonoBehaviour (ptr)
+public class VentBodyComponent(IntPtr ptr) : MonoBehaviour(ptr)
 {
     public DeadBody deadBody;
 
     public void ExposeBody()
     {
         deadBody.ShowBody(false);
+        this.Destroy();
     }
-    
 }

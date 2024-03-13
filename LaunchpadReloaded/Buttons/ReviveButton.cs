@@ -1,5 +1,5 @@
 ﻿using LaunchpadReloaded.API.Hud;
-using Reactor.Utilities.Extensions;
+using LaunchpadReloaded.Utilities;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
@@ -10,7 +10,7 @@ public class ReviveButton : CustomActionButton
     public override float Cooldown => 10;
     public override float EffectDuration => 0;
     public override int MaxUses => 5;
-    public override Sprite Sprite => LaunchpadReloadedPlugin.Bundle.LoadAsset<Sprite>("Revive.png");
+    public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.ReviveButton;
 
     public override bool Enabled(RoleBehaviour role)
     {

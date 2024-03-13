@@ -10,6 +10,6 @@ public static class ReportButtonPatch
     [HarmonyPatch(nameof(ReportButton.DoClick))]
     public static bool DoClickPatch()
     {
-        return !HackingManager.AnyActiveNodes();
+        return !HackingManager.Instance.AnyActiveNodes();
     }
 }
