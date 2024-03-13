@@ -1,4 +1,6 @@
 ﻿using HarmonyLib;
+using LaunchpadReloaded.API.Gamemodes;
+using LaunchpadReloaded.Components;
 using LaunchpadReloaded.API.Utilities;
 using LaunchpadReloaded.Features;
 using Reactor.Utilities.Extensions;
@@ -20,5 +22,14 @@ public static class ShipStatusPatch
         managers.AddComponent<ScannerManager>();
 
         HackingManager.RpcCreateNodes(__instance);
+    }
+
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(ShipStatus.OnDestroy))]
+    public static void ShipStatusDestroyPatch(ShipStatus __instance)
+    {
+        CustomGamemodeManager.SetGamemode(0);
+        LaunchpadGameOptions.Instance.Gamemodes.SetValue(0); 
+        //CustomGamemodeManager.RpcSetGamemode(PlayerControl.LocalPlayer, 0);
     }
 }

@@ -13,7 +13,7 @@ public class CustomNumberOption : AbstractGameOption
     public string NumberFormat { get; }
     public float Default { get; }
     public ConfigEntry<float> Config { get; }
-
+    
     public CustomNumberOption(string title, float defaultValue, FloatRange range, float increment, NumberSuffixes suffixType, string numberFormat = "0", Type role = null) : base(title, role)
     {
         Value = defaultValue;
@@ -49,6 +49,7 @@ public class CustomNumberOption : AbstractGameOption
         numberOption.OnValueChanged = (Il2CppSystem.Action<OptionBehaviour>)ValueChanged;
         numberOption.OnEnable();
         OptionBehaviour = numberOption;
+        OptionBehaviour.gameObject.SetActive(IsVisible());
     }
 
     protected override void OnValueChanged(OptionBehaviour optionBehaviour)

@@ -1,4 +1,6 @@
 ﻿using HarmonyLib;
+using InnerNet;
+using LaunchpadReloaded.API.Gamemodes;
 using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.API.Utilities;
@@ -30,6 +32,9 @@ public static class HudManagerPatches
         }
 
         if (!PlayerControl.LocalPlayer) return;
+        if (AmongUsClient.Instance.GameState != InnerNetClient.GameStates.Started && !ShipStatus.Instance) return;
+
+        CustomGamemodeManager.ActiveMode.HudUpdate(__instance);
 
         if (PlayerControl.LocalPlayer.Data.IsHacked())
         {
@@ -81,6 +86,13 @@ public static class HudManagerPatches
             // If not custom role and roleTab exists delete roletab (could happen in freeplay mode if switching roles)
             if (_roleTab != null) _roleTab.gameObject.Destroy();
         }
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch("OnGameStart")]
+    public static void GameStartPatch(HudManager __instance)
+    {
+        CustomGamemodeManager.ActiveMode.HudStart(__instance);
     }
 
     [HarmonyPostfix]

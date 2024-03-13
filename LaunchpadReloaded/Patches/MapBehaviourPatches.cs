@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using GameCore;
+using LaunchpadReloaded.API.Gamemodes;
 using LaunchpadReloaded.Buttons;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
@@ -15,6 +16,20 @@ namespace LaunchpadReloaded.Patches;
 public class MapBehaviourPatches
 {
     public static SpriteRenderer trackerHerePoint;
+
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(MapBehaviour.ShowSabotageMap))]
+    public static bool ShowSabotagePatch(MapBehaviour __instance)
+    {
+        bool shouldShow = CustomGamemodeManager.ActiveMode.ShouldShowSabotageMap(__instance);
+        if(!shouldShow)
+        {
+            __instance.ShowNormalMap();
+            return false;
+        }
+
+        return true;
+    }
 
     [HarmonyPrefix]
     [HarmonyPatch(nameof(MapBehaviour.Show))]

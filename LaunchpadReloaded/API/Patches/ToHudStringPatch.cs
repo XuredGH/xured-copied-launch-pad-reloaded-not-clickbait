@@ -1,4 +1,4 @@
-﻿using AmongUs.GameOptions;
+using AmongUs.GameOptions;
 using HarmonyLib;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.Utilities;

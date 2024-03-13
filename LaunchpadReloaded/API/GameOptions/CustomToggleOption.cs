@@ -8,7 +8,7 @@ public class CustomToggleOption : AbstractGameOption
     public bool Value { get; private set; }
     public bool Default { get; }
     public ConfigEntry<bool> Config { get; }
-
+    
     public CustomToggleOption(string title, bool defaultValue, Type role = null) : base(title, role)
     {
         Value = defaultValue;
@@ -40,5 +40,6 @@ public class CustomToggleOption : AbstractGameOption
         toggleOption.OnValueChanged = (Il2CppSystem.Action<OptionBehaviour>)ValueChanged;
         toggleOption.OnEnable();
         OptionBehaviour = toggleOption;
+        OptionBehaviour.gameObject.SetActive(IsVisible());
     }
 }

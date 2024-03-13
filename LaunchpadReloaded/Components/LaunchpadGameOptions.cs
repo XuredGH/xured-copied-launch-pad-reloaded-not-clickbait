@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;

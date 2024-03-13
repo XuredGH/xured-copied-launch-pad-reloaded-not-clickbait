@@ -39,6 +39,7 @@ public class CustomStringOption : AbstractGameOption
     protected override void OnValueChanged(OptionBehaviour optionBehaviour)
     {
         SetValue(optionBehaviour.GetInt());
+        if (_changedEvent != null) _changedEvent.Invoke(optionBehaviour.GetInt());
     }
 
     public void CreateStringOption(StringOption stringOption)
@@ -56,5 +57,6 @@ public class CustomStringOption : AbstractGameOption
         stringOption.OnValueChanged = (Il2CppSystem.Action<OptionBehaviour>)ValueChanged;
         stringOption.OnEnable();
         OptionBehaviour = stringOption;
+        OptionBehaviour.gameObject.SetActive(IsVisible());
     }
 }
