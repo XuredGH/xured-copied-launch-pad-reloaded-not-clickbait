@@ -14,7 +14,7 @@ public static class RoleOptionSettingsPatch
         {
             GameSettingMenu.Instance.RoleName.text = __instance.Role.NiceName;
             GameSettingMenu.Instance.RoleBlurb.text = __instance.Role.BlurbLong;
-            GameSettingMenu.Instance.RoleIcon.sprite = customRole.Icon;
+            GameSettingMenu.Instance.RoleIcon.sprite = customRole.Icon.LoadAsset();
             return false;
         }
         return true;

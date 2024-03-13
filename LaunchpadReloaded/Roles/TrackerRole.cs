@@ -3,14 +3,8 @@ using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Attributes;
-using Reactor.Utilities.Extensions;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using TMPro;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
@@ -26,7 +20,7 @@ public class TrackerRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
     public Color RoleColor => LaunchpadPalette.TrackerColor;
 
     public RoleTeamTypes Team => RoleTeamTypes.Crewmate;
-    public Sprite Icon => LaunchpadAssets.TrackButton;
+    public LoadableAsset<Sprite> Icon => LaunchpadAssets.TrackButton;
 
     public StringBuilder SetTabText()
     {
@@ -48,7 +42,7 @@ public class TrackerRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
         if (ScannerManager.Instance.Scanners.Count > 0) taskStringBuilder.AppendLine("<b>Created Scanners:</b>");
         foreach (ScannerComponent component in ScannerManager.Instance.Scanners)
         {
-            if(component.Room != null) taskStringBuilder.AppendLine($"Scanner {component.Id} ({component.Room.RoomId})");
+            if (component.Room != null) taskStringBuilder.AppendLine($"Scanner {component.Id} ({component.Room.RoomId})");
         }
         return taskStringBuilder;
     }

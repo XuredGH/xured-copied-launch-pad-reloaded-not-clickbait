@@ -1,8 +1,8 @@
-﻿using System;
-using System.Text;
-using LaunchpadReloaded.API.Roles;
+﻿using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Attributes;
+using System;
+using System.Text;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
@@ -16,7 +16,7 @@ public class CaptainRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
     public Color RoleColor => LaunchpadPalette.CaptainColor;
     public RoleTeamTypes Team => RoleTeamTypes.Crewmate;
     public override bool IsDead => false;
-    public Sprite Icon => LaunchpadAssets.ZoomButton;
+    public LoadableAsset<Sprite> Icon => LaunchpadAssets.ZoomButton;
 
     public StringBuilder SetTabText()
     {

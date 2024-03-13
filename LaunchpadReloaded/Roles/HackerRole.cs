@@ -1,11 +1,7 @@
 using LaunchpadReloaded.API.Roles;
-using LaunchpadReloaded.API.Utilities;
-using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Attributes;
-using Reactor.Utilities.Extensions;
 using System;
-using System.Linq;
 using System.Text;
 using UnityEngine;
 
@@ -20,7 +16,7 @@ public class HackerRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
     public Color RoleColor => LaunchpadPalette.HackerColor;
     public RoleTeamTypes Team => RoleTeamTypes.Impostor;
     public override bool IsDead => false;
-    public Sprite Icon => LaunchpadAssets.HackButton;
+    public LoadableAsset<Sprite> Icon => LaunchpadAssets.HackButton;
     public StringBuilder SetTabText()
     {
         StringBuilder taskStringBuilder = Helpers.CreateForRole(this);

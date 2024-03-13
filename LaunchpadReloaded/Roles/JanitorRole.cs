@@ -1,10 +1,8 @@
-﻿using System;
-using System.Text;
-using LaunchpadReloaded.API.Roles;
-using LaunchpadReloaded.Components;
-using LaunchpadReloaded.Features;
+﻿using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Attributes;
+using System;
+using System.Text;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
@@ -19,7 +17,7 @@ public class JanitorRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
     public RoleTeamTypes Team => RoleTeamTypes.Impostor;
     public override bool IsDead => false;
     public bool TargetsBodies => true;
-    public Sprite Icon => LaunchpadAssets.DragButton;
+    public LoadableAsset<Sprite> Icon => LaunchpadAssets.DragButton;
 
     public StringBuilder SetTabText()
     {

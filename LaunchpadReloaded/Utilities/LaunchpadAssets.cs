@@ -8,7 +8,7 @@ namespace LaunchpadReloaded.Utilities;
 public static class LaunchpadAssets
 {
     public static AssetBundle Bundle = AssetBundleManager.Load("assets");
-    public static Sprite NoImage = SpriteTools.LoadSpriteFromPath("LaunchpadReloaded");
+    public static LoadableAsset<Sprite> NoImage = new("", false);
 
     // Button Sprites
     public static LoadableAsset<Sprite> CallButton = new("CallMeeting.png");
