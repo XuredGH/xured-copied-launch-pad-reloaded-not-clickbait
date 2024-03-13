@@ -73,12 +73,11 @@ public class BattleRoyale : CustomGamemode
 
         instance.TaskStuff.gameObject.SetActive(false);
         instance.AbilityButton.gameObject.SetActive(false);
-        instance.UseButton.gameObject.SetActive(false);
+        //instance.UseButton.gameObject.SetActive(false);
         instance.ReportButton.gameObject.SetActive(false);
         instance.SabotageButton.gameObject.SetActive(false);
         instance.PetButton.gameObject.SetActive(false);
         instance.ImpostorVentButton.gameObject.SetActive(false);
-        instance.KillButton.transform.position = instance.UseButton.transform.position;
     }
 
     public override List<PlayerInfo> CalculateWinners()

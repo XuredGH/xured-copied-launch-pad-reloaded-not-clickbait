@@ -47,6 +47,7 @@ public class LaunchpadGameOptions
         Action<int> changed = i =>
         {
             CustomGamemodeManager.RpcSetGamemode(PlayerControl.LocalPlayer, i);
+
             if (CustomGamemodeManager.ActiveMode is BattleRoyale)
                 SeekerBody.ToggleVisibility(true);
             else
