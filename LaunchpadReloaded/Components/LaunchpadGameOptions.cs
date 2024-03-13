@@ -1,8 +1,8 @@
-using System;
+using LaunchpadReloaded.API.Gamemodes;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
-using Reactor.Utilities.Attributes;
+using System;
 
 namespace LaunchpadReloaded.Components;
 
@@ -51,6 +51,11 @@ public class LaunchpadGameOptions
         }
 
         Gamemodes = new CustomStringOption("Gamemodes", 0, ["Default", "Battle Royale"]);
+        Gamemodes.ChangedEvent = i =>
+        {
+            CustomGamemodeManager.RpcSetGamemode(PlayerControl.LocalPlayer, i);
+        };
+
         FriendlyFire = new CustomToggleOption("Friendly Fire", false);
 
         GeneralGroup = new CustomOptionGroup("General Options",

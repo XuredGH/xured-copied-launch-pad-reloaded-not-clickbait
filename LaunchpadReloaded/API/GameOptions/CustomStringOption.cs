@@ -13,7 +13,7 @@ public class CustomStringOption : AbstractGameOption
     public int Default { get; }
     public string[] Options { get; private set; }
     public ConfigEntry<int> Config { get; }
-
+    public Action<int> ChangedEvent = null;
     public CustomStringOption(string title, int defaultValue, string[] options, Type role = null) : base(title, role)
     {
         Value = options[defaultValue];
@@ -39,7 +39,7 @@ public class CustomStringOption : AbstractGameOption
     protected override void OnValueChanged(OptionBehaviour optionBehaviour)
     {
         SetValue(optionBehaviour.GetInt());
-        if (_changedEvent != null) _changedEvent.Invoke(optionBehaviour.GetInt());
+        if (ChangedEvent != null) ChangedEvent(optionBehaviour.GetInt());
     }
 
     public void CreateStringOption(StringOption stringOption)
@@ -57,6 +57,5 @@ public class CustomStringOption : AbstractGameOption
         stringOption.OnValueChanged = (Il2CppSystem.Action<OptionBehaviour>)ValueChanged;
         stringOption.OnEnable();
         OptionBehaviour = stringOption;
-        OptionBehaviour.gameObject.SetActive(IsVisible());
     }
 }

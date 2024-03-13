@@ -1,13 +1,8 @@
-﻿using GameCore;
+﻿using HarmonyLib;
 using LaunchpadReloaded.API.Gamemodes;
-using LaunchpadReloaded.Buttons;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
-using Reactor.Utilities;
-using Reactor.Utilities.Extensions;
-using System.Collections;
-using TMPro;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Patches;
@@ -22,7 +17,7 @@ public class MapBehaviourPatches
     public static bool ShowSabotagePatch(MapBehaviour __instance)
     {
         bool shouldShow = CustomGamemodeManager.ActiveMode.ShouldShowSabotageMap(__instance);
-        if(!shouldShow)
+        if (!shouldShow)
         {
             __instance.ShowNormalMap();
             return false;

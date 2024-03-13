@@ -11,9 +11,9 @@ public static class DeadBodyPatch
     [HarmonyPatch(nameof(DeadBody.OnClick))]
     public static bool OnClickPatch(DeadBody __instance)
     {
-        if(CustomGamemodeManager.ActiveMode.CanReport(__instance))
+        if (CustomGamemodeManager.ActiveMode.CanReport(__instance))
         {
-            return !HackingManager.AnyActiveNodes();
+            return !HackingManager.Instance.AnyActiveNodes();
         }
         return false;
     }
