@@ -1,6 +1,9 @@
-﻿using HarmonyLib;
+﻿using System.Linq;
+using HarmonyLib;
+using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
+using UnityEngine;
 
 namespace LaunchpadReloaded.Patches;
 
@@ -16,6 +19,30 @@ public static class PlayerControlPatches
             case JanitorRole:
                 __result = __result && !DragManager.IsDragging(__instance.PlayerId);
                 break;
+        }
+    }
+    
+    [HarmonyPrefix]
+    [HarmonyPatch("Start")]
+    public static void StartPrefix(PlayerControl __instance)
+    {
+        var gradColorComponent = __instance.gameObject.AddComponent<PlayerGradientData>();
+        if (__instance.AmOwner)
+        {
+            gradColorComponent.gradientColor = GradientManager.LocalGradientId;
+            GradientManager.RpcSetGradient(__instance,GradientManager.LocalGradientId);
+            Debug.LogError("Sent gradient");
+        }
+    }
+    
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(PlayerControl.SetPlayerMaterialColors))]
+    public static void SetPlayerMaterialColorsPrefix(PlayerControl __instance, [HarmonyArgument(0)] Renderer renderer)
+    {
+        var playerGradient = __instance.GetComponent<PlayerGradientData>();
+        if (playerGradient)
+        {
+            renderer.GetComponent<GradientColorComponent>().SetColor(__instance.Data.DefaultOutfit.ColorId, playerGradient.gradientColor);
         }
     }
 }

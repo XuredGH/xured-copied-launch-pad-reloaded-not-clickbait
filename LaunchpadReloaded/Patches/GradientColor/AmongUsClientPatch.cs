@@ -1,16 +1,15 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.Features;
+using Reactor.Utilities;
+using UnityEngine;
 
 namespace LaunchpadReloaded.Patches.GradientColor;
 
-[HarmonyPatch(typeof(AmongUsClient),nameof(AmongUsClient.CreatePlayer))]
+[HarmonyPatch(typeof(AmongUsClient),nameof(AmongUsClient.OnPlayerJoined))]
 public static class AmongUsClientPatch
 {
-    public static void Postfix(AmongUsClient __instance)
+    public static void Postfix()
     {
-        foreach (var player in GameData.Instance.AllPlayers)
-        {
-            GradientColorManager.RpcRequestGradient(player.Object);
-        }
+        GradientManager.RpcSetGradient(PlayerControl.LocalPlayer, GradientManager.LocalGradientId);
     }
 }

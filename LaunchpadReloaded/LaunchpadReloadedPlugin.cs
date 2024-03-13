@@ -33,8 +33,6 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
 
         Mat = Bundle.LoadAsset<Material>("GradientPlayerMaterial").DontUnload();
         BlankButton = Bundle.LoadAsset<Sprite>("BlankButton").DontUnload();
-
-        new GradientColorManager();
         
         // TODO: CREATE ATTRIBUTE FOR THIS VVV
         CustomRoleManager.RegisterAllRoles();

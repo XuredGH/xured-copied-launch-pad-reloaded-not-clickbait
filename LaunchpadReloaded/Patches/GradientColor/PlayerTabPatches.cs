@@ -1,5 +1,6 @@
 ﻿using AmongUs.Data;
 using HarmonyLib;
+using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using Reactor.Utilities.Extensions;
 using TMPro;
@@ -19,7 +20,7 @@ public static class PlayerTabPatches
     {
         SelectGradient = !SelectGradient;
         _titleText.text = SelectGradient ? "Secondary Color: " : "Main Color: ";
-        instance.currentColor = SelectGradient ? GradientColorManager.Instance.LocalGradientId : DataManager.Player.Customization.Color;
+        instance.currentColor = SelectGradient ? GradientManager.LocalGradientId : DataManager.Player.Customization.Color;
     }
     
     
@@ -59,7 +60,7 @@ public static class PlayerTabPatches
             colorChip.Button.OnMouseOut.RemoveAllListeners();
             colorChip.Button.OnMouseOut.AddListener((UnityAction)(() =>
             {
-                __instance.SelectColor(SelectGradient ? GradientColorManager.Instance.LocalGradientId : DataManager.Player.Customization.Color);
+                __instance.SelectColor(SelectGradient ? GradientManager.LocalGradientId : DataManager.Player.Customization.Color);
             }));
         }
     }
@@ -70,11 +71,11 @@ public static class PlayerTabPatches
     {
         if (SelectGradient && __instance.AvailableColors.Remove(__instance.currentColor))
         {
-            GradientColorManager.Instance.LocalGradientId = __instance.currentColor;
+            GradientManager.LocalGradientId = __instance.currentColor;
             __instance.PlayerPreview.UpdateFromDataManager(PlayerMaterial.MaskType.None);
             if (__instance.HasLocalPlayer())
             {
-                GradientColorManager.RpcSetGradient(PlayerControl.LocalPlayer, __instance.currentColor);
+                GradientManager.RpcSetGradient(PlayerControl.LocalPlayer, __instance.currentColor);
             }
             
             return false;
@@ -106,7 +107,7 @@ public static class PlayerTabPatches
     {
         if (SelectGradient)
         {
-            __result = GradientColorManager.Instance.LocalGradientId;
+            __result = GradientManager.LocalGradientId;
             return false;
         }
 
@@ -120,7 +121,7 @@ public static class PlayerTabPatches
         if(_titleText) _titleText.text = SelectGradient ? "Secondary Color: " : "Main Color: ";
         if (SelectGradient)
         {
-            __instance.currentColorIsEquipped = __instance.currentColor == GradientColorManager.Instance.LocalGradientId;
+            __instance.currentColorIsEquipped = __instance.currentColor == GradientManager.LocalGradientId;
         }
     }
 
@@ -132,47 +133,55 @@ public static class PlayerTabPatches
         {
             __instance.AvailableColors.Add(i);
         }
-        // VERY BUGGY NEEDS TO BE REWRITTEN
-        if (GameData.Instance)
+
+        if (!GameData.Instance)
         {
-            var allPlayers = GameData.Instance.AllPlayers.ToArray();
-            var grads = GradientColorManager.Instance.Gradients;
-            var localGradId = GradientColorManager.Instance.LocalGradientId;
-            var localColorId = PlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId;
-            foreach (var data in allPlayers)
-            {
-                if (SelectGradient)
-                {
-                    var isSame = data.DefaultOutfit.ColorId == localColorId;
-                    var isOpposite = grads[data.PlayerId] == localColorId;
-                    if (isSame)
-                    {
-                        __instance.AvailableColors.Remove(grads[data.PlayerId]);
-                    }
-
-                    if (isOpposite)
-                    {
-                        __instance.AvailableColors.Remove(data.DefaultOutfit.ColorId);
-                    }
-                }
-                else
-                {
-                    var isSame = grads[data.PlayerId] == localGradId;
-                    var isOpposite = data.DefaultOutfit.ColorId == localGradId;
-                    if (isSame)
-                    {
-                        __instance.AvailableColors.Remove(data.DefaultOutfit.ColorId);
-                    }
-
-                    if (isOpposite)
-                    {
-                        __instance.AvailableColors.Remove(grads[data.PlayerId]);
-                    }
-                    
-                }
-            }
+            return false;
         }
         
+        var allPlayers = GameData.Instance.AllPlayers;
+        var localGradId = GradientManager.LocalGradientId;
+        var localColorId = PlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId;
+            
+        foreach (var data in allPlayers)
+        {
+            if (!GradientManager.TryGetColor(data.PlayerId, out var gradColor))
+            {
+                continue;
+            }
+                
+            // TODO: simplify logic
+            if (SelectGradient)
+            {
+                var isSame = data.DefaultOutfit.ColorId == localColorId;
+                var isOpposite = gradColor == localColorId;
+                if (isSame)
+                {
+                    __instance.AvailableColors.Remove(gradColor);
+                }
+
+                if (isOpposite)
+                {
+                    __instance.AvailableColors.Remove(data.DefaultOutfit.ColorId);
+                }
+            }
+            else
+            {
+                var isSame = gradColor == localGradId;
+                var isOpposite = data.DefaultOutfit.ColorId == localGradId;
+                if (isSame)
+                {
+                    __instance.AvailableColors.Remove(data.DefaultOutfit.ColorId);
+                }
+
+                if (isOpposite)
+                {
+                    __instance.AvailableColors.Remove(gradColor);
+                }
+                    
+            }
+        }
+
         return false;
     }
 }
