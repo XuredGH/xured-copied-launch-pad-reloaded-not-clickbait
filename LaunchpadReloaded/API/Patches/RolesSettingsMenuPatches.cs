@@ -1,10 +1,10 @@
-﻿using System.Linq;
-using AmongUs.GameOptions;
+﻿using AmongUs.GameOptions;
 using HarmonyLib;
+using Il2CppSystem;
+using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
-using Reactor.Localization.Utilities;
-using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
+using System.Linq;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -13,7 +13,7 @@ namespace LaunchpadReloaded.API.Patches;
 [HarmonyPatch(typeof(RolesSettingsMenu))]
 public static class RolesSettingsMenuPatches
 {
-    
+
     // TODO: Add advanced role option settings
     [HarmonyPrefix]
     [HarmonyPatch("Start")]
@@ -29,28 +29,65 @@ public static class RolesSettingsMenuPatches
 
             var newTab = Object.Instantiate(tabPrefab, __instance.AdvancedRolesSettings.transform);
             newTab.name = role.NiceName + " Settings";
+            var toggleSet = Object.Instantiate(newTab.GetComponentInChildren<ToggleOption>(true));
+            var numberSet = Object.Instantiate(newTab.GetComponentInChildren<NumberOption>(true));
+
             foreach (var option in newTab.GetComponentsInChildren<OptionBehaviour>())
             {
                 option.gameObject.Destroy();
             }
 
+            var numOptsAdded = 0;
+            foreach (var customOption in CustomOptionsManager.CustomOptions)
+            {
+                if (customOption.AdvancedRole is not null && customOption.AdvancedRole == role.GetType())
+                {
+                    switch (customOption)
+                    {
+                        case CustomNumberOption numberOption:
+                            var numOpt = Object.Instantiate(numberSet, newTab.transform);
+                            numOpt.transform.localPosition -= new Vector3(0, .5f * numOptsAdded++, 0);
+                            numberOption.CreateNumberOption(numOpt);
+
+                            break;
+
+                        case CustomToggleOption toggleOption:
+                            var togOpt = Object.Instantiate(toggleSet, newTab.transform);
+                            togOpt.transform.localPosition -= new Vector3(0, .5f * numOptsAdded++, 0);
+                            toggleOption.CreateToggleOption(togOpt);
+
+                            break;
+                    }
+                }
+            }
+
             var tmp = newTab.GetComponentInChildren<TextTranslatorTMP>();
             tmp.defaultStr = role.NiceName;
             tmp.TargetText = role.StringName;
-            
-            var newOpt = Object.Instantiate(tabPrefab.GetComponentInChildren<NumberOption>(true),newTab.transform);
-            newOpt.Title = CustomStringName.CreateAndRegister("Testing");
-            
+
             var newAdvSet = new AdvancedRoleSettingsButton()
             {
                 Tab = newTab,
                 Type = (RoleTypes)key
             };
-            
+
             __instance.AllAdvancedSettingTabs.Add(newAdvSet);
         }
     }
-    
+
+    [HarmonyPostfix]
+    [HarmonyPatch("Start")]
+    public static void StartPostfix(RolesSettingsMenu __instance)
+    {
+        foreach (var customOption in CustomOptionsManager.CustomOptions)
+        {
+            if (customOption.AdvancedRole is not null)
+            {
+                customOption.OptionBehaviour.OnValueChanged = (Action<OptionBehaviour>)customOption.ValueChanged;
+            }
+        }
+    }
+
     [HarmonyPrefix]
     [HarmonyPatch("OnEnable")]
     public static void OnEnablePrefix(RolesSettingsMenu __instance)
@@ -76,14 +113,14 @@ public static class RolesSettingsMenuPatches
         if (obj is RoleOptionSetting { Role: ICustomRole role } roleSetting)
         {
             Debug.LogError("SETTING ROLE CONFIG");
-            PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config.TryGetEntry<int>(role.NumConfigDefinition, out var numEntry);
+            LaunchpadReloadedPlugin.Instance.Config.TryGetEntry<int>(role.NumConfigDefinition, out var numEntry);
             numEntry.Value = roleSetting.RoleMaxCount;
-            
-            PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config.TryGetEntry<int>(role.ChanceConfigDefinition, out var chanceEntry);
+
+            LaunchpadReloadedPlugin.Instance.Config.TryGetEntry<int>(role.ChanceConfigDefinition, out var chanceEntry);
             chanceEntry.Value = roleSetting.RoleChance;
-            
+
             roleSetting.UpdateValuesAndText(GameOptionsManager.Instance.CurrentGameOptions.RoleOptions);
-            
+
             GameOptionsManager.Instance.GameHostOptions = GameOptionsManager.Instance.CurrentGameOptions;
             return false;
         }

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Reflection;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Features;
 using Reactor.Utilities.Extensions;
@@ -17,7 +18,8 @@ public static class Extensions
 
     public static bool IsHacked(this GameData.PlayerInfo playerInfo)
     {
-        return HackingManager.HackedPlayers.Contains(playerInfo.PlayerId);
+        if (!HackingManager.Instance) return false;
+        return HackingManager.Instance.HackedPlayers.Contains(playerInfo.PlayerId);
     }
 
     public static void HideBody(this DeadBody body)
@@ -39,7 +41,10 @@ public static class Extensions
             spriteRenderer.enabled = true;
         }
     }
-    
+    public static bool IsOverride(this MethodInfo methodInfo)
+    {
+        return (methodInfo.GetBaseDefinition() != methodInfo);
+    }
     public static void UpdateBodies(this PlayerControl playerControl, Color outlineColor, ref DeadBody target)
     {
         foreach (var body in Object.FindObjectsOfType<DeadBody>())
@@ -74,5 +79,30 @@ public static class Extensions
             .Where(collider2D => collider2D.CompareTag("DeadBody"))
             .Select(collider2D => collider2D.GetComponent<DeadBody>())
             .FirstOrDefault(component => component && !component.Reported);
+    }
+
+    public static PlayerControl GetClosestPlayer(this PlayerControl playerControl, bool includeImpostors, float distance)
+    {
+        PlayerControl result = null;
+        if (!ShipStatus.Instance) return null;
+
+        var truePosition = playerControl.GetTruePosition();
+
+        foreach (var playerInfo in GameData.Instance.AllPlayers)
+        {
+            if (playerInfo.Disconnected || playerInfo.PlayerId == playerControl.PlayerId ||
+                playerInfo.IsDead || (!includeImpostors && playerInfo.Role.IsImpostor)) continue;
+
+            var @object = playerInfo.Object;
+            if (!@object) continue;
+            var vector = @object.GetTruePosition() - truePosition;
+            var magnitude = vector.magnitude;
+            if (!(magnitude <= distance) || PhysicsHelpers.AnyNonTriggersBetween(truePosition,
+                vector.normalized,
+                magnitude, LayerMask.GetMask(new string[2] { "Ship", "Objects" }))) continue;
+            result = @object;
+            distance = magnitude;
+        }
+        return result;
     }
 }

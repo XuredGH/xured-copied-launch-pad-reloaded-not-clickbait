@@ -9,10 +9,10 @@ namespace LaunchpadReloaded.API.Patches;
 public static class RoleOptionsCollectionPatch
 {
     //TODO: Create new options system
-    
+
     [HarmonyPrefix]
     [HarmonyPatch(nameof(RoleOptionsCollectionV07.GetChancePerGame))]
-    public static bool GetChancePrefix([HarmonyArgument(0)]RoleTypes roleType, ref int __result)
+    public static bool GetChancePrefix([HarmonyArgument(0)] RoleTypes roleType, ref int __result)
     {
         if (CustomRoleManager.GetCustomRoleBehaviour(roleType, out var customRole))
         {
@@ -26,7 +26,7 @@ public static class RoleOptionsCollectionPatch
 
     [HarmonyPrefix]
     [HarmonyPatch(nameof(RoleOptionsCollectionV07.GetNumPerGame))]
-    public static bool GetNumPrefix([HarmonyArgument(0)]RoleTypes roleType, ref int __result)
+    public static bool GetNumPrefix([HarmonyArgument(0)] RoleTypes roleType, ref int __result)
     {
         if (CustomRoleManager.GetCustomRoleBehaviour(roleType, out var customRole))
         {

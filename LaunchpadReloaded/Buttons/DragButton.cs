@@ -1,7 +1,7 @@
 ﻿using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
-using Reactor.Utilities.Extensions;
+using LaunchpadReloaded.Utilities;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
@@ -9,10 +9,10 @@ namespace LaunchpadReloaded.Buttons;
 public class DragButton : CustomActionButton
 {
     public override string Name => "DRAG";
-    public override float Cooldown => 0;
+    public override float Cooldown => 2;
     public override float EffectDuration => 0;
     public override int MaxUses => 0;
-    public override Sprite Sprite => LaunchpadReloadedPlugin.Bundle.LoadAsset<Sprite>("Drag.png");
+    public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.DragButton;
 
     public static DragButton Instance;
 
@@ -20,7 +20,7 @@ public class DragButton : CustomActionButton
     {
         Instance = this;
     }
-    
+
     public override bool Enabled(RoleBehaviour role)
     {
         return role is JanitorRole;
@@ -48,13 +48,22 @@ public class DragButton : CustomActionButton
     public void SetDrag()
     {
         OverrideName("DRAG");
-        OverrideSprite("Drag.png");
+        OverrideSprite(Sprite.LoadAsset());
     }
 
     public void SetDrop()
     {
         OverrideName("DROP");
-        OverrideSprite("Drop.png");
+        OverrideSprite(LaunchpadAssets.DropButton.LoadAsset());
+    }
+
+    public bool CanDrop()
+    {
+        foreach (Collider2D collider2D in Physics2D.OverlapCircleAll(PlayerControl.LocalPlayer.GetTruePosition(), PlayerControl.LocalPlayer.MaxReportDistance, Constants.PlayersOnlyMask))
+        {
+            if (!(collider2D.tag != "DeadBody")) return true;
+        }
+        return false;
     }
 
     protected override void OnClick()
@@ -62,13 +71,14 @@ public class DragButton : CustomActionButton
         if (DragManager.IsDragging(PlayerControl.LocalPlayer.PlayerId))
         {
             DragManager.RpcStopDragging(PlayerControl.LocalPlayer);
+            if (!CanDrop()) DragManager.RpcStartDragging(PlayerControl.LocalPlayer, DeadBodyTarget.ParentId);
         }
         else
         {
             DragManager.RpcStartDragging(PlayerControl.LocalPlayer, DeadBodyTarget.ParentId);
         }
     }
-    
-    
-    
+
+
+
 }

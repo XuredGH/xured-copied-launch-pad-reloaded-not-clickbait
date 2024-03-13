@@ -1,5 +1,5 @@
 ﻿using LaunchpadReloaded.API.Utilities;
-using Reactor.Utilities.Extensions;
+using LaunchpadReloaded.Utilities;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -8,29 +8,29 @@ namespace LaunchpadReloaded.API.Hud;
 public abstract class CustomActionButton
 {
     public abstract string Name { get; }
-    
+
     public abstract float Cooldown { get; }
-    
+
     public abstract float EffectDuration { get; }
-    
+
     public abstract int MaxUses { get; }
-    
-    public abstract Sprite Sprite { get; }
-    
+
+    public abstract LoadableAsset<Sprite> Sprite { get; }
+
     public bool HasEffect => EffectDuration > 0;
-    
+
     public bool LimitedUses => MaxUses > 0;
 
     protected bool EffectActive;
-    
+
     protected float Timer;
-    
+
     protected int UsesLeft;
-    
+
     protected ActionButton Button;
 
     protected DeadBody DeadBodyTarget;
-    
+
     public void CreateButton(Transform parent)
     {
         if (Button)
@@ -41,12 +41,12 @@ public abstract class CustomActionButton
         UsesLeft = MaxUses;
         Timer = 0;
         EffectActive = false;
-        
+
         Button = Object.Instantiate(HudManager.Instance.AbilityButton, parent);
         Button.name = Name + "Button";
         Button.OverrideText(Name);
-        
-        Button.graphic.sprite = Sprite;
+
+        Button.graphic.sprite = Sprite.LoadAsset();
 
         Button.SetUsesRemaining(MaxUses);
         if (MaxUses <= 0)
@@ -59,11 +59,8 @@ public abstract class CustomActionButton
         pb.OnClick.AddListener((UnityAction)ClickHandler);
     }
 
-    public void OverrideSprite(string path, bool useAssetBundle = true)
+    public void OverrideSprite(Sprite sprite)
     {
-        var sprite = useAssetBundle
-            ? LaunchpadReloadedPlugin.Bundle.LoadAsset<Sprite>(path)
-            : SpriteTools.LoadSpriteFromPath(path);
         Button.graphic.sprite = sprite;
     }
 
@@ -71,13 +68,13 @@ public abstract class CustomActionButton
     {
         Button.OverrideText(name);
     }
-    
+
     protected virtual void FixedUpdate(PlayerControl playerControl) { }
 
     protected abstract void OnClick();
-    
+
     public abstract bool Enabled(RoleBehaviour role);
-    
+
     protected virtual void OnEffectEnd() { }
 
     public bool CanUseHandler()
@@ -89,12 +86,12 @@ public abstract class CustomActionButton
     {
         return true;
     }
-    
+
     public virtual void SetActive(bool visible, RoleBehaviour role)
     {
         Button.ToggleVisible(visible && Enabled(role));
     }
-    
+
     private void ClickHandler()
     {
         if (!CanUseHandler())
@@ -107,7 +104,7 @@ public abstract class CustomActionButton
             UsesLeft--;
             Button.SetUsesRemaining(UsesLeft);
         }
-        
+
         OnClick();
         Button.SetDisabled();
         if (HasEffect)
@@ -120,7 +117,7 @@ public abstract class CustomActionButton
             Timer = Cooldown;
         }
     }
-    
+
     public void UpdateHandler(PlayerControl playerControl)
     {
         if (Timer >= 0)
@@ -144,7 +141,7 @@ public abstract class CustomActionButton
             Button.SetDisabled();
         }
         Button.SetCoolDown(Timer, EffectActive ? EffectDuration : Cooldown);
-        
+
         playerControl.UpdateBodies(playerControl.Data.Role.TeamColor, ref DeadBodyTarget);
         FixedUpdate(playerControl);
     }

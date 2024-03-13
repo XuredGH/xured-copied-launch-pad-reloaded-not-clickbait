@@ -1,7 +1,8 @@
 ﻿using LaunchpadReloaded.API.Hud;
+using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
-using Reactor.Utilities.Extensions;
+using LaunchpadReloaded.Utilities;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
@@ -12,15 +13,15 @@ public class HideButton : CustomActionButton
     public override float Cooldown => 5;
     public override float EffectDuration => 0;
     public override int MaxUses => 3;
-    public override Sprite Sprite => LaunchpadReloadedPlugin.Bundle.LoadAsset<Sprite>("Clean.png");
+    public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.HideButton;
 
     private Vent VentTarget => HudManager.Instance.ImpostorVentButton.currentTarget;
-    
+
     public override bool CanUse()
     {
-        return DeadBodyTarget is not null && 
+        return DeadBodyTarget is not null &&
                DragManager.IsDragging(PlayerControl.LocalPlayer.PlayerId) &&
-               VentTarget;
+               VentTarget && !VentTarget.gameObject.GetComponent<VentBodyComponent>();
     }
 
     protected override void OnClick()

@@ -7,9 +7,13 @@ public enum LaunchpadRPC : uint
     ToggleNode = 3,
     StartDrag = 3,
     StopDrag = 4,
-    HideBody = 5,
+    RemoveBody = 5,
     HideBodyInVent = 6,
     ExposeBody = 7,
-    SyncGradient = 8,
-    RequestGradient = 9
+    SyncGameOptions = 8,
+    SetGamemode = 9,
+    SetBodyType = 10,
+    CreateScanner = 11,
+    SyncGradient = 12,
+    RequestGradient = 13
 }
