@@ -1,8 +1,8 @@
-﻿using System.Linq;
-using LaunchpadReloaded.API.Utilities;
+﻿using LaunchpadReloaded.API.Utilities;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Networking;
 using Reactor.Networking.Attributes;
+using System.Linq;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Features;
@@ -19,7 +19,7 @@ public static class DeadBodyManager
     {
         var body = GetBodyById(bodyId);
         var vent = shipStatus.AllVents.First(v => v.Id == ventId);
-        
+
         if (!body || !vent)
         {
             return;
@@ -30,11 +30,11 @@ public static class DeadBodyManager
         {
             ventBody = vent.gameObject.AddComponent<VentBodyComponent>();
         }
-      
+
         body.HideBody();
         var pos = body.transform.position;
         var pos2 = vent.transform.position;
-        body.transform.position = new Vector3(pos2.x,pos2.y,pos.z);
+        body.transform.position = new Vector3(pos2.x, pos2.y, pos.z);
         ventBody.deadBody = body;
     }
 
@@ -42,12 +42,12 @@ public static class DeadBodyManager
     public static void RpcRemoveBody(ShipStatus shipStatus, byte bodyId)
     {
         var body = GetBodyById(bodyId);
-        
+
         if (!body)
         {
             return;
         }
-      
+
         body.HideBody();
     }
 
@@ -55,7 +55,7 @@ public static class DeadBodyManager
     public static void RpcExposeBody(ShipStatus shipStatus, int ventId)
     {
         var vent = shipStatus.AllVents.First(v => v.Id == ventId);
-        
+
         if (!vent)
         {
             return;
@@ -66,8 +66,8 @@ public static class DeadBodyManager
         {
             return;
         }
-      
+
         ventBody.ExposeBody();
     }
-    
+
 }

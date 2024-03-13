@@ -12,7 +12,7 @@ public class MapButton : CustomActionButton
     public override float Cooldown => (int)LaunchpadGameOptions.Instance.MapCooldown.Value;
     public override float EffectDuration => (int)LaunchpadGameOptions.Instance.MapDuration.Value;
     public override int MaxUses => 0;
-    public override Sprite Sprite => LaunchpadAssets.MapButton;
+    public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.MapButton;
 
     private MapOptions _mapOptions = new()
     {
@@ -22,7 +22,7 @@ public class MapButton : CustomActionButton
         Mode = MapOptions.Modes.CountOverlay,
     };
 
-    public override bool Enabled(RoleBehaviour role) =>  role is HackerRole;
+    public override bool Enabled(RoleBehaviour role) => role is HackerRole;
 
     protected override void OnClick()
     {

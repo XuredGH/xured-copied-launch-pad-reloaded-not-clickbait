@@ -3,14 +3,6 @@ using LaunchpadReloaded.API.Utilities;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
-using Reactor.Utilities.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TMPro;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
@@ -20,7 +12,7 @@ public class TrackButton : CustomActionButton
     public override float Cooldown => 0;
     public override float EffectDuration => 0;
     public override int MaxUses => 1;
-    public override Sprite Sprite => LaunchpadAssets.TrackButton;
+    public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.TrackButton;
     public PlayerControl CurrentTarget = null;
 
     public override bool Enabled(RoleBehaviour role) => role is TrackerRole;
@@ -35,7 +27,7 @@ public class TrackButton : CustomActionButton
             return;
         }
 
-        if(UsesLeft > 0)
+        if (UsesLeft > 0)
         {
             if (CurrentTarget != null)
             {
@@ -57,7 +49,7 @@ public class TrackButton : CustomActionButton
 
     protected override void OnClick()
     {
-        TrackingManager.Instance.TrackedPlayer = CurrentTarget; 
+        TrackingManager.Instance.TrackedPlayer = CurrentTarget;
         CurrentTarget = null;
     }
 }

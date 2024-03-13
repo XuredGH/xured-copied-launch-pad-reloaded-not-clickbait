@@ -1,36 +1,53 @@
 ﻿using LaunchpadReloaded.API.Utilities;
 using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Utilities;
+
 public static class LaunchpadAssets
 {
     public static AssetBundle Bundle = AssetBundleManager.Load("assets");
     public static Sprite NoImage = SpriteTools.LoadSpriteFromPath("LaunchpadReloaded");
 
     // Button Sprites
-    public static Sprite CallButton = Bundle.LoadAsset<Sprite>("CallMeeting.png");
-    public static Sprite DragButton = Bundle.LoadAsset<Sprite>("Drag.png");
-    public static Sprite DropButton = Bundle.LoadAsset<Sprite>("Drop.png");
-    public static Sprite ZoomButton = Bundle.LoadAsset<Sprite>("Zoom.png");
-    public static Sprite ReviveButton = Bundle.LoadAsset<Sprite>("Revive.png");
-    public static Sprite HideButton = Bundle.LoadAsset<Sprite>("Clean.png");
-    public static Sprite HackButton = SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.Hack.png");
-    public static Sprite MapButton = SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.Map.png");
-    public static Sprite ScannerButton = SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.Place_Scanner.png");
-    public static Sprite TrackButton = SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.Track.png");
+    public static LoadableAsset<Sprite> CallButton = new("CallMeeting.png");
+    public static LoadableAsset<Sprite> DragButton = new("Drag.png");
+    public static LoadableAsset<Sprite> DropButton = new("Drop.png");
+    public static LoadableAsset<Sprite> ZoomButton = new("Zoom.png");
+    public static LoadableAsset<Sprite> ReviveButton = new("Revive.png");
+    public static LoadableAsset<Sprite> HideButton = new("Clean.png");
+    public static LoadableAsset<Sprite> HackButton = new("Hack.png", false);
+    public static LoadableAsset<Sprite> MapButton = new("Map.png", false);
+    public static LoadableAsset<Sprite> ScannerButton = new("Place_Scanner.png", false);
+    public static LoadableAsset<Sprite> TrackButton = new("Track.png", false);
 
     // Object Sprites
-    public static Sprite ScannerSprite = SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.Scanner.png");
-    public static Sprite NodeSprite = SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.Node.png");
+    public static LoadableAsset<Sprite> ScannerSprite = new("Scanner.png", false);
+    public static LoadableAsset<Sprite> NodeSprite = new("Node.png", false);
 
     // Sounds
-    public static AudioClip BeepSound = Bundle.LoadAsset<AudioClip>("Beep.wav");
-    public static AudioClip PingSound = Bundle.LoadAsset<AudioClip>("Ping.mp3");
+    public static LoadableAsset<AudioClip> BeepSound = new("Beep.wav");
+    public static LoadableAsset<AudioClip> PingSound = new("Ping.mp3");
+}
+
+public class LoadableAsset<T> where T : Object
+{
+    public string Name { get; }
+    public bool UseBundle { get; }
+    private string ResourcesFolder = "LaunchpadReloaded.Resources.";
+    private T LoadedAsset = null;
+
+    public LoadableAsset(string name, bool useBundle = true)
+    {
+        Name = name;
+        UseBundle = useBundle;
+    }
+    public T LoadAsset()
+    {
+        if (LoadedAsset != null) return LoadedAsset;
+
+        if (UseBundle) return LoadedAsset = LaunchpadAssets.Bundle.LoadAsset<T>(Name);
+        else return LoadedAsset = SpriteTools.LoadSpriteFromPath(ResourcesFolder + Name) as T;
+    }
 }

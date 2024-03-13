@@ -1,15 +1,11 @@
-﻿using LaunchpadReloaded.API.Utilities;
-using LaunchpadReloaded.Components;
+﻿using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Networking;
-using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities.Attributes;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using static ShipStatus;
 
 namespace LaunchpadReloaded.Features;
 [RegisterInIl2Cpp]
@@ -37,7 +33,7 @@ public class ScannerManager(IntPtr ptr) : MonoBehaviour(ptr)
         scanner.transform.SetParent(ShipStatus.Instance.transform);
 
         var sprite = scanner.AddComponent<SpriteRenderer>();
-        sprite.sprite = LaunchpadAssets.ScannerSprite;
+        sprite.sprite = LaunchpadAssets.ScannerSprite.LoadAsset();
         scanner.layer = LayerMask.NameToLayer("Ship");
         sprite.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
 

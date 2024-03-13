@@ -1,12 +1,8 @@
-﻿using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Roles;
+﻿using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
-using Reactor.Utilities;
 using Reactor.Utilities.Attributes;
-using Reactor.Utilities.Extensions;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Components;
@@ -32,13 +28,13 @@ public class ScannerComponent(IntPtr ptr) : MonoBehaviour(ptr)
         if (PlayerControl.LocalPlayer.Data.Role is TrackerRole)
         {
             Helpers.SendNotification($"<b>{Room.RoomId} Scanner:</b>{player.Data.Color.ToTextColor()} {player.Data.PlayerName}</color>", Color.white, 1.4f);
-            SoundManager.Instance.PlaySoundImmediate(LaunchpadAssets.BeepSound, false, 0.3f);
+            SoundManager.Instance.PlaySoundImmediate(LaunchpadAssets.BeepSound.LoadAsset(), false, 0.3f);
             return;
         }
 
         if (player.AmOwner)
         {
-            SoundManager.Instance.PlaySoundImmediate(LaunchpadAssets.PingSound, false, 0.5f);
+            SoundManager.Instance.PlaySoundImmediate(LaunchpadAssets.BeepSound.LoadAsset(), false, 0.5f);
             Helpers.SendNotification($"<b>You have triggered the scanner.</b>\n{LaunchpadPalette.TrackerColor.ToTextColor()}The Tracker will be notified.</color>", Color.white, 1.4f, 2.4f);
         }
     }

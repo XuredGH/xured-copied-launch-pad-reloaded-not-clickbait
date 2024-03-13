@@ -3,6 +3,8 @@ using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.API.Utilities;
+using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using UnityEngine;
 
@@ -17,11 +19,12 @@ public static class PlayerControlPatches
     {
         if (MeetingHud.Instance) return;
 
-        if (__instance.Data.IsHacked())
+        if (__instance.Data.IsHacked() || (HackingManager.Instance && HackingManager.Instance.AnyActiveNodes() && __instance.Data.Role is HackerRole))
         {
             string randomString = Helpers.RandomString(Helpers.Random.Next(4, 6), "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#!?$(???#@)$@@@@0000");
             __instance.cosmetics.SetName(randomString);
             __instance.cosmetics.SetNameMask(true);
+            __instance.cosmetics.gameObject.SetActive(false);
         }
 
         if (!__instance.AmOwner) return;
@@ -33,7 +36,7 @@ public static class PlayerControlPatches
                 button.UpdateHandler(__instance);
             }
         }
-        
+
         if (__instance.Data.Role is ICustomRole customRole)
         {
             customRole.PlayerControlFixedUpdate(__instance);

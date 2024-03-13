@@ -2,7 +2,6 @@
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Attributes;
-using Reactor.Utilities.Extensions;
 using System;
 using UnityEngine;
 
@@ -27,9 +26,10 @@ public class HackNodeComponent(IntPtr ptr) : MonoBehaviour(ptr)
 
     public void Use()
     {
-        SoundManager.Instance.PlaySound(LaunchpadAssets.BeepSound, false, 0.5f, null);
+        SoundManager.Instance.PlaySound(LaunchpadAssets.BeepSound.LoadAsset(), false, 0.5f, null);
         HackingManager.RpcUnhackPlayer(PlayerControl.LocalPlayer);
-        if(HackingManager.Instance.HackedPlayers.Count <= 0)
+
+        if (HackingManager.Instance.HackedPlayers.Count <= 0)
         {
             HackingManager.RpcToggleNode(ShipStatus.Instance, this.Id, false);
         }

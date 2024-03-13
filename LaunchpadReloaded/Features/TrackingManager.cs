@@ -1,13 +1,8 @@
 ﻿using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Roles;
-using LaunchpadReloaded.Utilities;
+﻿using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Attributes;
-using Reactor.Utilities.Extensions;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Features;
@@ -24,7 +19,7 @@ public class TrackingManager(IntPtr ptr) : MonoBehaviour(ptr)
     {
         Instance = this;
     }
-     
+
     public void TrackingUpdate()
     {
         if (Timer <= 0f)
@@ -34,7 +29,7 @@ public class TrackingManager(IntPtr ptr) : MonoBehaviour(ptr)
             vector.x *= Mathf.Sign(ShipStatus.Instance.transform.localScale.x);
             vector.z = -1f;
             MapPosition = vector;
-            SoundManager.Instance.PlaySound(LaunchpadAssets.PingSound, false, 0.8f, null);
+            SoundManager.Instance.PlaySound(LaunchpadAssets.PingSound.LoadAsset(), false, 0.8f, null);
 
             // Stop pinging when player dies
             if (TrackedPlayer.Data.IsDead || TrackedPlayer.Data.Disconnected) TrackerDisconnected = true;
