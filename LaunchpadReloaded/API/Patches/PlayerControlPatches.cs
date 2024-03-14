@@ -1,12 +1,10 @@
 ﻿using HarmonyLib;
-using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.API.Utilities;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
-using UnityEngine;
 
 namespace LaunchpadReloaded.API.Patches;
 

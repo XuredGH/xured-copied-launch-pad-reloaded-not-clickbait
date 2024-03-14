@@ -1,7 +1,5 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.Features;
-using Reactor.Utilities;
-using UnityEngine;
 
 namespace LaunchpadReloaded.Patches.GradientColor;
 

@@ -1,7 +1,9 @@
-﻿using LaunchpadReloaded.API.Utilities;
+﻿using System;
+using LaunchpadReloaded.API.Utilities;
 using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace LaunchpadReloaded.Utilities;
 
@@ -9,8 +11,12 @@ public static class LaunchpadAssets
 {
     public static AssetBundle Bundle = AssetBundleManager.Load("assets");
     public static LoadableAsset<Sprite> NoImage = new("", false);
+    
+    // Materials
+    public static LoadableAsset<Material> GradientMaterial = new("GradientPlayerMaterial");
 
-    // Button Sprites
+    // Sprites
+    public static LoadableAsset<Sprite> BlankButton = new("BlankButton");
     public static LoadableAsset<Sprite> CallButton = new("CallMeeting.png");
     public static LoadableAsset<Sprite> DragButton = new("Drag.png");
     public static LoadableAsset<Sprite> DropButton = new("Drop.png");
@@ -31,23 +37,26 @@ public static class LaunchpadAssets
     public static LoadableAsset<AudioClip> PingSound = new("Ping.mp3");
 }
 
-public class LoadableAsset<T> where T : Object
+public class LoadableAsset<T>(string name, bool useBundle = true)
+    where T : Object
 {
-    public string Name { get; }
-    public bool UseBundle { get; }
-    private string ResourcesFolder = "LaunchpadReloaded.Resources.";
-    private T LoadedAsset = null;
+    private const string ResourcesFolder = "LaunchpadReloaded.Resources.";
+    public string Name { get; } = name;
+    public bool UseBundle { get; } = useBundle;
+    
+    private T _loadedAsset;
 
-    public LoadableAsset(string name, bool useBundle = true)
-    {
-        Name = name;
-        UseBundle = useBundle;
-    }
     public T LoadAsset()
     {
-        if (LoadedAsset != null) return LoadedAsset;
+        if (_loadedAsset != null) return _loadedAsset;
 
-        if (UseBundle) return LoadedAsset = LaunchpadAssets.Bundle.LoadAsset<T>(Name);
-        else return LoadedAsset = SpriteTools.LoadSpriteFromPath(ResourcesFolder + Name) as T;
+        if (UseBundle) return _loadedAsset = LaunchpadAssets.Bundle.LoadAsset<T>(Name);
+
+        if (typeof(T)==typeof(Sprite))
+        {
+            return _loadedAsset = SpriteTools.LoadSpriteFromPath(ResourcesFolder + Name) as T;
+        }
+
+        throw new Exception($"INVALID ASSET: {Name}");
     }
 }

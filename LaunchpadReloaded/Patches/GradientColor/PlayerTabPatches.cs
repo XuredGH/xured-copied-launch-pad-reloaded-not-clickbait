@@ -1,7 +1,7 @@
 ﻿using AmongUs.Data;
 using HarmonyLib;
-using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Extensions;
 using TMPro;
 using UnityEngine;
@@ -34,7 +34,7 @@ public static class PlayerTabPatches
             _switchButton = Object.Instantiate(__instance.ColorTabPrefab, __instance.ColorTabArea);
         
             var spriteRenderer = _switchButton.GetComponent<SpriteRenderer>();
-            var sprite = spriteRenderer.sprite = LaunchpadReloadedPlugin.BlankButton;
+            var sprite = spriteRenderer.sprite = LaunchpadAssets.BlankButton.LoadAsset();
         
             _switchButton.GetComponent<BoxCollider2D>().size = sprite.rect.size/sprite.pixelsPerUnit;
             _switchButton.transform.localScale = new Vector3(1, 1, 1);

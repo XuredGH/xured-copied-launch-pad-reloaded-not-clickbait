@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Attributes;
 using Reactor.Utilities.Extensions;
 using UnityEngine;
-using UnityEngine.Serialization;
-using Random = UnityEngine.Random;
 
 namespace LaunchpadReloaded.Components;
 
@@ -35,7 +31,7 @@ public class GradientColorComponent(IntPtr ptr) : MonoBehaviour(ptr)
             return;
         }
         
-        renderer.material = LaunchpadReloadedPlugin.Mat;
+        renderer.material = LaunchpadAssets.GradientMaterial.LoadAsset();
         mat = renderer.material;
         
         PlayerMaterial.SetColors(color1, mat);
