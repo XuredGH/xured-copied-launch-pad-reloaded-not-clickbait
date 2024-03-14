@@ -11,6 +11,7 @@ public static class CustomOptionsTab
 {
     public static GameObject customTab;
     public static GameObject customScreen;
+    public static SpriteRenderer rend;
 
     public static GameObject Initialize(GameSettingMenu __instance)
     {
@@ -20,7 +21,7 @@ public static class CustomOptionsTab
         customScreen = CreateNewMenu(__instance);
         customTab = CreateCustomTab(__instance, customScreen, gameBtn, roleBtn);
 
-        var rend = customTab.transform.FindChild("LaunchpadBtn/Tab Background").GetComponent<SpriteRenderer>();
+        rend = customTab.transform.FindChild("LaunchpadBtn/Tab Background").GetComponent<SpriteRenderer>();
         rend.enabled = false;
 
         UpdateListeners(__instance, gameBtn.GetComponentInChildren<PassiveButton>(), roleBtn.GetComponentInChildren<PassiveButton>(), rend);
@@ -125,7 +126,16 @@ public static class CustomOptionsTab
         var btn = inside.GetComponentInChildren<PassiveButton>();
 
         btn.OnClick.RemoveAllListeners();
-        var value = () =>
+
+        btn.OnClick.AddListener((Action)TabAction);
+
+        var spriteRend = inside.GetComponentInChildren<SpriteRenderer>();
+        spriteRend.sprite = SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.Hack.png");
+        spriteRend.gameObject.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f); ;
+
+        return newTab;
+
+        void TabAction()
         {
             __instance.RegularGameSettings.SetActive(false);
             __instance.RolesSettings.gameObject.SetActive(false);
@@ -136,20 +146,13 @@ public static class CustomOptionsTab
 
             gameTab.transform.FindChild("ColorButton/Tab Background").gameObject.GetComponent<SpriteRenderer>().enabled = false;
             roleTab.transform.FindChild("Hat Button/Tab Background").gameObject.GetComponent<SpriteRenderer>().enabled = false;
-        };
-        btn.OnClick.AddListener(value);
-
-        var spriteRend = inside.GetComponentInChildren<SpriteRenderer>();
-        spriteRend.sprite = SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.Hack.png");
-        spriteRend.gameObject.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f); ;
-
-        return newTab;
+        }
     }
 
     public static GameObject CreateNewMenu(GameSettingMenu __instance)
     {
         var gameSettings = __instance.RegularGameSettings;
-        var newSettings = GameObject.Instantiate(gameSettings, gameSettings.transform.parent);
+        var newSettings = Object.Instantiate(gameSettings, gameSettings.transform.parent);
         newSettings.name = "Launchpad Settings";
         newSettings.SetActive(false);
 

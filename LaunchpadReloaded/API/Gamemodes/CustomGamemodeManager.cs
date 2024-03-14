@@ -26,7 +26,6 @@ public static class CustomGamemodeManager
     public static void RpcSetGamemode(PlayerControl player, int id)
     {
         SetGamemode(id);
-        LaunchpadGameOptions.Instance.Gamemodes.SetValue(id);
     }
 
     public static void SetGamemode(int id)

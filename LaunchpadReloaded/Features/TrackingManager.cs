@@ -1,5 +1,7 @@
-﻿using System;
+using System;
 using LaunchpadReloaded.Components;
+using LaunchpadReloaded.Utilities;
+using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Attributes;
 using UnityEngine;
@@ -36,7 +38,7 @@ public class TrackingManager(IntPtr ptr) : MonoBehaviour(ptr)
                 TrackerDisconnected = true;
             }
 
-            Timer = LaunchpadGameOptions.Instance.TrackerPingTimer.Value;
+            Timer = TrackerRole.PingTimer.Value;
         }
         else
         {

@@ -12,7 +12,7 @@ public abstract class AbstractGameOption
     public Type AdvancedRole { get; set; }
     public CustomOptionGroup Group = null;
     public Func<bool> Hidden { get; set; }
-
+    public bool Save { get; set; }
     public void ValueChanged(OptionBehaviour optionBehaviour)
     {
         OnValueChanged(optionBehaviour);
@@ -21,7 +21,7 @@ public abstract class AbstractGameOption
 
     protected abstract void OnValueChanged(OptionBehaviour optionBehaviour);
 
-    protected AbstractGameOption(string title, Type roleType)
+    protected AbstractGameOption(string title, Type roleType, bool save)
     {
         Title = title;
         StringName = CustomStringName.CreateAndRegister(Title);
@@ -30,6 +30,7 @@ public abstract class AbstractGameOption
             AdvancedRole = roleType;
         }
 
+        Save = save;
         Hidden = () => false;
         CustomOptionsManager.CustomOptions.Add(this);
     }

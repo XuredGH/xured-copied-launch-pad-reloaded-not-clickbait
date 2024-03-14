@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using LaunchpadReloaded.Buttons;
+﻿using LaunchpadReloaded.Buttons;
 using LaunchpadReloaded.Networking;
 using Reactor.Networking.Attributes;
+using System.Collections.Generic;
 
 namespace LaunchpadReloaded.Features;
 
@@ -13,7 +13,7 @@ public static class DragManager
     {
         return DraggingPlayers.ContainsKey(playerId);
     }
-    
+
     [MethodRpc((uint)LaunchpadRPC.StartDrag)]
     public static void RpcStartDragging(PlayerControl playerControl, byte bodyId)
     {
@@ -24,7 +24,7 @@ public static class DragManager
             DragButton.Instance.SetDrop();
         }
     }
-    
+
     [MethodRpc((uint)LaunchpadRPC.StopDrag)]
     public static void RpcStopDragging(PlayerControl playerControl)
     {

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 using AmongUs.GameOptions;
 using HarmonyLib;
+using LaunchpadReloaded.API.Gamemodes;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.Utilities;
 
@@ -34,9 +35,9 @@ public static class ToHudStringPatch
 
     public static void Postfix(IGameOptions __instance, ref string __result)
     {
-        if (ShowCustom)
+        if (ShowCustom || !CustomGamemodeManager.ActiveMode.CanAccessSettingsTab())
         {
-            var sb = new StringBuilder("<size=125%><b>Launchpad Options:</b></size>\n");
+            var sb = new StringBuilder("<size=150%><b>Launchpad Options:</b></size>\n");
             var groupsWithRoles = CustomOptionsManager.CustomGroups.Where(group => group.AdvancedRole != null);
             var groupsWithoutRoles = CustomOptionsManager.CustomGroups.Where(group => group.AdvancedRole == null);
 
@@ -51,32 +52,38 @@ public static class ToHudStringPatch
                 AddOptions(sb, group.CustomNumberOptions, group.CustomStringOptions, group.CustomToggleOptions);
                 sb.Append("\n");
             }
-            if (groupsWithRoles.Count() > 0)
-            {
-                sb.AppendLine("<size=120%><b>Roles</b></size>");
-            }
 
-            foreach (var group in groupsWithRoles)
+            var customOptionGroups = groupsWithRoles as CustomOptionGroup[] ?? groupsWithRoles.ToArray();
+            if (customOptionGroups.Any() && CustomGamemodeManager.ActiveMode.CanAccessRolesTab())
             {
-                if (group.Hidden())
+                sb.AppendLine($"<size=120%><b>Roles</b></size>");
+
+                foreach (var group in customOptionGroups)
                 {
-                    continue;
-                }
+                    if (group.Hidden())
+                    {
+                        continue;
+                    }
 
-                sb.AppendLine($"<size=90%><b>{group.Title}</b></size><size=70%>");
-                AddOptions(sb, group.CustomNumberOptions, group.CustomStringOptions, group.CustomToggleOptions);
-                sb.Append("</size>\n");
+                    sb.AppendLine($"<size=90%><b>{group.Title}</b></size><size=70%>");
+                    AddOptions(sb, group.CustomNumberOptions, group.CustomStringOptions, group.CustomToggleOptions);
+                    sb.Append("</size>\n");
+                }
             }
+
 
             AddOptions(sb,
                 CustomOptionsManager.CustomNumberOptions.Where(option => option.Group == null && !option.Hidden()),
                 CustomOptionsManager.CustomStringOptions.Where(option => option.Group == null && !option.Hidden()),
                 CustomOptionsManager.CustomToggleOptions.Where(option => option.Group == null && !option.Hidden()));
 
-            __result = sb + "\nPress <b>Tab</b> to view Normal Options";
+            var suffix = CustomGamemodeManager.ActiveMode.CanAccessSettingsTab() ? "\nPress <b>Tab</b> to view Normal Options" :
+                $"\n<b>You can not access Normal Options on {CustomGamemodeManager.ActiveMode.Name} mode.</b>";
+
+            __result = sb + suffix;
             return;
         }
 
-        __result = "<size=125%><b>Normal Options:</b></size>\n" + __result + "\nPress <b>Tab</b> to view Launchpad Options";
+        __result = "<size=150%><b>Normal Options:</b></size>\n" + __result + "\nPress <b>Tab</b> to view Launchpad Options";
     }
 }

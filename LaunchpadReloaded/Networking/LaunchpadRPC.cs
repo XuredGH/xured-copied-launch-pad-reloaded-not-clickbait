@@ -14,6 +14,6 @@ public enum LaunchpadRPC : uint
     SetGamemode = 9,
     SetBodyType = 10,
     CreateScanner = 11,
-    SyncGradient = 12,
-    RequestGradient = 13
+    Revive = 12,
+    SyncGradient = 13
 }

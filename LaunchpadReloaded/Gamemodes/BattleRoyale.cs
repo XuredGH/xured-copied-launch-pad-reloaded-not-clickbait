@@ -1,8 +1,9 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AmongUs.GameOptions;
 using LaunchpadReloaded.API.Gamemodes;
+using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities;
@@ -26,8 +27,12 @@ public class BattleRoyale : CustomGamemode
 
         var random = ShipStatus.Instance.DummyLocations.Random();
 
+        foreach (GameData.PlayerInfo player in GameData.Instance.AllPlayers)
+            player.Object.cosmetics.TogglePet(false);
+
         PlayerControl.LocalPlayer.NetTransform.RpcSnapTo(random.position);
-        GenericRPC.RpcSetBodyType(PlayerControl.LocalPlayer, 6);
+        if (LaunchpadGameOptions.Instance.SeekerCharacter.Value)
+            GenericRPC.RpcSetBodyType(PlayerControl.LocalPlayer, 6);
     }
 
     public IEnumerator DeathNotification(PlayerControl player)
@@ -52,9 +57,12 @@ public class BattleRoyale : CustomGamemode
         DeathNotif.gameObject.SetActive(false);
     }
 
+    public override bool CanAccessRolesTab() => false;
+    public override bool CanAccessSettingsTab() => false;
+
     public override void HudUpdate(HudManager instance)
     {
-        if(PlayerCount)
+        if (PlayerCount)
         {
             var alivePlayers = GameData.Instance.AllPlayers.ToArray().Where(player => !player.Disconnected && !player.IsDead);
             PlayerCount.text = $"<size=75%>{Palette.ImpostorRed.ToTextColor()}Battle Royale</size></color>\n{alivePlayers.Count()} Players Remaining.";
@@ -62,7 +70,7 @@ public class BattleRoyale : CustomGamemode
 
         instance.TaskStuff.gameObject.SetActive(false);
         instance.AbilityButton.gameObject.SetActive(false);
-        //instance.UseButton.gameObject.SetActive(false);
+        instance.UseButton.gameObject.SetActive(true);
         instance.ReportButton.gameObject.SetActive(false);
         instance.SabotageButton.gameObject.SetActive(false);
         instance.PetButton.gameObject.SetActive(false);
@@ -75,7 +83,13 @@ public class BattleRoyale : CustomGamemode
         return alivePlayers;
     }
     public override bool ShowCustomRoleScreen() => true;
-    public override bool CanKill(PlayerControl target) => true;
+
+    public override void CanKill(out bool runOriginal, out bool result, PlayerControl target)
+    {
+        runOriginal = false;
+        result = true;
+    }
+
     public override bool CanReport(DeadBody body) => false;
     public override bool CanVent(Vent vent, GameData.PlayerInfo playerInfo) => false;
     public override bool ShouldShowSabotageMap(MapBehaviour map) => false;

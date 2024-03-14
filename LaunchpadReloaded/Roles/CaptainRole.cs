@@ -1,6 +1,5 @@
-﻿using System;
-using System.Text;
-using AmongUs.GameOptions;
+using LaunchpadReloaded.API.GameOptions;
+using System;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Attributes;
@@ -20,9 +19,29 @@ public class CaptainRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
     public override bool IsDead => false;
     public LoadableAsset<Sprite> Icon => LaunchpadAssets.ZoomButton;
 
-    public StringBuilder SetTabText()
+    public static CustomNumberOption CaptainMeetingCooldown;
+    public static CustomNumberOption CaptainMeetingCount;
+    public static CustomOptionGroup Group;
+
+    public void CreateOptions()
     {
-        var taskStringBuilder = Helpers.CreateForRole(this);
-        return taskStringBuilder;
+        CaptainMeetingCooldown = new CustomNumberOption("Meeting Cooldown",
+            defaultValue: 45,
+            range: new FloatRange(0, 120),
+            increment: 5,
+            suffixType: NumberSuffixes.Seconds,
+            role: typeof(CaptainRole));
+
+        CaptainMeetingCount = new CustomNumberOption("Meeting Uses",
+            defaultValue: 3,
+            range: new FloatRange(1, 5),
+            increment: 1,
+            suffixType: NumberSuffixes.None,
+            role: typeof(CaptainRole));
+
+        Group = new CustomOptionGroup($"{RoleColor.ToTextColor()}Captain</color>",
+            numberOpt: [CaptainMeetingCooldown, CaptainMeetingCount],
+            stringOpt: [],
+            toggleOpt: [], role: typeof(CaptainRole));
     }
 }

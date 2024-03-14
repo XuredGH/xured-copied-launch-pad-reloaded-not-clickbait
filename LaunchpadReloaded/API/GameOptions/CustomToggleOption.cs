@@ -9,41 +9,44 @@ public class CustomToggleOption : AbstractGameOption
     public bool Default { get; }
     public ConfigEntry<bool> Config { get; }
     public Action<bool> ChangedEvent = null;
-    public CustomToggleOption(string title, bool defaultValue, Type role = null) : base(title, role)
+    public CustomToggleOption(string title, bool defaultValue, Type role = null, bool save = true) : base(title, role, save)
     {
-        Value = defaultValue;
         Default = defaultValue;
-        Config = LaunchpadReloadedPlugin.Instance.Config.Bind("Toggle Options", title, defaultValue);
+        if (Save)
+        {
+            Config = LaunchpadReloadedPlugin.Instance.Config.Bind("Toggle Options", title, defaultValue);
+        }
         CustomOptionsManager.CustomToggleOptions.Add(this);
-        SetValue(Config.Value);
+        SetValue(Save ? Config.Value : defaultValue);
     }
 
     public void SetValue(bool newValue)
     {
-        Config.Value = newValue;
+        if (Save)
+        {
+            Config.Value = newValue;
+        }
         Value = newValue;
 
         var behaviour = (ToggleOption)OptionBehaviour;
         if (behaviour)
         {
-            behaviour.CheckMark.enabled = Value;
+            behaviour.CheckMark.enabled = newValue;
         }
+
+        ChangedEvent?.Invoke(newValue);
     }
 
     protected override void OnValueChanged(OptionBehaviour optionBehaviour)
     {
         SetValue(optionBehaviour.GetBool());
-        if (ChangedEvent != null)
-        {
-            ChangedEvent(optionBehaviour.GetBool());
-        }
     }
 
     public void CreateToggleOption(ToggleOption toggleOption)
     {
         toggleOption.name = Title;
         toggleOption.Title = StringName;
-        toggleOption.CheckMark.enabled = Config.Value;
+        toggleOption.CheckMark.enabled = Value;
         toggleOption.OnValueChanged = (Il2CppSystem.Action<OptionBehaviour>)ValueChanged;
         toggleOption.OnEnable();
         OptionBehaviour = toggleOption;

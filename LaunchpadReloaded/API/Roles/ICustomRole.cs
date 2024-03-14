@@ -39,8 +39,14 @@ public interface ICustomRole
 
     RoleTypes GhostRole => Team == RoleTeamTypes.Crewmate ? RoleTypes.CrewmateGhost : RoleTypes.ImpostorGhost;
 
+    virtual void CreateOptions() { }
     void PlayerControlFixedUpdate(PlayerControl playerControl) { }
 
     void HudUpdate(HudManager hudManager) { }
-    StringBuilder SetTabText() { return null; }
+    
+    virtual StringBuilder SetTabText()
+    {
+        var taskStringBuilder = Helpers.CreateForRole(this);
+        return taskStringBuilder;
+    }
 }

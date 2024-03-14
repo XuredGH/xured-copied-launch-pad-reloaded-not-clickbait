@@ -10,11 +10,16 @@ namespace LaunchpadReloaded.API.Patches;
 
 [HarmonyPatch(typeof(PlayerControl))]
 public static class PlayerControlPatches
-{      
+{
     [HarmonyPostfix]
     [HarmonyPatch("FixedUpdate")]
     public static void FixedUpdatePostfix(PlayerControl __instance)
     {
+        if (__instance.IsRevived())
+        {
+            __instance.cosmetics.SetOutline(true,LaunchpadPalette.MedicColor);
+        }
+
         if (MeetingHud.Instance)
         {
             return;

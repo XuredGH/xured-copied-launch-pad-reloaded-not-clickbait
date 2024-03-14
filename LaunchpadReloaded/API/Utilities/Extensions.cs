@@ -1,6 +1,5 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Reflection;
-using Il2CppSystem.Collections.Generic;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Features;
 using Reactor.Utilities.Extensions;
@@ -11,7 +10,7 @@ namespace LaunchpadReloaded.API.Utilities;
 public static class Extensions
 {
     private static readonly ContactFilter2D Filter = ContactFilter2D.CreateLegacyFilter(Constants.NotShipMask, float.MinValue, float.MaxValue);
-    
+
     public static bool ButtonTimerEnabled(this PlayerControl playerControl)
     {
         return (playerControl.moveable || playerControl.petting) && !playerControl.inVent && !playerControl.shapeshifting && (!DestroyableSingleton<HudManager>.InstanceExists || !DestroyableSingleton<HudManager>.Instance.IsIntroDisplayed) && !MeetingHud.Instance && !PlayerCustomizationMenu.Instance && !ExileController.Instance && !IntroCutscene.Instance;
@@ -25,6 +24,11 @@ public static class Extensions
         }
 
         return HackingManager.Instance.HackedPlayers.Contains(playerInfo.PlayerId);
+    }
+
+    public static bool IsRevived(this PlayerControl player)
+    {
+        return RevivalManager.Instance.RevivedPlayers.Contains(player.PlayerId);
     }
 
     public static void HideBody(this DeadBody body)
@@ -75,11 +79,11 @@ public static class Extensions
         }
 
     }
-    
+
     public static DeadBody NearestDeadBody(this PlayerControl playerControl)
     {
-        var results = new List<Collider2D>();
-        Physics2D.OverlapCircle(playerControl.GetTruePosition(), playerControl.MaxReportDistance/4f, Filter, results);
+        var results = new Il2CppSystem.Collections.Generic.List<Collider2D>();
+        Physics2D.OverlapCircle(playerControl.GetTruePosition(), playerControl.MaxReportDistance / 4f, Filter, results);
         return results.ToArray()
             .Where(collider2D => collider2D.CompareTag("DeadBody"))
             .Select(collider2D => collider2D.GetComponent<DeadBody>())

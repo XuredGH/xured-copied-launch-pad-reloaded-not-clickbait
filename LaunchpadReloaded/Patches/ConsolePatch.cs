@@ -2,7 +2,6 @@
 using InnerNet;
 using LaunchpadReloaded.API.Gamemodes;
 using LaunchpadReloaded.API.Utilities;
-using LaunchpadReloaded.Features;
 
 namespace LaunchpadReloaded.Patches;
 
@@ -45,9 +44,45 @@ public static class ConsolePatch
         return true;
     }
 
-    [HarmonyPatch(typeof(MapConsole), nameof(MapConsole.CanUse))]
-    public static bool SystemCanUsePatch([HarmonyArgument(0)] GameData.PlayerInfo pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse)
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(SystemConsole), nameof(SystemConsole.CanUse))]
+    public static bool SystemCanUsePatch(SystemConsole __instance, [HarmonyArgument(0)] GameData.PlayerInfo pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse)
     {
-        return canUse = couldUse = !HackingManager.Instance.AnyActiveNodes();
+        if (AmongUsClient.Instance.GameState == InnerNetClient.GameStates.Started && ShipStatus.Instance)
+        {
+            if (CustomGamemodeManager.ActiveMode.CanUseSystemConsole(__instance))
+            {
+                return canUse = couldUse = !pc.IsHacked();
+            }
+            else
+            {
+                canUse = couldUse = false;
+                return false;
+            }
+        }
+
+        canUse = couldUse = true;
+        return true;
+    }
+
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(MapConsole), nameof(MapConsole.CanUse))]
+    public static bool MapCanUsePatch(MapConsole __instance, [HarmonyArgument(0)] GameData.PlayerInfo pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse)
+    {
+        if (AmongUsClient.Instance.GameState == InnerNetClient.GameStates.Started && ShipStatus.Instance)
+        {
+            if (CustomGamemodeManager.ActiveMode.CanUseMapConsole(__instance))
+            {
+                return canUse = couldUse = !pc.IsHacked();
+            }
+            else
+            {
+                canUse = couldUse = false;
+                return false;
+            }
+        }
+
+        canUse = couldUse = true;
+        return true;
     }
 }

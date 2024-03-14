@@ -1,5 +1,5 @@
-﻿using System;
-using System.Text;
+using System;
+using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Attributes;
@@ -20,9 +20,29 @@ public class JanitorRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
     public bool TargetsBodies => true;
     public LoadableAsset<Sprite> Icon => LaunchpadAssets.DragButton;
 
-    public StringBuilder SetTabText()
+    public static CustomNumberOption HideCooldown;
+    public static CustomNumberOption HideUses;
+    public static CustomOptionGroup Group;
+
+    public void CreateOptions()
     {
-        var taskStringBuilder = Helpers.CreateForRole(this);
-        return taskStringBuilder;
+        HideCooldown = new CustomNumberOption("Hide Bodies Cooldown",
+            defaultValue: 5,
+            range: new FloatRange(0, 120),
+            increment: 5,
+            suffixType: NumberSuffixes.Seconds,
+            role: typeof(JanitorRole));
+
+        HideUses = new CustomNumberOption("Hide Bodies Uses",
+            defaultValue: 3,
+            range: new FloatRange(1, 10),
+            increment: 1,
+            suffixType: NumberSuffixes.None,
+            role: typeof(JanitorRole));
+
+        Group = new CustomOptionGroup($"{RoleColor.ToTextColor()}Janitor</color>",
+            numberOpt: [HideCooldown, HideUses],
+            stringOpt: [],
+            toggleOpt: [], role: typeof(JanitorRole));
     }
 }

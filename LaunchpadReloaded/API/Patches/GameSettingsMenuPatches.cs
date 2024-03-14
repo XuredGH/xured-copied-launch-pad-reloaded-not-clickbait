@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
 using LaunchpadReloaded.API.GameOptions;
@@ -7,17 +7,26 @@ using Object = UnityEngine.Object;
 
 namespace LaunchpadReloaded.API.Patches;
 
-[HarmonyPatch(typeof(GameSettingMenu), "Start")]
+[HarmonyPatch(typeof(GameSettingMenu))]
 public static class GameSettingsMenuPatches
 {
-    public static void Prefix(GameSettingMenu __instance)
+    public static GameObject gameBtn;
+    public static GameObject roleBtn;
+
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(GameSettingMenu.Start))]
+    public static void StartPrefix(GameSettingMenu __instance)
     {
+        if (CustomOptionsTab.customTab != null) return;
         __instance.Tabs.transform.position += new Vector3(0.5f, 0, 0);
+        gameBtn = __instance.transform.FindChild("Header/Tabs/GameTab").gameObject;
+        roleBtn = __instance.transform.FindChild("Header/Tabs/RoleTab").gameObject;
 
         var numberOpt = __instance.RegularGameSettings.GetComponentInChildren<NumberOption>();
         var toggleOpt = Object.FindObjectOfType<ToggleOption>();
         var stringOpt = __instance.RegularGameSettings.GetComponentInChildren<StringOption>();
         var container = CustomOptionsTab.Initialize(__instance).transform;
+
 
         foreach (var group in CustomOptionsManager.CustomGroups.Where(group => group.AdvancedRole == null))
         {
@@ -34,6 +43,28 @@ public static class GameSettingsMenuPatches
         if (!numberOpt || !toggleOpt || !stringOpt)
         {
             Debug.LogError("OPTION PREFABS MISSING");
+        }
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(GameSettingMenu.Update))]
+    public static void UpdatePatch(GameSettingMenu __instance)
+    {
+        if (CustomGamemodeManager.ActiveMode == null) return;
+
+        gameBtn.SetActive(CustomGamemodeManager.ActiveMode.CanAccessSettingsTab());
+        roleBtn.SetActive(CustomGamemodeManager.ActiveMode.CanAccessRolesTab());
+
+        if (!CustomGamemodeManager.ActiveMode.CanAccessSettingsTab())
+        {
+            __instance.RegularGameSettings.SetActive(false);
+            __instance.RolesSettings.gameObject.SetActive(false);
+
+            CustomOptionsTab.customScreen.gameObject.SetActive(true);
+            CustomOptionsTab.rend.enabled = true;
+
+            __instance.GameSettingsHightlight.enabled = false;
+            __instance.RolesSettingsHightlight.enabled = false;
         }
     }
 
