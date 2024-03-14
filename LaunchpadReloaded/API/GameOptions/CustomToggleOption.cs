@@ -23,7 +23,7 @@ public class CustomToggleOption : AbstractGameOption
         Config.Value = newValue;
         Value = newValue;
 
-        ToggleOption behaviour = (ToggleOption)OptionBehaviour;
+        var behaviour = (ToggleOption)OptionBehaviour;
         if (behaviour) behaviour.CheckMark.enabled = Value;
     }
 

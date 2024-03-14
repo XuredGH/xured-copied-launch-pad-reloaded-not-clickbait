@@ -85,14 +85,14 @@ public static class CustomRoleManager
 
     public static TaskPanelBehaviour CreateRoleTab(ICustomRole role)
     {
-        TaskPanelBehaviour ogPanel = HudManager.Instance.TaskStuff.transform.FindChild("TaskPanel").gameObject.GetComponent<TaskPanelBehaviour>();
-        GameObject clonePanel = GameObject.Instantiate(ogPanel.gameObject, ogPanel.transform.parent);
+        var ogPanel = HudManager.Instance.TaskStuff.transform.FindChild("TaskPanel").gameObject.GetComponent<TaskPanelBehaviour>();
+        var clonePanel = GameObject.Instantiate(ogPanel.gameObject, ogPanel.transform.parent);
         clonePanel.name = "RolePanel";
 
-        TaskPanelBehaviour newPanel = clonePanel.GetComponent<TaskPanelBehaviour>();
+        var newPanel = clonePanel.GetComponent<TaskPanelBehaviour>();
         newPanel.open = false;
 
-        GameObject tab = newPanel.tab.gameObject;
+        var tab = newPanel.tab.gameObject;
         tab.GetComponentInChildren<TextTranslatorTMP>().Destroy();
 
         newPanel.transform.localPosition = ogPanel.transform.localPosition - new Vector3(0, 1, 0);
@@ -103,11 +103,11 @@ public static class CustomRoleManager
 
     public static void UpdateRoleTab(TaskPanelBehaviour panel, ICustomRole role)
     {
-        TextMeshPro tabText = panel.tab.gameObject.GetComponentInChildren<TextMeshPro>();
-        TaskPanelBehaviour ogPanel = HudManager.Instance.TaskStuff.transform.FindChild("TaskPanel").gameObject.GetComponent<TaskPanelBehaviour>();
+        var tabText = panel.tab.gameObject.GetComponentInChildren<TextMeshPro>();
+        var ogPanel = HudManager.Instance.TaskStuff.transform.FindChild("TaskPanel").gameObject.GetComponent<TaskPanelBehaviour>();
         if (tabText.text != role.RoleName) tabText.text = role.RoleName;
 
-        float y = ogPanel.taskText.textBounds.size.y + 1;
+        var y = ogPanel.taskText.textBounds.size.y + 1;
         panel.closedPosition = new Vector3(ogPanel.closedPosition.x, ogPanel.open ? y + 0.2f : 2f, ogPanel.closedPosition.z);
         panel.openPosition = new Vector3(ogPanel.openPosition.x, ogPanel.open ? y : 2f, ogPanel.openPosition.z);
 

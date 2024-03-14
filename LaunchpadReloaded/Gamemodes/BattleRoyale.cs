@@ -24,7 +24,7 @@ public class BattleRoyale : CustomGamemode
         var tasks = PlayerControl.LocalPlayer.myTasks;
         tasks.Clear();
 
-        Transform random = ShipStatus.Instance.DummyLocations.Random();
+        var random = ShipStatus.Instance.DummyLocations.Random();
 
         PlayerControl.LocalPlayer.NetTransform.RpcSnapTo(random.position);
         GenericRPC.RpcSetBodyType(PlayerControl.LocalPlayer, 6);
@@ -32,7 +32,7 @@ public class BattleRoyale : CustomGamemode
 
     public IEnumerator DeathNotification(PlayerControl player)
     {
-        string text = $"{player.Data.Color.ToTextColor()}{player.Data.PlayerName}</color> has <b>{Palette.ImpostorRed.ToTextColor()}DIED.</b></color>";
+        var text = $"{player.Data.Color.ToTextColor()}{player.Data.PlayerName}</color> has <b>{Palette.ImpostorRed.ToTextColor()}DIED.</b></color>";
         DeathNotif.text = text;
         DeathNotif.gameObject.SetActive(true);
         yield return new WaitForSeconds(3f);
@@ -71,7 +71,7 @@ public class BattleRoyale : CustomGamemode
 
     public override List<GameData.PlayerInfo> CalculateWinners()
     {
-        List<GameData.PlayerInfo> alivePlayers = GameData.Instance.AllPlayers.ToArray().Where(player => !player.Disconnected && !player.IsDead).ToList();
+        var alivePlayers = GameData.Instance.AllPlayers.ToArray().Where(player => !player.Disconnected && !player.IsDead).ToList();
         return alivePlayers;
     }
     public override bool ShowCustomRoleScreen() => true;

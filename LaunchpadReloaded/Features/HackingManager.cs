@@ -103,8 +103,8 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
         var node = Instance.Nodes.Find(node => node.Id == nodeId);
         Debug.Log(node.gameObject.transform.position.ToString());
         node.IsActive = value;
-        IEnumerable<GameData.PlayerInfo> hacker = GameData.Instance.AllPlayers.ToArray().Where(player => player.Role is HackerRole);
-        foreach (GameData.PlayerInfo player in hacker)
+        var hacker = GameData.Instance.AllPlayers.ToArray().Where(player => player.Role is HackerRole);
+        foreach (var player in hacker)
         {
             player.Object.SetName(player.PlayerName);
 

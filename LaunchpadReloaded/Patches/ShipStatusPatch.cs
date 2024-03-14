@@ -10,7 +10,7 @@ public static class ShipStatusPatch
     [HarmonyPatch(nameof(ShipStatus.Awake))]
     public static void MapLoadingPatch(ShipStatus __instance)
     {
-        GameObject managers = new GameObject("LaunchpadManagers");
+        var managers = new GameObject("LaunchpadManagers");
         managers.transform.SetParent(__instance.transform);
         managers.AddComponent<HackingManager>();
         managers.AddComponent<TrackingManager>();

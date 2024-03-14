@@ -22,9 +22,9 @@ public static class CustomOptionsManager
 
     public static void ResetToDefault()
     {
-        foreach (CustomNumberOption numberOpt in CustomNumberOptions) numberOpt.SetValue(numberOpt.Default);
-        foreach (CustomStringOption stringOpt in CustomStringOptions) stringOpt.SetValue(stringOpt.Default);
-        foreach (CustomToggleOption toggleOpt in CustomToggleOptions) toggleOpt.SetValue(toggleOpt.Default);
+        foreach (var numberOpt in CustomNumberOptions) numberOpt.SetValue(numberOpt.Default);
+        foreach (var stringOpt in CustomStringOptions) stringOpt.SetValue(stringOpt.Default);
+        foreach (var toggleOpt in CustomToggleOptions) toggleOpt.SetValue(toggleOpt.Default);
     }
 
     public static void HandleOptionsSync(bool[] toggles, float[] numbers, string[] strings)

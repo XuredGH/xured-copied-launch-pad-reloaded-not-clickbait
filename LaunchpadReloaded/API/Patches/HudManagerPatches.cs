@@ -51,7 +51,7 @@ public static class HudManagerPatches
         }
         else if (HackingManager.Instance && HackingManager.Instance.AnyActiveNodes())
         {
-            StringBuilder newB = new StringBuilder();
+            var newB = new StringBuilder();
             newB.Append(Color.green.ToTextColor());
             newB.Append(PlayerControl.LocalPlayer.Data.Role is HackerRole ?
                 "\n\nYou have hacked the crewmates! They will not be able to\ncomplete tasks or call meetings until they reverse the hack."

@@ -29,7 +29,7 @@ public class CustomStringOption : AbstractGameOption
         Config.Value = newValue;
         Value = Options[newValue];
 
-        StringOption behaviour = (StringOption)OptionBehaviour;
+        var behaviour = (StringOption)OptionBehaviour;
         if (behaviour) behaviour.Value = newValue;
     }
 
@@ -43,8 +43,8 @@ public class CustomStringOption : AbstractGameOption
 
     public void CreateStringOption(StringOption stringOption)
     {
-        List<StringNames> values = new List<StringNames>();
-        foreach (string val in Options)
+        var values = new List<StringNames>();
+        foreach (var val in Options)
         {
             values.Add(CustomStringName.CreateAndRegister(val));
         }

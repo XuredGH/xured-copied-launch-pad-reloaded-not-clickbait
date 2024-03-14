@@ -14,11 +14,11 @@ public static class TaskPanelPatch
     {
         if (__instance.gameObject.name != "RolePanel") return true;
         __instance.background.transform.localScale = __instance.taskText.textBounds.size.x > 0f ? new Vector3(__instance.taskText.textBounds.size.x + 0.4f, __instance.taskText.textBounds.size.y + 0.3f, 1f) : Vector3.zero;
-        Vector3 vector = __instance.background.sprite.bounds.extents;
+        var vector = __instance.background.sprite.bounds.extents;
         vector.y = -vector.y;
         vector = vector.Mul(__instance.background.transform.localScale);
         __instance.background.transform.localPosition = vector;
-        Vector3 vector2 = __instance.tab.sprite.bounds.extents;
+        var vector2 = __instance.tab.sprite.bounds.extents;
         vector2 = vector2.Mul(__instance.tab.transform.localScale);
         vector2.y = -vector2.y;
         vector2.x += vector.x * 2f;
@@ -27,7 +27,7 @@ public static class TaskPanelPatch
         {
             return false;
         }
-        Vector3 closePosition = new Vector3(-__instance.background.sprite.bounds.size.x * __instance.background.transform.localScale.x, __instance.closedPosition.y, __instance.closedPosition.z);
+        var closePosition = new Vector3(-__instance.background.sprite.bounds.size.x * __instance.background.transform.localScale.x, __instance.closedPosition.y, __instance.closedPosition.z);
         __instance.closedPosition = closePosition;
         if (__instance.open)
         {

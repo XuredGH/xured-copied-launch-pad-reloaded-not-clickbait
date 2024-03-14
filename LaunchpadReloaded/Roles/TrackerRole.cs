@@ -24,7 +24,7 @@ public class TrackerRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
 
     public StringBuilder SetTabText()
     {
-        StringBuilder taskStringBuilder = Helpers.CreateForRole(this);
+        var taskStringBuilder = Helpers.CreateForRole(this);
 
         if (TrackingManager.Instance.TrackedPlayer != null)
         {
@@ -40,7 +40,7 @@ public class TrackerRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
         }
 
         if (ScannerManager.Instance.Scanners.Count > 0) taskStringBuilder.AppendLine("<b>Created Scanners:</b>");
-        foreach (ScannerComponent component in ScannerManager.Instance.Scanners)
+        foreach (var component in ScannerManager.Instance.Scanners)
         {
             if (component.Room != null) taskStringBuilder.AppendLine($"Scanner {component.Id} ({component.Room.RoomId})");
         }

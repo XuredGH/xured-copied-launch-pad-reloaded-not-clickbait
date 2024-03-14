@@ -33,7 +33,7 @@ public class CustomNumberOption : AbstractGameOption
         Config.Value = newValue;
         Value = newValue;
 
-        NumberOption behaviour = (NumberOption)OptionBehaviour;
+        var behaviour = (NumberOption)OptionBehaviour;
         if (behaviour) behaviour.Value = Value;
     }
 
@@ -54,7 +54,7 @@ public class CustomNumberOption : AbstractGameOption
 
     protected override void OnValueChanged(OptionBehaviour optionBehaviour)
     {
-        float value = Mathf.Clamp(optionBehaviour.GetFloat(), Range.min, Range.max);
+        var value = Mathf.Clamp(optionBehaviour.GetFloat(), Range.min, Range.max);
         SetValue(value);
         if (ChangedEvent != null) ChangedEvent(value);
     }

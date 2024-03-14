@@ -36,7 +36,7 @@ public class CustomOptionGroup
         Options.AddRange(CustomToggleOptions);
         Options.AddRange(CustomStringOptions);
 
-        foreach (AbstractGameOption option in Options)
+        foreach (var option in Options)
         {
             Debug.Log(option.Title);
             option.Group = this;

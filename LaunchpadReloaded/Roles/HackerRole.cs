@@ -19,7 +19,7 @@ public class HackerRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
     public LoadableAsset<Sprite> Icon => LaunchpadAssets.HackButton;
     public StringBuilder SetTabText()
     {
-        StringBuilder taskStringBuilder = Helpers.CreateForRole(this);
+        var taskStringBuilder = Helpers.CreateForRole(this);
         return taskStringBuilder;
     }
 }

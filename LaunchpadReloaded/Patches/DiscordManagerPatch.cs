@@ -12,7 +12,7 @@ public static class DiscordManagerPatch
     public static bool StartPatch(DiscordManager __instance)
     {
         __instance.presence = new Discord.Discord(1217217004474339418, 1UL);
-        ActivityManager activityManager = __instance.presence.GetActivityManager();
+        var activityManager = __instance.presence.GetActivityManager();
         activityManager.RegisterSteam(945360U);
         activityManager.OnActivityJoin = (Action<string>)delegate (string joinSecret)
         {

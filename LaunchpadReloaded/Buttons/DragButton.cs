@@ -59,7 +59,7 @@ public class DragButton : CustomActionButton
 
     public bool CanDrop()
     {
-        foreach (Collider2D collider2D in Physics2D.OverlapCircleAll(PlayerControl.LocalPlayer.GetTruePosition(), PlayerControl.LocalPlayer.MaxReportDistance, Constants.PlayersOnlyMask))
+        foreach (var collider2D in Physics2D.OverlapCircleAll(PlayerControl.LocalPlayer.GetTruePosition(), PlayerControl.LocalPlayer.MaxReportDistance, Constants.PlayersOnlyMask))
         {
             if (!(collider2D.tag != "DeadBody")) return true;
         }

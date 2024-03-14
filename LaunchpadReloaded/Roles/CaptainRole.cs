@@ -20,7 +20,7 @@ public class CaptainRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
 
     public StringBuilder SetTabText()
     {
-        StringBuilder taskStringBuilder = Helpers.CreateForRole(this);
+        var taskStringBuilder = Helpers.CreateForRole(this);
         return taskStringBuilder;
     }
 }

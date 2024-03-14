@@ -12,7 +12,7 @@ public static class IntroCutscenePatch
     {
         if (CustomGamemodeManager.ActiveMode.ShowCustomRoleScreen())
         {
-            CustomGamemode mode = CustomGamemodeManager.ActiveMode;
+            var mode = CustomGamemodeManager.ActiveMode;
             __instance.TeamTitle.text = $"<size=70%>{mode.Name}</size>\n<size=20%>{mode.Description}</size>";
         }
     }

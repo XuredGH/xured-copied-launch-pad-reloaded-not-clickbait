@@ -22,7 +22,7 @@ public class ScannerManager(IntPtr ptr) : MonoBehaviour(ptr)
     [MethodRpc((uint)LaunchpadRPC.CreateScanner)]
     public static void RpcCreateScanner(PlayerControl playerControl, float x, float y)
     {
-        ScannerComponent newScanner = Instance.CreateScanner(playerControl, new Vector3(x, y, 0.0057f));
+        var newScanner = Instance.CreateScanner(playerControl, new Vector3(x, y, 0.0057f));
         Instance.Scanners.Add(newScanner);
     }
 

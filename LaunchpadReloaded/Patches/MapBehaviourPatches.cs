@@ -16,7 +16,7 @@ public class MapBehaviourPatches
     [HarmonyPatch(nameof(MapBehaviour.ShowSabotageMap))]
     public static bool ShowSabotagePatch(MapBehaviour __instance)
     {
-        bool shouldShow = CustomGamemodeManager.ActiveMode.ShouldShowSabotageMap(__instance);
+        var shouldShow = CustomGamemodeManager.ActiveMode.ShouldShowSabotageMap(__instance);
         if (!shouldShow)
         {
             __instance.ShowNormalMap();

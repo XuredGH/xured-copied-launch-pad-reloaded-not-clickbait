@@ -19,7 +19,7 @@ public static class GameSettingsMenuPatches
         var stringOpt = __instance.RegularGameSettings.GetComponentInChildren<StringOption>();
         var container = CustomOptionsTab.Initialize(__instance).transform;
 
-        foreach (CustomOptionGroup group in CustomOptionsManager.CustomGroups.Where(group => group.AdvancedRole == null))
+        foreach (var group in CustomOptionsManager.CustomGroups.Where(group => group.AdvancedRole == null))
         {
             group.Header = CustomOptionsTab.CreateHeader(toggleOpt, container, group.Title);
             CreateOptionsFor(__instance, toggleOpt, numberOpt, stringOpt, container,

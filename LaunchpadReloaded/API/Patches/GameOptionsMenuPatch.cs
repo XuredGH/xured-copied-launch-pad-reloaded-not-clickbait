@@ -24,13 +24,13 @@ public static class GameOptionsMenuPatch
     [HarmonyPatch("Update")]
     public static void UpdatePostfix(GameOptionsMenu __instance)
     {
-        GameSettingMenu menu = GameObject.FindObjectsOfType<GameSettingMenu>().First();
+        var menu = GameObject.FindObjectsOfType<GameSettingMenu>().First();
         if (menu.RegularGameSettings.active || menu.RolesSettings.gameObject.active) return;
 
-        float startOffset = 2.15f;
+        var startOffset = 2.15f;
         __instance.GetComponentInParent<Scroller>().ContentYBounds.max = startOffset + __instance.Children.Count * 0.5f;
 
-        foreach (CustomOptionGroup group in CustomOptionsManager.CustomGroups.Where(group => group.AdvancedRole == null))
+        foreach (var group in CustomOptionsManager.CustomGroups.Where(group => group.AdvancedRole == null))
         {
             if (group.Header == null) continue;
 
@@ -38,7 +38,7 @@ public static class GameOptionsMenuPatch
             startOffset -= 0.5f;
             group.Header.transform.localPosition = new Vector3(group.Header.transform.localPosition.x, startOffset, group.Header.transform.localPosition.z);
 
-            foreach (AbstractGameOption option in group.Options)
+            foreach (var option in group.Options)
             {
                 if (!option.OptionBehaviour) continue;
                 option.OptionBehaviour.enabled = !group.Hidden() && !option.Hidden();
@@ -49,7 +49,7 @@ public static class GameOptionsMenuPatch
             }
         }
 
-        foreach (AbstractGameOption option in CustomOptionsManager.CustomOptions.Where(option => option.Group == null))
+        foreach (var option in CustomOptionsManager.CustomOptions.Where(option => option.Group == null))
         {
             if (!option.OptionBehaviour) continue;
 

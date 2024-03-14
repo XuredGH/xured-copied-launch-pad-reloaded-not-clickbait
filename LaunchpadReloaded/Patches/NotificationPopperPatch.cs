@@ -19,7 +19,7 @@ public static class NotificationPopperPatch
         }
         
         if (__instance.gameObject.name != NewPopper.gameObject.name) return;
-        Vector3 pos = HudManager.Instance.TaskStuff.transform.FindChild("ProgressTracker").transform.localPosition;
+        var pos = HudManager.Instance.TaskStuff.transform.FindChild("ProgressTracker").transform.localPosition;
         __instance.transform.localPosition = new Vector3(pos.x + 2.5f, pos.y + 0.1f, __instance.zPos);
     }
 }

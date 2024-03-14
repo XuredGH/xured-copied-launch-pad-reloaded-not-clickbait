@@ -23,7 +23,7 @@ public class TrackingManager(IntPtr ptr) : MonoBehaviour(ptr)
     {
         if (Timer <= 0f)
         {
-            Vector3 vector = TrackedPlayer.transform.position;
+            var vector = TrackedPlayer.transform.position;
             vector /= ShipStatus.Instance.MapScale;
             vector.x *= Mathf.Sign(ShipStatus.Instance.transform.localScale.x);
             vector.z = -1f;

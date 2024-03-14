@@ -8,14 +8,14 @@ public static class WinningPatch
 {
     public static void Prefix()
     {
-        CustomGamemode gamemode = CustomGamemodeManager.ActiveMode;
+        var gamemode = CustomGamemodeManager.ActiveMode;
         if (gamemode.CalculateWinners() == null) return;
 
         TempData.winners.Clear();
 
         foreach (var winner in gamemode.CalculateWinners())
         {
-            WinningPlayerData data = new WinningPlayerData(winner);
+            var data = new WinningPlayerData(winner);
             data.IsYou = winner.PlayerId == PlayerControl.LocalPlayer.PlayerId;
             TempData.winners.Add(data);
         }
