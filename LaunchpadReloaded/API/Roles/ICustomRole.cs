@@ -9,6 +9,8 @@ namespace LaunchpadReloaded.API.Roles;
 public interface ICustomRole
 {
     string RoleName { get; }
+ 
+    ushort RoleId { get; }
 
     string RoleDescription { get; }
 
@@ -17,6 +19,7 @@ public interface ICustomRole
     Color RoleColor { get; }
 
     RoleTeamTypes Team { get; }
+    
     LoadableAsset<Sprite> Icon => LaunchpadAssets.NoImage;
 
     ConfigDefinition NumConfigDefinition => new("Roles", $"Num{RoleName}");

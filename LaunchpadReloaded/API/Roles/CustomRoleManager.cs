@@ -46,28 +46,29 @@ public static class CustomRoleManager
 
         var roleBehaviour = (RoleBehaviour) new GameObject(roleType.Name).DontDestroy().AddComponent(Il2CppType.From(roleType));
 
-        if (roleBehaviour is ICustomRole customRole)
+        if (roleBehaviour is not ICustomRole customRole)
         {
-            var roleId = (ushort)(Enum.GetNames<RoleTypes>().Length + CustomRoles.Count);
-            roleBehaviour.Role = (RoleTypes)roleId;
-            roleBehaviour.TeamType = customRole.Team;
-            roleBehaviour.NameColor = customRole.RoleColor;
-            roleBehaviour.StringName = CustomStringName.CreateAndRegister(customRole.RoleName);
-            roleBehaviour.BlurbName = CustomStringName.CreateAndRegister(customRole.RoleDescription);
-            roleBehaviour.BlurbNameLong = CustomStringName.CreateAndRegister(customRole.RoleLongDescription);
-            roleBehaviour.AffectedByLightAffectors = customRole.AffectedByLight;
-            roleBehaviour.CanBeKilled = customRole.CanGetKilled;
-            roleBehaviour.CanUseKillButton = customRole.CanUseKill;
-            roleBehaviour.CanVent = customRole.CanUseVent;
-            roleBehaviour.DefaultGhostRole = customRole.GhostRole;
-            roleBehaviour.MaxCount = 15;
-            CustomRoles.Add(roleId,roleBehaviour);
-
-            var config = PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config;
-            config.Bind(customRole.NumConfigDefinition,1);
-            config.Bind(customRole.ChanceConfigDefinition, 100);
+            return;
         }
-        
+
+        roleBehaviour.Role = (RoleTypes)customRole.RoleId;
+        roleBehaviour.TeamType = customRole.Team;
+        roleBehaviour.NameColor = customRole.RoleColor;
+        roleBehaviour.StringName = CustomStringName.CreateAndRegister(customRole.RoleName);
+        roleBehaviour.BlurbName = CustomStringName.CreateAndRegister(customRole.RoleDescription);
+        roleBehaviour.BlurbNameLong = CustomStringName.CreateAndRegister(customRole.RoleLongDescription);
+        roleBehaviour.AffectedByLightAffectors = customRole.AffectedByLight;
+        roleBehaviour.CanBeKilled = customRole.CanGetKilled;
+        roleBehaviour.CanUseKillButton = customRole.CanUseKill;
+        roleBehaviour.CanVent = customRole.CanUseVent;
+        roleBehaviour.DefaultGhostRole = customRole.GhostRole;
+        roleBehaviour.MaxCount = 15;
+        CustomRoles.Add(customRole.RoleId,roleBehaviour);
+
+        var config = PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config;
+        config.Bind(customRole.NumConfigDefinition,1);
+        config.Bind(customRole.ChanceConfigDefinition, 100);
+
     }
     
     public static bool GetCustomRoleBehaviour(RoleTypes roleType, out ICustomRole result)

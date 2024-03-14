@@ -12,13 +12,10 @@ namespace LaunchpadReloaded.Roles;
 public class TrackerRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
 {
     public string RoleName => "Tracker";
-
+    public ushort RoleId => (ushort)LaunchpadRoles.Tracker;
     public string RoleDescription => "Track a player's movements.";
-
     public string RoleLongDescription => "Place a tracker on a player to track their movements on the map.\nPlace scanners to detect nearby player movement.\n";
-
     public Color RoleColor => LaunchpadPalette.TrackerColor;
-
     public RoleTeamTypes Team => RoleTeamTypes.Crewmate;
     public LoadableAsset<Sprite> Icon => LaunchpadAssets.TrackButton;
 

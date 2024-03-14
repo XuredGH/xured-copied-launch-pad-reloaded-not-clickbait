@@ -11,6 +11,7 @@ namespace LaunchpadReloaded.Roles;
 public class HackerRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
 {
     public string RoleName => "Hacker";
+    public ushort RoleId => (ushort)LaunchpadRoles.Hacker;
     public string RoleDescription => "Hack meetings and sabotage the crewmates";
     public string RoleLongDescription => "Hack crewmates and make them unable to do tasks\nAnd view the admin map from anywhere!";
     public Color RoleColor => LaunchpadPalette.HackerColor;
