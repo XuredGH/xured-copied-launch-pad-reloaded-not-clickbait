@@ -12,7 +12,11 @@ public static class TaskPanelPatch
     [HarmonyPatch(nameof(TaskPanelBehaviour.Update))]
     public static bool UpdatePrefix(TaskPanelBehaviour __instance)
     {
-        if (__instance.gameObject.name != "RolePanel") return true;
+        if (__instance.gameObject.name != "RolePanel")
+        {
+            return true;
+        }
+
         __instance.background.transform.localScale = __instance.taskText.textBounds.size.x > 0f ? new Vector3(__instance.taskText.textBounds.size.x + 0.4f, __instance.taskText.textBounds.size.y + 0.3f, 1f) : Vector3.zero;
         var vector = __instance.background.sprite.bounds.extents;
         vector.y = -vector.y;

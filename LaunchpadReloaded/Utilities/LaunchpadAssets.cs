@@ -48,9 +48,15 @@ public class LoadableAsset<T>(string name, bool useBundle = true)
 
     public T LoadAsset()
     {
-        if (_loadedAsset != null) return _loadedAsset;
+        if (_loadedAsset != null)
+        {
+            return _loadedAsset;
+        }
 
-        if (UseBundle) return _loadedAsset = LaunchpadAssets.Bundle.LoadAsset<T>(Name);
+        if (UseBundle)
+        {
+            return _loadedAsset = LaunchpadAssets.Bundle.LoadAsset<T>(Name);
+        }
 
         if (typeof(T)==typeof(Sprite))
         {

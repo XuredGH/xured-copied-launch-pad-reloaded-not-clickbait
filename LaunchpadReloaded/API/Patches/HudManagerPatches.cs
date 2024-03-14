@@ -25,14 +25,23 @@ public static class HudManagerPatches
         if (!ShipStatus.Instance)
         {
             if (Input.GetKeyDown(KeyCode.Tab))
+            {
                 ToHudStringPatch.ShowCustom = !ToHudStringPatch.ShowCustom;
+            }
 
             var numPlayers = GameData.Instance ? GameData.Instance.PlayerCount : 10;
             HudManager.Instance.GameSettings.text = GameOptionsManager.Instance.CurrentGameOptions.ToHudString(numPlayers);
         }
 
-        if (!PlayerControl.LocalPlayer) return;
-        if (AmongUsClient.Instance.GameState != InnerNetClient.GameStates.Started && !ShipStatus.Instance) return;
+        if (!PlayerControl.LocalPlayer)
+        {
+            return;
+        }
+
+        if (AmongUsClient.Instance.GameState != InnerNetClient.GameStates.Started && !ShipStatus.Instance)
+        {
+            return;
+        }
 
         CustomGamemodeManager.ActiveMode.HudUpdate(__instance);
 
@@ -47,7 +56,10 @@ public static class HudManagerPatches
             __instance.tasksString.Append("</color>");
             __instance.TaskPanel.SetTaskText(__instance.tasksString.ToString());
 
-            if (_roleTab != null) _roleTab.gameObject.Destroy();
+            if (_roleTab != null)
+            {
+                _roleTab.gameObject.Destroy();
+            }
         }
         else if (HackingManager.Instance && HackingManager.Instance.AnyActiveNodes())
         {
@@ -61,7 +73,10 @@ public static class HudManagerPatches
             __instance.TaskPanel.SetTaskText(__instance.tasksString.ToString() + newB);
         }
 
-        if (HackingManager.Instance && HackingManager.Instance.AnyActiveNodes()) __instance.ReportButton.SetDisabled();
+        if (HackingManager.Instance && HackingManager.Instance.AnyActiveNodes())
+        {
+            __instance.ReportButton.SetDisabled();
+        }
 
         if (PlayerControl.LocalPlayer.Data.Role is ICustomRole customRole)
         {
@@ -69,22 +84,33 @@ public static class HudManagerPatches
 
             if (PlayerControl.LocalPlayer.Data.IsHacked())
             {
-                if (_roleTab) _roleTab.gameObject.Destroy();
+                if (_roleTab)
+                {
+                    _roleTab.gameObject.Destroy();
+                }
+
                 return;
             }
 
             if (customRole.SetTabText() != null)
             {
                 if (_roleTab == null)
+                {
                     _roleTab = CustomRoleManager.CreateRoleTab(customRole);
+                }
                 else
+                {
                     CustomRoleManager.UpdateRoleTab(_roleTab, customRole);
+                }
             }
         }
         else
         {
             // If not custom role and roleTab exists delete roletab (could happen in freeplay mode if switching roles)
-            if (_roleTab != null) _roleTab.gameObject.Destroy();
+            if (_roleTab != null)
+            {
+                _roleTab.gameObject.Destroy();
+            }
         }
     }
 
@@ -137,7 +163,10 @@ public static class HudManagerPatches
             return;
         }
 
-        if (_roleTab) _roleTab.gameObject.SetActive(isActive);
+        if (_roleTab)
+        {
+            _roleTab.gameObject.SetActive(isActive);
+        }
 
         foreach (var button in CustomButtonManager.CustomButtons)
         {

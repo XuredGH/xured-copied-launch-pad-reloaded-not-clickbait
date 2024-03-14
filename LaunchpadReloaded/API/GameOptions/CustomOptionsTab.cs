@@ -97,10 +97,16 @@ public static class CustomOptionsTab
         var position = transform.localPosition;
 
         var checkBox = header.transform.FindChild("CheckBox")?.gameObject;
-        if (checkBox) checkBox.Destroy();
+        if (checkBox)
+        {
+            checkBox.Destroy();
+        }
 
         var background = header.transform.FindChild("Background")?.gameObject;
-        if (background) background.Destroy();
+        if (background)
+        {
+            background.Destroy();
+        }
 
         header.GetComponent<OptionBehaviour>().Destroy();
         return header.gameObject;

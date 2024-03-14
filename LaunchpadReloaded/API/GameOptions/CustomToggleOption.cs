@@ -24,13 +24,19 @@ public class CustomToggleOption : AbstractGameOption
         Value = newValue;
 
         var behaviour = (ToggleOption)OptionBehaviour;
-        if (behaviour) behaviour.CheckMark.enabled = Value;
+        if (behaviour)
+        {
+            behaviour.CheckMark.enabled = Value;
+        }
     }
 
     protected override void OnValueChanged(OptionBehaviour optionBehaviour)
     {
         SetValue(optionBehaviour.GetBool());
-        if (ChangedEvent != null) ChangedEvent(optionBehaviour.GetBool());
+        if (ChangedEvent != null)
+        {
+            ChangedEvent(optionBehaviour.GetBool());
+        }
     }
 
     public void CreateToggleOption(ToggleOption toggleOption)

@@ -39,10 +39,17 @@ public class TrackerRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
             }
         }
 
-        if (ScannerManager.Instance.Scanners.Count > 0) taskStringBuilder.AppendLine("<b>Created Scanners:</b>");
+        if (ScannerManager.Instance.Scanners.Count > 0)
+        {
+            taskStringBuilder.AppendLine("<b>Created Scanners:</b>");
+        }
+
         foreach (var component in ScannerManager.Instance.Scanners)
         {
-            if (component.Room != null) taskStringBuilder.AppendLine($"Scanner {component.Id} ({component.Room.RoomId})");
+            if (component.Room != null)
+            {
+                taskStringBuilder.AppendLine($"Scanner {component.Id} ({component.Room.RoomId})");
+            }
         }
         return taskStringBuilder;
     }

@@ -105,7 +105,10 @@ public static class CustomRoleManager
     {
         var tabText = panel.tab.gameObject.GetComponentInChildren<TextMeshPro>();
         var ogPanel = HudManager.Instance.TaskStuff.transform.FindChild("TaskPanel").gameObject.GetComponent<TaskPanelBehaviour>();
-        if (tabText.text != role.RoleName) tabText.text = role.RoleName;
+        if (tabText.text != role.RoleName)
+        {
+            tabText.text = role.RoleName;
+        }
 
         var y = ogPanel.taskText.textBounds.size.y + 1;
         panel.closedPosition = new Vector3(ogPanel.closedPosition.x, ogPanel.open ? y + 0.2f : 2f, ogPanel.closedPosition.z);

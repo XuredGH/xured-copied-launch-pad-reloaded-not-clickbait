@@ -42,7 +42,10 @@ public static class GameSettingsMenuPatches
     {
         foreach (var customToggleOption in toggles)
         {
-            if (customToggleOption.AdvancedRole is not null || (customToggleOption.OptionBehaviour)) continue;
+            if (customToggleOption.AdvancedRole is not null || (customToggleOption.OptionBehaviour))
+            {
+                continue;
+            }
 
             var newOpt = Object.Instantiate(toggleOpt, container);
             customToggleOption.CreateToggleOption(newOpt);
@@ -51,7 +54,10 @@ public static class GameSettingsMenuPatches
 
         foreach (var customNumberOption in numbers)
         {
-            if (customNumberOption.AdvancedRole is not null || (customNumberOption.OptionBehaviour)) continue;
+            if (customNumberOption.AdvancedRole is not null || (customNumberOption.OptionBehaviour))
+            {
+                continue;
+            }
 
             var newOpt = Object.Instantiate(numberOpt, container);
             customNumberOption.CreateNumberOption(newOpt);
@@ -60,7 +66,10 @@ public static class GameSettingsMenuPatches
 
         foreach (var customStringOption in strings)
         {
-            if (customStringOption.AdvancedRole is not null || (customStringOption.OptionBehaviour)) continue;
+            if (customStringOption.AdvancedRole is not null || (customStringOption.OptionBehaviour))
+            {
+                continue;
+            }
 
             var newOpt = Object.Instantiate(stringOpt, container);
             customStringOption.CreateStringOption(newOpt);

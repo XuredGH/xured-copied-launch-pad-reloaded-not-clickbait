@@ -42,16 +42,26 @@ public static class ToHudStringPatch
 
             foreach (var group in groupsWithoutRoles)
             {
-                if (group.Hidden()) continue;
+                if (group.Hidden())
+                {
+                    continue;
+                }
 
                 sb.AppendLine($"<size=110%><b>{group.Title}</b></size>");
                 AddOptions(sb, group.CustomNumberOptions, group.CustomStringOptions, group.CustomToggleOptions);
                 sb.Append("\n");
             }
-            if (groupsWithRoles.Count() > 0) sb.AppendLine("<size=120%><b>Roles</b></size>");
+            if (groupsWithRoles.Count() > 0)
+            {
+                sb.AppendLine("<size=120%><b>Roles</b></size>");
+            }
+
             foreach (var group in groupsWithRoles)
             {
-                if (group.Hidden()) continue;
+                if (group.Hidden())
+                {
+                    continue;
+                }
 
                 sb.AppendLine($"<size=90%><b>{group.Title}</b></size><size=70%>");
                 AddOptions(sb, group.CustomNumberOptions, group.CustomStringOptions, group.CustomToggleOptions);

@@ -30,7 +30,10 @@ public class CustomStringOption : AbstractGameOption
         Value = Options[newValue];
 
         var behaviour = (StringOption)OptionBehaviour;
-        if (behaviour) behaviour.Value = newValue;
+        if (behaviour)
+        {
+            behaviour.Value = newValue;
+        }
     }
 
     public void SetValue(string newValue) => SetValue(Options.ToList().IndexOf(newValue));
@@ -38,7 +41,10 @@ public class CustomStringOption : AbstractGameOption
     protected override void OnValueChanged(OptionBehaviour optionBehaviour)
     {
         SetValue(optionBehaviour.GetInt());
-        if (ChangedEvent != null) ChangedEvent(optionBehaviour.GetInt());
+        if (ChangedEvent != null)
+        {
+            ChangedEvent(optionBehaviour.GetInt());
+        }
     }
 
     public void CreateStringOption(StringOption stringOption)

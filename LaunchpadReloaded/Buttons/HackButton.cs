@@ -21,7 +21,11 @@ public class HackButton : CustomActionButton
     {
         foreach (var player in PlayerControl.AllPlayerControls)
         {
-            if (player.Data.Role is HackerRole) continue;
+            if (player.Data.Role is HackerRole)
+            {
+                continue;
+            }
+
             HackingManager.RpcHackPlayer(player);
         }
 

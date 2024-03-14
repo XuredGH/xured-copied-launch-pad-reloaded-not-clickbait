@@ -15,7 +15,10 @@ public static class PlayerControlPatches
     [HarmonyPatch("FixedUpdate")]
     public static void FixedUpdatePostfix(PlayerControl __instance)
     {
-        if (MeetingHud.Instance) return;
+        if (MeetingHud.Instance)
+        {
+            return;
+        }
 
         if (__instance.Data.IsHacked() || (HackingManager.Instance && HackingManager.Instance.AnyActiveNodes() && __instance.Data.Role is HackerRole))
         {
@@ -25,7 +28,10 @@ public static class PlayerControlPatches
             __instance.cosmetics.gameObject.SetActive(false);
         }
 
-        if (!__instance.AmOwner) return;
+        if (!__instance.AmOwner)
+        {
+            return;
+        }
 
         foreach (var button in CustomButtonManager.CustomButtons)
         {

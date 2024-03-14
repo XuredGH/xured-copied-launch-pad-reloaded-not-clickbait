@@ -88,7 +88,10 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
         nodesParent.transform.SetParent(shipStatus.transform);
 
         var nodePositions = Instance.MapNodePositions[shipStatus.Type];
-        if (shipStatus.TryCast<AirshipStatus>()) nodePositions = Instance.AirshipPositions;
+        if (shipStatus.TryCast<AirshipStatus>())
+        {
+            nodePositions = Instance.AirshipPositions;
+        }
 
         for (var i = 0; i < nodePositions.Length; i++)
         {
@@ -108,8 +111,14 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
         {
             player.Object.SetName(player.PlayerName);
 
-            if (!value) player.Object.SetColor((byte)player.DefaultOutfit.ColorId);
-            else player.Object.RawSetColor(15);
+            if (!value)
+            {
+                player.Object.SetColor((byte)player.DefaultOutfit.ColorId);
+            }
+            else
+            {
+                player.Object.RawSetColor(15);
+            }
 
             player.Object.cosmetics.gameObject.SetActive(!value);
         }

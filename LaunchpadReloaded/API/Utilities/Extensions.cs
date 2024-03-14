@@ -19,7 +19,11 @@ public static class Extensions
 
     public static bool IsHacked(this GameData.PlayerInfo playerInfo)
     {
-        if (!HackingManager.Instance) return false;
+        if (!HackingManager.Instance)
+        {
+            return false;
+        }
+
         return HackingManager.Instance.HackedPlayers.Contains(playerInfo.PlayerId);
     }
 
@@ -85,22 +89,36 @@ public static class Extensions
     public static PlayerControl GetClosestPlayer(this PlayerControl playerControl, bool includeImpostors, float distance)
     {
         PlayerControl result = null;
-        if (!ShipStatus.Instance) return null;
+        if (!ShipStatus.Instance)
+        {
+            return null;
+        }
 
         var truePosition = playerControl.GetTruePosition();
 
         foreach (var playerInfo in GameData.Instance.AllPlayers)
         {
             if (playerInfo.Disconnected || playerInfo.PlayerId == playerControl.PlayerId ||
-                playerInfo.IsDead || (!includeImpostors && playerInfo.Role.IsImpostor)) continue;
+                playerInfo.IsDead || (!includeImpostors && playerInfo.Role.IsImpostor))
+            {
+                continue;
+            }
 
             var @object = playerInfo.Object;
-            if (!@object) continue;
+            if (!@object)
+            {
+                continue;
+            }
+
             var vector = @object.GetTruePosition() - truePosition;
             var magnitude = vector.magnitude;
             if (!(magnitude <= distance) || PhysicsHelpers.AnyNonTriggersBetween(truePosition,
                 vector.normalized,
-                magnitude, LayerMask.GetMask("Ship", "Objects"))) continue;
+                magnitude, LayerMask.GetMask("Ship", "Objects")))
+            {
+                continue;
+            }
+
             result = @object;
             distance = magnitude;
         }

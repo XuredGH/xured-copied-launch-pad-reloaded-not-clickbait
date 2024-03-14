@@ -15,7 +15,11 @@ public static class GameOptionsMenuPatch
     {
         foreach (var customOption in CustomOptionsManager.CustomOptions)
         {
-            if (customOption.AdvancedRole is not null) continue;
+            if (customOption.AdvancedRole is not null)
+            {
+                continue;
+            }
+
             customOption.OptionBehaviour.OnValueChanged = (Action<OptionBehaviour>)customOption.ValueChanged;
         }
     }
@@ -25,14 +29,20 @@ public static class GameOptionsMenuPatch
     public static void UpdatePostfix(GameOptionsMenu __instance)
     {
         var menu = GameObject.FindObjectsOfType<GameSettingMenu>().First();
-        if (menu.RegularGameSettings.active || menu.RolesSettings.gameObject.active) return;
+        if (menu.RegularGameSettings.active || menu.RolesSettings.gameObject.active)
+        {
+            return;
+        }
 
         var startOffset = 2.15f;
         __instance.GetComponentInParent<Scroller>().ContentYBounds.max = startOffset + __instance.Children.Count * 0.5f;
 
         foreach (var group in CustomOptionsManager.CustomGroups.Where(group => group.AdvancedRole == null))
         {
-            if (group.Header == null) continue;
+            if (group.Header == null)
+            {
+                continue;
+            }
 
             group.Header.SetActive(!group.Hidden());
             startOffset -= 0.5f;
@@ -40,7 +50,11 @@ public static class GameOptionsMenuPatch
 
             foreach (var option in group.Options)
             {
-                if (!option.OptionBehaviour) continue;
+                if (!option.OptionBehaviour)
+                {
+                    continue;
+                }
+
                 option.OptionBehaviour.enabled = !group.Hidden() && !option.Hidden();
                 option.OptionBehaviour.gameObject.SetActive(!group.Hidden() && !option.Hidden());
 
@@ -51,7 +65,10 @@ public static class GameOptionsMenuPatch
 
         foreach (var option in CustomOptionsManager.CustomOptions.Where(option => option.Group == null))
         {
-            if (!option.OptionBehaviour) continue;
+            if (!option.OptionBehaviour)
+            {
+                continue;
+            }
 
             option.OptionBehaviour.enabled = !option.Hidden();
             option.OptionBehaviour.gameObject.SetActive(!option.Hidden());

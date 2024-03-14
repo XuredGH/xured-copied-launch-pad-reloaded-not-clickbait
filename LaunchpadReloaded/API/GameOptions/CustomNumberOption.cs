@@ -34,7 +34,10 @@ public class CustomNumberOption : AbstractGameOption
         Value = newValue;
 
         var behaviour = (NumberOption)OptionBehaviour;
-        if (behaviour) behaviour.Value = Value;
+        if (behaviour)
+        {
+            behaviour.Value = Value;
+        }
     }
 
     public void CreateNumberOption(NumberOption numberOption)
@@ -56,7 +59,10 @@ public class CustomNumberOption : AbstractGameOption
     {
         var value = Mathf.Clamp(optionBehaviour.GetFloat(), Range.min, Range.max);
         SetValue(value);
-        if (ChangedEvent != null) ChangedEvent(value);
+        if (ChangedEvent != null)
+        {
+            ChangedEvent(value);
+        }
     }
 
 }

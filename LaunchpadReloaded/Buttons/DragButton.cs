@@ -61,7 +61,10 @@ public class DragButton : CustomActionButton
     {
         foreach (var collider2D in Physics2D.OverlapCircleAll(PlayerControl.LocalPlayer.GetTruePosition(), PlayerControl.LocalPlayer.MaxReportDistance, Constants.PlayersOnlyMask))
         {
-            if (!(collider2D.tag != "DeadBody")) return true;
+            if (!(collider2D.tag != "DeadBody"))
+            {
+                return true;
+            }
         }
         return false;
     }
@@ -71,7 +74,10 @@ public class DragButton : CustomActionButton
         if (DragManager.IsDragging(PlayerControl.LocalPlayer.PlayerId))
         {
             DragManager.RpcStopDragging(PlayerControl.LocalPlayer);
-            if (!CanDrop()) DragManager.RpcStartDragging(PlayerControl.LocalPlayer, DeadBodyTarget.ParentId);
+            if (!CanDrop())
+            {
+                DragManager.RpcStartDragging(PlayerControl.LocalPlayer, DeadBodyTarget.ParentId);
+            }
         }
         else
         {

@@ -23,7 +23,10 @@ public class ScannerComponent(IntPtr ptr) : MonoBehaviour(ptr)
     public void OnTriggerEnter2D(Collider2D collider)
     {
         var player = collider.gameObject.GetComponent<PlayerControl>();
-        if (player == null) return;
+        if (player == null)
+        {
+            return;
+        }
 
         if (PlayerControl.LocalPlayer.Data.Role is TrackerRole)
         {

@@ -9,7 +9,10 @@ public static class WinningPatch
     public static void Prefix()
     {
         var gamemode = CustomGamemodeManager.ActiveMode;
-        if (gamemode.CalculateWinners() == null) return;
+        if (gamemode.CalculateWinners() == null)
+        {
+            return;
+        }
 
         TempData.winners.Clear();
 

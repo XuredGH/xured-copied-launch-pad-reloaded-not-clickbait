@@ -9,7 +9,11 @@ public static class AmongUsClientPatch
     [HarmonyPatch(nameof(AmongUsClient.OnPlayerJoined))]
     public static void RpcSyncSettingsPostfix()
     {
-        if (!AmongUsClient.Instance.AmHost) return;
+        if (!AmongUsClient.Instance.AmHost)
+        {
+            return;
+        }
+
         CustomOptionsManager.SyncOptions();
     }
 }

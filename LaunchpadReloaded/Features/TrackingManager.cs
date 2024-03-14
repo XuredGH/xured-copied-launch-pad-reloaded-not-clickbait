@@ -31,7 +31,10 @@ public class TrackingManager(IntPtr ptr) : MonoBehaviour(ptr)
             SoundManager.Instance.PlaySound(LaunchpadAssets.PingSound.LoadAsset(), false, 0.8f);
 
             // Stop pinging when player dies
-            if (TrackedPlayer.Data.IsDead || TrackedPlayer.Data.Disconnected) TrackerDisconnected = true;
+            if (TrackedPlayer.Data.IsDead || TrackedPlayer.Data.Disconnected)
+            {
+                TrackerDisconnected = true;
+            }
 
             Timer = LaunchpadGameOptions.Instance.TrackerPingTimer.Value;
         }

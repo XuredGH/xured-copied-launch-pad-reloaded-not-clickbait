@@ -29,7 +29,10 @@ public static class HudManagerPatches
             __instance.TaskPanel.SetTaskText(__instance.tasksString.ToString());
         }
 
-        if (HackingManager.Instance && HackingManager.Instance.AnyActiveNodes()) __instance.ReportButton.SetDisabled();
+        if (HackingManager.Instance && HackingManager.Instance.AnyActiveNodes())
+        {
+            __instance.ReportButton.SetDisabled();
+        }
 
         foreach (var (player, bodyId) in DragManager.DraggingPlayers)
         {

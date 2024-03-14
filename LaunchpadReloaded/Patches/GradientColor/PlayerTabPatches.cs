@@ -118,7 +118,11 @@ public static class PlayerTabPatches
     [HarmonyPatch(nameof(PlayerTab.Update))]
     public static void UpdatePostfix(PlayerTab __instance)
     {
-        if(_titleText) _titleText.text = SelectGradient ? "Secondary Color: " : "Main Color: ";
+        if(_titleText)
+        {
+            _titleText.text = SelectGradient ? "Secondary Color: " : "Main Color: ";
+        }
+
         if (SelectGradient)
         {
             __instance.currentColorIsEquipped = __instance.currentColor == GradientManager.LocalGradientId;
