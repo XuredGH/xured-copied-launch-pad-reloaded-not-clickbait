@@ -1,4 +1,5 @@
-﻿using LaunchpadReloaded.API.Roles;
+﻿using LaunchpadReloaded.API.GameOptions;
+using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Utilities;
@@ -21,7 +22,6 @@ public class TrackerRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
 
     public RoleTeamTypes Team => RoleTeamTypes.Crewmate;
     public LoadableAsset<Sprite> Icon => LaunchpadAssets.TrackButton;
-
     public StringBuilder SetTabText()
     {
         StringBuilder taskStringBuilder = Helpers.CreateForRole(this);
@@ -45,5 +45,38 @@ public class TrackerRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
             if (component.Room != null) taskStringBuilder.AppendLine($"Scanner {component.Id} ({component.Room.RoomId})");
         }
         return taskStringBuilder;
+    }
+
+    public static CustomNumberOption PingTimer;
+    public static CustomNumberOption ScannerCooldown;
+    public static CustomNumberOption MaxScanners;
+    public static CustomOptionGroup Group;
+    public void CreateOptions()
+    {
+        PingTimer = new CustomNumberOption("Tracker Ping Timer",
+            defaultValue: 7,
+            range: new FloatRange(3, 30),
+            increment: 1,
+            suffixType: NumberSuffixes.Seconds,
+            role: typeof(TrackerRole));
+
+        MaxScanners = new CustomNumberOption("Max Scanners",
+            defaultValue: 3,
+            range: new FloatRange(1, 15),
+            increment: 1,
+            suffixType: NumberSuffixes.None,
+            role: typeof(TrackerRole));
+
+        ScannerCooldown = new CustomNumberOption("Place Scanner Cooldown",
+            defaultValue: 5,
+            range: new FloatRange(1, 20),
+            increment: 2,
+            suffixType: NumberSuffixes.Seconds,
+            role: typeof(TrackerRole));
+
+        Group = new CustomOptionGroup($"{RoleColor.ToTextColor()}Tracker</color>",
+            numberOpt: [PingTimer, MaxScanners, ScannerCooldown],
+            stringOpt: [],
+            toggleOpt: [], role: typeof(TrackerRole));
     }
 }

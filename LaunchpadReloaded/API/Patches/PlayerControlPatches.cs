@@ -1,22 +1,27 @@
 ﻿using HarmonyLib;
-using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.API.Utilities;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
-using UnityEngine;
 
 namespace LaunchpadReloaded.API.Patches;
 
 [HarmonyPatch(typeof(PlayerControl))]
 public static class PlayerControlPatches
-{      
+{
     [HarmonyPostfix]
     [HarmonyPatch("FixedUpdate")]
     public static void FixedUpdatePostfix(PlayerControl __instance)
     {
+        if (__instance.IsRevived())
+        {
+            __instance.cosmetics.SetOutline(true,
+                new Il2CppSystem.Nullable<UnityEngine.Color>(LaunchpadPalette.MedicColor));
+        }
+
+
         if (MeetingHud.Instance) return;
 
         if (__instance.Data.IsHacked() || (HackingManager.Instance && HackingManager.Instance.AnyActiveNodes() && __instance.Data.Role is HackerRole))

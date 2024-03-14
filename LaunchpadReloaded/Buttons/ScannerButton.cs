@@ -1,5 +1,4 @@
 ﻿using LaunchpadReloaded.API.Hud;
-using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
@@ -10,11 +9,11 @@ public class ScannerButton : CustomActionButton
 {
     public override string Name => "Deploy Scanner";
 
-    public override float Cooldown => (int)LaunchpadGameOptions.Instance.ScannerCooldown.Value;
+    public override float Cooldown => (int)TrackerRole.ScannerCooldown.Value;
 
     public override float EffectDuration => 0;
 
-    public override int MaxUses => (int)LaunchpadGameOptions.Instance.MaxScanners.Value;
+    public override int MaxUses => (int)TrackerRole.MaxScanners.Value;
 
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.ScannerButton;
 

@@ -17,6 +17,7 @@ public static class ShipStatusPatch
         managers.AddComponent<HackingManager>();
         managers.AddComponent<TrackingManager>();
         managers.AddComponent<ScannerManager>();
+        managers.AddComponent<RevivalManager>();
 
         HackingManager.RpcCreateNodes(__instance);
     }

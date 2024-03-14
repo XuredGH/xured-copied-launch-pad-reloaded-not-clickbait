@@ -1,6 +1,4 @@
 ﻿using LaunchpadReloaded.API.Hud;
-using LaunchpadReloaded.API.Utilities;
-using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using UnityEngine;
@@ -9,8 +7,8 @@ namespace LaunchpadReloaded.Buttons;
 public class MapButton : CustomActionButton
 {
     public override string Name => "Map";
-    public override float Cooldown => (int)LaunchpadGameOptions.Instance.MapCooldown.Value;
-    public override float EffectDuration => (int)LaunchpadGameOptions.Instance.MapDuration.Value;
+    public override float Cooldown => (int)HackerRole.MapCooldown.Value;
+    public override float EffectDuration => (int)HackerRole.MapDuration.Value;
     public override int MaxUses => 0;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.MapButton;
 
