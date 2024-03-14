@@ -28,6 +28,8 @@ public class DragButton : CustomActionButton
 
     public override bool CanUse()
     {
+        if ((DragManager.IsDragging(PlayerControl.LocalPlayer.PlayerId) && !CanDrop())) return false;
+
         return DeadBodyTarget is not null && PlayerControl.LocalPlayer.CanMove && !PlayerControl.LocalPlayer.inVent;
     }
 
@@ -59,11 +61,7 @@ public class DragButton : CustomActionButton
 
     public bool CanDrop()
     {
-        foreach (Collider2D collider2D in Physics2D.OverlapCircleAll(PlayerControl.LocalPlayer.GetTruePosition(), PlayerControl.LocalPlayer.MaxReportDistance, Constants.PlayersOnlyMask))
-        {
-            if (!(collider2D.tag != "DeadBody")) return true;
-        }
-        return false;
+        return !PhysicsHelpers.AnythingBetween(PlayerControl.LocalPlayer.Collider, PlayerControl.LocalPlayer.Collider.bounds.center, DeadBodyTarget.TruePosition, Constants.ShipAndAllObjectsMask, false);
     }
 
     protected override void OnClick()
@@ -71,7 +69,6 @@ public class DragButton : CustomActionButton
         if (DragManager.IsDragging(PlayerControl.LocalPlayer.PlayerId))
         {
             DragManager.RpcStopDragging(PlayerControl.LocalPlayer);
-            if (!CanDrop()) DragManager.RpcStartDragging(PlayerControl.LocalPlayer, DeadBodyTarget.ParentId);
         }
         else
         {

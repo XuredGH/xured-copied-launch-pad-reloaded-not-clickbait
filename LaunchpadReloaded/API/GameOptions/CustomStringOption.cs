@@ -13,25 +13,27 @@ public class CustomStringOption : AbstractGameOption
     public int Default { get; }
     public string[] Options { get; private set; }
     public ConfigEntry<int> Config { get; }
-    public Action<int> ChangedEvent = null;
-    public CustomStringOption(string title, int defaultValue, string[] options, Type role = null) : base(title, role)
+    public Action<int> ChangedEvent { get; set; }
+    public CustomStringOption(string title, int defaultValue, string[] options, Type role = null, bool save = true) : base(title, role, save)
     {
         Value = options[defaultValue];
         Options = options;
         Default = defaultValue;
         CustomOptionsManager.CustomStringOptions.Add(this);
+        ChangedEvent = null;
 
-        Config = LaunchpadReloadedPlugin.Instance.Config.Bind("String Options", title, defaultValue);
-        SetValue(Config.Value);
+        if (Save) Config = LaunchpadReloadedPlugin.Instance.Config.Bind("String Options", title, defaultValue);
+        SetValue(Save ? Config.Value : defaultValue);
     }
 
     public void SetValue(int newValue)
     {
-        Config.Value = newValue;
+        if (Save) Config.Value = newValue;
         Value = Options[newValue];
 
         StringOption behaviour = (StringOption)OptionBehaviour;
         if (behaviour) behaviour.Value = newValue;
+        if (ChangedEvent != null) ChangedEvent(newValue);
     }
 
     public void SetValue(string newValue) => SetValue(Options.ToList().IndexOf(newValue));
@@ -39,7 +41,6 @@ public class CustomStringOption : AbstractGameOption
     protected override void OnValueChanged(OptionBehaviour optionBehaviour)
     {
         SetValue(optionBehaviour.GetInt());
-        if (ChangedEvent != null) ChangedEvent(optionBehaviour.GetInt());
     }
 
     public void CreateStringOption(StringOption stringOption)
@@ -52,7 +53,7 @@ public class CustomStringOption : AbstractGameOption
 
         stringOption.name = Title;
         stringOption.Title = StringName;
-        stringOption.Value = Config.Value;
+        stringOption.Value = Options.ToList().IndexOf(Value);
         stringOption.Values = (Il2CppStructArray<StringNames>)values.ToArray();
         stringOption.OnValueChanged = (Il2CppSystem.Action<OptionBehaviour>)ValueChanged;
         stringOption.OnEnable();

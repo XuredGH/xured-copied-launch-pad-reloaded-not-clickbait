@@ -15,7 +15,7 @@ public class CustomNumberOption : AbstractGameOption
     public ConfigEntry<float> Config { get; }
     public Action<float> ChangedEvent = null;
 
-    public CustomNumberOption(string title, float defaultValue, FloatRange range, float increment, NumberSuffixes suffixType, string numberFormat = "0", Type role = null) : base(title, role)
+    public CustomNumberOption(string title, float defaultValue, FloatRange range, float increment, NumberSuffixes suffixType, string numberFormat = "0", Type role = null, bool save = true) : base(title, role, save)
     {
         Value = defaultValue;
         Default = defaultValue;
@@ -23,25 +23,26 @@ public class CustomNumberOption : AbstractGameOption
         Increment = increment;
         SuffixType = suffixType;
         NumberFormat = numberFormat;
-        Config = LaunchpadReloadedPlugin.Instance.Config.Bind("Number Options", title, defaultValue);
+        if (Save) Config = LaunchpadReloadedPlugin.Instance.Config.Bind("Number Options", title, defaultValue);
         CustomOptionsManager.CustomNumberOptions.Add(this);
-        SetValue(Config.Value);
+        SetValue(Save ? Config.Value : defaultValue);
     }
 
     public void SetValue(float newValue)
     {
-        Config.Value = newValue;
+        if (Save) Config.Value = newValue;
         Value = newValue;
 
         NumberOption behaviour = (NumberOption)OptionBehaviour;
         if (behaviour) behaviour.Value = Value;
+        if (ChangedEvent != null) ChangedEvent(Value);
     }
 
     public void CreateNumberOption(NumberOption numberOption)
     {
         numberOption.name = Title;
         numberOption.Title = StringName;
-        numberOption.Value = Config.Value;
+        numberOption.Value = Value;
         numberOption.Increment = Increment;
         numberOption.SuffixType = SuffixType;
         numberOption.FormatString = NumberFormat;
@@ -56,7 +57,6 @@ public class CustomNumberOption : AbstractGameOption
     {
         float value = Mathf.Clamp(optionBehaviour.GetFloat(), Range.min, Range.max);
         SetValue(value);
-        if (ChangedEvent != null) ChangedEvent(value);
     }
 
 }

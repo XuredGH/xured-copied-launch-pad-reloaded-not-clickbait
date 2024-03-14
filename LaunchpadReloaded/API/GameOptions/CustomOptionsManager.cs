@@ -25,6 +25,7 @@ public static class CustomOptionsManager
         foreach (CustomNumberOption numberOpt in CustomNumberOptions) numberOpt.SetValue(numberOpt.Default);
         foreach (CustomStringOption stringOpt in CustomStringOptions) stringOpt.SetValue(stringOpt.Default);
         foreach (CustomToggleOption toggleOpt in CustomToggleOptions) toggleOpt.SetValue(toggleOpt.Default);
+        foreach (AbstractGameOption option in CustomOptions) option.ValueChanged(option.OptionBehaviour);
     }
 
     public static void HandleOptionsSync(bool[] toggles, float[] numbers, string[] strings)

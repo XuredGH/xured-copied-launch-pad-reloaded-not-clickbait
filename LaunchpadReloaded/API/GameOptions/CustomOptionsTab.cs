@@ -10,6 +10,7 @@ public static class CustomOptionsTab
 {
     public static GameObject customTab;
     public static GameObject customScreen;
+    public static SpriteRenderer rend;
 
     public static GameObject Initialize(GameSettingMenu __instance)
     {
@@ -19,7 +20,7 @@ public static class CustomOptionsTab
         customScreen = CustomOptionsTab.CreateNewMenu(__instance);
         customTab = CustomOptionsTab.CreateCustomTab(__instance, customScreen, gameBtn, roleBtn);
 
-        SpriteRenderer rend = customTab.transform.FindChild("LaunchpadBtn/Tab Background").GetComponent<SpriteRenderer>();
+        rend = customTab.transform.FindChild("LaunchpadBtn/Tab Background").GetComponent<SpriteRenderer>();
         rend.enabled = false;
 
         UpdateListeners(__instance, gameBtn.GetComponentInChildren<PassiveButton>(), roleBtn.GetComponentInChildren<PassiveButton>(), rend);

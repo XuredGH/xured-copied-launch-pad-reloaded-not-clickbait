@@ -1,11 +1,7 @@
 ﻿using LaunchpadReloaded.API.Utilities;
+using LaunchpadReloaded.Components;
 using PowerTools;
 using Reactor.Networking.Attributes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Networking;
@@ -14,9 +10,11 @@ public static class GenericRPC
     [MethodRpc((uint)LaunchpadRPC.SetBodyType)]
     public static void RpcSetBodyType(PlayerControl player, int bodyType)
     {
-        if(bodyType == 6)
+        if (bodyType == 6)
         {
             player.MyPhysics.SetBodyType(PlayerBodyTypes.Seeker);
+            if (!LaunchpadGameOptions.Instance.ShowKnife.Value) return;
+
             GameObject seekerHand = player.transform.FindChild("BodyForms/Seeker/SeekerHand").gameObject;
             GameObject hand = GameObject.Instantiate(seekerHand).gameObject;
             hand.transform.SetParent(seekerHand.transform.parent);
