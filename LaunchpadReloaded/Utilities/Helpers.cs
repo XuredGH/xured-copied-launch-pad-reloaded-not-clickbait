@@ -1,16 +1,17 @@
-﻿using LaunchpadReloaded.Features;
-﻿using LaunchpadReloaded.API.Roles;
-using System;
+﻿using System;
 using System.Linq;
 using System.Text;
+using LaunchpadReloaded.API.Roles;
+using LaunchpadReloaded.Features;
 using TMPro;
 using UnityEngine;
+using Random = System.Random;
 
 namespace LaunchpadReloaded.Utilities;
 
 public static class Helpers
 {
-    public static System.Random Random = new System.Random();
+    public static Random Random = new Random();
 
     public static bool ShouldCancelClick()
     {

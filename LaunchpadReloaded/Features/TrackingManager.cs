@@ -1,7 +1,7 @@
-﻿using LaunchpadReloaded.Components;
-﻿using LaunchpadReloaded.Utilities;
+﻿using System;
+using LaunchpadReloaded.Components;
+using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Attributes;
-using System;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Features;
@@ -9,10 +9,10 @@ namespace LaunchpadReloaded.Features;
 public class TrackingManager(IntPtr ptr) : MonoBehaviour(ptr)
 {
     public static TrackingManager Instance;
-    public PlayerControl TrackedPlayer = null;
+    public PlayerControl TrackedPlayer;
     public Vector3 MapPosition;
-    public float Timer = 0f;
-    public bool TrackerDisconnected = false;
+    public float Timer;
+    public bool TrackerDisconnected;
 
     private void Awake()
     {
@@ -28,7 +28,7 @@ public class TrackingManager(IntPtr ptr) : MonoBehaviour(ptr)
             vector.x *= Mathf.Sign(ShipStatus.Instance.transform.localScale.x);
             vector.z = -1f;
             MapPosition = vector;
-            SoundManager.Instance.PlaySound(LaunchpadAssets.PingSound.LoadAsset(), false, 0.8f, null);
+            SoundManager.Instance.PlaySound(LaunchpadAssets.PingSound.LoadAsset(), false, 0.8f);
 
             // Stop pinging when player dies
             if (TrackedPlayer.Data.IsDead || TrackedPlayer.Data.Disconnected) TrackerDisconnected = true;
@@ -39,6 +39,5 @@ public class TrackingManager(IntPtr ptr) : MonoBehaviour(ptr)
         {
             Timer -= Time.deltaTime;
         }
-        return;
     }
 }

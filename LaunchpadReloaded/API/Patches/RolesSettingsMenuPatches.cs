@@ -1,10 +1,10 @@
-﻿using AmongUs.GameOptions;
+﻿using System.Linq;
+using AmongUs.GameOptions;
 using HarmonyLib;
 using Il2CppSystem;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
 using Reactor.Utilities.Extensions;
-using System.Linq;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -65,7 +65,7 @@ public static class RolesSettingsMenuPatches
             tmp.defaultStr = role.NiceName;
             tmp.TargetText = role.StringName;
 
-            var newAdvSet = new AdvancedRoleSettingsButton()
+            var newAdvSet = new AdvancedRoleSettingsButton
             {
                 Tab = newTab,
                 Type = (RoleTypes)key

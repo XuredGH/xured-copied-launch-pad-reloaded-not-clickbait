@@ -1,6 +1,6 @@
-﻿using Reactor.Networking.Rpc;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Reactor.Networking.Rpc;
 
 namespace LaunchpadReloaded.API.GameOptions;
 

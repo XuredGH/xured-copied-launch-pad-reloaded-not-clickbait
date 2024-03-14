@@ -1,7 +1,7 @@
-﻿using AmongUs.GameOptions;
+﻿using System.Text;
+using AmongUs.GameOptions;
 using BepInEx.Configuration;
 using LaunchpadReloaded.Utilities;
-using System.Text;
 using UnityEngine;
 
 namespace LaunchpadReloaded.API.Roles;
@@ -39,5 +39,5 @@ public interface ICustomRole
     void PlayerControlFixedUpdate(PlayerControl playerControl) { }
 
     void HudUpdate(HudManager hudManager) { }
-    virtual StringBuilder SetTabText() { return null; }
+    StringBuilder SetTabText() { return null; }
 }

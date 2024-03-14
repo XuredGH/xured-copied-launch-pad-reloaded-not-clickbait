@@ -1,8 +1,8 @@
+using System;
 using LaunchpadReloaded.API.Gamemodes;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
-using System;
 
 namespace LaunchpadReloaded.Components;
 

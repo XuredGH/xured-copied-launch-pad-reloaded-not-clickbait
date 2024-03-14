@@ -1,4 +1,5 @@
-﻿using LaunchpadReloaded.API.Utilities;
+﻿using System;
+using LaunchpadReloaded.API.Utilities;
 using Reactor.Utilities.Extensions;
 using TMPro;
 using UnityEngine;
@@ -16,8 +17,8 @@ public static class CustomOptionsTab
         GameObject gameBtn = __instance.transform.FindChild("Header/Tabs/GameTab").gameObject;
         GameObject roleBtn = __instance.transform.FindChild("Header/Tabs/RoleTab").gameObject;
 
-        customScreen = CustomOptionsTab.CreateNewMenu(__instance);
-        customTab = CustomOptionsTab.CreateCustomTab(__instance, customScreen, gameBtn, roleBtn);
+        customScreen = CreateNewMenu(__instance);
+        customTab = CreateCustomTab(__instance, customScreen, gameBtn, roleBtn);
 
         SpriteRenderer rend = customTab.transform.FindChild("LaunchpadBtn/Tab Background").GetComponent<SpriteRenderer>();
         rend.enabled = false;
@@ -118,7 +119,7 @@ public static class CustomOptionsTab
         PassiveButton btn = inside.GetComponentInChildren<PassiveButton>();
 
         btn.OnClick.RemoveAllListeners();
-        System.Action value = () =>
+        Action value = () =>
         {
             __instance.RegularGameSettings.SetActive(false);
             __instance.RolesSettings.gameObject.SetActive(false);
@@ -130,7 +131,7 @@ public static class CustomOptionsTab
             gameTab.transform.FindChild("ColorButton/Tab Background").gameObject.GetComponent<SpriteRenderer>().enabled = false;
             roleTab.transform.FindChild("Hat Button/Tab Background").gameObject.GetComponent<SpriteRenderer>().enabled = false;
         };
-        btn.OnClick.AddListener((UnityAction)value);
+        btn.OnClick.AddListener(value);
 
         SpriteRenderer spriteRend = inside.GetComponentInChildren<SpriteRenderer>();
         spriteRend.sprite = SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.Hack.png");

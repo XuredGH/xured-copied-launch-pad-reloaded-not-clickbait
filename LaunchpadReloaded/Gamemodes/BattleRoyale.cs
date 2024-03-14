@@ -1,15 +1,14 @@
-﻿using AmongUs.GameOptions;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using AmongUs.GameOptions;
 using LaunchpadReloaded.API.Gamemodes;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
-using static GameData;
 
 namespace LaunchpadReloaded.Gamemodes;
 public class BattleRoyale : CustomGamemode
@@ -70,15 +69,15 @@ public class BattleRoyale : CustomGamemode
         instance.ImpostorVentButton.gameObject.SetActive(false);
     }
 
-    public override List<PlayerInfo> CalculateWinners()
+    public override List<GameData.PlayerInfo> CalculateWinners()
     {
-        List<PlayerInfo> alivePlayers = GameData.Instance.AllPlayers.ToArray().Where(player => !player.Disconnected && !player.IsDead).ToList();
+        List<GameData.PlayerInfo> alivePlayers = GameData.Instance.AllPlayers.ToArray().Where(player => !player.Disconnected && !player.IsDead).ToList();
         return alivePlayers;
     }
     public override bool ShowCustomRoleScreen() => true;
     public override bool CanKill(PlayerControl target) => true;
     public override bool CanReport(DeadBody body) => false;
-    public override bool CanVent(Vent vent, PlayerInfo playerInfo) => false;
+    public override bool CanVent(Vent vent, GameData.PlayerInfo playerInfo) => false;
     public override bool ShouldShowSabotageMap(MapBehaviour map) => false;
     public override bool CanUseConsole(Console console) => false;
     public override bool CanUseMapConsole(MapConsole console) => false;

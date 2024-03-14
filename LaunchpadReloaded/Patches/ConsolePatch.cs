@@ -33,11 +33,9 @@ public static class ConsolePatch
                 couldUse = false;
                 return true;
             }
-            else
-            {
-                canUse = couldUse = false;
-                return false;
-            }
+
+            canUse = couldUse = false;
+            return false;
         }
 
         canUse = couldUse = true;

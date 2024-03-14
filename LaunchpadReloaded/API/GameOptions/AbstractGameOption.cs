@@ -1,6 +1,6 @@
-﻿using LaunchpadReloaded.API.Roles;
+﻿using System;
+using LaunchpadReloaded.API.Roles;
 using Reactor.Localization.Utilities;
-using System;
 
 namespace LaunchpadReloaded.API.GameOptions;
 

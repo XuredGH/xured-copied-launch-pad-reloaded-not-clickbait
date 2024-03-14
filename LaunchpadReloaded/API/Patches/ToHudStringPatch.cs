@@ -1,10 +1,10 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using AmongUs.GameOptions;
 using HarmonyLib;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.Utilities;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace LaunchpadReloaded.API.Patches;
 
@@ -48,7 +48,7 @@ public static class ToHudStringPatch
                 AddOptions(sb, group.CustomNumberOptions, group.CustomStringOptions, group.CustomToggleOptions);
                 sb.Append("\n");
             }
-            if (groupsWithRoles.Count() > 0) sb.AppendLine($"<size=120%><b>Roles</b></size>");
+            if (groupsWithRoles.Count() > 0) sb.AppendLine("<size=120%><b>Roles</b></size>");
             foreach (var group in groupsWithRoles)
             {
                 if (group.Hidden()) continue;
@@ -63,7 +63,7 @@ public static class ToHudStringPatch
                 CustomOptionsManager.CustomStringOptions.Where(option => option.Group == null && !option.Hidden()),
                 CustomOptionsManager.CustomToggleOptions.Where(option => option.Group == null && !option.Hidden()));
 
-            __result = sb.ToString() + "\nPress <b>Tab</b> to view Normal Options";
+            __result = sb + "\nPress <b>Tab</b> to view Normal Options";
             return;
         }
 

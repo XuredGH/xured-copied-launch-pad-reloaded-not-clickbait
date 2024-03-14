@@ -13,7 +13,7 @@ public class TrackButton : CustomActionButton
     public override float EffectDuration => 0;
     public override int MaxUses => 1;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.TrackButton;
-    public PlayerControl CurrentTarget = null;
+    public PlayerControl CurrentTarget;
 
     public override bool Enabled(RoleBehaviour role) => role is TrackerRole;
 
@@ -31,15 +31,15 @@ public class TrackButton : CustomActionButton
         {
             if (CurrentTarget != null)
             {
-                CurrentTarget.cosmetics.currentBodySprite.BodySprite.material.SetFloat("_Outline", (float)(0));
+                CurrentTarget.cosmetics.currentBodySprite.BodySprite.material.SetFloat("_Outline", 0);
                 CurrentTarget = null;
             }
 
-            this.CurrentTarget = playerControl.GetClosestPlayer(true, 1.5f);
+            CurrentTarget = playerControl.GetClosestPlayer(true, 1.5f);
 
             if (CurrentTarget != null)
             {
-                CurrentTarget.cosmetics.currentBodySprite.BodySprite.material.SetFloat("_Outline", (float)(1));
+                CurrentTarget.cosmetics.currentBodySprite.BodySprite.material.SetFloat("_Outline", 1);
                 CurrentTarget.cosmetics.currentBodySprite.BodySprite.material.SetColor("_OutlineColor", Palette.CrewmateBlue);
             }
         }

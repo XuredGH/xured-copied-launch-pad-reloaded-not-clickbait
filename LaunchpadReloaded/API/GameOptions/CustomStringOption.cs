@@ -1,9 +1,8 @@
-﻿using BepInEx.Configuration;
-using Il2CppInterop.Runtime.InteropTypes.Arrays;
-using Reactor.Localization.Utilities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BepInEx.Configuration;
+using Reactor.Localization.Utilities;
 
 namespace LaunchpadReloaded.API.GameOptions;
 
@@ -53,7 +52,7 @@ public class CustomStringOption : AbstractGameOption
         stringOption.name = Title;
         stringOption.Title = StringName;
         stringOption.Value = Config.Value;
-        stringOption.Values = (Il2CppStructArray<StringNames>)values.ToArray();
+        stringOption.Values = values.ToArray();
         stringOption.OnValueChanged = (Il2CppSystem.Action<OptionBehaviour>)ValueChanged;
         stringOption.OnEnable();
         OptionBehaviour = stringOption;

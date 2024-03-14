@@ -1,15 +1,15 @@
-﻿using LaunchpadReloaded.Components;
-using LaunchpadReloaded.Networking;
-using Reactor.Networking.Attributes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using LaunchpadReloaded.Components;
+using LaunchpadReloaded.Networking;
+using Reactor.Networking.Attributes;
 
 namespace LaunchpadReloaded.API.Gamemodes;
 public static class CustomGamemodeManager
 {
     public static List<CustomGamemode> Gamemodes = new List<CustomGamemode>();
-    public static CustomGamemode ActiveMode = null;
+    public static CustomGamemode ActiveMode;
 
     public static void RegisterAllGamemodes()
     {
@@ -31,7 +31,7 @@ public static class CustomGamemodeManager
 
     public static void SetGamemode(int id)
     {
-        ActiveMode = CustomGamemodeManager.Gamemodes.Find(gamemode => gamemode.Id == id);
+        ActiveMode = Gamemodes.Find(gamemode => gamemode.Id == id);
     }
 
     public static void RegisterGamemode(Type gamemodeType)

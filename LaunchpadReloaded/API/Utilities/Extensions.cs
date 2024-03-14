@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Reflection;
+using Il2CppSystem.Collections.Generic;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Features;
 using Reactor.Utilities.Extensions;
@@ -73,7 +74,7 @@ public static class Extensions
     
     public static DeadBody NearestDeadBody(this PlayerControl playerControl)
     {
-        var results = new Il2CppSystem.Collections.Generic.List<Collider2D>();
+        var results = new List<Collider2D>();
         Physics2D.OverlapCircle(playerControl.GetTruePosition(), playerControl.MaxReportDistance/4f, Filter, results);
         return results.ToArray()
             .Where(collider2D => collider2D.CompareTag("DeadBody"))
@@ -99,7 +100,7 @@ public static class Extensions
             var magnitude = vector.magnitude;
             if (!(magnitude <= distance) || PhysicsHelpers.AnyNonTriggersBetween(truePosition,
                 vector.normalized,
-                magnitude, LayerMask.GetMask(new string[2] { "Ship", "Objects" }))) continue;
+                magnitude, LayerMask.GetMask("Ship", "Objects"))) continue;
             result = @object;
             distance = magnitude;
         }

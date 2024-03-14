@@ -1,6 +1,6 @@
-﻿using Discord;
+﻿using System;
+using Discord;
 using HarmonyLib;
-using System;
 using UnityEngine.SceneManagement;
 
 namespace LaunchpadReloaded.Patches;
@@ -30,7 +30,7 @@ public static class DiscordManagerPatch
     [HarmonyPrefix]
     public static void Prefix(ActivityManager __instance, [HarmonyArgument(0)] Activity activity)
     {
-        activity.Details += $"All Of Us: Launchpad | Modded Among Us";
+        activity.Details += "All Of Us: Launchpad | Modded Among Us";
         activity.State += " | dsc.gg/allofus";
     }
 }

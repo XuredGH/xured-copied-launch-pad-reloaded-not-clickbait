@@ -1,8 +1,8 @@
-﻿using LaunchpadReloaded.API.Roles;
+﻿using System;
+using System.Text;
+using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Attributes;
-using System;
-using System.Text;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;

@@ -1,8 +1,8 @@
-﻿using LaunchpadReloaded.Roles;
+﻿using System;
+using System.Collections.Generic;
+using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Attributes;
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Components;
@@ -17,7 +17,7 @@ public class ScannerComponent(IntPtr ptr) : MonoBehaviour(ptr)
 
     public void Awake()
     {
-        this.Room = Helpers.GetRoom(transform.position);
+        Room = Helpers.GetRoom(transform.position);
     }
 
     public void OnTriggerEnter2D(Collider2D collider)

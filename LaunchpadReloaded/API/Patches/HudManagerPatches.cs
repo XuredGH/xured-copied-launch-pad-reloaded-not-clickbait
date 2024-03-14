@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using System.Text;
+using HarmonyLib;
 using InnerNet;
 using LaunchpadReloaded.API.Gamemodes;
 using LaunchpadReloaded.API.Hud;
@@ -7,7 +8,6 @@ using LaunchpadReloaded.API.Utilities;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
 using Reactor.Utilities.Extensions;
-using System.Text;
 using UnityEngine;
 
 namespace LaunchpadReloaded.API.Patches;
@@ -39,7 +39,7 @@ public static class HudManagerPatches
         if (PlayerControl.LocalPlayer.Data.IsHacked())
         {
             __instance.tasksString.Clear();
-            __instance.tasksString.Append(UnityEngine.Color.green.ToTextColor());
+            __instance.tasksString.Append(Color.green.ToTextColor());
             __instance.tasksString.Append("You have been hacked!\n");
             __instance.tasksString.Append("You are unable to complete tasks or call meetings.\n");
             __instance.tasksString.Append("Find an active node to reverse the hack!.\n");
@@ -52,13 +52,13 @@ public static class HudManagerPatches
         else if (HackingManager.Instance && HackingManager.Instance.AnyActiveNodes())
         {
             StringBuilder newB = new StringBuilder();
-            newB.Append(UnityEngine.Color.green.ToTextColor());
+            newB.Append(Color.green.ToTextColor());
             newB.Append(PlayerControl.LocalPlayer.Data.Role is HackerRole ?
                 "\n\nYou have hacked the crewmates! They will not be able to\ncomplete tasks or call meetings until they reverse the hack."
                 : "\n\nYou will still not be able to report bodies or \ncall meetings until all crewmates reverse the hack.");
             newB.Append($"\n{HackingManager.Instance.HackedPlayers.Count} players are still hacked.");
             newB.Append("</color>");
-            __instance.TaskPanel.SetTaskText(__instance.tasksString.ToString() + newB.ToString());
+            __instance.TaskPanel.SetTaskText(__instance.tasksString.ToString() + newB);
         }
 
         if (HackingManager.Instance && HackingManager.Instance.AnyActiveNodes()) __instance.ReportButton.SetDisabled();

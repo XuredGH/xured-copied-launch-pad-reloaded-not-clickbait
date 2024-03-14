@@ -1,8 +1,8 @@
-﻿using LaunchpadReloaded.API.Utilities;
+﻿using System;
+using LaunchpadReloaded.API.Utilities;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Attributes;
-using System;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Components;
@@ -10,7 +10,7 @@ namespace LaunchpadReloaded.Components;
 [RegisterInIl2Cpp(typeof(IUsable))]
 public class HackNodeComponent(IntPtr ptr) : MonoBehaviour(ptr)
 {
-    public bool IsActive = false;
+    public bool IsActive;
     public int Id;
     public SpriteRenderer Image;
     public ImageNames UseIcon => ImageNames.UseButton;
@@ -26,12 +26,12 @@ public class HackNodeComponent(IntPtr ptr) : MonoBehaviour(ptr)
 
     public void Use()
     {
-        SoundManager.Instance.PlaySound(LaunchpadAssets.BeepSound.LoadAsset(), false, 0.5f, null);
+        SoundManager.Instance.PlaySound(LaunchpadAssets.BeepSound.LoadAsset(), false, 0.5f);
         HackingManager.RpcUnhackPlayer(PlayerControl.LocalPlayer);
 
         if (HackingManager.Instance.HackedPlayers.Count <= 0)
         {
-            HackingManager.RpcToggleNode(ShipStatus.Instance, this.Id, false);
+            HackingManager.RpcToggleNode(ShipStatus.Instance, Id, false);
         }
     }
 
@@ -44,7 +44,7 @@ public class HackNodeComponent(IntPtr ptr) : MonoBehaviour(ptr)
         if (canUse)
         {
             var truePosition = @object.GetTruePosition();
-            var position = base.transform.position;
+            var position = transform.position;
             num = Vector2.Distance(truePosition, position);
             canUse &= (num <= 0.5f && !PhysicsHelpers.AnythingBetween(truePosition, position, Constants.ShipOnlyMask, false));
         }

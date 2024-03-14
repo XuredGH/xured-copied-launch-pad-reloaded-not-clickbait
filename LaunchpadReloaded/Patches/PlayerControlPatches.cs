@@ -1,6 +1,7 @@
+using System.Linq;
 using HarmonyLib;
-using LaunchpadReloaded.Components;
 using LaunchpadReloaded.API.Gamemodes;
+using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
 using UnityEngine;
@@ -44,12 +45,30 @@ public static class PlayerControlPatches
     
     [HarmonyPostfix]
     [HarmonyPatch(nameof(PlayerControl.SetPlayerMaterialColors))]
-    public static void SetPlayerMaterialColorsPrefix(PlayerControl __instance, [HarmonyArgument(0)] Renderer renderer)
+    public static void SetPlayerMaterialColorsPostfix(PlayerControl __instance, [HarmonyArgument(0)] Renderer renderer)
     {
         var playerGradient = __instance.GetComponent<PlayerGradientData>();
         if (playerGradient)
         {
             renderer.GetComponent<GradientColorComponent>().SetColor(__instance.Data.DefaultOutfit.ColorId, playerGradient.gradientColor);
         }
+    }
+    
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(PlayerControl.CheckColor))]
+    public static bool CheckColorPrefix(PlayerControl __instance, [HarmonyArgument(0)] byte bodyColor)
+    {
+        var allPlayers = GameData.Instance.AllPlayers.ToArray();
+        var num = 0;
+        while (num++ < 100 &&
+               (bodyColor >= Palette.PlayerColors.Length ||
+                allPlayers.Any(p => !p.Disconnected &&
+                                      p.PlayerId != __instance.PlayerId &&
+                                      p.DefaultOutfit.ColorId == bodyColor)))
+        {
+            bodyColor = (byte)((bodyColor + 1) % Palette.PlayerColors.Length);
+        }
+
+        return false;
     }
 }
