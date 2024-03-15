@@ -14,14 +14,7 @@ public class GradientColorComponent(IntPtr ptr) : MonoBehaviour(ptr)
 
     public Vector4 offset = new (0, .35f, .5f, 1); 
     public float strength = 125;
-
-    private readonly int _shaderWidth = Shader.PropertyToID("_Width");
-    private readonly int _shaderHeight = Shader.PropertyToID("_Height");
-    private readonly int _body2 = Shader.PropertyToID("_BodyColor2");
-    private readonly int _back2 = Shader.PropertyToID("_BackColor2");
-    private readonly int _gradOffset = Shader.PropertyToID("_GradientOffset");
-    private readonly int _gradStrength = Shader.PropertyToID("_GradientStrength");
-
+    
     public void SetColor(int color1 = 0, int color2 = 0)
     {
         renderer = GetComponent<SpriteRenderer>();
@@ -30,16 +23,22 @@ public class GradientColorComponent(IntPtr ptr) : MonoBehaviour(ptr)
             this.Destroy();
             return;
         }
+
+        if (color1 > Palette.PlayerColors.Length || color2 > Palette.PlayerColors.Length)
+        {
+            Debug.LogError("Invalid color ID!");
+            return;
+        }
         
         renderer.material = LaunchpadAssets.GradientMaterial.LoadAsset();
         mat = renderer.material;
         
         PlayerMaterial.SetColors(color1, mat);
         
-        mat.SetColor(_body2,Palette.PlayerColors[color2]);
-        mat.SetColor(_back2,Palette.ShadowColors[color2]);
-        mat.SetFloat(_gradStrength, strength);
-        mat.SetVector(_gradOffset, offset);
+        mat.SetColor(ShaderID.SecondaryBodyColor,Palette.PlayerColors[color2]);
+        mat.SetColor(ShaderID.SecondaryShadowColor,Palette.ShadowColors[color2]);
+        mat.SetFloat(ShaderID.GradientStrength, strength);
+        mat.SetVector(ShaderID.GradientOffset, offset);
         
     }
 
@@ -51,8 +50,8 @@ public class GradientColorComponent(IntPtr ptr) : MonoBehaviour(ptr)
         }
 
         var rect = renderer.sprite.rect;
-        mat.SetFloat(_shaderWidth, rect.width);
-        mat.SetFloat(_shaderHeight, rect.height);
+        mat.SetFloat(ShaderID.SpriteWidth, rect.width);
+        mat.SetFloat(ShaderID.SpriteHeight, rect.height);
 
     }
 }

@@ -13,7 +13,7 @@ public static class NotificationPopperPatch
     {
         if(!NewPopper)
         {
-            var newGameObject = GameObject.Instantiate(__instance.gameObject, __instance.transform.parent);
+            var newGameObject = Object.Instantiate(__instance.gameObject, __instance.transform.parent);
             newGameObject.name = "LaunchpadNotifications";
             NewPopper = newGameObject.GetComponent<NotificationPopper>();
         }

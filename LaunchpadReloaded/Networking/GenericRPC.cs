@@ -19,7 +19,7 @@ public static class GenericRPC
             }
 
             var seekerHand = player.transform.FindChild("BodyForms/Seeker/SeekerHand").gameObject;
-            var hand = GameObject.Instantiate(seekerHand).gameObject;
+            var hand = Object.Instantiate(seekerHand).gameObject;
             hand.transform.SetParent(seekerHand.transform.parent);
             hand.transform.localScale = new Vector3(2, 2, 2);
             hand.name = "KnifeHand";

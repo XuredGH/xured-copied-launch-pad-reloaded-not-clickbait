@@ -9,6 +9,7 @@ using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
 using TMPro;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace LaunchpadReloaded.API.Roles;
 
@@ -87,7 +88,7 @@ public static class CustomRoleManager
     public static TaskPanelBehaviour CreateRoleTab(ICustomRole role)
     {
         var ogPanel = HudManager.Instance.TaskStuff.transform.FindChild("TaskPanel").gameObject.GetComponent<TaskPanelBehaviour>();
-        var clonePanel = GameObject.Instantiate(ogPanel.gameObject, ogPanel.transform.parent);
+        var clonePanel = Object.Instantiate(ogPanel.gameObject, ogPanel.transform.parent);
         clonePanel.name = "RolePanel";
 
         var newPanel = clonePanel.GetComponent<TaskPanelBehaviour>();

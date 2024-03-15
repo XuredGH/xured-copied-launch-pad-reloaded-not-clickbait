@@ -1,5 +1,4 @@
 using System;
-using System.Text;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Utilities;

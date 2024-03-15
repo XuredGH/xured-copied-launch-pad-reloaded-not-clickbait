@@ -9,24 +9,24 @@ using Object = UnityEngine.Object;
 namespace LaunchpadReloaded.API.GameOptions;
 public static class CustomOptionsTab
 {
-    public static GameObject customTab;
-    public static GameObject customScreen;
-    public static SpriteRenderer rend;
+    public static GameObject CustomTab;
+    public static GameObject CustomScreen;
+    public static SpriteRenderer Rend;
 
     public static GameObject Initialize(GameSettingMenu __instance)
     {
         var gameBtn = __instance.transform.FindChild("Header/Tabs/GameTab").gameObject;
         var roleBtn = __instance.transform.FindChild("Header/Tabs/RoleTab").gameObject;
 
-        customScreen = CreateNewMenu(__instance);
-        customTab = CreateCustomTab(__instance, customScreen, gameBtn, roleBtn);
+        CustomScreen = CreateNewMenu(__instance);
+        CustomTab = CreateCustomTab(__instance, CustomScreen, gameBtn, roleBtn);
 
-        rend = customTab.transform.FindChild("LaunchpadBtn/Tab Background").GetComponent<SpriteRenderer>();
-        rend.enabled = false;
+        Rend = CustomTab.transform.FindChild("LaunchpadBtn/Tab Background").GetComponent<SpriteRenderer>();
+        Rend.enabled = false;
 
-        UpdateListeners(__instance, gameBtn.GetComponentInChildren<PassiveButton>(), roleBtn.GetComponentInChildren<PassiveButton>(), rend);
+        UpdateListeners(__instance, gameBtn.GetComponentInChildren<PassiveButton>(), roleBtn.GetComponentInChildren<PassiveButton>(), Rend);
 
-        var container = customScreen.transform.FindChild("GameGroup/SliderInner");
+        var container = CustomScreen.transform.FindChild("GameGroup/SliderInner");
         container.DestroyChildren();
         CreateNewResetButton(__instance, container);
 
@@ -36,7 +36,7 @@ public static class CustomOptionsTab
     private static void CreateNewResetButton(GameSettingMenu __instance, Transform container)
     {
         var resetBtn = __instance.RegularGameSettings.transform.FindChild("GameGroup/SliderInner/ResetToDefault");
-        var newResetBtn = GameObject.Instantiate(resetBtn.gameObject, container);
+        var newResetBtn = Object.Instantiate(resetBtn.gameObject, container);
         newResetBtn.gameObject.name = "LaunchpadReset";
 
         var tmp = newResetBtn.GetComponentInChildren<TextMeshPro>();
@@ -65,7 +65,7 @@ public static class CustomOptionsTab
             __instance.RegularGameSettings.SetActive(true);
             __instance.RolesSettings.gameObject.SetActive(false);
 
-            customScreen.gameObject.SetActive(false);
+            CustomScreen.gameObject.SetActive(false);
             rend.enabled = false;
 
             __instance.GameSettingsHightlight.enabled = true;
@@ -78,7 +78,7 @@ public static class CustomOptionsTab
             __instance.RegularGameSettings.SetActive(false);
             __instance.RolesSettings.gameObject.SetActive(true);
 
-            customScreen.gameObject.SetActive(false);
+            CustomScreen.gameObject.SetActive(false);
             rend.enabled = false;
 
             __instance.GameSettingsHightlight.enabled = false;
@@ -93,9 +93,6 @@ public static class CustomOptionsTab
         header.Title = StringNames.None;
         header.TitleText.text = title;
         header.name = "Header";
-
-        var transform = header.transform;
-        var position = transform.localPosition;
 
         var checkBox = header.transform.FindChild("CheckBox")?.gameObject;
         if (checkBox)
@@ -116,7 +113,7 @@ public static class CustomOptionsTab
     public static GameObject CreateCustomTab(GameSettingMenu __instance, GameObject newSettings,
         GameObject gameTab, GameObject roleTab)
     {
-        var newTab = GameObject.Instantiate(gameTab, gameTab.transform.parent);
+        var newTab = Object.Instantiate(gameTab, gameTab.transform.parent);
         newTab.name = "LaunchpadTab";
         gameTab.transform.position += new Vector3(-1, 0, 0);
 
@@ -131,7 +128,7 @@ public static class CustomOptionsTab
 
         var spriteRend = inside.GetComponentInChildren<SpriteRenderer>();
         spriteRend.sprite = SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.Hack.png");
-        spriteRend.gameObject.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f); ;
+        spriteRend.gameObject.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
 
         return newTab;
 

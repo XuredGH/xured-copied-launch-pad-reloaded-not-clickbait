@@ -29,6 +29,6 @@ public class HackButton : CustomActionButton
         }
 
         PlayerControl.LocalPlayer.RawSetColor(15);
-        HackingManager.RpcToggleNode(ShipStatus.Instance, HackingManager.Instance.Nodes.Random().Id, true);
+        HackingManager.RpcToggleNode(ShipStatus.Instance, HackingManager.Instance.nodes.Random().Id, true);
     }
 }

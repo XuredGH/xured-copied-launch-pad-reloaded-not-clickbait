@@ -6,4 +6,5 @@ public enum LaunchpadRoles : ushort
     Hacker = 11,
     Janitor = 12,
     Tracker = 13,
+    Medic = 14,
 }

@@ -12,7 +12,7 @@ public class ScannerComponent(IntPtr ptr) : MonoBehaviour(ptr)
 {
     public PlayerControl PlacedBy;
     public byte Id;
-    public List<PlayerControl> PlayersInProximity = new List<PlayerControl>();
+    public List<PlayerControl> PlayersInProximity = [];
     public PlainShipRoom Room;
 
     public void Awake()

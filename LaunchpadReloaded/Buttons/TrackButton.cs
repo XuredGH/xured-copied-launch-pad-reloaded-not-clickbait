@@ -29,18 +29,18 @@ public class TrackButton : CustomActionButton
 
         if (UsesLeft > 0)
         {
-            if (CurrentTarget != null)
+            if (CurrentTarget)
             {
-                CurrentTarget.cosmetics.currentBodySprite.BodySprite.material.SetFloat("_Outline", 0);
+                CurrentTarget.cosmetics.currentBodySprite.BodySprite.material.SetFloat(ShaderID.Outline, 0);
                 CurrentTarget = null;
             }
 
             CurrentTarget = playerControl.GetClosestPlayer(true, 1.5f);
 
-            if (CurrentTarget != null)
+            if (CurrentTarget)
             {
-                CurrentTarget.cosmetics.currentBodySprite.BodySprite.material.SetFloat("_Outline", 1);
-                CurrentTarget.cosmetics.currentBodySprite.BodySprite.material.SetColor("_OutlineColor", Palette.CrewmateBlue);
+                CurrentTarget.cosmetics.currentBodySprite.BodySprite.material.SetFloat(ShaderID.Outline, 1);
+                CurrentTarget.cosmetics.currentBodySprite.BodySprite.material.SetColor(ShaderID.OutlineColor, Palette.CrewmateBlue);
             }
         }
     }

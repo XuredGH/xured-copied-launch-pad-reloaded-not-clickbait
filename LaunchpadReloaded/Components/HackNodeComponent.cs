@@ -29,7 +29,7 @@ public class HackNodeComponent(IntPtr ptr) : MonoBehaviour(ptr)
         SoundManager.Instance.PlaySound(LaunchpadAssets.BeepSound.LoadAsset(), false, 0.5f);
         HackingManager.RpcUnhackPlayer(PlayerControl.LocalPlayer);
 
-        if (HackingManager.Instance.HackedPlayers.Count <= 0)
+        if (HackingManager.Instance.hackedPlayers.Count <= 0)
         {
             HackingManager.RpcToggleNode(ShipStatus.Instance, Id, false);
         }

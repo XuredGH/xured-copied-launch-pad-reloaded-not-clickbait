@@ -17,16 +17,21 @@ public static class TaskPanelPatch
             return true;
         }
 
-        __instance.background.transform.localScale = __instance.taskText.textBounds.size.x > 0f ? new Vector3(__instance.taskText.textBounds.size.x + 0.4f, __instance.taskText.textBounds.size.y + 0.3f, 1f) : Vector3.zero;
+        var transform = __instance.background.transform;
         var vector = __instance.background.sprite.bounds.extents;
-        vector.y = -vector.y;
-        vector = vector.Mul(__instance.background.transform.localScale);
-        __instance.background.transform.localPosition = vector;
         var vector2 = __instance.tab.sprite.bounds.extents;
+        
+        transform.localScale = __instance.taskText.textBounds.size.x > 0f ? new Vector3(__instance.taskText.textBounds.size.x + 0.4f, __instance.taskText.textBounds.size.y + 0.3f, 1f) : Vector3.zero;
+        
+        vector.y = -vector.y;
+        vector = vector.Mul(transform.localScale);
+        __instance.background.transform.localPosition = vector;
+        
         vector2 = vector2.Mul(__instance.tab.transform.localScale);
         vector2.y = -vector2.y;
         vector2.x += vector.x * 2f;
         __instance.tab.transform.localPosition = vector2;
+        
         if (GameManager.Instance == null)
         {
             return false;

@@ -13,7 +13,7 @@ namespace LaunchpadReloaded.Features;
 public class RevivalManager(IntPtr ptr) : MonoBehaviour(ptr)
 {
     public static RevivalManager Instance;
-    public List<byte> RevivedPlayers = new List<byte>();
+    public List<byte> RevivedPlayers = [];
 
     private void Awake()
     {

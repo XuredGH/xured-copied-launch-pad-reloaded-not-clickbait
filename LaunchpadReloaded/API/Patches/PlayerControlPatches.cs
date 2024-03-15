@@ -1,10 +1,12 @@
 ﻿using HarmonyLib;
+using Il2CppSystem;
 using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.API.Utilities;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
+using UnityEngine;
 
 namespace LaunchpadReloaded.API.Patches;
 
@@ -17,7 +19,7 @@ public static class PlayerControlPatches
     {
         if (__instance.IsRevived())
         {
-            __instance.cosmetics.SetOutline(true,LaunchpadPalette.MedicColor);
+            __instance.cosmetics.SetOutline(true,new Nullable<Color>(LaunchpadPalette.MedicColor));
         }
 
         if (MeetingHud.Instance)

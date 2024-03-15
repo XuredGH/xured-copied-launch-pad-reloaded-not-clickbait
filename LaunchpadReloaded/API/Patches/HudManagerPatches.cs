@@ -52,7 +52,7 @@ public static class HudManagerPatches
             __instance.tasksString.Append("You have been hacked!\n");
             __instance.tasksString.Append("You are unable to complete tasks or call meetings.\n");
             __instance.tasksString.Append("Find an active node to reverse the hack!.\n");
-            __instance.tasksString.Append($"{HackingManager.Instance.HackedPlayers.Count} players are still hacked.");
+            __instance.tasksString.Append($"{HackingManager.Instance.hackedPlayers.Count} players are still hacked.");
             __instance.tasksString.Append("</color>");
             __instance.TaskPanel.SetTaskText(__instance.tasksString.ToString());
 
@@ -68,7 +68,7 @@ public static class HudManagerPatches
             newB.Append(PlayerControl.LocalPlayer.Data.Role is HackerRole ?
                 "\n\nYou have hacked the crewmates! They will not be able to\ncomplete tasks or call meetings until they reverse the hack."
                 : "\n\nYou will still not be able to report bodies or \ncall meetings until all crewmates reverse the hack.");
-            newB.Append($"\n{HackingManager.Instance.HackedPlayers.Count} players are still hacked.");
+            newB.Append($"\n{HackingManager.Instance.hackedPlayers.Count} players are still hacked.");
             newB.Append("</color>");
             __instance.TaskPanel.SetTaskText(__instance.tasksString.ToString() + newB);
         }

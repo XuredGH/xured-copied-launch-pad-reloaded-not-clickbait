@@ -6,7 +6,7 @@ namespace LaunchpadReloaded.API.Hud;
 
 public static class CustomButtonManager
 {
-    public static readonly List<CustomActionButton> CustomButtons = new();
+    public static readonly List<CustomActionButton> CustomButtons = [];
 
     public static void RegisterAllButtons()
     {

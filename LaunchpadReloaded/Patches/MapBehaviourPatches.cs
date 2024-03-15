@@ -39,7 +39,7 @@ public class MapBehaviourPatches
     {
         if (PlayerControl.LocalPlayer.Data.Role is TrackerRole && TrackingManager.Instance.TrackedPlayer && !trackerHerePoint)
         {
-            trackerHerePoint = GameObject.Instantiate(__instance.HerePoint, __instance.HerePoint.transform.parent);
+            trackerHerePoint = Object.Instantiate(__instance.HerePoint, __instance.HerePoint.transform.parent);
             trackerHerePoint.name = "TrackingPlayer";
             trackerHerePoint.transform.localPosition = TrackingManager.Instance.MapPosition;
             TrackingManager.Instance.TrackedPlayer.SetPlayerMaterialColors(trackerHerePoint);

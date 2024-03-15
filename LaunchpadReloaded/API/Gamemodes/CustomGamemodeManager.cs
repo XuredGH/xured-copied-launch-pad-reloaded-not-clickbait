@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Networking;
 using Reactor.Networking.Attributes;
 
 namespace LaunchpadReloaded.API.Gamemodes;
 public static class CustomGamemodeManager
 {
-    public static List<CustomGamemode> Gamemodes = new List<CustomGamemode>();
+    public static List<CustomGamemode> Gamemodes = [];
     public static CustomGamemode ActiveMode;
 
     public static void RegisterAllGamemodes()

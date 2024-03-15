@@ -12,7 +12,7 @@ namespace LaunchpadReloaded.Features;
 public class ScannerManager(IntPtr ptr) : MonoBehaviour(ptr)
 {
     public static ScannerManager Instance;
-    public List<ScannerComponent> Scanners = new();
+    public List<ScannerComponent> Scanners = [];
 
     private void Awake()
     {

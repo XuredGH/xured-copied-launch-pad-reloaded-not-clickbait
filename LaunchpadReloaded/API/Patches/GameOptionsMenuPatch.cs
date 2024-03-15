@@ -3,6 +3,7 @@ using HarmonyLib;
 using Il2CppSystem;
 using LaunchpadReloaded.API.GameOptions;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace LaunchpadReloaded.API.Patches;
 
@@ -28,7 +29,7 @@ public static class GameOptionsMenuPatch
     [HarmonyPatch("Update")]
     public static void UpdatePostfix(GameOptionsMenu __instance)
     {
-        var menu = GameObject.FindObjectsOfType<GameSettingMenu>().First();
+        var menu = Object.FindObjectsOfType<GameSettingMenu>().First();
         if (menu.RegularGameSettings.active || menu.RolesSettings.gameObject.active)
         {
             return;
@@ -46,7 +47,8 @@ public static class GameOptionsMenuPatch
 
             group.Header.SetActive(!group.Hidden());
             startOffset -= 0.5f;
-            group.Header.transform.localPosition = new Vector3(group.Header.transform.localPosition.x, startOffset, group.Header.transform.localPosition.z);
+            var position = group.Header.transform.localPosition;
+            group.Header.transform.localPosition = new Vector3(position.x, startOffset, position.z);
 
             foreach (var option in group.Options)
             {
@@ -59,7 +61,9 @@ public static class GameOptionsMenuPatch
                 option.OptionBehaviour.gameObject.SetActive(!group.Hidden() && !option.Hidden());
 
                 startOffset -= 0.5f;
-                option.OptionBehaviour.transform.localPosition = new Vector3(option.OptionBehaviour.transform.localPosition.x, startOffset, option.OptionBehaviour.transform.localPosition.z);
+                var transform = option.OptionBehaviour.transform;
+                var optionPosition = transform.localPosition;
+                transform.localPosition = new Vector3(optionPosition.x, startOffset, optionPosition.z);
             }
         }
 
@@ -74,7 +78,9 @@ public static class GameOptionsMenuPatch
             option.OptionBehaviour.gameObject.SetActive(!option.Hidden());
 
             startOffset -= 0.5f;
-            option.OptionBehaviour.transform.localPosition = new Vector3(option.OptionBehaviour.transform.localPosition.x, startOffset, option.OptionBehaviour.transform.localPosition.z);
+            var transform = option.OptionBehaviour.transform;
+            var optionPosition = transform.localPosition;
+            transform.localPosition = new Vector3(optionPosition.x, startOffset, optionPosition.z);
         }
     }
 }

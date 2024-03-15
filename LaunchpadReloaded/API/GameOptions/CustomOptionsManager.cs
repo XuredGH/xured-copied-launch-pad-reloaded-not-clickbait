@@ -6,11 +6,11 @@ namespace LaunchpadReloaded.API.GameOptions;
 
 public static class CustomOptionsManager
 {
-    public static readonly List<AbstractGameOption> CustomOptions = new();
-    public static readonly List<CustomNumberOption> CustomNumberOptions = new();
-    public static readonly List<CustomToggleOption> CustomToggleOptions = new();
-    public static readonly List<CustomStringOption> CustomStringOptions = new();
-    public static readonly List<CustomOptionGroup> CustomGroups = new();
+    public static readonly List<AbstractGameOption> CustomOptions = [];
+    public static readonly List<CustomNumberOption> CustomNumberOptions = [];
+    public static readonly List<CustomToggleOption> CustomToggleOptions = [];
+    public static readonly List<CustomStringOption> CustomStringOptions = [];
+    public static readonly List<CustomOptionGroup> CustomGroups = [];
     public static void SyncOptions()
     {
         var toggles = CustomToggleOptions.Select(x => x.Value).ToArray();
