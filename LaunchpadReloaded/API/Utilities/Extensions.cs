@@ -28,6 +28,7 @@ public static class Extensions
 
     public static bool IsRevived(this PlayerControl player)
     {
+        if (RevivalManager.Instance is null) return false;
         return RevivalManager.Instance.RevivedPlayers.Contains(player.PlayerId);
     }
 

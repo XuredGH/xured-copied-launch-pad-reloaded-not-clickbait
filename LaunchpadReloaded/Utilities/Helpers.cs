@@ -18,8 +18,13 @@ public static class Helpers
         return DragManager.IsDragging(PlayerControl.LocalPlayer.PlayerId);
     }
 
-    public static TextMeshPro CreateTextLabel(string name, Transform parent, 
-        AspectPosition.EdgeAlignments alignment, Vector3 distance, float fontSize = 2f, 
+    public static DeadBody GetBodyById(byte id)
+    {
+        return UnityEngine.Object.FindObjectsOfType<DeadBody>().FirstOrDefault(body => body.ParentId == id);
+    }
+
+    public static TextMeshPro CreateTextLabel(string name, Transform parent,
+        AspectPosition.EdgeAlignments alignment, Vector3 distance, float fontSize = 2f,
         TextAlignmentOptions textAlignment = TextAlignmentOptions.Center)
     {
         var textObj = new GameObject(name);
@@ -39,7 +44,7 @@ public static class Helpers
 
         return textMeshPro;
     }
-  
+
     public static string RandomString(int length, string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
     {
         return new string(Enumerable.Repeat(chars, length)
