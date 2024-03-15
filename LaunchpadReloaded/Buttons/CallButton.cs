@@ -18,6 +18,8 @@ public class CallButton : CustomActionButton
         return role is CaptainRole;
     }
 
+    public override bool CanUse() => !ZoomButton.IsZoom;
+
     protected override void OnClick()
     {
         PlayerControl.LocalPlayer.CmdReportDeadBody(null);

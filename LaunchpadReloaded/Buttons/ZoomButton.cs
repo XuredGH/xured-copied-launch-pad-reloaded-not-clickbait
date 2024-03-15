@@ -14,7 +14,7 @@ public class ZoomButton : CustomActionButton
     public override float EffectDuration => 5;
     public override int MaxUses => 0;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.ZoomButton;
-
+    public static bool IsZoom = false;
     public override bool Enabled(RoleBehaviour role)
     {
         return role is CaptainRole;
@@ -22,7 +22,6 @@ public class ZoomButton : CustomActionButton
 
     protected override void OnClick()
     {
-        HudManager.Instance.ShadowQuad.gameObject.SetActive(false);
         ZoomOut();
     }
 
@@ -31,52 +30,37 @@ public class ZoomButton : CustomActionButton
         ZoomIn();
     }
 
-    private static IEnumerator ZoomOutCoroutine()
+    public static IEnumerator ZoomOutCoroutine()
     {
-        if (Camera.main is not null)
+        HudManager.Instance.ShadowQuad.gameObject.SetActive(false);
+        IsZoom = true;
+        for (var ft = Camera.main.orthographicSize; ft < 9; ft += 0.1f)
         {
-            for (var ft = Camera.main.orthographicSize; ft < 12; ft += 0.1f)
-            {
-                Camera.main.orthographicSize = ft;
-                if (MeetingHud.Instance)
-                {
-                    Camera.main.orthographicSize = 3f;
-                }
-                foreach (var cam in Camera.allCameras) cam.orthographicSize = Camera.main.orthographicSize;
-                ResolutionManager.ResolutionChanged.Invoke((float)Screen.width / Screen.height, Screen.width, Screen.height, Screen.fullScreen);
-
-                yield return null;
-            }
+            Camera.main.orthographicSize = MeetingHud.Instance ? 3f : ft;
+            ResolutionManager.ResolutionChanged.Invoke((float)Screen.width / Screen.height, Screen.width, Screen.height, Screen.fullScreen);
+            foreach (var cam in Camera.allCameras) cam.orthographicSize = Camera.main.orthographicSize;
+            yield return null;
         }
     }
 
-    private static IEnumerator ZoomInCoroutine()
+    public static IEnumerator ZoomInCoroutine()
     {
-        if (Camera.main is not null)
+        for (var ft = Camera.main.orthographicSize; ft > 3; ft -= 0.1f)
         {
-            for (var ft = Camera.main.orthographicSize; ft > 3; ft -= 0.1f)
-            {
-                Camera.main.orthographicSize = ft;
+            Camera.main.orthographicSize = MeetingHud.Instance ? 3f : ft;
+            ResolutionManager.ResolutionChanged.Invoke((float)Screen.width / Screen.height, Screen.width, Screen.height, Screen.fullScreen);
+            foreach (var cam in Camera.allCameras) cam.orthographicSize = Camera.main.orthographicSize;
 
-                if (MeetingHud.Instance)
-                {
-                    Camera.main.orthographicSize = 3f;
-                }
-
-                foreach (var cam in Camera.allCameras) cam.orthographicSize = Camera.main.orthographicSize;
-                ResolutionManager.ResolutionChanged.Invoke((float)Screen.width / Screen.height, Screen.width, Screen.height, Screen.fullScreen);
-
-                if (ft < 4f) HudManager.Instance.ShadowQuad.gameObject.SetActive(true);
-
-                yield return null;
-            }
+            yield return null;
         }
+
+        HudManager.Instance.ShadowQuad.gameObject.SetActive(true);
+        IsZoom = false;
     }
 
     private static void ZoomOut()
     {
         Coroutines.Start(ZoomOutCoroutine());
-        HudManager.Instance.ShadowQuad.gameObject.SetActive(false);
     }
 
     private static void ZoomIn()
