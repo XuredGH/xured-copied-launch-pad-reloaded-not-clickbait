@@ -1,4 +1,6 @@
-﻿using LaunchpadReloaded.Networking;
+﻿using AmongUs.GameOptions;
+using LaunchpadReloaded.Networking;
+using LaunchpadReloaded.Utilities;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities.Attributes;
 using Reactor.Utilities.Extensions;
@@ -21,8 +23,11 @@ public class RevivalManager(IntPtr ptr) : MonoBehaviour(ptr)
     }
 
     [MethodRpc((uint)LaunchpadRPC.Revive)]
-    public static void RpcRevive(DeadBody body)
+    public static void RpcRevive(PlayerControl player, byte bodyId)
     {
+        DeadBody body = Helpers.GetBodyById(bodyId);
+        if (body is null) return;
+
         Revive(body);
     }
 
@@ -31,11 +36,18 @@ public class RevivalManager(IntPtr ptr) : MonoBehaviour(ptr)
         var player = PlayerControl.AllPlayerControls.ToArray().ToList().Find(player => player.PlayerId == body.ParentId);
         player.transform.position = body.transform.position;
         player.Revive();
-        player.SetRole(AmongUs.GameOptions.RoleTypes.Crewmate);
 
-        if (PlayerControl.LocalPlayer.PlayerId == player.PlayerId)
+        player.RemainingEmergencies = GameManager.Instance.LogicOptions.GetNumEmergencyMeetings();
+        RoleManager.Instance.SetRole(player, RoleTypes.Crewmate);
+        player.Data.Role.SpawnTaskHeader(player);
+        player.MyPhysics.SetBodyType(player.BodyType);
+
+        if (player.AmOwner)
         {
-            PlayerControl.LocalPlayer.myTasks.RemoveAt(0);
+            HudManager.Instance.MapButton.gameObject.SetActive(true);
+            HudManager.Instance.ReportButton.gameObject.SetActive(true);
+            HudManager.Instance.UseButton.gameObject.SetActive(true);
+            player.myTasks.RemoveAt(0);
         }
 
         body.gameObject.Destroy();

@@ -41,6 +41,10 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
             new Vector3(24.3133f, 14.628f, 0.0146f),
             new Vector3(7.6678f, -9.9008f, -0.0099f)
             ],
+
+        // Submerged compatibility soon
+        [(MapType)6] = [
+            ]
     };
 
     private Vector3[] AirshipPositions = [
