@@ -1,12 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using AmongUs.GameOptions;
 using LaunchpadReloaded.API.Gamemodes;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -40,12 +40,15 @@ public class BattleRoyale : CustomGamemode
         DeathNotif.text = text;
         DeathNotif.gameObject.SetActive(true);
         yield return new WaitForSeconds(3f);
-        DeathNotif.gameObject.SetActive(false);
+        if (DeathNotif) DeathNotif.gameObject.SetActive(false);
     }
     public override void OnDeath(PlayerControl player)
     {
+        var alivePlayers = GameData.Instance.AllPlayers.ToArray().Where(player => !player.Disconnected && !player.IsDead).Count();
+        if (alivePlayers == 2 || alivePlayers == 1) return;
+
         player.transform.FindChild("BodyForms/Seeker/KnifeHand").gameObject.Destroy();
-        Coroutines.Start(DeathNotification(player));
+        if (DeathNotif) Coroutines.Start(DeathNotification(player));
     }
     public override void HudStart(HudManager instance)
     {
@@ -97,19 +100,18 @@ public class BattleRoyale : CustomGamemode
     public override bool CanUseSystemConsole(SystemConsole console) => false;
     public override void CheckGameEnd(out bool runOriginal, LogicGameFlowNormal instance)
     {
-        runOriginal = true;
-/*        runOriginal = false;
+        runOriginal = false;
         var alivePlayers = GameData.Instance.AllPlayers.ToArray().Where(player => !player.Disconnected && !player.IsDead);
         if (alivePlayers.Count() == 1)
         {
             instance.Manager.RpcEndGame(GameOverReason.ImpostorByKill, false);
-        }*/
+        }
     }
 
     public override void AssignRoles(out bool runOriginal, LogicRoleSelectionNormal instance)
     {
-        runOriginal = false; 
-        foreach(var player in GameData.Instance.AllPlayers)
+        runOriginal = false;
+        foreach (var player in GameData.Instance.AllPlayers)
         {
             player.Object.RpcSetRole(RoleTypes.Impostor);
         }

@@ -10,6 +10,6 @@ public static class MeetingHudPatches
     [HarmonyPatch("Awake")]
     public static void AwakePostfix()
     {
-        DragManager.DraggingPlayers.Clear();
+        DragManager.Instance.DraggingPlayers.Clear();
     }
 }

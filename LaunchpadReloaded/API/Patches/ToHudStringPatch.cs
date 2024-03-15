@@ -1,11 +1,11 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using AmongUs.GameOptions;
 using HarmonyLib;
 using LaunchpadReloaded.API.Gamemodes;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.Utilities;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace LaunchpadReloaded.API.Patches;
 
@@ -35,6 +35,8 @@ public static class ToHudStringPatch
 
     public static void Postfix(IGameOptions __instance, ref string __result)
     {
+        if (GameManager.Instance is null || GameManager.Instance.IsHideAndSeek()) return;
+
         if (ShowCustom || !CustomGamemodeManager.ActiveMode.CanAccessSettingsTab())
         {
             var sb = new StringBuilder("<size=150%><b>Launchpad Options:</b></size>\n");

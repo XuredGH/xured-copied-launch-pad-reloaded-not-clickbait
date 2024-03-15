@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using LaunchpadReloaded.Components;
+﻿using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Utilities;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities.Attributes;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Features;
@@ -12,11 +12,12 @@ namespace LaunchpadReloaded.Features;
 public class ScannerManager(IntPtr ptr) : MonoBehaviour(ptr)
 {
     public static ScannerManager Instance;
-    public List<ScannerComponent> Scanners = [];
+    public List<ScannerComponent> Scanners;
 
     private void Awake()
     {
         Instance = this;
+        Scanners = new List<ScannerComponent>();
     }
 
     [MethodRpc((uint)LaunchpadRPC.CreateScanner)]

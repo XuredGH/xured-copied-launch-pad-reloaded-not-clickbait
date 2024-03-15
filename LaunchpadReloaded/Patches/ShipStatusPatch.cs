@@ -2,6 +2,7 @@
 using LaunchpadReloaded.API.Gamemodes;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Utilities;
+using Reactor.Utilities.Extensions;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Patches;
@@ -18,6 +19,7 @@ public static class ShipStatusPatch
         managers.AddComponent<TrackingManager>();
         managers.AddComponent<ScannerManager>();
         managers.AddComponent<RevivalManager>();
+        managers.AddComponent<DragManager>();
 
         HackingManager.RpcCreateNodes(__instance);
     }
@@ -28,6 +30,8 @@ public static class ShipStatusPatch
     {
         CustomGamemodeManager.SetGamemode(0);
         LaunchpadGameOptions.Instance.GameModes.SetValue(0);
+
+        if (__instance.transform.FindChild("LaunchpadManagers")) __instance.transform.FindChild("LaunchpadManagers").gameObject.Destroy();
         //CustomGamemodeManager.RpcSetGamemode(PlayerControl.LocalPlayer, 0);
     }
 }

@@ -1,5 +1,5 @@
-﻿using System;
-using Reactor.Utilities.Attributes;
+﻿using Reactor.Utilities.Attributes;
+using System;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Components;
@@ -8,6 +8,4 @@ namespace LaunchpadReloaded.Components;
 public class PlayerGradientData(IntPtr ptr) : MonoBehaviour(ptr)
 {
     public int gradientColor = 255;
-    
-    
 }

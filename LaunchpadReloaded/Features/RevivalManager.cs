@@ -1,6 +1,5 @@
 ﻿using AmongUs.GameOptions;
 using LaunchpadReloaded.Networking;
-using LaunchpadReloaded.Utilities;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities.Attributes;
 using Reactor.Utilities.Extensions;
@@ -15,11 +14,17 @@ namespace LaunchpadReloaded.Features;
 public class RevivalManager(IntPtr ptr) : MonoBehaviour(ptr)
 {
     public static RevivalManager Instance;
-    public List<byte> RevivedPlayers = [];
+    public List<byte> RevivedPlayers;
 
     private void Awake()
     {
         Instance = this;
+        RevivedPlayers = new List<byte>();
+    }
+
+    private void OnDestroy()
+    {
+        RevivedPlayers.Clear();
     }
 
     [MethodRpc((uint)LaunchpadRPC.Revive)]

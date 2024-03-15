@@ -1,10 +1,10 @@
-﻿using System.Linq;
-using AmongUs.GameOptions;
+﻿using AmongUs.GameOptions;
 using HarmonyLib;
 using Il2CppSystem;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
 using Reactor.Utilities.Extensions;
+using System.Linq;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -38,6 +38,8 @@ public static class RolesSettingsMenuPatches
             }
 
             var numOptsAdded = 0;
+            var toggleOptsAdded = 0;
+
             foreach (var customOption in CustomOptionsManager.CustomOptions)
             {
                 if (customOption.AdvancedRole is not null && customOption.AdvancedRole == role.GetType())
@@ -53,7 +55,7 @@ public static class RolesSettingsMenuPatches
 
                         case CustomToggleOption toggleOption:
                             var togOpt = Object.Instantiate(toggleSet, newTab.transform);
-                            togOpt.transform.localPosition -= new Vector3(0, .5f * numOptsAdded++, 0);
+                            togOpt.transform.localPosition -= new Vector3(0, .4f * toggleOptsAdded++, 0);
                             toggleOption.CreateToggleOption(togOpt);
 
                             break;
@@ -110,19 +112,22 @@ public static class RolesSettingsMenuPatches
     [HarmonyPatch("ValueChanged")]
     public static bool ValueChangedPrefix(RolesSettingsMenu __instance, [HarmonyArgument(0)] OptionBehaviour obj)
     {
-        if (obj is RoleOptionSetting { Role: ICustomRole role } roleSetting)
+        if (obj is RoleOptionSetting roleSetting)
         {
-            Debug.LogError("SETTING ROLE CONFIG");
-            LaunchpadReloadedPlugin.Instance.Config.TryGetEntry<int>(role.NumConfigDefinition, out var numEntry);
-            numEntry.Value = roleSetting.RoleMaxCount;
+            if (roleSetting.Role is ICustomRole role)
+            {
+                Debug.LogError("SETTING ROLE CONFIG");
+                LaunchpadReloadedPlugin.Instance.Config.TryGetEntry<int>(role.NumConfigDefinition, out var numEntry);
+                numEntry.Value = roleSetting.RoleMaxCount;
 
-            LaunchpadReloadedPlugin.Instance.Config.TryGetEntry<int>(role.ChanceConfigDefinition, out var chanceEntry);
-            chanceEntry.Value = roleSetting.RoleChance;
+                LaunchpadReloadedPlugin.Instance.Config.TryGetEntry<int>(role.ChanceConfigDefinition, out var chanceEntry);
+                chanceEntry.Value = roleSetting.RoleChance;
 
-            roleSetting.UpdateValuesAndText(GameOptionsManager.Instance.CurrentGameOptions.RoleOptions);
+                roleSetting.UpdateValuesAndText(GameOptionsManager.Instance.CurrentGameOptions.RoleOptions);
 
-            GameOptionsManager.Instance.GameHostOptions = GameOptionsManager.Instance.CurrentGameOptions;
-            return false;
+                GameOptionsManager.Instance.GameHostOptions = GameOptionsManager.Instance.CurrentGameOptions;
+                return false;
+            }
         }
 
         return true;

@@ -1,8 +1,8 @@
-using System;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Attributes;
+using System;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
@@ -29,28 +29,28 @@ public class HackerRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
     {
         HackCooldown = new CustomNumberOption("Hack Cooldown",
             defaultValue: 60,
-            range: new FloatRange(10, 300),
+            10, 300,
             increment: 10,
             suffixType: NumberSuffixes.Seconds,
             role: typeof(HackerRole));
 
         HackUses = new CustomNumberOption("Hacks Per Game",
             defaultValue: 2,
-            range: new FloatRange(1, 8),
+            1, 8,
             increment: 1,
             suffixType: NumberSuffixes.None,
             role: typeof(HackerRole));
 
         MapCooldown = new CustomNumberOption("Map Cooldown",
             defaultValue: 10,
-            range: new FloatRange(0, 40),
+            0, 40,
             increment: 3,
             suffixType: NumberSuffixes.Seconds,
             role: typeof(HackerRole));
 
         MapDuration = new CustomNumberOption("Map Duration",
             defaultValue: 3,
-            range: new FloatRange(1, 30),
+            1, 30,
             increment: 3,
             suffixType: NumberSuffixes.Seconds,
             role: typeof(HackerRole));

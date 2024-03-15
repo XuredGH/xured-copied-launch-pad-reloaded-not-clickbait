@@ -1,8 +1,8 @@
 using LaunchpadReloaded.API.GameOptions;
-using System;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Attributes;
+using System;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
@@ -27,14 +27,14 @@ public class CaptainRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
     {
         CaptainMeetingCooldown = new CustomNumberOption("Meeting Cooldown",
             defaultValue: 45,
-            range: new FloatRange(0, 120),
+            0, 120,
             increment: 5,
             suffixType: NumberSuffixes.Seconds,
             role: typeof(CaptainRole));
 
         CaptainMeetingCount = new CustomNumberOption("Meeting Uses",
             defaultValue: 3,
-            range: new FloatRange(1, 5),
+            1, 5,
             increment: 1,
             suffixType: NumberSuffixes.None,
             role: typeof(CaptainRole));

@@ -17,7 +17,7 @@ public static class HudManagerPatches
             return;
         }
 
-        if(PlayerControl.LocalPlayer.Data.IsHacked())
+        if (PlayerControl.LocalPlayer.Data.IsHacked())
         {
             __instance.tasksString.Clear();
             __instance.tasksString.Append(Color.green.ToTextColor());
@@ -29,16 +29,18 @@ public static class HudManagerPatches
             __instance.TaskPanel.SetTaskText(__instance.tasksString.ToString());
         }
 
-        if (HackingManager.Instance && HackingManager.Instance.AnyActiveNodes())
+        if (DragManager.Instance is null || HackingManager.Instance is null) return;
+
+        if (HackingManager.Instance.AnyActiveNodes())
         {
             __instance.ReportButton.SetDisabled();
         }
 
-        foreach (var (player, bodyId) in DragManager.DraggingPlayers)
+        foreach (var (player, bodyId) in DragManager.Instance.DraggingPlayers)
         {
             var bodyById = DeadBodyManager.GetBodyById(bodyId);
             bodyById.transform.position = Vector3.Lerp(bodyById.transform.position, GameData.Instance.GetPlayerById(player).Object.transform.position, 5f * Time.deltaTime);
         }
     }
-    
+
 }

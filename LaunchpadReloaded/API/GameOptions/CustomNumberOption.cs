@@ -1,5 +1,5 @@
-﻿using System;
-using BepInEx.Configuration;
+﻿using BepInEx.Configuration;
+using System;
 using UnityEngine;
 
 namespace LaunchpadReloaded.API.GameOptions;
@@ -7,7 +7,8 @@ namespace LaunchpadReloaded.API.GameOptions;
 public class CustomNumberOption : AbstractGameOption
 {
     public float Value { get; private set; }
-    public FloatRange Range { get; }
+    public float Min { get; }
+    public float Max { get; }
     public float Increment { get; }
     public NumberSuffixes SuffixType { get; }
     public string NumberFormat { get; }
@@ -15,11 +16,12 @@ public class CustomNumberOption : AbstractGameOption
     public ConfigEntry<float> Config { get; }
     public Action<float> ChangedEvent = null;
 
-    public CustomNumberOption(string title, float defaultValue, FloatRange range, float increment, NumberSuffixes suffixType, string numberFormat = "0", Type role = null, bool save = true) : base(title, role, save)
+    public CustomNumberOption(string title, float defaultValue, float min, float max, float increment, NumberSuffixes suffixType, string numberFormat = "0", Type role = null, bool save = true) : base(title, role, save)
     {
         Value = defaultValue;
         Default = defaultValue;
-        Range = range;
+        Min = min;
+        Max = max;
         Increment = increment;
         SuffixType = suffixType;
         NumberFormat = numberFormat;
@@ -30,6 +32,8 @@ public class CustomNumberOption : AbstractGameOption
 
     public void SetValue(float newValue)
     {
+        newValue = Mathf.Clamp(newValue, Min, Max);
+
         if (Save) Config.Value = newValue;
         Value = newValue;
 
@@ -50,8 +54,8 @@ public class CustomNumberOption : AbstractGameOption
         numberOption.Increment = Increment;
         numberOption.SuffixType = SuffixType;
         numberOption.FormatString = NumberFormat;
+        numberOption.ValidRange = new FloatRange(Min, Max);
         numberOption.ZeroIsInfinity = false;
-        numberOption.ValidRange = Range;
         numberOption.OnValueChanged = (Il2CppSystem.Action<OptionBehaviour>)ValueChanged;
         numberOption.OnEnable();
         OptionBehaviour = numberOption;
@@ -59,8 +63,7 @@ public class CustomNumberOption : AbstractGameOption
 
     protected override void OnValueChanged(OptionBehaviour optionBehaviour)
     {
-        var value = Mathf.Clamp(optionBehaviour.GetFloat(), Range.min, Range.max);
-        SetValue(value);
+        SetValue(optionBehaviour.GetFloat());
     }
 
 }

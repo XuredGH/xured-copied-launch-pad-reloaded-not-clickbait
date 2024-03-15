@@ -1,10 +1,10 @@
-using System;
-using System.Text;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Attributes;
+using System;
+using System.Text;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
@@ -58,21 +58,21 @@ public class TrackerRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
     {
         PingTimer = new CustomNumberOption("Tracker Ping Timer",
             defaultValue: 7,
-            range: new FloatRange(3, 30),
+            3, 30,
             increment: 1,
             suffixType: NumberSuffixes.Seconds,
             role: typeof(TrackerRole));
 
         MaxScanners = new CustomNumberOption("Max Scanners",
             defaultValue: 3,
-            range: new FloatRange(1, 15),
+            1, 15,
             increment: 1,
             suffixType: NumberSuffixes.None,
             role: typeof(TrackerRole));
 
         ScannerCooldown = new CustomNumberOption("Place Scanner Cooldown",
             defaultValue: 5,
-            range: new FloatRange(1, 20),
+            1, 20,
             increment: 2,
             suffixType: NumberSuffixes.Seconds,
             role: typeof(TrackerRole));

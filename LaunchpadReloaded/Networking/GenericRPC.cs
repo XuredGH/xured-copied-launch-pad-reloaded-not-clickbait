@@ -1,5 +1,4 @@
-﻿using LaunchpadReloaded.API.Utilities;
-using LaunchpadReloaded.Utilities;
+﻿using LaunchpadReloaded.Utilities;
 using PowerTools;
 using Reactor.Networking.Attributes;
 using UnityEngine;
@@ -23,13 +22,14 @@ public static class GenericRPC
             hand.transform.SetParent(seekerHand.transform.parent);
             hand.transform.localScale = new Vector3(2, 2, 2);
             hand.name = "KnifeHand";
+            hand.layer = LayerMask.NameToLayer("Players");
 
             var nodeSync = hand.GetComponent<SpriteAnimNodeSync>();
-            nodeSync.flipOffset = new Vector3(-1.5f, 0.5f, -0.0228f);
-            nodeSync.normalOffset = new Vector3(1.5f, 0.5f, -0.0228f);
+            nodeSync.flipOffset = new Vector3(-1.5f, 0.5f, 0);
+            nodeSync.normalOffset = new Vector3(1.5f, 0.5f, 0);
 
             var rend = hand.GetComponent<SpriteRenderer>();
-            rend.sprite = SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.KnifeHand.png");
+            rend.sprite = LaunchpadAssets.KnifeHandSprite.LoadAsset();
 
             hand.SetActive(true);
             return;

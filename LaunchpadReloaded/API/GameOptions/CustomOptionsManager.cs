@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Reactor.Networking.Rpc;
+using System.Collections.Generic;
 using System.Linq;
-using Reactor.Networking.Rpc;
 
 namespace LaunchpadReloaded.API.GameOptions;
 
@@ -39,6 +39,7 @@ public static class CustomOptionsManager
 
         foreach (var option in CustomOptions)
         {
+            if (option.OptionBehaviour is null) continue;
             option.ValueChanged(option.OptionBehaviour);
         }
     }

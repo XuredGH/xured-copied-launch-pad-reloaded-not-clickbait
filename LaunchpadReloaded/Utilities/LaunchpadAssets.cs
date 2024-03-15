@@ -1,7 +1,7 @@
-﻿using System;
-using LaunchpadReloaded.API.Utilities;
+﻿using LaunchpadReloaded.API.Utilities;
 using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
+using System;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -11,7 +11,7 @@ public static class LaunchpadAssets
 {
     public static AssetBundle Bundle = AssetBundleManager.Load("assets");
     public static LoadableAsset<Sprite> NoImage = new("", false);
-    
+
     // Materials
     public static LoadableAsset<Material> GradientMaterial = new("GradientPlayerMaterial");
 
@@ -31,7 +31,7 @@ public static class LaunchpadAssets
     // Object Sprites
     public static LoadableAsset<Sprite> ScannerSprite = new("Scanner.png", false);
     public static LoadableAsset<Sprite> NodeSprite = new("Node.png", false);
-
+    public static LoadableAsset<Sprite> KnifeHandSprite = new("KnifeHand.png", false);
     // Sounds
     public static LoadableAsset<AudioClip> BeepSound = new("Beep.wav");
     public static LoadableAsset<AudioClip> PingSound = new("Ping.mp3");
@@ -43,7 +43,7 @@ public class LoadableAsset<T>(string name, bool useBundle = true)
     private const string ResourcesFolder = "LaunchpadReloaded.Resources.";
     public string Name { get; } = name;
     public bool UseBundle { get; } = useBundle;
-    
+
     private T _loadedAsset;
 
     public T LoadAsset()
@@ -58,7 +58,7 @@ public class LoadableAsset<T>(string name, bool useBundle = true)
             return _loadedAsset = LaunchpadAssets.Bundle.LoadAsset<T>(Name);
         }
 
-        if (typeof(T)==typeof(Sprite))
+        if (typeof(T) == typeof(Sprite))
         {
             return _loadedAsset = SpriteTools.LoadSpriteFromPath(ResourcesFolder + Name) as T;
         }

@@ -28,14 +28,14 @@ public class MedicRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
     {
         MaxRevives = new CustomNumberOption("Max Revives",
             defaultValue: 2,
-            range: new FloatRange(1, 9),
+            1, 9,
             increment: 1,
             suffixType: NumberSuffixes.None,
             role: typeof(MedicRole));
 
         ReviveCooldown = new CustomNumberOption("Revive Cooldown",
             defaultValue: 20,
-            range: new FloatRange(1, 50),
+            1, 50,
             increment: 2,
             suffixType: NumberSuffixes.Seconds,
             role: typeof(MedicRole));

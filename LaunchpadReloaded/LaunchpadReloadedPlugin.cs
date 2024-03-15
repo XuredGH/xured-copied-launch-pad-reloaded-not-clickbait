@@ -28,7 +28,7 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
         Instance = this;
         Harmony.PatchAll();
 
-        
+
         // TODO: CREATE ATTRIBUTE FOR THIS VVV
         CustomGamemodeManager.RegisterAllGamemodes();
         CustomGamemodeManager.SetGamemode(0);
@@ -36,8 +36,8 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
         CustomButtonManager.RegisterAllButtons();
 
         new LaunchpadGameOptions();
-        
+
         Config.Save();
     }
-    
+
 }

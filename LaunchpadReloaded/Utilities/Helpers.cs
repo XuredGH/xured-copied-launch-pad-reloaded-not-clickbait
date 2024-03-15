@@ -1,8 +1,8 @@
-﻿using System;
+﻿using LaunchpadReloaded.API.Roles;
+using LaunchpadReloaded.Features;
+using System;
 using System.Linq;
 using System.Text;
-using LaunchpadReloaded.API.Roles;
-using LaunchpadReloaded.Features;
 using TMPro;
 using UnityEngine;
 using Random = System.Random;
@@ -15,9 +15,20 @@ public static class Helpers
 
     public static bool ShouldCancelClick()
     {
-        return DragManager.IsDragging(PlayerControl.LocalPlayer.PlayerId);
-    }
+        if (DragManager.Instance is null) return false;
 
+        return DragManager.Instance.IsDragging(PlayerControl.LocalPlayer.PlayerId);
+    }
+    public static string FirstLetterToUpper(string str)
+    {
+        if (str == null)
+            return null;
+
+        if (str.Length > 1)
+            return char.ToUpper(str[0]) + str.Substring(1);
+
+        return str.ToUpper();
+    }
     public static DeadBody GetBodyById(byte id)
     {
         return UnityEngine.Object.FindObjectsOfType<DeadBody>().FirstOrDefault(body => body.ParentId == id);

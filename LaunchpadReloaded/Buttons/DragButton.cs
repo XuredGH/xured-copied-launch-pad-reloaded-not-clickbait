@@ -28,14 +28,12 @@ public class DragButton : CustomActionButton
 
     public override bool CanUse()
     {
-        if ((DragManager.IsDragging(PlayerControl.LocalPlayer.PlayerId) && !CanDrop())) return false;
-
-        return DeadBodyTarget is not null && PlayerControl.LocalPlayer.CanMove && !PlayerControl.LocalPlayer.inVent;
+        return DeadBodyTarget is not null && DragManager.Instance && PlayerControl.LocalPlayer.CanMove && !PlayerControl.LocalPlayer.inVent;
     }
 
     protected override void FixedUpdate(PlayerControl playerControl)
     {
-        if (DragManager.IsDragging(playerControl.PlayerId))
+        if (DragManager.Instance && DragManager.Instance.IsDragging(playerControl.PlayerId))
         {
             HudManager.Instance.KillButton.SetDisabled();
             HudManager.Instance.ReportButton.SetDisabled();
@@ -61,12 +59,13 @@ public class DragButton : CustomActionButton
 
     public bool CanDrop()
     {
+        if (DeadBodyTarget || DragManager.Instance is null) return false;
         return !PhysicsHelpers.AnythingBetween(PlayerControl.LocalPlayer.Collider, PlayerControl.LocalPlayer.Collider.bounds.center, DeadBodyTarget.TruePosition, Constants.ShipAndAllObjectsMask, false);
     }
 
     protected override void OnClick()
     {
-        if (DragManager.IsDragging(PlayerControl.LocalPlayer.PlayerId))
+        if (DragManager.Instance.IsDragging(PlayerControl.LocalPlayer.PlayerId))
         {
             DragManager.RpcStopDragging(PlayerControl.LocalPlayer);
         }

@@ -1,8 +1,8 @@
-using System;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Attributes;
+using System;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
@@ -28,14 +28,14 @@ public class JanitorRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
     {
         HideCooldown = new CustomNumberOption("Hide Bodies Cooldown",
             defaultValue: 5,
-            range: new FloatRange(0, 120),
+            0, 120,
             increment: 5,
             suffixType: NumberSuffixes.Seconds,
             role: typeof(JanitorRole));
 
         HideUses = new CustomNumberOption("Hide Bodies Uses",
             defaultValue: 3,
-            range: new FloatRange(1, 10),
+            1, 10,
             increment: 1,
             suffixType: NumberSuffixes.None,
             role: typeof(JanitorRole));

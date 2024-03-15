@@ -1,22 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using LaunchpadReloaded.Components;
+﻿using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities.Attributes;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Features;
+
 [RegisterInIl2Cpp]
 public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
 {
     public static HackingManager Instance { get; private set; }
 
-    public List<byte> hackedPlayers = [];
-    public List<HackNodeComponent> nodes = [];
+    public List<byte> hackedPlayers;
+    public List<HackNodeComponent> nodes;
 
     private readonly Dictionary<ShipStatus.MapType, Vector3[]> _mapNodePositions = new()
     {
@@ -59,6 +60,14 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
     private void Awake()
     {
         Instance = this;
+        nodes = new List<HackNodeComponent>();
+        hackedPlayers = new List<byte>();
+    }
+
+    private void OnDestroy()
+    {
+        nodes.Clear();
+        hackedPlayers.Clear();
     }
 
     public bool AnyActiveNodes()

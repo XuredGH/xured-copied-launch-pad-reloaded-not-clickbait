@@ -9,17 +9,26 @@ namespace LaunchpadReloaded.Buttons;
 public class ReviveButton : CustomActionButton
 {
     public override string Name => "REVIVE";
-    public override float Cooldown => 10;
+    public override float Cooldown => MedicRole.ReviveCooldown.Value;
     public override float EffectDuration => 0;
-    public override int MaxUses => 2;
+    public override int MaxUses => (int)MedicRole.MaxRevives.Value;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.ReviveButton;
     public override bool Enabled(RoleBehaviour role) => role is MedicRole;
     public override bool CanUse()
     {
-        return (RevivalManager.Instance && DeadBodyTarget is not null) && PlayerControl.LocalPlayer.CanMove &&
-            !DragManager.DraggingPlayers.ContainsValue(DeadBodyTarget.ParentId);
+        return (RevivalManager.Instance && DeadBodyTarget is not null) && CanRevive() && PlayerControl.LocalPlayer.CanMove &&
+            !DragManager.Instance.DraggingPlayers.ContainsValue(DeadBodyTarget.ParentId);
     }
 
+    public bool CanRevive()
+    {
+        if (!MedicRole.OnlyAllowInMedbay.Value) return true;
+
+        return ShipStatus.Instance.FastRooms[SystemTypes.MedBay].roomArea
+            .OverlapPoint(PlayerControl.LocalPlayer.GetTruePosition()) ||
+            ShipStatus.Instance.FastRooms[SystemTypes.Laboratory].roomArea
+            .OverlapPoint(PlayerControl.LocalPlayer.GetTruePosition());
+    }
     protected override void OnClick()
     {
         RevivalManager.RpcRevive(ShipStatus.Instance, DeadBodyTarget.ParentId);

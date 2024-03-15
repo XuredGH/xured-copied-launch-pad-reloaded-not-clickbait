@@ -1,8 +1,8 @@
-﻿using System;
+﻿using LaunchpadReloaded.Networking;
+using Reactor.Networking.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
-using LaunchpadReloaded.Networking;
-using Reactor.Networking.Attributes;
 
 namespace LaunchpadReloaded.API.Gamemodes;
 public static class CustomGamemodeManager
@@ -22,7 +22,7 @@ public static class CustomGamemodeManager
     }
 
     [MethodRpc((uint)LaunchpadRPC.SetGamemode)]
-    public static void RpcSetGamemode(PlayerControl player, int id)
+    public static void RpcSetGamemode(GameManager manager, int id)
     {
         SetGamemode(id);
     }

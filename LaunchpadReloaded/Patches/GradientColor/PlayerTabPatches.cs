@@ -14,41 +14,41 @@ public static class PlayerTabPatches
 {
     public static bool SelectGradient;
     private static ColorChip _switchButton;
+    private static TextMeshPro _buttonText;
     private static TextMeshPro _titleText;
 
     private static void SwitchSelector(PlayerTab instance)
     {
         SelectGradient = !SelectGradient;
-        _titleText.text = SelectGradient ? "Secondary Color: " : "Main Color: ";
         instance.currentColor = SelectGradient ? GradientManager.LocalGradientId : DataManager.Player.Customization.Color;
     }
-    
-    
+
+
     [HarmonyPostfix]
     [HarmonyPatch("OnEnable")]
     public static void OnEnablePostfix(PlayerTab __instance)
     {
         if (!_switchButton)
         {
-            __instance.transform.FindChild("Text").GetComponent<TextMeshPro>().text = "Main Color: ";
+            _titleText = __instance.transform.FindChild("Text").GetComponent<TextMeshPro>();
             _switchButton = Object.Instantiate(__instance.ColorTabPrefab, __instance.ColorTabArea);
-        
+
             var spriteRenderer = _switchButton.GetComponent<SpriteRenderer>();
             var sprite = spriteRenderer.sprite = LaunchpadAssets.BlankButton.LoadAsset();
 
             _switchButton.GetComponent<BoxCollider2D>().size = sprite.rect.size / sprite.pixelsPerUnit;
             _switchButton.transform.localScale = new Vector3(1, 1, 1);
             _switchButton.transform.localPosition = new Vector3(2, 1.5f, -2);
-            
-            var buttonText = Object.Instantiate(__instance.transform.Find("Text").gameObject,_switchButton.transform);
+
+            var buttonText = Object.Instantiate(__instance.transform.Find("Text").gameObject, _switchButton.transform);
             buttonText.transform.localPosition = new Vector3(0, 0, 0);
             buttonText.GetComponent<TextTranslatorTMP>().Destroy();
-            
-            _titleText = buttonText.GetComponent<TextMeshPro>();
-            _titleText.alignment = TextAlignmentOptions.Center;
-            _titleText.text = SelectGradient ? "Main Color" : "Secondary\nColor";
-            _titleText.fontSize = _titleText.fontSizeMax = 4;
-        
+
+            _buttonText = buttonText.GetComponent<TextMeshPro>();
+            _buttonText.alignment = TextAlignmentOptions.Center;
+            _buttonText.richText = true;
+            _buttonText.fontSize = _buttonText.fontSizeMax = 3.5f;
+
             _switchButton.Button.OnClick.RemoveAllListeners();
             _switchButton.Button.OnMouseOut.RemoveAllListeners();
             _switchButton.Button.OnMouseOver.RemoveAllListeners();
@@ -77,7 +77,7 @@ public static class PlayerTabPatches
             {
                 GradientManager.RpcSetGradient(PlayerControl.LocalPlayer, __instance.currentColor);
             }
-            
+
             return false;
         }
 
@@ -118,8 +118,9 @@ public static class PlayerTabPatches
     [HarmonyPatch(nameof(PlayerTab.Update))]
     public static void UpdatePostfix(PlayerTab __instance)
     {
-        if(_titleText)
+        if (_buttonText && _titleText)
         {
+            _buttonText.text = SelectGradient ? "Main Color" : "Secondary\nColor";
             _titleText.text = SelectGradient ? "Secondary Color: " : "Main Color: ";
         }
 
@@ -142,18 +143,18 @@ public static class PlayerTabPatches
         {
             return false;
         }
-        
+
         var allPlayers = GameData.Instance.AllPlayers;
         var localGradId = GradientManager.LocalGradientId;
         var localColorId = PlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId;
-            
+
         foreach (var data in allPlayers)
         {
             if (!GradientManager.TryGetColor(data.PlayerId, out var gradColor))
             {
                 continue;
             }
-                
+
             // TODO: simplify logic
             if (SelectGradient)
             {
@@ -182,7 +183,7 @@ public static class PlayerTabPatches
                 {
                     __instance.AvailableColors.Remove(gradColor);
                 }
-                    
+
             }
         }
 

@@ -1,8 +1,8 @@
-﻿using System.Collections;
-using LaunchpadReloaded.Components;
+﻿using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Networking;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities;
+using System.Collections;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Features;
@@ -11,7 +11,7 @@ namespace LaunchpadReloaded.Features;
 public static class GradientManager
 {
     public static int LocalGradientId { get; set; }
-    
+
 
     [MethodRpc((uint)LaunchpadRPC.SyncGradient)]
     public static void RpcSetGradient(PlayerControl pc, int colorId)
@@ -20,7 +20,7 @@ public static class GradientManager
         Debug.LogError(pc.AmOwner);
         Coroutines.Start(WaitForDataCoroutine(pc));
     }
-    
+
     private static IEnumerator WaitForDataCoroutine(PlayerControl pc)
     {
         while (pc.Data is null)
@@ -42,7 +42,7 @@ public static class GradientManager
                 return true;
             }
         }
-        
+
         color = 0;
         Debug.LogError($"No player data for {id}");
         return false;

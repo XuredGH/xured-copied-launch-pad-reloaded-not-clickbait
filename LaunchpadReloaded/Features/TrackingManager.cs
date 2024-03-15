@@ -1,7 +1,7 @@
-using System;
-using LaunchpadReloaded.Utilities;
 using LaunchpadReloaded.Roles;
+using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Attributes;
+using System;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Features;
@@ -17,6 +17,7 @@ public class TrackingManager(IntPtr ptr) : MonoBehaviour(ptr)
     private void Awake()
     {
         Instance = this;
+        TrackedPlayer = null;
     }
 
     public void TrackingUpdate()
