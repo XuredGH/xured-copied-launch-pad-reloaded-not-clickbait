@@ -4,7 +4,7 @@ using HarmonyLib;
 using LaunchpadReloaded.API.Gamemodes;
 using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Roles;
-using LaunchpadReloaded.Components;
+using LaunchpadReloaded.Utilities;
 using Reactor;
 using Reactor.Networking;
 using Reactor.Networking.Attributes;

@@ -35,8 +35,8 @@ public static class PlayerTabPatches
         
             var spriteRenderer = _switchButton.GetComponent<SpriteRenderer>();
             var sprite = spriteRenderer.sprite = LaunchpadAssets.BlankButton.LoadAsset();
-        
-            _switchButton.GetComponent<BoxCollider2D>().size = sprite.rect.size/sprite.pixelsPerUnit;
+
+            _switchButton.GetComponent<BoxCollider2D>().size = sprite.rect.size / sprite.pixelsPerUnit;
             _switchButton.transform.localScale = new Vector3(1, 1, 1);
             _switchButton.transform.localPosition = new Vector3(2, 1.5f, -2);
             

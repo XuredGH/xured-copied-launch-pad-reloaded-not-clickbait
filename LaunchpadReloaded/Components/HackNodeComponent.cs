@@ -19,9 +19,9 @@ public class HackNodeComponent(IntPtr ptr) : MonoBehaviour(ptr)
 
     public void SetOutline(bool on, bool mainTarget)
     {
-        Image.material.SetFloat("_Outline", on ? 1 : 0);
-        Image.material.SetColor("_OutlineColor", Color.green);
-        Image.material.SetColor("_AddColor", mainTarget ? Color.green : Color.clear);
+        Image.material.SetFloat(ShaderID.Outline, on ? 1 : 0);
+        Image.material.SetColor(ShaderID.OutlineColor, Color.green);
+        Image.material.SetColor(ShaderID.OutlineColor, mainTarget ? Color.green : Color.clear);
     }
 
     public void Use()

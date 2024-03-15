@@ -13,8 +13,8 @@ namespace LaunchpadReloaded.Features;
 [RegisterInIl2Cpp]
 public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
 {
-    public static HackingManager? Instance;
-    
+    public static HackingManager Instance { get; private set; }
+
     public List<byte> hackedPlayers = [];
     public List<HackNodeComponent> nodes = [];
 

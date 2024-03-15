@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.API.Gamemodes;
-using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Utilities;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Patches;
@@ -27,7 +27,7 @@ public static class ShipStatusPatch
     public static void ShipStatusDestroyPatch(ShipStatus __instance)
     {
         CustomGamemodeManager.SetGamemode(0);
-        LaunchpadGameOptions.Instance.Gamemodes.SetValue(0);
+        LaunchpadGameOptions.Instance.GameModes.SetValue(0);
         //CustomGamemodeManager.RpcSetGamemode(PlayerControl.LocalPlayer, 0);
     }
 }
