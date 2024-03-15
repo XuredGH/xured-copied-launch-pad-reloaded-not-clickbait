@@ -39,7 +39,6 @@ public static class PlayerControlPatches
         {
             gradColorComponent.gradientColor = GradientManager.LocalGradientId;
             GradientManager.RpcSetGradient(__instance, GradientManager.LocalGradientId);
-            Debug.LogError("Sent gradient");
         }
     }
 

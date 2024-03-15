@@ -41,7 +41,6 @@ public static class PlayerMaterialPatch
                 if (pet.TargetPlayer)
                 {
                     id = pet.TargetPlayer.PlayerId;
-                    Debug.LogError("pet target found");
                 }
             }
 

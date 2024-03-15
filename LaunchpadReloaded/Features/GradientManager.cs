@@ -3,7 +3,6 @@ using LaunchpadReloaded.Networking;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities;
 using System.Collections;
-using UnityEngine;
 
 namespace LaunchpadReloaded.Features;
 
@@ -17,7 +16,6 @@ public static class GradientManager
     public static void RpcSetGradient(PlayerControl pc, int colorId)
     {
         pc.GetComponent<PlayerGradientData>().gradientColor = colorId;
-        Debug.LogError(pc.AmOwner);
         Coroutines.Start(WaitForDataCoroutine(pc));
     }
 
@@ -44,7 +42,6 @@ public static class GradientManager
         }
 
         color = 0;
-        Debug.LogError($"No player data for {id}");
         return false;
     }
 }
