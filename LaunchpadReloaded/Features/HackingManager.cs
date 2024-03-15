@@ -43,8 +43,7 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
             ],
 
         // Submerged compatibility soon
-        [(MapType)6] = [
-            ]
+        [(ShipStatus.MapType)6] = []
     };
 
     private readonly Vector3[] _airshipPositions = [
