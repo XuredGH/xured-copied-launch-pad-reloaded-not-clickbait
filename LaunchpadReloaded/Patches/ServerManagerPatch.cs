@@ -8,9 +8,9 @@ public static class ServerManagerPatch
 {
     public static void Postfix(ServerManager __instance)
     {
-        var serverInfo = new ServerInfo("http-1", "http://brand-lauderdale.gl.at.ply.gg", 7764, false);
+        var serverInfo = new ServerInfo("http-1", "http://"+LaunchpadReloadedPlugin.LaunchpadServerAddress, LaunchpadReloadedPlugin.LaunchpadServerPort, false);
         ServerInfo[] arr = [serverInfo];
-        var regionInfo = new StaticHttpRegionInfo("launchpad test server", (StringNames)1003,"brand-lauderdale.gl.at.ply.gg", arr);
+        var regionInfo = new StaticHttpRegionInfo("launchpad test server", (StringNames)1003,LaunchpadReloadedPlugin.LaunchpadServerAddress, arr);
         
         __instance.AddOrUpdateRegion(regionInfo.Cast<IRegionInfo>());
         
