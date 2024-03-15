@@ -19,7 +19,8 @@ public static class PlayerMaterialPatch
 
         if (PlayerCustomizationMenu.Instance && PlayerTabPatches.SelectGradient)
         {
-            color2 = PlayerCustomizationMenu.Instance.GetComponentInChildren<PlayerTab>().currentColor;
+            PlayerTab plrTab = PlayerCustomizationMenu.Instance.GetComponentInChildren<PlayerTab>();
+            color2 = plrTab != null ? plrTab.currentColor : 0;
         }
 
         if (GameData.Instance)

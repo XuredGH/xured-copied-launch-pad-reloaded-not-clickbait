@@ -21,7 +21,11 @@ public static class ColorblindPatch
             string defaultColor = Helpers.FirstLetterToUpper(Palette.GetColorName(player.cosmetics.ColorId).ToLower());
             string gradientColor = Helpers.FirstLetterToUpper(Palette.GetColorName(comp.gradientColor).ToLower());
 
-            if (defaultColor == gradientColor || gradientColor == "???") return true;
+            if (defaultColor == gradientColor || gradientColor == "???")
+            {
+                __result = defaultColor;
+                return false;
+            }
 
             __result = $"{defaultColor}-{gradientColor}";
             return false;
