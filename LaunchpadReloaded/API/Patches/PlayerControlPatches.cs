@@ -1,10 +1,12 @@
 ﻿using HarmonyLib;
+using Il2CppSystem;
 using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.API.Utilities;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
+using UnityEngine;
 
 namespace LaunchpadReloaded.API.Patches;
 
@@ -17,22 +19,26 @@ public static class PlayerControlPatches
     {
         if (__instance.IsRevived())
         {
-            __instance.cosmetics.SetOutline(true,
-                new Il2CppSystem.Nullable<UnityEngine.Color>(LaunchpadPalette.MedicColor));
+            __instance.cosmetics.SetOutline(true,new Nullable<Color>(LaunchpadPalette.MedicColor));
         }
 
-
-        if (MeetingHud.Instance) return;
+        if (MeetingHud.Instance)
+        {
+            return;
+        }
 
         if (__instance.Data.IsHacked() || (HackingManager.Instance && HackingManager.Instance.AnyActiveNodes() && __instance.Data.Role is HackerRole))
         {
-            string randomString = Helpers.RandomString(Helpers.Random.Next(4, 6), "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#!?$(???#@)$@@@@0000");
+            var randomString = Helpers.RandomString(Helpers.Random.Next(4, 6), "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#!?$(???#@)$@@@@0000");
             __instance.cosmetics.SetName(randomString);
             __instance.cosmetics.SetNameMask(true);
             __instance.cosmetics.gameObject.SetActive(false);
         }
 
-        if (!__instance.AmOwner) return;
+        if (!__instance.AmOwner)
+        {
+            return;
+        }
 
         foreach (var button in CustomButtonManager.CustomButtons)
         {

@@ -20,11 +20,15 @@ public class HackButton : CustomActionButton
     {
         foreach (var player in PlayerControl.AllPlayerControls)
         {
-            if (player.Data.Role is HackerRole) continue;
+            if (player.Data.Role is HackerRole)
+            {
+                continue;
+            }
+
             HackingManager.RpcHackPlayer(player);
         }
 
         PlayerControl.LocalPlayer.RawSetColor(15);
-        HackingManager.RpcToggleNode(ShipStatus.Instance, HackingManager.Instance.Nodes.Random().Id, true);
+        HackingManager.RpcToggleNode(ShipStatus.Instance, HackingManager.Instance.nodes.Random().Id, true);
     }
 }

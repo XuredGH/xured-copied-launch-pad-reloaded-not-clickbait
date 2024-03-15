@@ -1,11 +1,5 @@
-﻿using GameCore;
-using HarmonyLib;
+﻿using HarmonyLib;
 using LaunchpadReloaded.API.Gamemodes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LaunchpadReloaded.API.Patches;
 
@@ -18,7 +12,7 @@ public static class IntroCutscenePatch
     {
         if (CustomGamemodeManager.ActiveMode.ShowCustomRoleScreen())
         {
-            CustomGamemode mode = CustomGamemodeManager.ActiveMode;
+            var mode = CustomGamemodeManager.ActiveMode;
             __instance.TeamTitle.text = $"<size=70%>{mode.Name}</size>\n<size=20%>{mode.Description}</size>";
         }
     }

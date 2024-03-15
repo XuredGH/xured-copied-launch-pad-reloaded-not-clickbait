@@ -11,6 +11,7 @@ namespace LaunchpadReloaded.Roles;
 public class MedicRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
 {
     public string RoleName => "Medic";
+    public ushort RoleId => (ushort)LaunchpadRoles.Medic;
     public string RoleDescription => "Help the crewmates by reviving dead players.";
     public string RoleLongDescription => "Use your revive ability to bring dead bodies\nback to life!";
     public Color RoleColor => LaunchpadPalette.MedicColor;

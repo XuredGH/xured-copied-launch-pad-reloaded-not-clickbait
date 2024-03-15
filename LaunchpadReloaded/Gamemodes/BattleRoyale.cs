@@ -1,16 +1,14 @@
-﻿using AmongUs.GameOptions;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using AmongUs.GameOptions;
 using LaunchpadReloaded.API.Gamemodes;
-using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
-using static GameData;
 
 namespace LaunchpadReloaded.Gamemodes;
 public class BattleRoyale : CustomGamemode
@@ -26,7 +24,7 @@ public class BattleRoyale : CustomGamemode
         var tasks = PlayerControl.LocalPlayer.myTasks;
         tasks.Clear();
 
-        Transform random = ShipStatus.Instance.DummyLocations.Random();
+        var random = ShipStatus.Instance.DummyLocations.Random();
 
         foreach (GameData.PlayerInfo player in GameData.Instance.AllPlayers)
             player.Object.cosmetics.TogglePet(false);
@@ -38,7 +36,7 @@ public class BattleRoyale : CustomGamemode
 
     public IEnumerator DeathNotification(PlayerControl player)
     {
-        string text = $"{player.Data.Color.ToTextColor()}{player.Data.PlayerName}</color> has <b>{Palette.ImpostorRed.ToTextColor()}DIED.</b></color>";
+        var text = $"{player.Data.Color.ToTextColor()}{player.Data.PlayerName}</color> has <b>{Palette.ImpostorRed.ToTextColor()}DIED.</b></color>";
         DeathNotif.text = text;
         DeathNotif.gameObject.SetActive(true);
         yield return new WaitForSeconds(3f);
@@ -78,9 +76,9 @@ public class BattleRoyale : CustomGamemode
         instance.ImpostorVentButton.gameObject.SetActive(false);
     }
 
-    public override List<PlayerInfo> CalculateWinners()
+    public override List<GameData.PlayerInfo> CalculateWinners()
     {
-        List<PlayerInfo> alivePlayers = GameData.Instance.AllPlayers.ToArray().Where(player => !player.Disconnected && !player.IsDead).ToList();
+        var alivePlayers = GameData.Instance.AllPlayers.ToArray().Where(player => !player.Disconnected && !player.IsDead).ToList();
         return alivePlayers;
     }
     public override bool ShowCustomRoleScreen() => true;
@@ -92,7 +90,7 @@ public class BattleRoyale : CustomGamemode
     }
 
     public override bool CanReport(DeadBody body) => false;
-    public override bool CanVent(Vent vent, PlayerInfo playerInfo) => false;
+    public override bool CanVent(Vent vent, GameData.PlayerInfo playerInfo) => false;
     public override bool ShouldShowSabotageMap(MapBehaviour map) => false;
     public override bool CanUseConsole(Console console) => false;
     public override bool CanUseMapConsole(MapConsole console) => false;
@@ -100,18 +98,18 @@ public class BattleRoyale : CustomGamemode
     public override void CheckGameEnd(out bool runOriginal, LogicGameFlowNormal instance)
     {
         runOriginal = true;
-        /*        runOriginal = false;
-                var alivePlayers = GameData.Instance.AllPlayers.ToArray().Where(player => !player.Disconnected && !player.IsDead);
-                if (alivePlayers.Count() == 1)
-                {
-                    instance.Manager.RpcEndGame(GameOverReason.ImpostorByKill, false);
-                }*/
+/*        runOriginal = false;
+        var alivePlayers = GameData.Instance.AllPlayers.ToArray().Where(player => !player.Disconnected && !player.IsDead);
+        if (alivePlayers.Count() == 1)
+        {
+            instance.Manager.RpcEndGame(GameOverReason.ImpostorByKill, false);
+        }*/
     }
 
     public override void AssignRoles(out bool runOriginal, LogicRoleSelectionNormal instance)
     {
-        runOriginal = false;
-        foreach (var player in GameData.Instance.AllPlayers)
+        runOriginal = false; 
+        foreach(var player in GameData.Instance.AllPlayers)
         {
             player.Object.RpcSetRole(RoleTypes.Impostor);
         }

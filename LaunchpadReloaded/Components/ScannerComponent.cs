@@ -1,8 +1,8 @@
-﻿using LaunchpadReloaded.Roles;
+﻿using System;
+using System.Collections.Generic;
+using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Attributes;
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Components;
@@ -12,18 +12,21 @@ public class ScannerComponent(IntPtr ptr) : MonoBehaviour(ptr)
 {
     public PlayerControl PlacedBy;
     public byte Id;
-    public List<PlayerControl> PlayersInProximity = new List<PlayerControl>();
+    public List<PlayerControl> PlayersInProximity = [];
     public PlainShipRoom Room;
 
     public void Awake()
     {
-        this.Room = Helpers.GetRoom(transform.position);
+        Room = Helpers.GetRoom(transform.position);
     }
 
     public void OnTriggerEnter2D(Collider2D collider)
     {
         var player = collider.gameObject.GetComponent<PlayerControl>();
-        if (player == null) return;
+        if (player == null)
+        {
+            return;
+        }
 
         if (PlayerControl.LocalPlayer.Data.Role is TrackerRole)
         {

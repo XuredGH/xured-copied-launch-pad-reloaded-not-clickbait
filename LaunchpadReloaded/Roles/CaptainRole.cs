@@ -1,8 +1,8 @@
-﻿using LaunchpadReloaded.API.GameOptions;
+using LaunchpadReloaded.API.GameOptions;
+using System;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Attributes;
-using System;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
@@ -11,6 +11,7 @@ namespace LaunchpadReloaded.Roles;
 public class CaptainRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
 {
     public string RoleName => "Captain";
+    public ushort RoleId => (ushort)LaunchpadRoles.Captain;
     public string RoleDescription => "Protect the crew with your abilities";
     public string RoleLongDescription => "Use your zoom ability to keep an eye on the crew\n And call meetings from any location!";
     public Color RoleColor => LaunchpadPalette.CaptainColor;

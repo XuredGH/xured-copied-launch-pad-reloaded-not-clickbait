@@ -1,6 +1,6 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.API.Gamemodes;
-using LaunchpadReloaded.Components;
+using LaunchpadReloaded.Utilities;
 
 namespace LaunchpadReloaded.Patches;
 

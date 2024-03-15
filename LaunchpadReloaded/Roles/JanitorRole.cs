@@ -1,8 +1,8 @@
-﻿using LaunchpadReloaded.API.GameOptions;
+using System;
+using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Attributes;
-using System;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
@@ -11,6 +11,7 @@ namespace LaunchpadReloaded.Roles;
 public class JanitorRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
 {
     public string RoleName => "Janitor";
+    public ushort RoleId => (ushort)LaunchpadRoles.Janitor;
     public string RoleDescription => "Drag bodies and hide them in vents";
     public string RoleLongDescription => "You can drag bodies and hide them in vents\nWhich will cause them to disappear unless the vent is used.";
     public Color RoleColor => LaunchpadPalette.JanitorColor;

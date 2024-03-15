@@ -1,16 +1,16 @@
-﻿using Reactor.Networking.Rpc;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Reactor.Networking.Rpc;
 
 namespace LaunchpadReloaded.API.GameOptions;
 
 public static class CustomOptionsManager
 {
-    public static readonly List<AbstractGameOption> CustomOptions = new();
-    public static readonly List<CustomNumberOption> CustomNumberOptions = new();
-    public static readonly List<CustomToggleOption> CustomToggleOptions = new();
-    public static readonly List<CustomStringOption> CustomStringOptions = new();
-    public static readonly List<CustomOptionGroup> CustomGroups = new();
+    public static readonly List<AbstractGameOption> CustomOptions = [];
+    public static readonly List<CustomNumberOption> CustomNumberOptions = [];
+    public static readonly List<CustomToggleOption> CustomToggleOptions = [];
+    public static readonly List<CustomStringOption> CustomStringOptions = [];
+    public static readonly List<CustomOptionGroup> CustomGroups = [];
     public static void SyncOptions()
     {
         var toggles = CustomToggleOptions.Select(x => x.Value).ToArray();
@@ -22,10 +22,25 @@ public static class CustomOptionsManager
 
     public static void ResetToDefault()
     {
-        foreach (CustomNumberOption numberOpt in CustomNumberOptions) numberOpt.SetValue(numberOpt.Default);
-        foreach (CustomStringOption stringOpt in CustomStringOptions) stringOpt.SetValue(stringOpt.Default);
-        foreach (CustomToggleOption toggleOpt in CustomToggleOptions) toggleOpt.SetValue(toggleOpt.Default);
-        foreach (AbstractGameOption option in CustomOptions) option.ValueChanged(option.OptionBehaviour);
+        foreach (var numberOpt in CustomNumberOptions)
+        {
+            numberOpt.SetValue(numberOpt.Default);
+        }
+
+        foreach (var stringOpt in CustomStringOptions)
+        {
+            stringOpt.SetValue(stringOpt.Default);
+        }
+
+        foreach (var toggleOpt in CustomToggleOptions)
+        {
+            toggleOpt.SetValue(toggleOpt.Default);
+        }
+
+        foreach (var option in CustomOptions)
+        {
+            option.ValueChanged(option.OptionBehaviour);
+        }
     }
 
     public static void HandleOptionsSync(bool[] toggles, float[] numbers, string[] strings)

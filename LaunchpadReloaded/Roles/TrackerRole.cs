@@ -1,11 +1,10 @@
-﻿using LaunchpadReloaded.API.GameOptions;
+using System;
+using System.Text;
+using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
-using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Attributes;
-using System;
-using System.Text;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
@@ -13,18 +12,15 @@ namespace LaunchpadReloaded.Roles;
 public class TrackerRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
 {
     public string RoleName => "Tracker";
-
+    public ushort RoleId => (ushort)LaunchpadRoles.Tracker;
     public string RoleDescription => "Track a player's movements.";
-
     public string RoleLongDescription => "Place a tracker on a player to track their movements on the map.\nPlace scanners to detect nearby player movement.\n";
-
     public Color RoleColor => LaunchpadPalette.TrackerColor;
-
     public RoleTeamTypes Team => RoleTeamTypes.Crewmate;
     public LoadableAsset<Sprite> Icon => LaunchpadAssets.TrackButton;
     public StringBuilder SetTabText()
     {
-        StringBuilder taskStringBuilder = Helpers.CreateForRole(this);
+        var taskStringBuilder = Helpers.CreateForRole(this);
 
         if (TrackingManager.Instance.TrackedPlayer != null)
         {
@@ -39,10 +35,17 @@ public class TrackerRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
             }
         }
 
-        if (ScannerManager.Instance.Scanners.Count > 0) taskStringBuilder.AppendLine("<b>Created Scanners:</b>");
-        foreach (ScannerComponent component in ScannerManager.Instance.Scanners)
+        if (ScannerManager.Instance.Scanners.Count > 0)
         {
-            if (component.Room != null) taskStringBuilder.AppendLine($"Scanner {component.Id} ({component.Room.RoomId})");
+            taskStringBuilder.AppendLine("<b>Created Scanners:</b>");
+        }
+
+        foreach (var component in ScannerManager.Instance.Scanners)
+        {
+            if (component.Room != null)
+            {
+                taskStringBuilder.AppendLine($"Scanner {component.Id} ({component.Room.RoomId})");
+            }
         }
         return taskStringBuilder;
     }

@@ -1,5 +1,5 @@
-﻿using BepInEx.Configuration;
-using System;
+﻿using System;
+using BepInEx.Configuration;
 using UnityEngine;
 
 namespace LaunchpadReloaded.API.GameOptions;
@@ -33,9 +33,13 @@ public class CustomNumberOption : AbstractGameOption
         if (Save) Config.Value = newValue;
         Value = newValue;
 
-        NumberOption behaviour = (NumberOption)OptionBehaviour;
-        if (behaviour) behaviour.Value = Value;
-        if (ChangedEvent != null) ChangedEvent(Value);
+        var behaviour = (NumberOption)OptionBehaviour;
+        if (behaviour)
+        {
+            behaviour.Value = Value;
+        }
+
+        ChangedEvent?.Invoke(Value);
     }
 
     public void CreateNumberOption(NumberOption numberOption)
@@ -55,7 +59,7 @@ public class CustomNumberOption : AbstractGameOption
 
     protected override void OnValueChanged(OptionBehaviour optionBehaviour)
     {
-        float value = Mathf.Clamp(optionBehaviour.GetFloat(), Range.min, Range.max);
+        var value = Mathf.Clamp(optionBehaviour.GetFloat(), Range.min, Range.max);
         SetValue(value);
     }
 

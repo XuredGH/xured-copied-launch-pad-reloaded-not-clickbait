@@ -1,7 +1,7 @@
-﻿using AmongUs.GameOptions;
+﻿using System.Text;
+using AmongUs.GameOptions;
 using BepInEx.Configuration;
 using LaunchpadReloaded.Utilities;
-using System.Text;
 using UnityEngine;
 
 namespace LaunchpadReloaded.API.Roles;
@@ -9,6 +9,8 @@ namespace LaunchpadReloaded.API.Roles;
 public interface ICustomRole
 {
     string RoleName { get; }
+ 
+    ushort RoleId { get; }
 
     string RoleDescription { get; }
 
@@ -17,6 +19,7 @@ public interface ICustomRole
     Color RoleColor { get; }
 
     RoleTeamTypes Team { get; }
+    
     LoadableAsset<Sprite> Icon => LaunchpadAssets.NoImage;
 
     ConfigDefinition NumConfigDefinition => new("Roles", $"Num{RoleName}");
@@ -36,13 +39,14 @@ public interface ICustomRole
 
     RoleTypes GhostRole => Team == RoleTeamTypes.Crewmate ? RoleTypes.CrewmateGhost : RoleTypes.ImpostorGhost;
 
-    virtual void CreateOptions() { }
+    void CreateOptions() { }
     void PlayerControlFixedUpdate(PlayerControl playerControl) { }
 
     void HudUpdate(HudManager hudManager) { }
-    virtual StringBuilder SetTabText()
+
+    StringBuilder SetTabText()
     {
-        StringBuilder taskStringBuilder = Helpers.CreateForRole(this);
+        var taskStringBuilder = Helpers.CreateForRole(this);
         return taskStringBuilder;
     }
 }

@@ -9,6 +9,7 @@ using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
 using TMPro;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace LaunchpadReloaded.API.Roles;
 
@@ -46,28 +47,29 @@ public static class CustomRoleManager
 
         var roleBehaviour = (RoleBehaviour) new GameObject(roleType.Name).DontDestroy().AddComponent(Il2CppType.From(roleType));
 
-        if (roleBehaviour is ICustomRole customRole)
+        if (roleBehaviour is not ICustomRole customRole)
         {
-            var roleId = (ushort)(Enum.GetNames<RoleTypes>().Length + CustomRoles.Count);
-            roleBehaviour.Role = (RoleTypes)roleId;
-            roleBehaviour.TeamType = customRole.Team;
-            roleBehaviour.NameColor = customRole.RoleColor;
-            roleBehaviour.StringName = CustomStringName.CreateAndRegister(customRole.RoleName);
-            roleBehaviour.BlurbName = CustomStringName.CreateAndRegister(customRole.RoleDescription);
-            roleBehaviour.BlurbNameLong = CustomStringName.CreateAndRegister(customRole.RoleLongDescription);
-            roleBehaviour.AffectedByLightAffectors = customRole.AffectedByLight;
-            roleBehaviour.CanBeKilled = customRole.CanGetKilled;
-            roleBehaviour.CanUseKillButton = customRole.CanUseKill;
-            roleBehaviour.CanVent = customRole.CanUseVent;
-            roleBehaviour.DefaultGhostRole = customRole.GhostRole;
-            roleBehaviour.MaxCount = 15;
-            CustomRoles.Add(roleId,roleBehaviour);
-
-            var config = PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config;
-            config.Bind(customRole.NumConfigDefinition,1);
-            config.Bind(customRole.ChanceConfigDefinition, 100);
+            return;
         }
-        
+
+        roleBehaviour.Role = (RoleTypes)customRole.RoleId;
+        roleBehaviour.TeamType = customRole.Team;
+        roleBehaviour.NameColor = customRole.RoleColor;
+        roleBehaviour.StringName = CustomStringName.CreateAndRegister(customRole.RoleName);
+        roleBehaviour.BlurbName = CustomStringName.CreateAndRegister(customRole.RoleDescription);
+        roleBehaviour.BlurbNameLong = CustomStringName.CreateAndRegister(customRole.RoleLongDescription);
+        roleBehaviour.AffectedByLightAffectors = customRole.AffectedByLight;
+        roleBehaviour.CanBeKilled = customRole.CanGetKilled;
+        roleBehaviour.CanUseKillButton = customRole.CanUseKill;
+        roleBehaviour.CanVent = customRole.CanUseVent;
+        roleBehaviour.DefaultGhostRole = customRole.GhostRole;
+        roleBehaviour.MaxCount = 15;
+        CustomRoles.Add(customRole.RoleId,roleBehaviour);
+
+        var config = PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config;
+        config.Bind(customRole.NumConfigDefinition,1);
+        config.Bind(customRole.ChanceConfigDefinition, 100);
+
     }
     
     public static bool GetCustomRoleBehaviour(RoleTypes roleType, out ICustomRole result)
@@ -85,14 +87,14 @@ public static class CustomRoleManager
 
     public static TaskPanelBehaviour CreateRoleTab(ICustomRole role)
     {
-        TaskPanelBehaviour ogPanel = HudManager.Instance.TaskStuff.transform.FindChild("TaskPanel").gameObject.GetComponent<TaskPanelBehaviour>();
-        GameObject clonePanel = GameObject.Instantiate(ogPanel.gameObject, ogPanel.transform.parent);
+        var ogPanel = HudManager.Instance.TaskStuff.transform.FindChild("TaskPanel").gameObject.GetComponent<TaskPanelBehaviour>();
+        var clonePanel = Object.Instantiate(ogPanel.gameObject, ogPanel.transform.parent);
         clonePanel.name = "RolePanel";
 
-        TaskPanelBehaviour newPanel = clonePanel.GetComponent<TaskPanelBehaviour>();
+        var newPanel = clonePanel.GetComponent<TaskPanelBehaviour>();
         newPanel.open = false;
 
-        GameObject tab = newPanel.tab.gameObject;
+        var tab = newPanel.tab.gameObject;
         tab.GetComponentInChildren<TextTranslatorTMP>().Destroy();
 
         newPanel.transform.localPosition = ogPanel.transform.localPosition - new Vector3(0, 1, 0);
@@ -103,11 +105,14 @@ public static class CustomRoleManager
 
     public static void UpdateRoleTab(TaskPanelBehaviour panel, ICustomRole role)
     {
-        TextMeshPro tabText = panel.tab.gameObject.GetComponentInChildren<TextMeshPro>();
-        TaskPanelBehaviour ogPanel = HudManager.Instance.TaskStuff.transform.FindChild("TaskPanel").gameObject.GetComponent<TaskPanelBehaviour>();
-        if (tabText.text != role.RoleName) tabText.text = role.RoleName;
+        var tabText = panel.tab.gameObject.GetComponentInChildren<TextMeshPro>();
+        var ogPanel = HudManager.Instance.TaskStuff.transform.FindChild("TaskPanel").gameObject.GetComponent<TaskPanelBehaviour>();
+        if (tabText.text != role.RoleName)
+        {
+            tabText.text = role.RoleName;
+        }
 
-        float y = ogPanel.taskText.textBounds.size.y + 1;
+        var y = ogPanel.taskText.textBounds.size.y + 1;
         panel.closedPosition = new Vector3(ogPanel.closedPosition.x, ogPanel.open ? y + 0.2f : 2f, ogPanel.closedPosition.z);
         panel.openPosition = new Vector3(ogPanel.openPosition.x, ogPanel.open ? y : 2f, ogPanel.openPosition.z);
 

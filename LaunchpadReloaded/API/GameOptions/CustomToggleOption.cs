@@ -1,5 +1,5 @@
-﻿using BepInEx.Configuration;
-using System;
+﻿using System;
+using BepInEx.Configuration;
 
 namespace LaunchpadReloaded.API.GameOptions;
 
@@ -12,19 +12,29 @@ public class CustomToggleOption : AbstractGameOption
     public CustomToggleOption(string title, bool defaultValue, Type role = null, bool save = true) : base(title, role, save)
     {
         Default = defaultValue;
-        if (Save) Config = LaunchpadReloadedPlugin.Instance.Config.Bind("Toggle Options", title, defaultValue);
+        if (Save)
+        {
+            Config = LaunchpadReloadedPlugin.Instance.Config.Bind("Toggle Options", title, defaultValue);
+        }
         CustomOptionsManager.CustomToggleOptions.Add(this);
         SetValue(Save ? Config.Value : defaultValue);
     }
 
     public void SetValue(bool newValue)
     {
-        if (Save) Config.Value = newValue;
+        if (Save)
+        {
+            Config.Value = newValue;
+        }
         Value = newValue;
 
-        ToggleOption behaviour = (ToggleOption)OptionBehaviour;
-        if (behaviour) behaviour.CheckMark.enabled = newValue;
-        if (ChangedEvent != null) ChangedEvent(newValue);
+        var behaviour = (ToggleOption)OptionBehaviour;
+        if (behaviour)
+        {
+            behaviour.CheckMark.enabled = newValue;
+        }
+
+        ChangedEvent?.Invoke(newValue);
     }
 
     protected override void OnValueChanged(OptionBehaviour optionBehaviour)

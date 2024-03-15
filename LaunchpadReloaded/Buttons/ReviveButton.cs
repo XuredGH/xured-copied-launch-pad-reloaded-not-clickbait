@@ -22,7 +22,7 @@ public class ReviveButton : CustomActionButton
 
     protected override void OnClick()
     {
-        RevivalManager.RpcRevive(PlayerControl.LocalPlayer, DeadBodyTarget.ParentId);
+        RevivalManager.RpcRevive(ShipStatus.Instance, DeadBodyTarget.ParentId);
         DeadBodyTarget = null;
     }
 }

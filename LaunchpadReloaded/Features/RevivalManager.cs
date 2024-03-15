@@ -15,7 +15,7 @@ namespace LaunchpadReloaded.Features;
 public class RevivalManager(IntPtr ptr) : MonoBehaviour(ptr)
 {
     public static RevivalManager Instance;
-    public List<byte> RevivedPlayers = new List<byte>();
+    public List<byte> RevivedPlayers = [];
 
     private void Awake()
     {
@@ -23,12 +23,17 @@ public class RevivalManager(IntPtr ptr) : MonoBehaviour(ptr)
     }
 
     [MethodRpc((uint)LaunchpadRPC.Revive)]
-    public static void RpcRevive(PlayerControl player, byte bodyId)
+    public static void RpcRevive(ShipStatus shipStatus, byte bodyId)
     {
-        DeadBody body = Helpers.GetBodyById(bodyId);
-        if (body is null) return;
-
-        Revive(body);
+        var body = DeadBodyManager.GetBodyById(bodyId);
+        if (body)
+        {
+            Revive(body);
+        }
+        else
+        {
+            Debug.LogWarning($"Body for id {bodyId} not found");
+        }
     }
 
     public static void Revive(DeadBody body)

@@ -1,5 +1,5 @@
 ﻿using LaunchpadReloaded.API.Utilities;
-using LaunchpadReloaded.Components;
+using LaunchpadReloaded.Utilities;
 using PowerTools;
 using Reactor.Networking.Attributes;
 using UnityEngine;
@@ -13,19 +13,22 @@ public static class GenericRPC
         if (bodyType == 6)
         {
             player.MyPhysics.SetBodyType(PlayerBodyTypes.Seeker);
-            if (!LaunchpadGameOptions.Instance.ShowKnife.Value) return;
+            if (!LaunchpadGameOptions.Instance.ShowKnife.Value)
+            {
+                return;
+            }
 
-            GameObject seekerHand = player.transform.FindChild("BodyForms/Seeker/SeekerHand").gameObject;
-            GameObject hand = GameObject.Instantiate(seekerHand).gameObject;
+            var seekerHand = player.transform.FindChild("BodyForms/Seeker/SeekerHand").gameObject;
+            var hand = Object.Instantiate(seekerHand).gameObject;
             hand.transform.SetParent(seekerHand.transform.parent);
             hand.transform.localScale = new Vector3(2, 2, 2);
             hand.name = "KnifeHand";
 
-            SpriteAnimNodeSync nodeSync = hand.GetComponent<SpriteAnimNodeSync>();
+            var nodeSync = hand.GetComponent<SpriteAnimNodeSync>();
             nodeSync.flipOffset = new Vector3(-1.5f, 0.5f, -0.0228f);
             nodeSync.normalOffset = new Vector3(1.5f, 0.5f, -0.0228f);
 
-            SpriteRenderer rend = hand.GetComponent<SpriteRenderer>();
+            var rend = hand.GetComponent<SpriteRenderer>();
             rend.sprite = SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.KnifeHand.png");
 
             hand.SetActive(true);

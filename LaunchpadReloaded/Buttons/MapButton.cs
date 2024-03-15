@@ -30,6 +30,9 @@ public class MapButton : CustomActionButton
     protected override void OnEffectEnd()
     {
         base.OnEffectEnd();
-        if (MapBehaviour.Instance.IsOpen) HudManager.Instance.ToggleMapVisible(null);
+        if (MapBehaviour.Instance.IsOpen)
+        {
+            HudManager.Instance.ToggleMapVisible(null);
+        }
     }
 }

@@ -1,16 +1,17 @@
-﻿using LaunchpadReloaded.API.Roles;
-using LaunchpadReloaded.Features;
-using System;
+﻿using System;
 using System.Linq;
 using System.Text;
+using LaunchpadReloaded.API.Roles;
+using LaunchpadReloaded.Features;
 using TMPro;
 using UnityEngine;
+using Random = System.Random;
 
 namespace LaunchpadReloaded.Utilities;
 
 public static class Helpers
 {
-    public static System.Random Random = new System.Random();
+    public static Random Random = new Random();
 
     public static bool ShouldCancelClick()
     {
@@ -67,7 +68,7 @@ public static class Helpers
 
     public static void SendNotification(string text, Color textColor, float duration = 2f, float fontSize = 3f)
     {
-        NotificationPopper notifs = HudManager.Instance.Notifier.transform.parent.FindChild("LaunchpadNotifications").GetComponent<NotificationPopper>();
+        var notifs = HudManager.Instance.Notifier.transform.parent.FindChild("LaunchpadNotifications").GetComponent<NotificationPopper>();
         notifs.TextArea.text = text;
         notifs.TextArea.fontSize = fontSize;
         notifs.textColor = textColor;
@@ -81,7 +82,7 @@ public static class Helpers
 
     public static StringBuilder CreateForRole(ICustomRole role)
     {
-        StringBuilder taskStringBuilder = new StringBuilder();
+        var taskStringBuilder = new StringBuilder();
         taskStringBuilder.AppendLine($"{role.RoleColor.ToTextColor()}You are a <b>{role.RoleName}.</b></color>");
         taskStringBuilder.Append("<size=70%>");
         taskStringBuilder.AppendLine($"{role.RoleLongDescription}");

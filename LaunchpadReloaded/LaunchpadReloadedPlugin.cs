@@ -2,15 +2,13 @@
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using LaunchpadReloaded.API.Gamemodes;
-using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Roles;
-using LaunchpadReloaded.Components;
+using LaunchpadReloaded.Utilities;
 using Reactor;
 using Reactor.Networking;
 using Reactor.Networking.Attributes;
-using Reactor.Utilities;
-using UnityEngine;
+
 namespace LaunchpadReloaded;
 
 [BepInAutoPlugin]
@@ -22,10 +20,12 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
     public Harmony Harmony { get; } = new(Id);
     public static LaunchpadReloadedPlugin Instance { get; private set; }
 
+    
     public override void Load()
     {
         Instance = this;
         Harmony.PatchAll();
+
         
         // TODO: CREATE ATTRIBUTE FOR THIS VVV
         CustomGamemodeManager.RegisterAllGamemodes();
@@ -36,7 +36,6 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
         new LaunchpadGameOptions();
         
         Config.Save();
-
-        // Set to default mode
     }
+    
 }

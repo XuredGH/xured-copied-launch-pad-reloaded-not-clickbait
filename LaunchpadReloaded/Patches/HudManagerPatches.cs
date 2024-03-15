@@ -20,7 +20,7 @@ public static class HudManagerPatches
         if(PlayerControl.LocalPlayer.Data.IsHacked())
         {
             __instance.tasksString.Clear();
-            __instance.tasksString.Append(UnityEngine.Color.green.ToTextColor());
+            __instance.tasksString.Append(Color.green.ToTextColor());
             __instance.tasksString.Append("You have been hacked!\n");
             __instance.tasksString.Append("You are unable to complete tasks or call meetings.\n");
             __instance.tasksString.Append("Find an active node to reverse the hack!.\n");
@@ -29,7 +29,10 @@ public static class HudManagerPatches
             __instance.TaskPanel.SetTaskText(__instance.tasksString.ToString());
         }
 
-        if (HackingManager.Instance && HackingManager.Instance.AnyActiveNodes()) __instance.ReportButton.SetDisabled();
+        if (HackingManager.Instance && HackingManager.Instance.AnyActiveNodes())
+        {
+            __instance.ReportButton.SetDisabled();
+        }
 
         foreach (var (player, bodyId) in DragManager.DraggingPlayers)
         {

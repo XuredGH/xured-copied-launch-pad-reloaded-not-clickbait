@@ -1,9 +1,8 @@
-﻿using BepInEx.Configuration;
-using Il2CppInterop.Runtime.InteropTypes.Arrays;
-using Reactor.Localization.Utilities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BepInEx.Configuration;
+using Reactor.Localization.Utilities;
 
 namespace LaunchpadReloaded.API.GameOptions;
 
@@ -31,9 +30,13 @@ public class CustomStringOption : AbstractGameOption
         if (Save) Config.Value = newValue;
         Value = Options[newValue];
 
-        StringOption behaviour = (StringOption)OptionBehaviour;
-        if (behaviour) behaviour.Value = newValue;
-        if (ChangedEvent != null) ChangedEvent(newValue);
+        var behaviour = (StringOption)OptionBehaviour;
+        if (behaviour)
+        {
+            behaviour.Value = newValue;
+        }
+
+        ChangedEvent?.Invoke(newValue);
     }
 
     public void SetValue(string newValue) => SetValue(Options.ToList().IndexOf(newValue));
@@ -45,8 +48,8 @@ public class CustomStringOption : AbstractGameOption
 
     public void CreateStringOption(StringOption stringOption)
     {
-        List<StringNames> values = new List<StringNames>();
-        foreach (string val in Options)
+        var values = new List<StringNames>();
+        foreach (var val in Options)
         {
             values.Add(CustomStringName.CreateAndRegister(val));
         }
@@ -54,7 +57,7 @@ public class CustomStringOption : AbstractGameOption
         stringOption.name = Title;
         stringOption.Title = StringName;
         stringOption.Value = Options.ToList().IndexOf(Value);
-        stringOption.Values = (Il2CppStructArray<StringNames>)values.ToArray();
+        stringOption.Values = values.ToArray();
         stringOption.OnValueChanged = (Il2CppSystem.Action<OptionBehaviour>)ValueChanged;
         stringOption.OnEnable();
         OptionBehaviour = stringOption;

@@ -1,8 +1,8 @@
-﻿using HarmonyLib;
-using LaunchpadReloaded.API.Gamemodes;
-using LaunchpadReloaded.API.GameOptions;
 using System.Collections.Generic;
 using System.Linq;
+using HarmonyLib;
+using LaunchpadReloaded.API.Gamemodes;
+using LaunchpadReloaded.API.GameOptions;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -11,17 +11,17 @@ namespace LaunchpadReloaded.API.Patches;
 [HarmonyPatch(typeof(GameSettingMenu))]
 public static class GameSettingsMenuPatches
 {
-    public static GameObject gameBtn;
-    public static GameObject roleBtn;
+    public static GameObject GameBtn;
+    public static GameObject RoleBtn;
 
     [HarmonyPrefix]
     [HarmonyPatch(nameof(GameSettingMenu.Start))]
     public static void StartPrefix(GameSettingMenu __instance)
     {
-        if (CustomOptionsTab.customTab != null) return;
+        if (CustomOptionsTab.CustomTab != null) return;
         __instance.Tabs.transform.position += new Vector3(0.5f, 0, 0);
-        gameBtn = __instance.transform.FindChild("Header/Tabs/GameTab").gameObject;
-        roleBtn = __instance.transform.FindChild("Header/Tabs/RoleTab").gameObject;
+        GameBtn = __instance.transform.FindChild("Header/Tabs/GameTab").gameObject;
+        RoleBtn = __instance.transform.FindChild("Header/Tabs/RoleTab").gameObject;
 
         var numberOpt = __instance.RegularGameSettings.GetComponentInChildren<NumberOption>();
         var toggleOpt = Object.FindObjectOfType<ToggleOption>();
@@ -29,7 +29,7 @@ public static class GameSettingsMenuPatches
         var container = CustomOptionsTab.Initialize(__instance).transform;
 
 
-        foreach (CustomOptionGroup group in CustomOptionsManager.CustomGroups.Where(group => group.AdvancedRole == null))
+        foreach (var group in CustomOptionsManager.CustomGroups.Where(group => group.AdvancedRole == null))
         {
             group.Header = CustomOptionsTab.CreateHeader(toggleOpt, container, group.Title);
             CreateOptionsFor(__instance, toggleOpt, numberOpt, stringOpt, container,
@@ -44,7 +44,6 @@ public static class GameSettingsMenuPatches
         if (!numberOpt || !toggleOpt || !stringOpt)
         {
             Debug.LogError("OPTION PREFABS MISSING");
-            return;
         }
     }
 
@@ -54,16 +53,16 @@ public static class GameSettingsMenuPatches
     {
         if (CustomGamemodeManager.ActiveMode == null) return;
 
-        gameBtn.SetActive(CustomGamemodeManager.ActiveMode.CanAccessSettingsTab());
-        roleBtn.SetActive(CustomGamemodeManager.ActiveMode.CanAccessRolesTab());
+        GameBtn.SetActive(CustomGamemodeManager.ActiveMode.CanAccessSettingsTab());
+        RoleBtn.SetActive(CustomGamemodeManager.ActiveMode.CanAccessRolesTab());
 
         if (!CustomGamemodeManager.ActiveMode.CanAccessSettingsTab())
         {
             __instance.RegularGameSettings.SetActive(false);
             __instance.RolesSettings.gameObject.SetActive(false);
 
-            CustomOptionsTab.customScreen.gameObject.SetActive(true);
-            CustomOptionsTab.rend.enabled = true;
+            CustomOptionsTab.CustomScreen.gameObject.SetActive(true);
+            CustomOptionsTab.Rend.enabled = true;
 
             __instance.GameSettingsHightlight.enabled = false;
             __instance.RolesSettingsHightlight.enabled = false;
@@ -75,7 +74,10 @@ public static class GameSettingsMenuPatches
     {
         foreach (var customToggleOption in toggles)
         {
-            if (customToggleOption.AdvancedRole is not null || (customToggleOption.OptionBehaviour)) continue;
+            if (customToggleOption.AdvancedRole is not null || (customToggleOption.OptionBehaviour))
+            {
+                continue;
+            }
 
             var newOpt = Object.Instantiate(toggleOpt, container);
             customToggleOption.CreateToggleOption(newOpt);
@@ -84,7 +86,10 @@ public static class GameSettingsMenuPatches
 
         foreach (var customNumberOption in numbers)
         {
-            if (customNumberOption.AdvancedRole is not null || (customNumberOption.OptionBehaviour)) continue;
+            if (customNumberOption.AdvancedRole is not null || (customNumberOption.OptionBehaviour))
+            {
+                continue;
+            }
 
             var newOpt = Object.Instantiate(numberOpt, container);
             customNumberOption.CreateNumberOption(newOpt);
@@ -93,7 +98,10 @@ public static class GameSettingsMenuPatches
 
         foreach (var customStringOption in strings)
         {
-            if (customStringOption.AdvancedRole is not null || (customStringOption.OptionBehaviour)) continue;
+            if (customStringOption.AdvancedRole is not null || (customStringOption.OptionBehaviour))
+            {
+                continue;
+            }
 
             var newOpt = Object.Instantiate(stringOpt, container);
             customStringOption.CreateStringOption(newOpt);

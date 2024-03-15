@@ -1,9 +1,4 @@
 ﻿using HarmonyLib;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Patches;
@@ -18,13 +13,17 @@ public static class NotificationPopperPatch
     {
         if(!NewPopper)
         {
-            var newGameObject = GameObject.Instantiate(__instance.gameObject, __instance.transform.parent);
+            var newGameObject = Object.Instantiate(__instance.gameObject, __instance.transform.parent);
             newGameObject.name = "LaunchpadNotifications";
             NewPopper = newGameObject.GetComponent<NotificationPopper>();
         }
         
-        if (__instance.gameObject.name != NewPopper.gameObject.name) return;
-        Vector3 pos = HudManager.Instance.TaskStuff.transform.FindChild("ProgressTracker").transform.localPosition;
+        if (__instance.gameObject.name != NewPopper.gameObject.name)
+        {
+            return;
+        }
+
+        var pos = HudManager.Instance.TaskStuff.transform.FindChild("ProgressTracker").transform.localPosition;
         __instance.transform.localPosition = new Vector3(pos.x + 2.5f, pos.y + 0.1f, __instance.zPos);
     }
 }

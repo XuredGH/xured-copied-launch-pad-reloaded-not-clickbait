@@ -1,6 +1,6 @@
-﻿using Discord;
+﻿using System;
+using Discord;
 using HarmonyLib;
-using System;
 using UnityEngine.SceneManagement;
 
 namespace LaunchpadReloaded.Patches;
@@ -12,7 +12,7 @@ public static class DiscordManagerPatch
     public static bool StartPatch(DiscordManager __instance)
     {
         __instance.presence = new Discord.Discord(1217217004474339418, 1UL);
-        ActivityManager activityManager = __instance.presence.GetActivityManager();
+        var activityManager = __instance.presence.GetActivityManager();
         activityManager.RegisterSteam(945360U);
         activityManager.OnActivityJoin = (Action<string>)delegate (string joinSecret)
         {
@@ -30,7 +30,7 @@ public static class DiscordManagerPatch
     [HarmonyPrefix]
     public static void Prefix(ActivityManager __instance, [HarmonyArgument(0)] Activity activity)
     {
-        activity.Details += $"All Of Us: Launchpad | Modded Among Us";
+        activity.Details += "All Of Us: Launchpad | Modded Among Us";
         activity.State += " | dsc.gg/allofus";
     }
 }

@@ -15,4 +15,5 @@ public enum LaunchpadRPC : uint
     SetBodyType = 10,
     CreateScanner = 11,
     Revive = 12,
+    SyncGradient = 13
 }

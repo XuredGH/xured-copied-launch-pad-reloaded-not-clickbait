@@ -1,10 +1,10 @@
+using System;
+using System.Collections.Generic;
 using LaunchpadReloaded.API.Gamemodes;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
-using System;
-using System.Collections.Generic;
 
-namespace LaunchpadReloaded.Components;
+namespace LaunchpadReloaded.Utilities;
 
 public class LaunchpadGameOptions
 {
@@ -12,7 +12,7 @@ public class LaunchpadGameOptions
 
     // General Options
     public CustomToggleOption FriendlyFire;
-    public CustomStringOption Gamemodes;
+    public CustomStringOption GameModes;
     public CustomOptionGroup GeneralGroup;
 
     // Battle Royale
@@ -27,8 +27,8 @@ public class LaunchpadGameOptions
             throw new Exception("Can't have more than one Launchpad Options");
         }
 
-        Gamemodes = new CustomStringOption("Gamemodes", 0, ["Default", "Battle Royale"]);
-        Gamemodes.ChangedEvent = i =>
+        GameModes = new CustomStringOption("Gamemodes", 0, ["Default", "Battle Royale"]);
+        GameModes.ChangedEvent = i =>
         {
             CustomGamemodeManager.RpcSetGamemode(PlayerControl.LocalPlayer, i);
         };
@@ -37,7 +37,7 @@ public class LaunchpadGameOptions
 
         GeneralGroup = new CustomOptionGroup("General Options",
             toggleOpt: [FriendlyFire],
-            stringOpt: [Gamemodes,],
+            stringOpt: [GameModes,],
             numberOpt: []);
 
         SeekerCharacter = new CustomToggleOption("Use Seeker Character", true);
@@ -47,7 +47,7 @@ public class LaunchpadGameOptions
             toggleOpt: [SeekerCharacter, ShowKnife],
             stringOpt: [],
             numberOpt: []);
-        BattleRoyaleGroup.Hidden = () => Gamemodes.Value != "Battle Royale";
+        BattleRoyaleGroup.Hidden = () => GameModes.Value != "Battle Royale";
 
         foreach (KeyValuePair<ushort, RoleBehaviour> role in CustomRoleManager.CustomRoles)
         {

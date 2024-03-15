@@ -1,11 +1,11 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using AmongUs.GameOptions;
 using HarmonyLib;
 using LaunchpadReloaded.API.Gamemodes;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.Utilities;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace LaunchpadReloaded.API.Patches;
 
@@ -43,20 +43,27 @@ public static class ToHudStringPatch
 
             foreach (var group in groupsWithoutRoles)
             {
-                if (group.Hidden()) continue;
+                if (group.Hidden())
+                {
+                    continue;
+                }
 
                 sb.AppendLine($"<size=110%><b>{group.Title}</b></size>");
                 AddOptions(sb, group.CustomNumberOptions, group.CustomStringOptions, group.CustomToggleOptions);
                 sb.Append("\n");
             }
 
-            if (groupsWithRoles.Count() > 0 && CustomGamemodeManager.ActiveMode.CanAccessRolesTab())
+            var customOptionGroups = groupsWithRoles as CustomOptionGroup[] ?? groupsWithRoles.ToArray();
+            if (customOptionGroups.Any() && CustomGamemodeManager.ActiveMode.CanAccessRolesTab())
             {
                 sb.AppendLine($"<size=120%><b>Roles</b></size>");
 
-                foreach (var group in groupsWithRoles)
+                foreach (var group in customOptionGroups)
                 {
-                    if (group.Hidden()) continue;
+                    if (group.Hidden())
+                    {
+                        continue;
+                    }
 
                     sb.AppendLine($"<size=90%><b>{group.Title}</b></size><size=70%>");
                     AddOptions(sb, group.CustomNumberOptions, group.CustomStringOptions, group.CustomToggleOptions);
@@ -70,10 +77,10 @@ public static class ToHudStringPatch
                 CustomOptionsManager.CustomStringOptions.Where(option => option.Group == null && !option.Hidden()),
                 CustomOptionsManager.CustomToggleOptions.Where(option => option.Group == null && !option.Hidden()));
 
-            string suffix = CustomGamemodeManager.ActiveMode.CanAccessSettingsTab() ? "\nPress <b>Tab</b> to view Normal Options" :
+            var suffix = CustomGamemodeManager.ActiveMode.CanAccessSettingsTab() ? "\nPress <b>Tab</b> to view Normal Options" :
                 $"\n<b>You can not access Normal Options on {CustomGamemodeManager.ActiveMode.Name} mode.</b>";
 
-            __result = sb.ToString() + suffix;
+            __result = sb + suffix;
             return;
         }
 
