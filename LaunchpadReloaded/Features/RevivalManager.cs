@@ -21,9 +21,17 @@ public class RevivalManager(IntPtr ptr) : MonoBehaviour(ptr)
     }
 
     [MethodRpc((uint)LaunchpadRPC.Revive)]
-    public static void RpcRevive(DeadBody body)
+    public static void RpcRevive(ShipStatus shipStatus, byte bodyId)
     {
-        Revive(body);
+        var body = DeadBodyManager.GetBodyById(bodyId);
+        if (body)
+        {
+            Revive(body);
+        }
+        else
+        {
+            Debug.LogWarning($"Body for id {bodyId} not found");
+        }
     }
 
     public static void Revive(DeadBody body)

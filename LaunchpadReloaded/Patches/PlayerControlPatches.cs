@@ -54,8 +54,10 @@ public static class PlayerControlPatches
         }
     }
     
-    [HarmonyPrefix]
-    [HarmonyPatch(nameof(PlayerControl.CheckColor))]
+    
+    // TODO: Finish custom check color
+    //[HarmonyPrefix]
+    //[HarmonyPatch(nameof(PlayerControl.CheckColor))]
     public static bool CheckColorPrefix(PlayerControl __instance, [HarmonyArgument(0)] byte bodyColor)
     {
         var allPlayers = GameData.Instance.AllPlayers.ToArray();
