@@ -39,7 +39,7 @@ public static class ToHudStringPatch
 
         if (ShowCustom || !CustomGameModeManager.ActiveMode.CanAccessSettingsTab())
         {
-            var sb = new StringBuilder("<size=150%><b>Launchpad Options:</b></size>\n");
+            var sb = new StringBuilder("<size=180%><b>Launchpad Options:</b></size>\n<size=130%>");
             var groupsWithRoles = CustomOptionsManager.CustomGroups.Where(group => group.AdvancedRole != null);
             var groupsWithoutRoles = CustomOptionsManager.CustomGroups.Where(group => group.AdvancedRole == null);
 
@@ -55,14 +55,14 @@ public static class ToHudStringPatch
                     continue;
                 }
 
-                sb.AppendLine($"\n<size=110%><b>{group.Title}</b></size>");
+                sb.AppendLine($"\n<size=160%><b>{group.Title}</b></size>");
                 AddOptions(sb, group.CustomNumberOptions, group.CustomStringOptions, group.CustomToggleOptions);
             }
 
             var customOptionGroups = groupsWithRoles as CustomOptionGroup[] ?? groupsWithRoles.ToArray();
             if (customOptionGroups.Any() && CustomGameModeManager.ActiveMode.CanAccessRolesTab())
             {
-                sb.AppendLine($"\n<size=120%><b>Roles</b></size>");
+                sb.AppendLine($"\n<size=160%><b>Roles</b></size>");
 
                 foreach (var group in customOptionGroups)
                 {
@@ -71,7 +71,7 @@ public static class ToHudStringPatch
                         continue;
                     }
 
-                    sb.AppendLine($"<size=90%><b>{group.Title}</b></size><size=70%>");
+                    sb.AppendLine($"<size=140%><b>{group.Title}</b></size><size=120%>");
                     AddOptions(sb, group.CustomNumberOptions, group.CustomStringOptions, group.CustomToggleOptions);
                     sb.Append("</size>\n");
                 }
@@ -84,6 +84,6 @@ public static class ToHudStringPatch
             return;
         }
 
-        __result = "<size=150%><b>Normal Options:</b></size>\n" + __result + "\nPress <b>Tab</b> to view Launchpad Options";
+        __result = "<size=160%><b>Normal Options:</b></size>\n<size=130%>" + __result + "\nPress <b>Tab</b> to view Launchpad Options</size>";
     }
 }
