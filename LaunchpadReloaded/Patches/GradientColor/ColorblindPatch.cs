@@ -27,7 +27,7 @@ public static class ColorblindPatch
                 return false;
             }
 
-            __result = $"{defaultColor}-{gradientColor}";
+            __result = $"{gradientColor}-{defaultColor}";
             return false;
         }
         return true;

@@ -1,5 +1,6 @@
 using HarmonyLib;
 using LaunchpadReloaded.API.GameModes;
+using LaunchpadReloaded.API.Utilities;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
@@ -28,6 +29,8 @@ public static class PlayerControlPatches
     public static void OnPlayerDie(PlayerControl __instance)
     {
         CustomGameModeManager.ActiveMode.OnDeath(__instance);
+        if (__instance.Data.IsHacked())
+            HackingManager.RpcUnHackPlayer(__instance);
     }
 
     [HarmonyPostfix]

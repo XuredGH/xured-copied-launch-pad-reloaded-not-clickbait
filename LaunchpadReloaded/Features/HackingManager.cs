@@ -91,6 +91,12 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
         player.SetName(player.Data.PlayerName);
         player.SetColor((byte)player.Data.DefaultOutfit.ColorId);
         player.cosmetics.gameObject.SetActive(true);
+
+        if (Instance.hackedPlayers.Count <= 0)
+        {
+            foreach (var node in HackingManager.Instance.nodes)
+                RpcToggleNode(ShipStatus.Instance, node.Id, false);
+        }
     }
 
     [MethodRpc((uint)LaunchpadRPC.CreateNodes)]

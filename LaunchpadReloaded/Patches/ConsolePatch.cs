@@ -18,17 +18,17 @@ public static class ConsolePatch
         {
             if (CustomGameModeManager.ActiveMode.CanUseConsole(__instance))
             {
-                if (pc.IsHacked())
-                {
-                    return canUse = couldUse = false;
-                }
-
                 var task = __instance.FindTask(pc.Object);
 
                 if (task && task.GetComponent<SabotageTask>())
                 {
-                    return canUse = couldUse = false;
+                    canUse = couldUse = true;
+                    return true;
+                }
 
+                if (pc.IsHacked())
+                {
+                    return canUse = couldUse = false;
                 }
 
                 canUse = false;

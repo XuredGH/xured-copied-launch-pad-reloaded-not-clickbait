@@ -1,4 +1,5 @@
 ﻿using LaunchpadReloaded.API.Hud;
+using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using UnityEngine;
@@ -18,7 +19,7 @@ public class CallButton : CustomActionButton
         return role is CaptainRole;
     }
 
-    public override bool CanUse() => !ZoomButton.IsZoom;
+    public override bool CanUse() => !ZoomButton.IsZoom && !HackingManager.Instance.AnyActiveNodes();
 
     protected override void OnClick()
     {

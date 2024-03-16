@@ -1,4 +1,5 @@
 ﻿using LaunchpadReloaded.API.Hud;
+using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities;
@@ -19,6 +20,8 @@ public class ZoomButton : CustomActionButton
     {
         return role is CaptainRole;
     }
+
+    public override bool CanUse() => !HackingManager.Instance.AnyActiveNodes();
 
     protected override void OnClick()
     {

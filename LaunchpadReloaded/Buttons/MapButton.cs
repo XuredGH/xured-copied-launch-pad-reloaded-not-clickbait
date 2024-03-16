@@ -19,7 +19,6 @@ public class MapButton : CustomActionButton
         ShowLivePlayerPosition = true,
         Mode = MapOptions.Modes.CountOverlay,
     };
-
     public override bool Enabled(RoleBehaviour role) => role is HackerRole;
 
     protected override void OnClick()

@@ -43,7 +43,7 @@ public class ScannerManager(IntPtr ptr) : MonoBehaviour(ptr)
         collider.isTrigger = true;
 
         var realCollision = scanner.AddComponent<CircleCollider2D>();
-        realCollision.radius = 0.6f;
+        realCollision.radius = 0.2f;
         realCollision.offset = new Vector2(0, -0.2f);
 
         var component = scanner.AddComponent<ScannerComponent>();
