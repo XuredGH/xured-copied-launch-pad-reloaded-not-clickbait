@@ -14,14 +14,14 @@ public class HackNodeComponent(IntPtr ptr) : MonoBehaviour(ptr)
     public int Id;
     public SpriteRenderer Image;
     public ImageNames UseIcon => ImageNames.UseButton;
-    public float UsableDistance => 3f;
+    public float UsableDistance => 0.8f;
     public float PercentCool => 0;
 
     public void SetOutline(bool on, bool mainTarget)
     {
         Image.material.SetFloat(ShaderID.Outline, on ? 1 : 0);
         Image.material.SetColor(ShaderID.OutlineColor, Color.green);
-        Image.material.SetColor(ShaderID.OutlineColor, mainTarget ? Color.green : Color.clear);
+        Image.material.SetColor(ShaderID.AddColor, mainTarget ? Color.green : Color.clear);
     }
 
     public void Use()
@@ -41,7 +41,7 @@ public class HackNodeComponent(IntPtr ptr) : MonoBehaviour(ptr)
             var truePosition = @object.GetTruePosition();
             var position = transform.position;
             num = Vector2.Distance(truePosition, position);
-            canUse &= (num <= 0.5f && !PhysicsHelpers.AnythingBetween(truePosition, position, Constants.ShipOnlyMask, false));
+            canUse &= (num <= UsableDistance);
         }
         return num;
     }
