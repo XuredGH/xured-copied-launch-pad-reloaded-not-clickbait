@@ -60,7 +60,6 @@ public class BattleRoyale : CustomGameMode
     }
 
     public override bool CanAccessRolesTab() => false;
-    public override bool CanAccessSettingsTab() => false;
 
     public override void HudUpdate(HudManager instance)
     {

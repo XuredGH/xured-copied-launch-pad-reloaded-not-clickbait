@@ -24,9 +24,12 @@ public static class GenericRPC
             hand.name = "KnifeHand";
             hand.layer = LayerMask.NameToLayer("Players");
 
+            hand.transform.localPosition = player.transform.localPosition;
+            hand.transform.position = player.transform.position;
+
             var nodeSync = hand.GetComponent<SpriteAnimNodeSync>();
-            nodeSync.flipOffset = new Vector3(-1.5f, 0.5f, 0.0113f);
-            nodeSync.normalOffset = new Vector3(1.5f, 0.5f, 0.0113f);
+            nodeSync.flipOffset = new Vector3(-1.5f, 0.5f, 0);
+            nodeSync.normalOffset = new Vector3(1.5f, 0.5f, 0);
 
             var rend = hand.GetComponent<SpriteRenderer>();
             rend.sprite = LaunchpadAssets.KnifeHandSprite.LoadAsset();

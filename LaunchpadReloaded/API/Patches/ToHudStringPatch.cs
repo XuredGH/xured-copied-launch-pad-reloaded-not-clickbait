@@ -43,6 +43,11 @@ public static class ToHudStringPatch
             var groupsWithRoles = CustomOptionsManager.CustomGroups.Where(group => group.AdvancedRole != null);
             var groupsWithoutRoles = CustomOptionsManager.CustomGroups.Where(group => group.AdvancedRole == null);
 
+            AddOptions(sb,
+                CustomOptionsManager.CustomNumberOptions.Where(option => option.Group == null && !option.Hidden()),
+                CustomOptionsManager.CustomStringOptions.Where(option => option.Group == null && !option.Hidden()),
+                CustomOptionsManager.CustomToggleOptions.Where(option => option.Group == null && !option.Hidden()));
+
             foreach (var group in groupsWithoutRoles)
             {
                 if (group.Hidden())
@@ -50,15 +55,14 @@ public static class ToHudStringPatch
                     continue;
                 }
 
-                sb.AppendLine($"<size=110%><b>{group.Title}</b></size>");
+                sb.AppendLine($"\n<size=110%><b>{group.Title}</b></size>");
                 AddOptions(sb, group.CustomNumberOptions, group.CustomStringOptions, group.CustomToggleOptions);
-                sb.Append("\n");
             }
 
             var customOptionGroups = groupsWithRoles as CustomOptionGroup[] ?? groupsWithRoles.ToArray();
             if (customOptionGroups.Any() && CustomGameModeManager.ActiveMode.CanAccessRolesTab())
             {
-                sb.AppendLine($"<size=120%><b>Roles</b></size>");
+                sb.AppendLine($"\n<size=120%><b>Roles</b></size>");
 
                 foreach (var group in customOptionGroups)
                 {
@@ -72,12 +76,6 @@ public static class ToHudStringPatch
                     sb.Append("</size>\n");
                 }
             }
-
-
-            AddOptions(sb,
-                CustomOptionsManager.CustomNumberOptions.Where(option => option.Group == null && !option.Hidden()),
-                CustomOptionsManager.CustomStringOptions.Where(option => option.Group == null && !option.Hidden()),
-                CustomOptionsManager.CustomToggleOptions.Where(option => option.Group == null && !option.Hidden()));
 
             var suffix = CustomGameModeManager.ActiveMode.CanAccessSettingsTab() ? "\nPress <b>Tab</b> to view Normal Options" :
                 $"\n<b>You can not access Normal Options on {CustomGameModeManager.ActiveMode.Name} mode.</b>";

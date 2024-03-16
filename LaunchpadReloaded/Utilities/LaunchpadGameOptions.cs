@@ -10,15 +10,20 @@ public class LaunchpadGameOptions
 {
     public static LaunchpadGameOptions Instance { get; private set; }
 
-    // General Options
-    public CustomToggleOption FriendlyFire;
     public CustomStringOption GameModes;
+
+    // General Options
+    public CustomToggleOption OnlyShowRoleColor;
     public CustomOptionGroup GeneralGroup;
 
     // Battle Royale
     public CustomToggleOption SeekerCharacter;
     public CustomToggleOption ShowKnife;
     public CustomOptionGroup BattleRoyaleGroup;
+
+    // Fun Options
+    public CustomToggleOption FriendlyFire;
+    public CustomOptionGroup FunGroup;
 
     public LaunchpadGameOptions()
     {
@@ -27,7 +32,7 @@ public class LaunchpadGameOptions
             throw new Exception("Can't have more than one Launchpad Options");
         }
 
-        GameModes = new CustomStringOption("GameModes", 0, ["Default", "Battle Royale"]);
+        GameModes = new CustomStringOption("Gamemode", 0, ["Default", "Battle Royale"]);
         GameModes.ChangedEvent = i =>
         {
             if (AmongUsClient.Instance.AmHost)
@@ -36,21 +41,29 @@ public class LaunchpadGameOptions
             }
         };
 
-        FriendlyFire = new CustomToggleOption("Friendly Fire", false);
-
+        OnlyShowRoleColor = new CustomToggleOption("Reveal Crewmate Roles", false);
         GeneralGroup = new CustomOptionGroup("General Options",
+            toggleOpt: [OnlyShowRoleColor],
+            stringOpt: [],
+            numberOpt: []);
+
+        FriendlyFire = new CustomToggleOption("Friendly Fire", false);
+        FunGroup = new CustomOptionGroup("Fun Options",
             toggleOpt: [FriendlyFire],
-            stringOpt: [GameModes,],
+            stringOpt: [],
             numberOpt: []);
 
         SeekerCharacter = new CustomToggleOption("Use Seeker Character", true);
         ShowKnife = new CustomToggleOption("Show Knife", true);
+        ShowKnife.Hidden = () => SeekerCharacter.Value == false;
 
         BattleRoyaleGroup = new CustomOptionGroup("Battle Royale Options",
             toggleOpt: [SeekerCharacter, ShowKnife],
             stringOpt: [],
             numberOpt: []);
+
         BattleRoyaleGroup.Hidden = () => GameModes.Value != "Battle Royale";
+        GeneralGroup.Hidden = FunGroup.Hidden = () => GameModes.Value != "Default";
 
         foreach (KeyValuePair<ushort, RoleBehaviour> role in CustomRoleManager.CustomRoles)
         {
