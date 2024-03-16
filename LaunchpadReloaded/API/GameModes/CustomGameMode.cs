@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
-namespace LaunchpadReloaded.API.Gamemodes;
-public abstract class CustomGamemode
+namespace LaunchpadReloaded.API.GameModes;
+public abstract class CustomGameMode
 {
     public abstract string Name { get; }
     public abstract string Description { get; }

@@ -1,5 +1,5 @@
 using HarmonyLib;
-using LaunchpadReloaded.API.Gamemodes;
+using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
@@ -27,7 +27,7 @@ public static class PlayerControlPatches
     [HarmonyPatch(nameof(PlayerControl.Die))]
     public static void OnPlayerDie(PlayerControl __instance)
     {
-        CustomGamemodeManager.ActiveMode.OnDeath(__instance);
+        CustomGameModeManager.ActiveMode.OnDeath(__instance);
     }
 
     [HarmonyPrefix]

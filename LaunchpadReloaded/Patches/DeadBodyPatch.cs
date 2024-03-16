@@ -1,5 +1,5 @@
 ﻿using HarmonyLib;
-using LaunchpadReloaded.API.Gamemodes;
+using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.Features;
 
 namespace LaunchpadReloaded.Patches;
@@ -11,7 +11,7 @@ public static class DeadBodyPatch
     [HarmonyPatch(nameof(DeadBody.OnClick))]
     public static bool OnClickPatch(DeadBody __instance)
     {
-        if (CustomGamemodeManager.ActiveMode.CanReport(__instance))
+        if (CustomGameModeManager.ActiveMode.CanReport(__instance))
         {
             return !HackingManager.Instance.AnyActiveNodes();
         }

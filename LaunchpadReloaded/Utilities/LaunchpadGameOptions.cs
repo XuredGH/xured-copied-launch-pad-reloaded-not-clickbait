@@ -1,4 +1,4 @@
-using LaunchpadReloaded.API.Gamemodes;
+using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
 using System;
@@ -27,10 +27,10 @@ public class LaunchpadGameOptions
             throw new Exception("Can't have more than one Launchpad Options");
         }
 
-        GameModes = new CustomStringOption("Gamemodes", 0, ["Default", "Battle Royale"]);
+        GameModes = new CustomStringOption("GameModes", 0, ["Default", "Battle Royale"]);
         GameModes.ChangedEvent = i =>
         {
-            CustomGamemodeManager.RpcSetGamemode(GameManager.Instance, i);
+            CustomGameModeManager.RpcSetGameMode(GameManager.Instance, i);
         };
 
         FriendlyFire = new CustomToggleOption("Friendly Fire", false);

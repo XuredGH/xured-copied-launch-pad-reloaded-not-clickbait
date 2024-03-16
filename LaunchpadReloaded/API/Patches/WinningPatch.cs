@@ -1,5 +1,5 @@
 ﻿using HarmonyLib;
-using LaunchpadReloaded.API.Gamemodes;
+using LaunchpadReloaded.API.GameModes;
 
 namespace LaunchpadReloaded.API.Patches;
 
@@ -8,15 +8,15 @@ public static class WinningPatch
 {
     public static void Prefix()
     {
-        var gamemode = CustomGamemodeManager.ActiveMode;
-        if (gamemode.CalculateWinners() == null)
+        var gameMode = CustomGameModeManager.ActiveMode;
+        if (gameMode.CalculateWinners() == null)
         {
             return;
         }
 
         TempData.winners.Clear();
 
-        foreach (var winner in gamemode.CalculateWinners())
+        foreach (var winner in gameMode.CalculateWinners())
         {
             var data = new WinningPlayerData(winner);
             data.IsYou = winner.PlayerId == PlayerControl.LocalPlayer.PlayerId;

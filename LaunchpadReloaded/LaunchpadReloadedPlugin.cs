@@ -1,7 +1,7 @@
 ﻿using BepInEx;
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
-using LaunchpadReloaded.API.Gamemodes;
+using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Utilities;
@@ -31,8 +31,8 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
 
         RegisterColors();
 
-        CustomGamemodeManager.RegisterAllGamemodes();
-        CustomGamemodeManager.SetGamemode(0);
+        CustomGameModeManager.RegisterAllGameModes();
+        CustomGameModeManager.SetGameMode(0);
         CustomRoleManager.RegisterAllRoles();
         CustomButtonManager.RegisterAllButtons();
 
@@ -41,20 +41,16 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
         Config.Save();
     }
 
-    public void RegisterColors()
+    private static void RegisterColors()
     {
-        CustomColor[] colors =
-         typeof(LaunchpadColors)
-         .GetFields()
-         .Select(s =>
-             (CustomColor)s.GetValue(null))
-             .ToArray();
+        var colors = 
+            typeof(LaunchpadColors)
+            .GetProperties()
+            .Select(s => (CustomColor)s.GetValue(null))
+            .ToArray();
 
-        foreach (CustomColor color in colors)
-        {
-            Palette.PlayerColors = Palette.PlayerColors.ToList().AddItem(color.MainColor).ToArray();
-            Palette.ShadowColors = Palette.ShadowColors.ToList().AddItem(color.ShadowColor).ToArray();
-            Palette.ColorNames = Palette.ColorNames.ToList().AddItem(color.Name).ToArray();
-        }
+        Palette.PlayerColors = Palette.PlayerColors.ToArray().AddRangeToArray(colors.Select(x=>x.MainColor).ToArray());
+        Palette.ShadowColors = Palette.ShadowColors.ToArray().AddRangeToArray(colors.Select(x=>x.ShadowColor).ToArray());
+        Palette.ColorNames = Palette.ColorNames.ToArray().AddRangeToArray(colors.Select(x=>x.Name).ToArray());
     }
 }

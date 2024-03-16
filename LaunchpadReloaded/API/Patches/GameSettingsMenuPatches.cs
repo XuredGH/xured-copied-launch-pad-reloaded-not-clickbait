@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
-using LaunchpadReloaded.API.Gamemodes;
+using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.API.GameOptions;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -51,12 +51,12 @@ public static class GameSettingsMenuPatches
     [HarmonyPatch(nameof(GameSettingMenu.Update))]
     public static void UpdatePatch(GameSettingMenu __instance)
     {
-        if (CustomGamemodeManager.ActiveMode == null) return;
+        if (CustomGameModeManager.ActiveMode == null) return;
 
-        GameBtn.SetActive(CustomGamemodeManager.ActiveMode.CanAccessSettingsTab());
-        RoleBtn.SetActive(CustomGamemodeManager.ActiveMode.CanAccessRolesTab());
+        GameBtn.SetActive(CustomGameModeManager.ActiveMode.CanAccessSettingsTab());
+        RoleBtn.SetActive(CustomGameModeManager.ActiveMode.CanAccessRolesTab());
 
-        if (!CustomGamemodeManager.ActiveMode.CanAccessSettingsTab())
+        if (!CustomGameModeManager.ActiveMode.CanAccessSettingsTab())
         {
             __instance.RegularGameSettings.SetActive(false);
             __instance.RolesSettings.gameObject.SetActive(false);

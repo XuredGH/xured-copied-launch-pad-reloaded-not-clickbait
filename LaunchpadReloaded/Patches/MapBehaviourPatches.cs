@@ -1,5 +1,5 @@
 ﻿using HarmonyLib;
-using LaunchpadReloaded.API.Gamemodes;
+using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
@@ -16,7 +16,7 @@ public class MapBehaviourPatches
     [HarmonyPatch(nameof(MapBehaviour.ShowSabotageMap))]
     public static bool ShowSabotagePatch(MapBehaviour __instance)
     {
-        var shouldShow = CustomGamemodeManager.ActiveMode.ShouldShowSabotageMap(__instance);
+        var shouldShow = CustomGameModeManager.ActiveMode.ShouldShowSabotageMap(__instance);
         if (!shouldShow)
         {
             __instance.ShowNormalMap();

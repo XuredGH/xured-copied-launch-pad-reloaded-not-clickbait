@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using HarmonyLib;
 using InnerNet;
-using LaunchpadReloaded.API.Gamemodes;
+using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.API.Utilities;
@@ -43,7 +43,7 @@ public static class HudManagerPatches
             return;
         }
 
-        CustomGamemodeManager.ActiveMode.HudUpdate(__instance);
+        CustomGameModeManager.ActiveMode.HudUpdate(__instance);
 
         if (PlayerControl.LocalPlayer.Data.IsHacked())
         {
@@ -118,7 +118,7 @@ public static class HudManagerPatches
     [HarmonyPatch("OnGameStart")]
     public static void GameStartPatch(HudManager __instance)
     {
-        CustomGamemodeManager.ActiveMode.HudStart(__instance);
+        CustomGameModeManager.ActiveMode.HudStart(__instance);
     }
 
     [HarmonyPostfix]

@@ -1,5 +1,5 @@
 ﻿using HarmonyLib;
-using LaunchpadReloaded.API.Gamemodes;
+using LaunchpadReloaded.API.GameModes;
 
 namespace LaunchpadReloaded.API.Patches;
 
@@ -10,9 +10,9 @@ public static class IntroCutscenePatch
     [HarmonyPatch(nameof(IntroCutscene.BeginImpostor))]
     public static void BeginImpostorPatch(IntroCutscene __instance)
     {
-        if (CustomGamemodeManager.ActiveMode.ShowCustomRoleScreen())
+        if (CustomGameModeManager.ActiveMode.ShowCustomRoleScreen())
         {
-            var mode = CustomGamemodeManager.ActiveMode;
+            var mode = CustomGameModeManager.ActiveMode;
             __instance.TeamTitle.text = $"<size=70%>{mode.Name}</size>\n<size=20%>{mode.Description}</size>";
         }
     }
@@ -21,6 +21,6 @@ public static class IntroCutscenePatch
     [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.OnDestroy))]
     public static void GameBeginPatch()
     {
-        CustomGamemodeManager.ActiveMode.Initialize();
+        CustomGameModeManager.ActiveMode.Initialize();
     }
 }

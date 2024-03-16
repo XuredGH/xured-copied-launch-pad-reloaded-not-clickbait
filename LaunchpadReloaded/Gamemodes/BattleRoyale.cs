@@ -1,5 +1,5 @@
 using AmongUs.GameOptions;
-using LaunchpadReloaded.API.Gamemodes;
+using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities;
@@ -10,8 +10,8 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 
-namespace LaunchpadReloaded.Gamemodes;
-public class BattleRoyale : CustomGamemode
+namespace LaunchpadReloaded.GameModes;
+public class BattleRoyale : CustomGameMode
 {
     public override string Name => "Battle Royale";
     public override string Description => "Everyone can kill.\n<b><i>Last one standing wins.</b></i>";

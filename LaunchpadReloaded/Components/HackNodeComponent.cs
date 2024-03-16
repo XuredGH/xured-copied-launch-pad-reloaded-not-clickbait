@@ -27,7 +27,7 @@ public class HackNodeComponent(IntPtr ptr) : MonoBehaviour(ptr)
     public void Use()
     {
         SoundManager.Instance.PlaySound(LaunchpadAssets.BeepSound.LoadAsset(), false, 0.5f);
-        HackingManager.RpcUnhackPlayer(PlayerControl.LocalPlayer);
+        HackingManager.RpcUnHackPlayer(PlayerControl.LocalPlayer);
 
         if (HackingManager.Instance.hackedPlayers.Count <= 0)
         {

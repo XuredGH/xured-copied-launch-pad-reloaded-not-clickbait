@@ -1,6 +1,6 @@
 ﻿using HarmonyLib;
 using InnerNet;
-using LaunchpadReloaded.API.Gamemodes;
+using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.API.Utilities;
 
 namespace LaunchpadReloaded.Patches;
@@ -16,7 +16,7 @@ public static class ConsolePatch
     {
         if (AmongUsClient.Instance.GameState == InnerNetClient.GameStates.Started && ShipStatus.Instance)
         {
-            if (CustomGamemodeManager.ActiveMode.CanUseConsole(__instance))
+            if (CustomGameModeManager.ActiveMode.CanUseConsole(__instance))
             {
                 if (pc.IsHacked())
                 {
@@ -50,7 +50,7 @@ public static class ConsolePatch
     {
         if (AmongUsClient.Instance.GameState == InnerNetClient.GameStates.Started && ShipStatus.Instance)
         {
-            if (CustomGamemodeManager.ActiveMode.CanUseSystemConsole(__instance))
+            if (CustomGameModeManager.ActiveMode.CanUseSystemConsole(__instance))
             {
                 return canUse = couldUse = !pc.IsHacked();
             }
@@ -71,7 +71,7 @@ public static class ConsolePatch
     {
         if (AmongUsClient.Instance.GameState == InnerNetClient.GameStates.Started && ShipStatus.Instance)
         {
-            if (CustomGamemodeManager.ActiveMode.CanUseMapConsole(__instance))
+            if (CustomGameModeManager.ActiveMode.CanUseMapConsole(__instance))
             {
                 return canUse = couldUse = !pc.IsHacked();
             }

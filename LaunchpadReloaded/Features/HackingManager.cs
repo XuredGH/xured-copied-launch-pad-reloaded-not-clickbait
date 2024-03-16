@@ -60,8 +60,8 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
     private void Awake()
     {
         Instance = this;
-        nodes = new List<HackNodeComponent>();
-        hackedPlayers = new List<byte>();
+        nodes = [];
+        hackedPlayers = [];
     }
 
     private void OnDestroy()
@@ -84,8 +84,8 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
         player.RawSetColor(15);
     }
 
-    [MethodRpc((uint)LaunchpadRPC.UnhackPlayer)]
-    public static void RpcUnhackPlayer(PlayerControl player)
+    [MethodRpc((uint)LaunchpadRPC.UnHackPlayer)]
+    public static void RpcUnHackPlayer(PlayerControl player)
     {
         Instance.hackedPlayers.Remove(player.PlayerId);
         player.SetName(player.Data.PlayerName);
