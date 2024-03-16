@@ -30,7 +30,7 @@ public class LaunchpadGameOptions
         GameModes = new CustomStringOption("GameModes", 0, ["Default", "Battle Royale"]);
         GameModes.ChangedEvent = i =>
         {
-            CustomGameModeManager.RpcSetGameMode(GameManager.Instance, i);
+            CustomGameModeManager.RpcSetGameMode(PlayerControl.LocalPlayer, i);
         };
 
         FriendlyFire = new CustomToggleOption("Friendly Fire", false);

@@ -15,7 +15,7 @@ public static class CustomOptionsManager
     {
         var toggles = CustomToggleOptions.Select(x => x.Value).ToArray();
         var numbers = CustomNumberOptions.Select(x => x.Value).ToArray();
-        var strings = CustomStringOptions.Select(x => x.Value).ToArray();
+        var strings = CustomStringOptions.Select(x => x.IndexValue).ToArray();
 
         Rpc<SyncOptionsRpc>.Instance.Send(new SyncOptionsRpc.Data(toggles, numbers, strings));
     }
@@ -44,7 +44,7 @@ public static class CustomOptionsManager
         }
     }
 
-    public static void HandleOptionsSync(bool[] toggles, float[] numbers, string[] strings)
+    public static void HandleOptionsSync(bool[] toggles, float[] numbers, int[] strings)
     {
         for (var i = 0; i < toggles.Length; i++)
         {

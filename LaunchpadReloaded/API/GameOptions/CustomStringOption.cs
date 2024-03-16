@@ -8,14 +8,15 @@ namespace LaunchpadReloaded.API.GameOptions;
 
 public class CustomStringOption : AbstractGameOption
 {
-    public string Value { get; private set; }
+    public int IndexValue { get; private set; }
+    public string Value => Options[IndexValue];
     public int Default { get; }
     public string[] Options { get; private set; }
     public ConfigEntry<int> Config { get; }
     public Action<int> ChangedEvent { get; set; }
     public CustomStringOption(string title, int defaultValue, string[] options, Type role = null, bool save = true) : base(title, role, save)
     {
-        Value = options[defaultValue];
+        IndexValue = defaultValue;
         Options = options;
         Default = defaultValue;
         CustomOptionsManager.CustomStringOptions.Add(this);
@@ -28,7 +29,7 @@ public class CustomStringOption : AbstractGameOption
     public void SetValue(int newValue)
     {
         if (Save) Config.Value = newValue;
-        Value = Options[newValue];
+        IndexValue = newValue;
 
         var behaviour = (StringOption)OptionBehaviour;
         if (behaviour)

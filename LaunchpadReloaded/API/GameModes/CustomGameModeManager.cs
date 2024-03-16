@@ -22,7 +22,7 @@ public static class CustomGameModeManager
     }
 
     [MethodRpc((uint)LaunchpadRPC.SetGameMode)]
-    public static void RpcSetGameMode(GameManager manager, int id)
+    public static void RpcSetGameMode(PlayerControl pc, int id)
     {
         SetGameMode(id);
     }
