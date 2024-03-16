@@ -44,7 +44,7 @@ public class MedicRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
             defaultValue: false,
             role: typeof(MedicRole));
 
-        Group = new CustomOptionGroup($"{RoleColor.ToTextColor()}Janitor</color>",
+        Group = new CustomOptionGroup($"{RoleColor.ToTextColor()}Medic</color>",
             numberOpt: [MaxRevives, ReviveCooldown],
             stringOpt: [],
             toggleOpt: [OnlyAllowInMedbay],
