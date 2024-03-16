@@ -13,6 +13,11 @@ public static class CustomOptionsManager
     public static readonly List<CustomOptionGroup> CustomGroups = [];
     public static void SyncOptions()
     {
+        if (!AmongUsClient.Instance.AmHost)
+        {
+            return;
+        }
+        
         var toggles = CustomToggleOptions.Select(x => x.Value).ToArray();
         var numbers = CustomNumberOptions.Select(x => x.Value).ToArray();
         var strings = CustomStringOptions.Select(x => x.IndexValue).ToArray();
