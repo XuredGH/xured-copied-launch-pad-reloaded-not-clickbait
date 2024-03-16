@@ -1,8 +1,8 @@
-﻿using System;
-using LaunchpadReloaded.API.Utilities;
+﻿using LaunchpadReloaded.API.Utilities;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Attributes;
+using System;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Components;
@@ -31,7 +31,8 @@ public class HackNodeComponent(IntPtr ptr) : MonoBehaviour(ptr)
 
         if (HackingManager.Instance.hackedPlayers.Count <= 0)
         {
-            HackingManager.RpcToggleNode(ShipStatus.Instance, Id, false);
+            foreach (var node in HackingManager.Instance.nodes)
+                HackingManager.RpcToggleNode(ShipStatus.Instance, node.Id, false);
         }
     }
 

@@ -2,7 +2,6 @@
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
-using Reactor.Utilities.Extensions;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
@@ -29,6 +28,8 @@ public class HackButton : CustomActionButton
         }
 
         PlayerControl.LocalPlayer.RawSetColor(15);
-        HackingManager.RpcToggleNode(ShipStatus.Instance, HackingManager.Instance.nodes.Random().Id, true);
+
+        foreach (var node in HackingManager.Instance.nodes)
+            HackingManager.RpcToggleNode(ShipStatus.Instance, node.Id, true);
     }
 }

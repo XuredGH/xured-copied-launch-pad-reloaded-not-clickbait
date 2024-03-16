@@ -1,4 +1,5 @@
-﻿using LaunchpadReloaded.Roles;
+﻿using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Attributes;
 using System;
@@ -22,6 +23,8 @@ public class ScannerComponent(IntPtr ptr) : MonoBehaviour(ptr)
 
     public void OnTriggerEnter2D(Collider2D collider)
     {
+        if (HackingManager.Instance.AnyActiveNodes()) return;
+
         var player = collider.gameObject.GetComponent<PlayerControl>();
         if (player == null)
         {

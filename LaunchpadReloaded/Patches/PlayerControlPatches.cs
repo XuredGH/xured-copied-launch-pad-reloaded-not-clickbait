@@ -30,6 +30,15 @@ public static class PlayerControlPatches
         CustomGameModeManager.ActiveMode.OnDeath(__instance);
     }
 
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(PlayerControl.FixedUpdate))]
+    public static void UpdatePatch(PlayerControl __instance)
+    {
+        var knife = __instance.gameObject.transform.FindChild("BodyForms/Seeker/KnifeHand");
+        if (knife is null) return;
+
+        knife.gameObject.SetActive(!__instance.Data.IsDead && __instance.CanMove);
+    }
     [HarmonyPrefix]
     [HarmonyPatch("Start")]
     public static void StartPrefix(PlayerControl __instance)

@@ -5,7 +5,6 @@ using LaunchpadReloaded.Utilities;
 using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -40,15 +39,16 @@ public class BattleRoyale : CustomGameMode
         DeathNotif.text = text;
         DeathNotif.gameObject.SetActive(true);
         yield return new WaitForSeconds(3f);
-        if (DeathNotif) DeathNotif.gameObject.SetActive(false);
+        DeathNotif.gameObject.SetActive(false);
     }
     public override void OnDeath(PlayerControl player)
     {
         var alivePlayers = GameData.Instance.AllPlayers.ToArray().Where(player => !player.Disconnected && !player.IsDead).Count();
-        if (alivePlayers == 2 || alivePlayers == 1) return;
+        player.roleAssigned = false;
+        player.RpcSetRole(RoleTypes.CrewmateGhost);
 
-        player.transform.FindChild("BodyForms/Seeker/KnifeHand").gameObject.Destroy();
-        if (DeathNotif) Coroutines.Start(DeathNotification(player));
+        if (alivePlayers == 1) return;
+        Coroutines.Start(DeathNotification(player));
     }
     public override void HudStart(HudManager instance)
     {
@@ -71,7 +71,6 @@ public class BattleRoyale : CustomGameMode
         }
 
         instance.TaskStuff.gameObject.SetActive(false);
-        instance.AbilityButton.gameObject.SetActive(false);
         instance.UseButton.gameObject.SetActive(true);
         instance.ReportButton.gameObject.SetActive(false);
         instance.SabotageButton.gameObject.SetActive(false);
@@ -79,11 +78,11 @@ public class BattleRoyale : CustomGameMode
         instance.ImpostorVentButton.gameObject.SetActive(false);
     }
 
-    public override List<GameData.PlayerInfo> CalculateWinners()
-    {
-        var alivePlayers = GameData.Instance.AllPlayers.ToArray().Where(player => !player.Disconnected && !player.IsDead).ToList();
-        return alivePlayers;
-    }
+    /*    public override List<GameData.PlayerInfo> CalculateWinners()
+        {
+            var alivePlayers = GameData.Instance.AllPlayers.ToArray().Where(player => !player.Disconnected && !player.IsDead).ToList();
+            return alivePlayers;
+        }*/
     public override bool ShowCustomRoleScreen() => true;
 
     public override void CanKill(out bool runOriginal, out bool result, PlayerControl target)
