@@ -18,9 +18,11 @@ public class JesterRole(IntPtr ptr) : RoleBehaviour(ptr), ICustomRole
     public Color RoleColor => LaunchpadPalette.JesterColor;
     public RoleTeamTypes Team => RoleTeamTypes.Crewmate;
     public bool IsNeutral => true;
+    public bool TasksCount => false;
     public bool CanUseVent => CanUseVents is not null ? CanUseVents.Value : true;
     public override bool IsDead => false;
     public LoadableAsset<Sprite> Icon => LaunchpadAssets.ZoomButton;
+
     public override void AppendTaskHint(StringBuilder taskStringBuilder) { }
     public override bool DidWin(GameOverReason reason)
     {

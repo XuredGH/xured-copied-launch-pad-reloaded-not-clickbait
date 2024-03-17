@@ -31,7 +31,8 @@ public interface ICustomRole
     bool CanGetKilled => Team == RoleTeamTypes.Crewmate;
     bool IsNeutral => false;
     bool CanUseKill => Team == RoleTeamTypes.Impostor;
-    bool CanUseVent => false;
+    bool CanUseVent => Team == RoleTeamTypes.Impostor;
+    bool TasksCount => Team == RoleTeamTypes.Crewmate;
 
     bool TargetsBodies => false;
     bool CreateCustomTab => true;

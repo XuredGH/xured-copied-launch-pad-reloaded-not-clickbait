@@ -14,15 +14,13 @@ public static class JesterPatches
     {
         bool didWin = TempData.winners.ToArray().Any((WinningPlayerData h) => h.IsYou);
 
-        switch (TempData.EndReason)
+        if (TempData.EndReason == (GameOverReason)CustomGameOverReason.JesterWins)
         {
-            case (GameOverReason)CustomGameOverReason.JesterWins:
-                __instance.WinText.text += didWin ? "\n<size=30%>You Win.</size>" : "\n<size=30%>Jester Wins.</size>";
-                __instance.BackgroundBar.material.SetColor("_Color", LaunchpadPalette.JesterColor);
-                __instance.WinText.color = LaunchpadPalette.JesterColor;
-                SoundManager.Instance.PlaySound(__instance.DisconnectStinger, false, 1f, null);
-                break;
-        }
+            __instance.WinText.text += didWin ? "\n<size=30%>You Win.</size>" : "\n<size=30%>Jester Wins.</size>";
+            __instance.BackgroundBar.material.SetColor("_Color", LaunchpadPalette.JesterColor);
+            __instance.WinText.color = LaunchpadPalette.JesterColor;
+            SoundManager.Instance.PlaySound(__instance.DisconnectStinger, false, 1f, null);
+        };
     }
 
     [HarmonyPostfix]

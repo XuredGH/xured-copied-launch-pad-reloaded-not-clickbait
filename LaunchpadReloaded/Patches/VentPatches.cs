@@ -22,17 +22,16 @@ public static class VentPatches
         float num = float.MaxValue;
         PlayerControl @object = pc.Object;
         bool customRoleUsable = false;
-        if (@object.Data.Role is ICustomRole role) customRoleUsable = role.CanUseVent;
+        if (pc.Role.IsImpostor) customRoleUsable = true;
+        if (pc.Role is ICustomRole role) customRoleUsable = role.CanUseVent;
 
-        canUse = couldUse = (@object.inVent || customRoleUsable || CustomGameModeManager.ActiveMode.CanVent(__instance, pc))
-            && !pc.IsDead && (@object.CanMove || @object.inVent);
-
+        canUse = couldUse = customRoleUsable && !pc.IsDead && (@object.CanMove || @object.inVent);
         if (canUse)
         {
             Vector3 center = @object.Collider.bounds.center;
             Vector3 position = __instance.transform.position;
             num = Vector2.Distance(center, position);
-            canUse &= (num <= __instance.UsableDistance && (!PhysicsHelpers.AnythingBetween(@object.Collider, center, position, Constants.ShipOnlyMask, false) || __instance.name.StartsWith("JackInTheBoxVent_")));
+            canUse &= (num <= __instance.UsableDistance && !PhysicsHelpers.AnythingBetween(@object.Collider, center, position, Constants.ShipOnlyMask, false));
         }
         __result = num;
         return false;

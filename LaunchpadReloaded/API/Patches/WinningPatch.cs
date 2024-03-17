@@ -23,9 +23,4 @@ public static class WinningPatch
             TempData.winners.Add(data);
         }
     }
-
-    public static void Postfix(EndGameManager __instance)
-    {
-        if (TempData.EndReason != (GameOverReason)9) return;
-    }
 }
