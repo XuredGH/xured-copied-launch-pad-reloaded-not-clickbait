@@ -37,25 +37,26 @@ public static class RolesSettingsMenuPatches
                 option.gameObject.Destroy();
             }
 
-            var numOptsAdded = 0;
-            var toggleOptsAdded = 0;
+            float startOffset = 0.5f;
 
             foreach (var customOption in CustomOptionsManager.CustomOptions)
             {
                 if (customOption.AdvancedRole is not null && customOption.AdvancedRole == role.GetType())
                 {
+                    startOffset -= 0.5f;
+
                     switch (customOption)
                     {
                         case CustomNumberOption numberOption:
                             var numOpt = Object.Instantiate(numberSet, newTab.transform);
-                            numOpt.transform.localPosition -= new Vector3(0, .5f * numOptsAdded++, 0);
+                            numOpt.transform.localPosition = new Vector3(-1.25f, startOffset, 0);
                             numberOption.CreateNumberOption(numOpt);
 
                             break;
 
                         case CustomToggleOption toggleOption:
                             var togOpt = Object.Instantiate(toggleSet, newTab.transform);
-                            togOpt.transform.localPosition -= new Vector3(0, .4f * toggleOptsAdded++, 0);
+                            togOpt.transform.localPosition = new Vector3(-1.25f, startOffset, 0);
                             toggleOption.CreateToggleOption(togOpt);
 
                             break;
@@ -88,6 +89,12 @@ public static class RolesSettingsMenuPatches
                 customOption.OptionBehaviour.OnValueChanged = (Action<OptionBehaviour>)customOption.ValueChanged;
             }
         }
+
+        Scroller scroll = __instance.GetComponentInChildren<Scroller>();
+        scroll.active = true;
+        scroll.ContentYBounds.max = __instance.Children.Count * 0.02f;
+
+        scroll.transform.FindChild("UI_Scrollbar").gameObject.SetActive(true);
     }
 
     [HarmonyPrefix]
