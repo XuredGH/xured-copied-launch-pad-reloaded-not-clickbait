@@ -29,7 +29,6 @@ public class GradientColorComponent(IntPtr ptr) : MonoBehaviour(ptr)
             return;
         }
 
-        renderer.material = LaunchpadAssets.GradientMaterial.LoadAsset();
         mat = renderer.material;
 
         PlayerMaterial.SetColors(color1, mat);
