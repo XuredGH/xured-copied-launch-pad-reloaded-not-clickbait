@@ -1,7 +1,7 @@
-﻿using System.Text;
-using AmongUs.GameOptions;
+﻿using AmongUs.GameOptions;
 using BepInEx.Configuration;
 using LaunchpadReloaded.Utilities;
+using System.Text;
 using UnityEngine;
 
 namespace LaunchpadReloaded.API.Roles;
@@ -9,7 +9,7 @@ namespace LaunchpadReloaded.API.Roles;
 public interface ICustomRole
 {
     string RoleName { get; }
- 
+
     ushort RoleId { get; }
 
     string RoleDescription { get; }
@@ -19,7 +19,7 @@ public interface ICustomRole
     Color RoleColor { get; }
 
     RoleTeamTypes Team { get; }
-    
+
     LoadableAsset<Sprite> Icon => LaunchpadAssets.NoImage;
 
     ConfigDefinition NumConfigDefinition => new("Roles", $"Num{RoleName}");
@@ -29,10 +29,10 @@ public interface ICustomRole
     bool AffectedByLight => Team == RoleTeamTypes.Crewmate;
 
     bool CanGetKilled => Team == RoleTeamTypes.Crewmate;
-
+    bool IsNeutral => false;
     bool CanUseKill => Team == RoleTeamTypes.Impostor;
-
     bool CanUseVent => Team == RoleTeamTypes.Impostor;
+    bool TasksCount => Team == RoleTeamTypes.Crewmate;
 
     bool TargetsBodies => false;
     bool CreateCustomTab => true;
@@ -43,6 +43,10 @@ public interface ICustomRole
     void PlayerControlFixedUpdate(PlayerControl playerControl) { }
 
     void HudUpdate(HudManager hudManager) { }
+    string GetCustomEjectionMessage(GameData.PlayerInfo player)
+    {
+        return Team == RoleTeamTypes.Impostor ? $"{player.PlayerName} was The {RoleName}" : null;
+    }
 
     StringBuilder SetTabText()
     {

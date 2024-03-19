@@ -6,6 +6,7 @@ using Reactor.Utilities.Extensions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using Object = UnityEngine.Object;
 
 namespace LaunchpadReloaded.Patches.GradientColor;
 
@@ -40,7 +41,7 @@ public static class PlayerTabPatches
             _switchButton.transform.localScale = new Vector3(1, 1, 1);
             _switchButton.transform.localPosition = new Vector3(2, 1.5f, -2);
 
-            var buttonText = Object.Instantiate(__instance.transform.Find("Text").gameObject, _switchButton.transform);
+            var buttonText = UnityEngine.Object.Instantiate(__instance.transform.Find("Text").gameObject, _switchButton.transform);
             buttonText.transform.localPosition = new Vector3(0, 0, 0);
             buttonText.GetComponent<TextTranslatorTMP>().Destroy();
 
@@ -138,6 +139,7 @@ public static class PlayerTabPatches
         {
             __instance.AvailableColors.Add(i);
         }
+        if (!LaunchpadGameOptions.Instance.UniqueColors.Value) return false;
 
         if (!GameData.Instance)
         {

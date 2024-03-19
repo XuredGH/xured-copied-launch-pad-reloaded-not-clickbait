@@ -14,6 +14,7 @@ public class LaunchpadGameOptions
 
     // General Options
     public CustomToggleOption OnlyShowRoleColor;
+    public CustomToggleOption DisableMeetingTeleport;
     public CustomOptionGroup GeneralGroup;
 
     // Battle Royale
@@ -23,6 +24,7 @@ public class LaunchpadGameOptions
 
     // Fun Options
     public CustomToggleOption FriendlyFire;
+    public CustomToggleOption UniqueColors;
     public CustomOptionGroup FunGroup;
 
     public LaunchpadGameOptions()
@@ -41,15 +43,26 @@ public class LaunchpadGameOptions
             }
         };
 
+        DisableMeetingTeleport = new CustomToggleOption("Disable Meeting Teleport", false);
         OnlyShowRoleColor = new CustomToggleOption("Reveal Crewmate Roles", false);
         GeneralGroup = new CustomOptionGroup("General Options",
-            toggleOpt: [OnlyShowRoleColor],
+            toggleOpt: [OnlyShowRoleColor, DisableMeetingTeleport],
             stringOpt: [],
             numberOpt: []);
 
         FriendlyFire = new CustomToggleOption("Friendly Fire", false);
+        UniqueColors = new CustomToggleOption("Unique Colors", true);
+        UniqueColors.ChangedEvent = i =>
+        {
+            if (!AmongUsClient.Instance.AmHost || i == false) return;
+            foreach (PlayerControl plr in PlayerControl.AllPlayerControls)
+            {
+                plr.CmdCheckColor((byte)plr.cosmetics.ColorId);
+            }
+        };
+
         FunGroup = new CustomOptionGroup("Fun Options",
-            toggleOpt: [FriendlyFire],
+            toggleOpt: [FriendlyFire, UniqueColors],
             stringOpt: [],
             numberOpt: []);
 

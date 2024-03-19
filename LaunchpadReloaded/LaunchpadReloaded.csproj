@@ -13,6 +13,10 @@
         <GamePlatform Condition="'$(GamePlatform)' == ''">Steam</GamePlatform>
         <GameVersion Condition="'$(GamePlatform)' == 'Steam'">2024.3.5</GameVersion>
     </PropertyGroup>
+
+    <ItemGroup>
+      <None Remove="Resources\Shoot.png" />
+    </ItemGroup>
     
     <ItemGroup>
         <PackageReference Include="Reactor" Version="2.2.0" />
@@ -35,6 +39,7 @@
       <EmbeddedResource Include="Resources\Node.png" />
       <EmbeddedResource Include="Resources\Place_Scanner.png" />
       <EmbeddedResource Include="Resources\Scanner.png" />
+      <EmbeddedResource Include="Resources\Shoot.png" />
       <EmbeddedResource Include="Resources\Track.png" />
     </ItemGroup>
     

@@ -1,27 +1,32 @@
-﻿using System.Text;
-using HarmonyLib;
+﻿using HarmonyLib;
 using InnerNet;
 using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.API.Utilities;
-using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Roles;
 using Reactor.Utilities.Extensions;
 using UnityEngine;
 
 namespace LaunchpadReloaded.API.Patches;
 
 [HarmonyPatch(typeof(HudManager))]
-public static class HudManagerPatches
+public static class HudManagerPatchesApi
 {
     private static GameObject _bottomLeft;
-    private static TaskPanelBehaviour _roleTab;
+    public static TaskPanelBehaviour _roleTab;
+
+    private static float _increment = 0.3f;
+    private static FloatRange _bounds = new FloatRange(2.9f, 4.6f);
 
     [HarmonyPostfix]
     [HarmonyPatch("Update")]
     public static void UpdatePostfix(HudManager __instance)
     {
+        if (!PlayerControl.LocalPlayer)
+        {
+            return;
+        }
+
         if (!ShipStatus.Instance)
         {
             if (Input.GetKeyDown(KeyCode.Tab))
@@ -31,11 +36,25 @@ public static class HudManagerPatches
 
             var numPlayers = GameData.Instance ? GameData.Instance.PlayerCount : 10;
             HudManager.Instance.GameSettings.text = GameOptionsManager.Instance.CurrentGameOptions.ToHudString(numPlayers);
-        }
 
-        if (!PlayerControl.LocalPlayer)
-        {
-            return;
+            if (!PlayerControl.LocalPlayer.CanMove) return;
+            if (!ToHudStringPatch.ShowCustom) return;
+
+            var pos = __instance.GameSettings.transform.localPosition;
+            if (Input.mouseScrollDelta.y > 0f)
+            {
+                pos =
+                    new Vector3(pos.x,
+                        Mathf.Clamp(pos.y - _increment, _bounds.min, _bounds.max), pos.z);
+            }
+            else if (Input.mouseScrollDelta.y < 0f)
+            {
+                pos =
+                    new Vector3(pos.x,
+                        Mathf.Clamp(pos.y + _increment, _bounds.min, _bounds.max), pos.z);
+            }
+
+            __instance.GameSettings.transform.localPosition = pos;
         }
 
         if (AmongUsClient.Instance.GameState != InnerNetClient.GameStates.Started && !ShipStatus.Instance)
@@ -44,39 +63,6 @@ public static class HudManagerPatches
         }
 
         CustomGameModeManager.ActiveMode.HudUpdate(__instance);
-
-        if (PlayerControl.LocalPlayer.Data.IsHacked())
-        {
-            __instance.tasksString.Clear();
-            __instance.tasksString.Append(Color.green.ToTextColor());
-            __instance.tasksString.Append("You have been hacked!\n");
-            __instance.tasksString.Append("You are unable to complete tasks or call meetings.\n");
-            __instance.tasksString.Append("Find an active node to reverse the hack!.\n");
-            __instance.tasksString.Append($"{HackingManager.Instance.hackedPlayers.Count} players are still hacked.");
-            __instance.tasksString.Append("</color>");
-            __instance.TaskPanel.SetTaskText(__instance.tasksString.ToString());
-
-            if (_roleTab != null)
-            {
-                _roleTab.gameObject.Destroy();
-            }
-        }
-        else if (HackingManager.Instance && HackingManager.Instance.AnyActiveNodes())
-        {
-            var newB = new StringBuilder();
-            newB.Append(Color.green.ToTextColor());
-            newB.Append(PlayerControl.LocalPlayer.Data.Role is HackerRole ?
-                "\n\nYou have hacked the crewmates! They will not be able to\ncomplete tasks or call meetings until they reverse the hack."
-                : "\n\nYou will still not be able to report bodies or \ncall meetings until all crewmates reverse the hack.");
-            newB.Append($"\n{HackingManager.Instance.hackedPlayers.Count} players are still hacked.");
-            newB.Append("</color>");
-            __instance.TaskPanel.SetTaskText(__instance.tasksString.ToString() + newB);
-        }
-
-        if (HackingManager.Instance && HackingManager.Instance.AnyActiveNodes())
-        {
-            __instance.ReportButton.SetDisabled();
-        }
 
         if (PlayerControl.LocalPlayer.Data.Role is ICustomRole customRole)
         {
@@ -171,6 +157,11 @@ public static class HudManagerPatches
         foreach (var button in CustomButtonManager.CustomButtons)
         {
             button.SetActive(isActive, roleBehaviour);
+        }
+
+        if (roleBehaviour is ICustomRole role)
+        {
+            __instance.ImpostorVentButton.gameObject.SetActive(isActive && role.CanUseVent);
         }
     }
 }

@@ -14,6 +14,7 @@ public class ReviveButton : CustomActionButton
     public override int MaxUses => (int)MedicRole.MaxRevives.Value;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.ReviveButton;
     public override bool Enabled(RoleBehaviour role) => role is MedicRole;
+
     public override bool CanUse()
     {
         return (RevivalManager.Instance && DeadBodyTarget is not null) && CanRevive() && PlayerControl.LocalPlayer.CanMove &&
@@ -24,10 +25,24 @@ public class ReviveButton : CustomActionButton
     {
         if (!MedicRole.OnlyAllowInMedbay.Value) return true;
 
-        return ShipStatus.Instance.FastRooms[SystemTypes.MedBay].roomArea
-            .OverlapPoint(PlayerControl.LocalPlayer.GetTruePosition()) ||
-            ShipStatus.Instance.FastRooms[SystemTypes.Laboratory].roomArea
+        try
+        {
+            return ShipStatus.Instance.FastRooms[SystemTypes.MedBay].roomArea
             .OverlapPoint(PlayerControl.LocalPlayer.GetTruePosition());
+        }
+        catch
+        {
+            try
+            {
+                return ShipStatus.Instance.FastRooms[SystemTypes.Laboratory].roomArea
+                .OverlapPoint(PlayerControl.LocalPlayer.GetTruePosition());
+            }
+            catch
+            {
+                return ShipStatus.Instance.FastRooms[SystemTypes.Medical].roomArea
+                .OverlapPoint(PlayerControl.LocalPlayer.GetTruePosition());
+            }
+        }
     }
     protected override void OnClick()
     {

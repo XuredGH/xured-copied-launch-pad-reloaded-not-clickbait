@@ -22,6 +22,7 @@ public class JanitorRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
 
     public static CustomNumberOption HideCooldown;
     public static CustomNumberOption HideUses;
+    public static CustomToggleOption CleanInsteadOfHide;
     public static CustomOptionGroup Group;
 
     public void CreateOptions()

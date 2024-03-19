@@ -43,14 +43,14 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
 
     private static void RegisterColors()
     {
-        var colors = 
+        var colors =
             typeof(LaunchpadColors)
             .GetProperties()
             .Select(s => (CustomColor)s.GetValue(null))
             .ToArray();
 
-        Palette.PlayerColors = Palette.PlayerColors.ToArray().AddRangeToArray(colors.Select(x=>x.MainColor).ToArray());
-        Palette.ShadowColors = Palette.ShadowColors.ToArray().AddRangeToArray(colors.Select(x=>x.ShadowColor).ToArray());
-        Palette.ColorNames = Palette.ColorNames.ToArray().AddRangeToArray(colors.Select(x=>x.Name).ToArray());
+        Palette.PlayerColors = Palette.PlayerColors.ToArray().AddRangeToArray(colors.Select(x => x.MainColor).ToArray());
+        Palette.ShadowColors = Palette.ShadowColors.ToArray().AddRangeToArray(colors.Select(x => x.ShadowColor).ToArray());
+        Palette.ColorNames = Palette.ColorNames.ToArray().AddRangeToArray(colors.Select(x => x.Name).ToArray());
     }
 }
