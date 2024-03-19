@@ -9,7 +9,7 @@ namespace LaunchpadReloaded.Buttons;
 public class DragButton : CustomActionButton
 {
     public override string Name => "DRAG";
-    public override float Cooldown => 2;
+    public override float Cooldown => 0;
     public override float EffectDuration => 0;
     public override int MaxUses => 0;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.DragButton;
@@ -23,7 +23,7 @@ public class DragButton : CustomActionButton
 
     public override bool Enabled(RoleBehaviour role)
     {
-        return role is JanitorRole;
+        return role is JanitorRole || (MedicRole.DragBodies.Value && role is MedicRole);
     }
 
     public override bool CanUse()

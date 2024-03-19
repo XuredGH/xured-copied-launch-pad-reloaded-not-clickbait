@@ -16,7 +16,7 @@ public static class HudManagerPatchesApi
     public static TaskPanelBehaviour _roleTab;
 
     private static float _increment = 0.3f;
-    private static FloatRange _bounds = new FloatRange(2.9f, 3.5f);
+    private static FloatRange _bounds = new FloatRange(2.9f, 4.6f);
 
     [HarmonyPostfix]
     [HarmonyPatch("Update")]

@@ -27,6 +27,7 @@ public static class LaunchpadAssets
     public static LoadableAsset<Sprite> MapButton = new("Map.png", false);
     public static LoadableAsset<Sprite> ScannerButton = new("Place_Scanner.png", false);
     public static LoadableAsset<Sprite> TrackButton = new("Track.png", false);
+    public static LoadableAsset<Sprite> ShootButton = new("Shoot.png", false);
 
     // Object Sprites
     public static LoadableAsset<Sprite> ScannerSprite = new("Scanner.png", false);

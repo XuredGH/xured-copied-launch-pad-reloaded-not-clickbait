@@ -40,7 +40,7 @@ public static class JesterPatches
     {
         if (TutorialManager.InstanceExists) return true;
 
-        if (__instance.exiled.Role is JesterRole)
+        if (__instance.exiled is not null && __instance.exiled.Role is not null && __instance.exiled.Role is JesterRole)
         {
             GameManager.Instance.RpcEndGame((GameOverReason)CustomGameOverReason.JesterWins, false);
             return false;

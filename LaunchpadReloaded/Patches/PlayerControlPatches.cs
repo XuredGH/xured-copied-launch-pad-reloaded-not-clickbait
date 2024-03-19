@@ -4,6 +4,7 @@ using LaunchpadReloaded.API.Utilities;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
+using LaunchpadReloaded.Utilities;
 using System.Linq;
 using UnityEngine;
 
@@ -52,6 +53,14 @@ public static class PlayerControlPatches
             gradColorComponent.gradientColor = GradientManager.LocalGradientId;
             GradientManager.RpcSetGradient(__instance, GradientManager.LocalGradientId);
         }
+    }
+
+    [HarmonyPrefix, HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CheckColor))]
+    public static bool Prefix(PlayerControl __instance, [HarmonyArgument(0)] byte colorId)
+    {
+        if (LaunchpadGameOptions.Instance.UniqueColors.Value) return true;
+        __instance.RpcSetColor(colorId);
+        return false;
     }
 
     [HarmonyPostfix]

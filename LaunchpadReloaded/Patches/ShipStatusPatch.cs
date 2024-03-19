@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Utilities;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Patches;
@@ -19,6 +20,15 @@ public static class ShipStatusPatch
         managers.AddComponent<DragManager>();
 
         HackingManager.RpcCreateNodes(__instance);
+    }
+
+
+    [HarmonyPrefix, HarmonyPatch(nameof(ShipStatus.SpawnPlayer))]
+    public static bool SpawnPlayerPatch(ShipStatus __instance, [HarmonyArgument(2)] bool initialSpawn)
+    {
+        if (initialSpawn == false && LaunchpadGameOptions.Instance.DisableMeetingTeleport.Value) return false;
+
+        return true;
     }
 
     /*    [HarmonyPrefix]
