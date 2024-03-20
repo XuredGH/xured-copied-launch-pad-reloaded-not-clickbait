@@ -15,12 +15,14 @@ public class GradientColorComponent(IntPtr ptr) : MonoBehaviour(ptr)
     public Vector4 offset = new(0, .35f, .5f, 1);
     public float strength = 125;
 
-    public void SetColor(int color1 = 0, int color2 = 0)
+    public int primaryColor;
+    public int secondaryColor;
+    
+    public void SetColor(int color1, int color2)
     {
         renderer = GetComponent<SpriteRenderer>();
         if (!renderer)
         {
-            this.Destroy();
             return;
         }
 
@@ -29,15 +31,40 @@ public class GradientColorComponent(IntPtr ptr) : MonoBehaviour(ptr)
             return;
         }
 
+        primaryColor = color1;
+        secondaryColor = color2;
+
         mat = renderer.material;
 
-        PlayerMaterial.SetColors(color1, mat);
+        PlayerMaterial.SetColors(primaryColor, mat);
 
-        mat.SetColor(ShaderID.SecondaryBodyColor, Palette.PlayerColors[color2]);
-        mat.SetColor(ShaderID.SecondaryShadowColor, Palette.ShadowColors[color2]);
+        mat.SetColor(ShaderID.SecondaryBodyColor, Palette.PlayerColors[secondaryColor]);
+        mat.SetColor(ShaderID.SecondaryShadowColor, Palette.ShadowColors[secondaryColor]);
         mat.SetFloat(ShaderID.GradientStrength, strength);
         mat.SetVector(ShaderID.GradientOffset, offset);
+    }
+    
+    public void SetColor(int gradientColor)
+    {
+        renderer = GetComponent<SpriteRenderer>();
+        if (!renderer)
+        {
+            return;
+        }
 
+        if (gradientColor > Palette.PlayerColors.Length)
+        {
+            return;
+        }
+
+        secondaryColor = gradientColor;
+
+        mat = renderer.material;
+        
+        mat.SetColor(ShaderID.SecondaryBodyColor, Palette.PlayerColors[secondaryColor]);
+        mat.SetColor(ShaderID.SecondaryShadowColor, Palette.ShadowColors[secondaryColor]);
+        mat.SetFloat(ShaderID.GradientStrength, strength);
+        mat.SetVector(ShaderID.GradientOffset, offset);
     }
 
     public void Update()

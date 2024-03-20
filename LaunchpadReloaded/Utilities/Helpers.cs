@@ -16,7 +16,10 @@ public static class Helpers
 
     public static bool ShouldCancelClick()
     {
-        if (DragManager.Instance is null) return false;
+        if (DragManager.Instance is null)
+        {
+            return false;
+        }
 
         return DragManager.Instance.IsDragging(PlayerControl.LocalPlayer.PlayerId);
     }

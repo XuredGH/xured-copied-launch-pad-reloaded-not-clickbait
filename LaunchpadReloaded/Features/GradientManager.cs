@@ -15,7 +15,7 @@ public static class GradientManager
     [MethodRpc((uint)LaunchpadRPC.SyncGradient)]
     public static void RpcSetGradient(PlayerControl pc, int colorId)
     {
-        pc.GetComponent<PlayerGradientData>().gradientColor = colorId;
+        pc.GetComponent<PlayerGradientData>().GradientColor = colorId;
         Coroutines.Start(WaitForDataCoroutine(pc));
     }
 
@@ -34,9 +34,9 @@ public static class GradientManager
         if (data != null && data.Object)
         {
             var colorData = data.Object.GetComponent<PlayerGradientData>();
-            if (colorData && colorData.gradientColor != 255)
+            if (colorData && colorData.GradientColor != 255)
             {
-                color = (byte)colorData.gradientColor;
+                color = (byte)colorData.GradientColor;
                 return true;
             }
         }

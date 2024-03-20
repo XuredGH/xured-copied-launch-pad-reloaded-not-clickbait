@@ -35,7 +35,10 @@ public static class ToHudStringPatch
 
     public static void Postfix(IGameOptions __instance, ref string __result)
     {
-        if (GameManager.Instance is null || GameManager.Instance.IsHideAndSeek()) return;
+        if (GameManager.Instance is null || GameManager.Instance.IsHideAndSeek())
+        {
+            return;
+        }
 
         if (ShowCustom || !CustomGameModeManager.ActiveMode.CanAccessSettingsTab())
         {

@@ -22,13 +22,21 @@ public class CustomStringOption : AbstractGameOption
         CustomOptionsManager.CustomStringOptions.Add(this);
         ChangedEvent = null;
 
-        if (Save) Config = LaunchpadReloadedPlugin.Instance.Config.Bind("String Options", title, defaultValue);
+        if (Save)
+        {
+            Config = LaunchpadReloadedPlugin.Instance.Config.Bind("String Options", title, defaultValue);
+        }
+
         SetValue(Save ? Config.Value : defaultValue);
     }
 
     public void SetValue(int newValue)
     {
-        if (Save) Config.Value = newValue;
+        if (Save)
+        {
+            Config.Value = newValue;
+        }
+
         IndexValue = newValue;
 
         var behaviour = (StringOption)OptionBehaviour;

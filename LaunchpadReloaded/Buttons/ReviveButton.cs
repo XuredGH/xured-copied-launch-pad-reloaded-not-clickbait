@@ -22,12 +22,15 @@ public class ReviveButton : CustomActionButton
 
     public bool CanRevive()
     {
-        if (!MedicRole.OnlyAllowInMedbay.Value) return true;
+        if (!MedicRole.OnlyAllowInMedbay.Value)
+        {
+            return true;
+        }
 
         return ShipStatus.Instance.FastRooms[SystemTypes.MedBay].roomArea
-            .OverlapPoint(PlayerControl.LocalPlayer.GetTruePosition()) ||
-            ShipStatus.Instance.FastRooms[SystemTypes.Laboratory].roomArea
-            .OverlapPoint(PlayerControl.LocalPlayer.GetTruePosition());
+                   .OverlapPoint(PlayerControl.LocalPlayer.GetTruePosition()) ||
+               ShipStatus.Instance.FastRooms[SystemTypes.Laboratory].roomArea
+                   .OverlapPoint(PlayerControl.LocalPlayer.GetTruePosition());
     }
     protected override void OnClick()
     {

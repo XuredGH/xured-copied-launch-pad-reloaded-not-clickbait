@@ -30,7 +30,9 @@ public static class PlayerControlPatches
     {
         CustomGameModeManager.ActiveMode.OnDeath(__instance);
         if (__instance.Data.IsHacked())
+        {
             HackingManager.RpcUnHackPlayer(__instance);
+        }
     }
 
     [HarmonyPostfix]
@@ -38,7 +40,10 @@ public static class PlayerControlPatches
     public static void UpdatePatch(PlayerControl __instance)
     {
         var knife = __instance.gameObject.transform.FindChild("BodyForms/Seeker/KnifeHand");
-        if (knife is null) return;
+        if (knife is null)
+        {
+            return;
+        }
 
         knife.gameObject.SetActive(!__instance.Data.IsDead && __instance.CanMove);
     }
@@ -47,9 +52,10 @@ public static class PlayerControlPatches
     public static void StartPrefix(PlayerControl __instance)
     {
         var gradColorComponent = __instance.gameObject.AddComponent<PlayerGradientData>();
+        //__instance.cosmetics.gameObject.AddComponent<PlayerGradientData>();
         if (__instance.AmOwner)
         {
-            gradColorComponent.gradientColor = GradientManager.LocalGradientId;
+            gradColorComponent.GradientColor = GradientManager.LocalGradientId;
             GradientManager.RpcSetGradient(__instance, GradientManager.LocalGradientId);
         }
     }
@@ -61,7 +67,7 @@ public static class PlayerControlPatches
         var playerGradient = __instance.GetComponent<PlayerGradientData>();
         if (playerGradient)
         {
-            renderer.GetComponent<GradientColorComponent>().SetColor(__instance.Data.DefaultOutfit.ColorId, playerGradient.gradientColor);
+            renderer.GetComponent<GradientColorComponent>().SetColor(__instance.Data.DefaultOutfit.ColorId, playerGradient.GradientColor);
         }
     }
 

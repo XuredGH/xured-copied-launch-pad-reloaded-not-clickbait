@@ -65,10 +65,13 @@ public class LaunchpadGameOptions
         BattleRoyaleGroup.Hidden = () => GameModes.Value != "Battle Royale";
         GeneralGroup.Hidden = FunGroup.Hidden = () => GameModes.Value != "Default";
 
-        foreach (KeyValuePair<ushort, RoleBehaviour> role in CustomRoleManager.CustomRoles)
+        foreach (var role in CustomRoleManager.CustomRoles)
         {
-            ICustomRole customRole = role.Value as ICustomRole;
-            if (customRole != null) customRole.CreateOptions();
+            var customRole = role.Value as ICustomRole;
+            if (customRole != null)
+            {
+                customRole.CreateOptions();
+            }
         }
 
         Instance = this;

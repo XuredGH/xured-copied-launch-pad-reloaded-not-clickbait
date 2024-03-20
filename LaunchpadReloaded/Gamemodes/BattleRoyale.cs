@@ -25,12 +25,14 @@ public class BattleRoyale : CustomGameMode
 
         var random = ShipStatus.Instance.DummyLocations.Random();
 
-        foreach (GameData.PlayerInfo player in GameData.Instance.AllPlayers)
+        foreach (var player in GameData.Instance.AllPlayers)
             player.Object.cosmetics.TogglePet(false);
 
         PlayerControl.LocalPlayer.NetTransform.RpcSnapTo(random.position);
         if (LaunchpadGameOptions.Instance.SeekerCharacter.Value)
+        {
             GenericRPC.RpcSetBodyType(PlayerControl.LocalPlayer, 6);
+        }
     }
 
     public IEnumerator DeathNotification(PlayerControl player)
@@ -47,7 +49,11 @@ public class BattleRoyale : CustomGameMode
         player.roleAssigned = false;
         player.RpcSetRole(RoleTypes.CrewmateGhost);
 
-        if (alivePlayers == 1) return;
+        if (alivePlayers == 1)
+        {
+            return;
+        }
+
         Coroutines.Start(DeathNotification(player));
     }
     public override void HudStart(HudManager instance)

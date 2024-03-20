@@ -59,7 +59,11 @@ public class DragButton : CustomActionButton
 
     public bool CanDrop()
     {
-        if (DeadBodyTarget || DragManager.Instance is null) return false;
+        if (DeadBodyTarget || DragManager.Instance is null)
+        {
+            return false;
+        }
+
         return !PhysicsHelpers.AnythingBetween(PlayerControl.LocalPlayer.Collider, PlayerControl.LocalPlayer.Collider.bounds.center, DeadBodyTarget.TruePosition, Constants.ShipAndAllObjectsMask, false);
     }
 

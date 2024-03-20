@@ -29,7 +29,10 @@ public static class HudManagerPatches
             __instance.TaskPanel.SetTaskText(__instance.tasksString.ToString());
         }
 
-        if (DragManager.Instance is null || HackingManager.Instance is null) return;
+        if (DragManager.Instance is null || HackingManager.Instance is null)
+        {
+            return;
+        }
 
         if (HackingManager.Instance.AnyActiveNodes())
         {

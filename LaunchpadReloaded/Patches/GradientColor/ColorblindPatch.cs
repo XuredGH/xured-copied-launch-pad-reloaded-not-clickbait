@@ -7,29 +7,25 @@ namespace LaunchpadReloaded.Patches.GradientColor;
 [HarmonyPatch(typeof(CosmeticsLayer))]
 public static class ColorblindPatch
 {
-    [HarmonyPrefix]
-    [HarmonyPatch(nameof(CosmeticsLayer.GetColorBlindText))]
+    [HarmonyPrefix, HarmonyPatch(nameof(CosmeticsLayer.GetColorBlindText))]
     public static bool CosmeticsLayerPatch(CosmeticsLayer __instance, ref string __result)
     {
-        PlayerControl player = __instance.transform.parent.gameObject.GetComponent<PlayerControl>();
-        if (player == null) return true;
-
-        PlayerGradientData comp;
-
-        if (player.TryGetComponent<PlayerGradientData>(out comp))
+        if (!__instance.TryGetComponent(out PlayerGradientData comp) &&
+            !__instance.transform.parent.TryGetComponent(out comp))
         {
-            string defaultColor = Helpers.FirstLetterToUpper(Palette.GetColorName(player.cosmetics.ColorId).ToLower());
-            string gradientColor = Helpers.FirstLetterToUpper(Palette.GetColorName(comp.gradientColor).ToLower());
+            return true;
+        }
 
-            if (defaultColor == gradientColor || gradientColor == "???")
-            {
-                __result = defaultColor;
-                return false;
-            }
+        var defaultColor = Helpers.FirstLetterToUpper(Palette.GetColorName(__instance.ColorId).ToLower());
+        var gradientColor = Helpers.FirstLetterToUpper(Palette.GetColorName(comp.GradientColor).ToLower());
 
-            __result = $"{gradientColor}-{defaultColor}";
+        if (defaultColor == gradientColor || gradientColor == "???")
+        {
+            __result = defaultColor;
             return false;
         }
-        return true;
+
+        __result = $"{gradientColor}-{defaultColor}";
+        return false;
     }
 }

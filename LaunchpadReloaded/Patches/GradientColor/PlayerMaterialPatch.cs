@@ -19,11 +19,16 @@ public static class PlayerMaterialPatch
 
         if (PlayerCustomizationMenu.Instance && PlayerTabPatches.SelectGradient)
         {
-            PlayerTab plrTab = PlayerCustomizationMenu.Instance.GetComponentInChildren<PlayerTab>();
+            var plrTab = PlayerCustomizationMenu.Instance.GetComponentInChildren<PlayerTab>();
             color2 = plrTab != null ? plrTab.currentColor : 0;
         }
 
-        if (GameData.Instance)
+        if (renderer.GetComponentInParent<PlayerGradientData>())
+        {
+            color2 = renderer.GetComponentInParent<PlayerGradientData>().GradientColor;
+        }
+
+        /*if (GameData.Instance)
         {
             byte id = 255;
             if (renderer.GetComponentInParent<PlayerControl>())
@@ -49,7 +54,7 @@ public static class PlayerMaterialPatch
             {
                 color2 = color;
             }
-        }
+        }*/
 
 
 
