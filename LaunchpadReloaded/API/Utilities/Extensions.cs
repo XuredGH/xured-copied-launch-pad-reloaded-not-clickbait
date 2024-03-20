@@ -3,7 +3,6 @@ using System.Reflection;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
-using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
 using UnityEngine;
 
@@ -15,29 +14,12 @@ public static class Extensions
 
     public static void SetGradientData(this GameObject gameObject, byte playerId)
     {
-        if (!GradientManager.TryGetColor(playerId, out var color))
-        {
-            return;
-        }
-        
         var data = gameObject.GetComponent<PlayerGradientData>();
         if (!data)
         {
             data = gameObject.AddComponent<PlayerGradientData>();
         }
-
-        data.GradientColor = color;
-    }
-
-    public static void SetGradientData(this GameObject gameObject, int colorId)
-    {
-        var data = gameObject.GetComponent<PlayerGradientData>();
-        if (!data)
-        {
-            data = gameObject.AddComponent<PlayerGradientData>();
-        }
-
-        data.GradientColor = colorId;
+        data.playerId = playerId;
     }
 
     public static bool ButtonTimerEnabled(this PlayerControl playerControl)

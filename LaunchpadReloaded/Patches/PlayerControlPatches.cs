@@ -52,7 +52,7 @@ public static class PlayerControlPatches
     public static void StartPrefix(PlayerControl __instance)
     {
         var gradColorComponent = __instance.gameObject.AddComponent<PlayerGradientData>();
-        //__instance.cosmetics.gameObject.AddComponent<PlayerGradientData>();
+        gradColorComponent.playerId = __instance.PlayerId;
         if (__instance.AmOwner)
         {
             gradColorComponent.GradientColor = GradientManager.LocalGradientId;

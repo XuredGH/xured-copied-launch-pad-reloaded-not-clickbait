@@ -1,5 +1,6 @@
 ﻿using Reactor.Utilities.Attributes;
 using System;
+using LaunchpadReloaded.Features;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -9,22 +10,24 @@ namespace LaunchpadReloaded.Components;
 public class PlayerGradientData(IntPtr ptr) : MonoBehaviour(ptr)
 {
     private int _gradientColor = Random.RandomRangeInt(0, Palette.PlayerColors.Length);
+
+    public byte playerId;
     
     public int GradientColor
     {
         get
         {
-            if (!transform.parent)
+            if (GetComponent<PlayerControl>())
             {
                 return _gradientColor;
             }
-            
-            if (transform.parent.TryGetComponent<PlayerGradientData>(out var gradientData))
+
+            if (GradientManager.TryGetColor(playerId, out var color))
             {
-                return _gradientColor = gradientData.GradientColor;
+                return color;
             }
 
-            return _gradientColor;
+            throw new InvalidOperationException("No gradient color found!");
         }
         set => _gradientColor = value;
     }

@@ -1,6 +1,8 @@
-﻿using HarmonyLib;
+﻿using System;
+using HarmonyLib;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Utilities;
+using Reactor.Utilities;
 
 namespace LaunchpadReloaded.Patches.GradientColor;
 
@@ -13,6 +15,7 @@ public static class ColorblindPatch
         if (!__instance.TryGetComponent(out PlayerGradientData comp) &&
             !__instance.transform.parent.TryGetComponent(out comp))
         {
+            Logger<LaunchpadReloadedPlugin>.Error(__instance.transform.parent.name);
             return true;
         }
 
