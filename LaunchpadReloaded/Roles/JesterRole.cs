@@ -17,7 +17,7 @@ public class JesterRole(IntPtr ptr) : RoleBehaviour(ptr), ICustomRole
     public string RoleLongDescription => "Convince the crew to vote you out!";
     public Color RoleColor => LaunchpadPalette.JesterColor;
     public RoleTeamTypes Team => RoleTeamTypes.Crewmate;
-    public bool IsNeutral => true;
+    public bool IsOutcast => true;
     public bool TasksCount => false;
     public bool CanUseVent => CanUseVents is not null ? CanUseVents.Value : true;
     public override bool IsDead => false;

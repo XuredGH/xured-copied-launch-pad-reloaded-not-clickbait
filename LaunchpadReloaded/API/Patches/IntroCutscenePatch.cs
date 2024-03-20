@@ -19,19 +19,28 @@ public static class IntroCutscenePatch
         }
     }
 
-    [HarmonyPostfix]
+    [HarmonyPrefix]
     [HarmonyPatch(nameof(IntroCutscene.BeginCrewmate))]
-    public static void BeginCrewmate(IntroCutscene __instance)
+    public static bool BeginCrewmate(IntroCutscene __instance)
     {
         if (PlayerControl.LocalPlayer.Data.Role is ICustomRole customRole)
         {
-            if (!customRole.IsNeutral) return;
+            if (!customRole.IsOutcast) return true;
+
+            Vector3 position = __instance.BackgroundBar.transform.position;
+            position.y -= 0.25f;
+            __instance.BackgroundBar.transform.position = position;
 
             __instance.BackgroundBar.material.SetColor("_Color", Color.gray);
-            __instance.TeamTitle.text = "NEUTRAL";
+            __instance.TeamTitle.text = "OUTCAST";
+            __instance.impostorScale = 1f;
+            __instance.ImpostorText.text = "You are an Outcast. You do not have a team.";
             __instance.TeamTitle.color = Color.gray;
-            __instance.ImpostorText.text = string.Empty;
+
+            __instance.ourCrewmate = __instance.CreatePlayer(0, Mathf.CeilToInt(7.5f), PlayerControl.LocalPlayer.Data, false);
+            return false;
         }
+        return true;
     }
 
     [HarmonyPostfix]

@@ -29,7 +29,7 @@ public interface ICustomRole
     bool AffectedByLight => Team == RoleTeamTypes.Crewmate;
 
     bool CanGetKilled => Team == RoleTeamTypes.Crewmate;
-    bool IsNeutral => false;
+    bool IsOutcast => false;
     bool CanUseKill => Team == RoleTeamTypes.Impostor;
     bool CanUseVent => Team == RoleTeamTypes.Impostor;
     bool TasksCount => Team == RoleTeamTypes.Crewmate;
