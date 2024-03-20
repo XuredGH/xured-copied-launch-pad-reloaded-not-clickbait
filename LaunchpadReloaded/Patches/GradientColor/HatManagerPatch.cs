@@ -13,7 +13,7 @@ public static class HatManagerPatch
     
     public static void Postfix(HatManager __instance)
     {
-        var mat = __instance.PlayerMaterial = __instance.MaskedPlayerMaterial = __instance.MaskedMaterial = LaunchpadAssets.GradientMaterial.LoadAsset();
+        var mat = __instance.PlayerMaterial = __instance.MaskedPlayerMaterial = LaunchpadAssets.GradientMaterial.LoadAsset();
         
         mat.SetFloat(ShaderID.GradientStrength, Strength);
         mat.SetVector(ShaderID.GradientOffset, Offset);

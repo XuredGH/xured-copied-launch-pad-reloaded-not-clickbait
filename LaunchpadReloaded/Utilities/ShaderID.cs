@@ -13,5 +13,4 @@ public static class ShaderID
     public static readonly int Outline = Shader.PropertyToID("_Outline");
     public static readonly int OutlineColor = Shader.PropertyToID("_OutlineColor");
     public static readonly int AddColor = Shader.PropertyToID("_AddColor");
-
 }
