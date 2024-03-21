@@ -13,7 +13,6 @@ namespace LaunchpadReloaded.Utilities;
 public static class Helpers
 {
     public static Random Random = new Random();
-
     public static bool ShouldCancelClick()
     {
         if (DragManager.Instance is null) return false;

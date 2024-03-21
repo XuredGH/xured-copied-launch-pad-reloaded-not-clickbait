@@ -1,5 +1,5 @@
 ﻿using System;
-using LaunchpadReloaded.API.Utilities;
+using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Attributes;
 using Reactor.Utilities.Extensions;
 using UnityEngine;
