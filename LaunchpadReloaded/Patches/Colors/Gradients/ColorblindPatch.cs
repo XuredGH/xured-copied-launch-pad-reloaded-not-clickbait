@@ -1,10 +1,9 @@
-﻿using System;
-using HarmonyLib;
+﻿using HarmonyLib;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities;
 
-namespace LaunchpadReloaded.Patches.GradientColor;
+namespace LaunchpadReloaded.Patches.Colors.Gradients;
 
 [HarmonyPatch(typeof(CosmeticsLayer))]
 public static class ColorblindPatch

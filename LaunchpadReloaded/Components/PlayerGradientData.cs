@@ -1,6 +1,6 @@
 ﻿using Reactor.Utilities.Attributes;
 using System;
-using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Features.Managers;
 using UnityEngine;
 using Random = UnityEngine.Random;
 

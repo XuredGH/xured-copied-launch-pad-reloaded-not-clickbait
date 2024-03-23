@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
-using LaunchpadReloaded.API.Utilities;
+using LaunchpadReloaded.Utilities;
 
-namespace LaunchpadReloaded.Patches.GradientColor;
+namespace LaunchpadReloaded.Patches.Colors.Gradients;
 
 [HarmonyPatch(typeof(PlayerVoteArea))]
 public static class PlayerVoteAreaPatches
