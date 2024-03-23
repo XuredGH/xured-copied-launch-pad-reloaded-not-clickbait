@@ -16,7 +16,7 @@ public class BattleRoyale : CustomGameMode
     public override string Name => "Battle Royale";
     public override string Description => "Everyone can kill.\n<b><i>Last one standing wins.</b></i>";
 
-    public override int Id => 1;
+    public override int Id => (int)LaunchpadGamemodes.BattleRoyale;
     public TextMeshPro PlayerCount;
     public TextMeshPro DeathNotif;
     public override void Initialize()

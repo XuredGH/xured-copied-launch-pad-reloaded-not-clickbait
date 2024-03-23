@@ -17,7 +17,7 @@ public static class JesterPatches
     {
         var didWin = TempData.winners.ToArray().Any((h) => h.IsYou);
 
-        if (TempData.EndReason != (GameOverReason)CustomGameOverReason.JesterWins)
+        if (TempData.EndReason != (GameOverReason)GameOverReasons.JesterWins)
         {
             return;
         }
@@ -50,7 +50,7 @@ public static class JesterPatches
 
         if (__instance.exiled is not null && __instance.exiled.Role is not null && __instance.exiled.Role is JesterRole)
         {
-            GameManager.Instance.RpcEndGame((GameOverReason)CustomGameOverReason.JesterWins, false);
+            GameManager.Instance.RpcEndGame((GameOverReason)GameOverReasons.JesterWins, false);
             return false;
         }
         return true;

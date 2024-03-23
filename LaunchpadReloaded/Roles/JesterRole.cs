@@ -26,7 +26,7 @@ public class JesterRole(IntPtr ptr) : RoleBehaviour(ptr), ICustomRole
     public override void AppendTaskHint(StringBuilder taskStringBuilder) { }
     public override bool DidWin(GameOverReason reason)
     {
-        return reason == (GameOverReason)CustomGameOverReason.JesterWins;
+        return reason == (GameOverReason)GameOverReasons.JesterWins;
     }
 
     public string GetCustomEjectionMessage(GameData.PlayerInfo exiled)
