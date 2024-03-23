@@ -1,6 +1,6 @@
 ﻿using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
-using LaunchpadReloaded.Utilities;
+using LaunchpadReloaded.Features;
 using Reactor.Utilities.Attributes;
 using System;
 using UnityEngine;
@@ -20,6 +20,7 @@ public class MedicRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
     public bool TargetsBodies => true;
     public LoadableAsset<Sprite> Icon => LaunchpadAssets.ReviveButton;
     public static CustomToggleOption OnlyAllowInMedbay;
+    public static CustomToggleOption DragBodies;
     public static CustomNumberOption MaxRevives;
     public static CustomNumberOption ReviveCooldown;
     public static CustomOptionGroup Group;
@@ -44,10 +45,14 @@ public class MedicRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
             defaultValue: false,
             role: typeof(MedicRole));
 
+        DragBodies = new CustomToggleOption("Can Drag Bodies",
+            defaultValue: false,
+            role: typeof(MedicRole));
+
         Group = new CustomOptionGroup($"{RoleColor.ToTextColor()}Medic</color>",
             numberOpt: [MaxRevives, ReviveCooldown],
             stringOpt: [],
-            toggleOpt: [OnlyAllowInMedbay],
-            role: typeof(JanitorRole));
+            toggleOpt: [OnlyAllowInMedbay, DragBodies],
+            role: typeof(MedicRole));
     }
 }

@@ -1,6 +1,6 @@
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
-using LaunchpadReloaded.Utilities;
+using LaunchpadReloaded.Features;
 using Reactor.Utilities.Attributes;
 using System;
 using UnityEngine;
@@ -22,6 +22,7 @@ public class JanitorRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
 
     public static CustomNumberOption HideCooldown;
     public static CustomNumberOption HideUses;
+    public static CustomToggleOption CleanInsteadOfHide;
     public static CustomOptionGroup Group;
 
     public void CreateOptions()

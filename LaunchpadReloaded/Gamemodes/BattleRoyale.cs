@@ -1,15 +1,16 @@
+using System.Collections;
+using System.Linq;
 using AmongUs.GameOptions;
 using LaunchpadReloaded.API.GameModes;
+using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
-using System.Collections;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 
-namespace LaunchpadReloaded.GameModes;
+namespace LaunchpadReloaded.Gamemodes;
 public class BattleRoyale : CustomGameMode
 {
     public override string Name => "Battle Royale";
@@ -45,7 +46,7 @@ public class BattleRoyale : CustomGameMode
     }
     public override void OnDeath(PlayerControl player)
     {
-        var alivePlayers = GameData.Instance.AllPlayers.ToArray().Where(player => !player.Disconnected && !player.IsDead).Count();
+        var alivePlayers = GameData.Instance.AllPlayers.ToArray().Count(info => !info.Disconnected && !info.IsDead);
         player.roleAssigned = false;
         player.RpcSetRole(RoleTypes.CrewmateGhost);
 

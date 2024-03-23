@@ -1,7 +1,7 @@
 ﻿using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Roles;
-using LaunchpadReloaded.Utilities;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
@@ -14,6 +14,7 @@ public class ReviveButton : CustomActionButton
     public override int MaxUses => (int)MedicRole.MaxRevives.Value;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.ReviveButton;
     public override bool Enabled(RoleBehaviour role) => role is MedicRole;
+
     public override bool CanUse()
     {
         return (RevivalManager.Instance && DeadBodyTarget is not null) && CanRevive() && PlayerControl.LocalPlayer.CanMove &&
@@ -27,10 +28,24 @@ public class ReviveButton : CustomActionButton
             return true;
         }
 
-        return ShipStatus.Instance.FastRooms[SystemTypes.MedBay].roomArea
-                   .OverlapPoint(PlayerControl.LocalPlayer.GetTruePosition()) ||
-               ShipStatus.Instance.FastRooms[SystemTypes.Laboratory].roomArea
-                   .OverlapPoint(PlayerControl.LocalPlayer.GetTruePosition());
+        try
+        {
+            return ShipStatus.Instance.FastRooms[SystemTypes.MedBay].roomArea
+            .OverlapPoint(PlayerControl.LocalPlayer.GetTruePosition());
+        }
+        catch
+        {
+            try
+            {
+                return ShipStatus.Instance.FastRooms[SystemTypes.Laboratory].roomArea
+                .OverlapPoint(PlayerControl.LocalPlayer.GetTruePosition());
+            }
+            catch
+            {
+                return ShipStatus.Instance.FastRooms[SystemTypes.Medical].roomArea
+                .OverlapPoint(PlayerControl.LocalPlayer.GetTruePosition());
+            }
+        }
     }
     protected override void OnClick()
     {
