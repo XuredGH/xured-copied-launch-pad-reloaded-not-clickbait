@@ -16,7 +16,8 @@ public static class PlayerMaterialPatch
         }
 
         var color2 = GradientManager.LocalGradientId;
-
+        var enabled = true;
+        
         if (PlayerCustomizationMenu.Instance && PlayerTabPatches.SelectGradient)
         {
             var plrTab = PlayerCustomizationMenu.Instance.GetComponentInChildren<PlayerTab>();
@@ -25,7 +26,9 @@ public static class PlayerMaterialPatch
 
         if (renderer.GetComponentInParent<PlayerGradientData>())
         {
-            color2 = renderer.GetComponentInParent<PlayerGradientData>().GradientColor;
+            var comp = renderer.GetComponentInParent<PlayerGradientData>();
+            color2 = comp.GradientColor;
+            enabled = comp.GradientEnabled;
         }
 
         /*if (GameData.Instance)
@@ -64,7 +67,7 @@ public static class PlayerMaterialPatch
             gradColor = renderer.gameObject.AddComponent<GradientColorComponent>();
         }
 
-        gradColor.SetColor(colorId, color2);
+        gradColor.SetColor(colorId, enabled ? color2 : colorId);
 
     }
 }

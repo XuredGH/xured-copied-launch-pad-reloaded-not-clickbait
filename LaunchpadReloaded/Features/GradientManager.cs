@@ -19,6 +19,12 @@ public static class GradientManager
         Coroutines.Start(WaitForDataCoroutine(pc));
     }
 
+    [MethodRpc((uint)LaunchpadRPC.SetGradientEnabled)]
+    public static void RpcSetGradientEnabled(PlayerControl pc, bool enabled)
+    {
+        pc.GetComponent<PlayerGradientData>().GradientEnabled = enabled;
+    }
+
     private static IEnumerator WaitForDataCoroutine(PlayerControl pc)
     {
         while (pc.Data is null)
@@ -42,6 +48,22 @@ public static class GradientManager
         }
 
         color = 0;
+        return false;
+    }
+    public static bool TryGetEnabled(byte id, out bool enabled)
+    {
+        var data = GameData.Instance.GetPlayerById(id);
+        if (data != null && data.Object)
+        {
+            var colorData = data.Object.GetComponent<PlayerGradientData>();
+            if (colorData && colorData.GradientColor != 255)
+            {
+                enabled = colorData.GradientEnabled;
+                return true;
+            }
+        }
+
+        enabled = false;
         return false;
     }
 }

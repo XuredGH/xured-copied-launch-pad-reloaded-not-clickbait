@@ -19,6 +19,11 @@ public static class ColorblindPatch
             return true;
         }
 
+        if (!comp.GradientEnabled)
+        {
+            return true;
+        }
+        
         var defaultColor = Helpers.FirstLetterToUpper(Palette.GetColorName(__instance.ColorId).ToLower());
         var gradientColor = Helpers.FirstLetterToUpper(Palette.GetColorName(comp.GradientColor).ToLower());
 

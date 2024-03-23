@@ -12,6 +12,27 @@ public class PlayerGradientData(IntPtr ptr) : MonoBehaviour(ptr)
     private int _gradientColor = Random.RandomRangeInt(0, Palette.PlayerColors.Length);
 
     public byte playerId;
+
+    private bool _gradientEnabled = true;
+
+    public bool GradientEnabled
+    {
+        get
+        {
+            if (GetComponent<PlayerControl>())
+            {
+                return _gradientEnabled;
+            }
+
+            if (GradientManager.TryGetEnabled(playerId, out var gradEnabled))
+            {
+                return gradEnabled;
+            }
+
+            throw new InvalidOperationException("No gradient data found!");
+        }
+        set => _gradientEnabled = value;
+    }
     
     public int GradientColor
     {

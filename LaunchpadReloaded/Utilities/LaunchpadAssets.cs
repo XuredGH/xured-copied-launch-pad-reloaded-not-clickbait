@@ -9,32 +9,33 @@ namespace LaunchpadReloaded.Utilities;
 
 public static class LaunchpadAssets
 {
-    public static AssetBundle Bundle = AssetBundleManager.Load("assets");
-    public static LoadableAsset<Sprite> NoImage = new("", false);
+    public static readonly AssetBundle Bundle = AssetBundleManager.Load("assets");
+    public static readonly LoadableAsset<Sprite> NoImage = new("", false);
 
     // Materials
-    public static LoadableAsset<Material> GradientMaterial = new("GradientPlayerMaterial");
+    public static readonly LoadableAsset<Material> GradientMaterial = new("GradientPlayerMaterial");
+    public static readonly LoadableAsset<Material> MaskedGradientMaterial = new ("MaskedGradientMaterial");
 
     // Sprites
-    public static LoadableAsset<Sprite> BlankButton = new("BlankButton");
-    public static LoadableAsset<Sprite> CallButton = new("CallMeeting.png");
-    public static LoadableAsset<Sprite> DragButton = new("Drag.png");
-    public static LoadableAsset<Sprite> DropButton = new("Drop.png");
-    public static LoadableAsset<Sprite> ZoomButton = new("Zoom.png");
-    public static LoadableAsset<Sprite> ReviveButton = new("Revive.png");
-    public static LoadableAsset<Sprite> HideButton = new("Clean.png");
-    public static LoadableAsset<Sprite> HackButton = new("Hack.png", false);
-    public static LoadableAsset<Sprite> MapButton = new("Map.png", false);
-    public static LoadableAsset<Sprite> ScannerButton = new("Place_Scanner.png", false);
-    public static LoadableAsset<Sprite> TrackButton = new("Track.png", false);
+    public static readonly LoadableAsset<Sprite> BlankButton = new("BlankButton");
+    public static readonly LoadableAsset<Sprite> CallButton = new("CallMeeting.png");
+    public static readonly LoadableAsset<Sprite> DragButton = new("Drag.png");
+    public static readonly LoadableAsset<Sprite> DropButton = new("Drop.png");
+    public static readonly LoadableAsset<Sprite> ZoomButton = new("Zoom.png");
+    public static readonly LoadableAsset<Sprite> ReviveButton = new("Revive.png");
+    public static readonly LoadableAsset<Sprite> HideButton = new("Clean.png");
+    public static readonly LoadableAsset<Sprite> HackButton = new("Hack.png", false);
+    public static readonly LoadableAsset<Sprite> MapButton = new("Map.png", false);
+    public static readonly LoadableAsset<Sprite> ScannerButton = new("Place_Scanner.png", false);
+    public static readonly LoadableAsset<Sprite> TrackButton = new("Track.png", false);
 
     // Object Sprites
-    public static LoadableAsset<Sprite> ScannerSprite = new("Scanner.png", false);
-    public static LoadableAsset<Sprite> NodeSprite = new("Node.png", false);
-    public static LoadableAsset<Sprite> KnifeHandSprite = new("KnifeHand.png", false);
+    public static readonly LoadableAsset<Sprite> ScannerSprite = new("Scanner.png", false);
+    public static readonly LoadableAsset<Sprite> NodeSprite = new("Node.png", false);
+    public static readonly LoadableAsset<Sprite> KnifeHandSprite = new("KnifeHand.png", false);
     // Sounds
-    public static LoadableAsset<AudioClip> BeepSound = new("Beep.wav");
-    public static LoadableAsset<AudioClip> PingSound = new("Ping.mp3");
+    public static readonly LoadableAsset<AudioClip> BeepSound = new("Beep.wav");
+    public static readonly LoadableAsset<AudioClip> PingSound = new("Ping.mp3");
 }
 
 public class LoadableAsset<T>(string name, bool useBundle = true)

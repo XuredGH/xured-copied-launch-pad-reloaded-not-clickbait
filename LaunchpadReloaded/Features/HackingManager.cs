@@ -132,9 +132,11 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
             if (!value)
             {
                 player.Object.SetColor((byte)player.DefaultOutfit.ColorId);
+                GradientManager.RpcSetGradientEnabled(player.Object, true);
             }
             else
             {
+                GradientManager.RpcSetGradientEnabled(player.Object, false);
                 player.Object.RawSetColor(15);
             }
 

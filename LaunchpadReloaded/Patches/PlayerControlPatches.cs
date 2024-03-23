@@ -32,6 +32,7 @@ public static class PlayerControlPatches
         if (__instance.Data.IsHacked())
         {
             HackingManager.RpcUnHackPlayer(__instance);
+            GradientManager.RpcSetGradientEnabled(__instance, true);
         }
     }
 

@@ -2,6 +2,7 @@
 using Reactor.Utilities.Attributes;
 using Reactor.Utilities.Extensions;
 using System;
+using Reactor.Utilities;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Components;
@@ -11,10 +12,7 @@ public class GradientColorComponent(IntPtr ptr) : MonoBehaviour(ptr)
 {
     public SpriteRenderer renderer;
     public Material mat;
-
-    public Vector4 offset = new(0, .35f, .5f, 1);
-    public float strength = 125;
-
+    
     public int primaryColor;
     public int secondaryColor;
     
@@ -26,11 +24,15 @@ public class GradientColorComponent(IntPtr ptr) : MonoBehaviour(ptr)
             return;
         }
 
-        if (color1 > Palette.PlayerColors.Length || color2 > Palette.PlayerColors.Length)
+        if (color2 > Palette.PlayerColors.Length || color2<0)
         {
+            if (color1 >= 0 && color1 < Palette.PlayerColors.Length)
+            {
+                PlayerMaterial.SetColors(primaryColor, mat);
+            }
             return;
         }
-
+        
         primaryColor = color1;
         secondaryColor = color2;
 
@@ -40,8 +42,6 @@ public class GradientColorComponent(IntPtr ptr) : MonoBehaviour(ptr)
 
         mat.SetColor(ShaderID.SecondaryBodyColor, Palette.PlayerColors[secondaryColor]);
         mat.SetColor(ShaderID.SecondaryShadowColor, Palette.ShadowColors[secondaryColor]);
-        mat.SetFloat(ShaderID.GradientStrength, strength);
-        mat.SetVector(ShaderID.GradientOffset, offset);
     }
     
     public void SetColor(int gradientColor)
@@ -63,20 +63,16 @@ public class GradientColorComponent(IntPtr ptr) : MonoBehaviour(ptr)
         
         mat.SetColor(ShaderID.SecondaryBodyColor, Palette.PlayerColors[secondaryColor]);
         mat.SetColor(ShaderID.SecondaryShadowColor, Palette.ShadowColors[secondaryColor]);
-        mat.SetFloat(ShaderID.GradientStrength, strength);
-        mat.SetVector(ShaderID.GradientOffset, offset);
     }
 
     public void Update()
     {
-        if (!renderer || !renderer.sprite)
+        if (!renderer)
         {
             return;
         }
 
-        var rect = renderer.sprite.rect;
-        mat.SetFloat(ShaderID.SpriteWidth, rect.width);
-        mat.SetFloat(ShaderID.SpriteHeight, rect.height);
+        mat.SetInt(ShaderID.Flip, renderer.flipX ? 1 : 0);
 
     }
 }
