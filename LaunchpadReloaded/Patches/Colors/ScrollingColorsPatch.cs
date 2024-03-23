@@ -1,13 +1,13 @@
 ﻿using HarmonyLib;
-using LaunchpadReloaded.Utilities;
+using LaunchpadReloaded.Features;
 using UnityEngine;
 
-namespace LaunchpadReloaded.Patches.ColorScroll;
+namespace LaunchpadReloaded.Patches.Colors;
 [HarmonyPatch(typeof(PlayerTab))]
 public static class ScrollingColorsPatch
 {
     /// Collider
-    private static BoxCollider2D _collider = null;
+    private static BoxCollider2D _collider;
 
     /// <summary>
     /// Add scrolling to the colors tab
@@ -16,22 +16,21 @@ public static class ScrollingColorsPatch
     public static void AddScrollingToColorsTabPatch(PlayerTab __instance)
     {
         if (PlayerCustomizationMenu.Instance is null) return;
-        InventoryTab tab = PlayerCustomizationMenu.Instance.Tabs[1].Tab;
+        var tab = PlayerCustomizationMenu.Instance.Tabs[1].Tab;
 
         if (__instance.scroller == null)
         {
-            Scroller newScroller = GameObject.Instantiate(tab.scroller);
+            var newScroller = Object.Instantiate(tab.scroller, __instance.transform, true);
             newScroller.Inner.transform.DestroyChildren();
-            newScroller.transform.SetParent(__instance.transform);
 
-            GameObject maskObj = new GameObject();
+            var maskObj = new GameObject();
             maskObj.layer = 5;
             maskObj.name = "SpriteMask";
             maskObj.transform.SetParent(__instance.transform);
             maskObj.transform.localPosition = new Vector3(0, 0, 0);
             maskObj.transform.localScale = new Vector3(500, 4.76f);
 
-            SpriteMask mask = maskObj.AddComponent<SpriteMask>();
+            var mask = maskObj.AddComponent<SpriteMask>();
             mask.sprite = LaunchpadAssets.BlankButton.LoadAsset();
 
             _collider = maskObj.AddComponent<BoxCollider2D>();
@@ -40,7 +39,7 @@ public static class ScrollingColorsPatch
             __instance.scroller = newScroller;
         }
 
-        foreach (ColorChip chip in __instance.ColorChips)
+        foreach (var chip in __instance.ColorChips)
         {
             chip.transform.SetParent(__instance.scroller.Inner);
             chip.Button.ClickMask = _collider;

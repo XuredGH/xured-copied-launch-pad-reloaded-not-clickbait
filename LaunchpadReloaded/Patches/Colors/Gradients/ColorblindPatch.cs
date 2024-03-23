@@ -2,7 +2,7 @@
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Utilities;
 
-namespace LaunchpadReloaded.Patches.Colors.GradientColor;
+namespace LaunchpadReloaded.Patches.Colors.Gradients;
 
 [HarmonyPatch(typeof(CosmeticsLayer))]
 public static class ColorblindPatch
@@ -11,15 +11,15 @@ public static class ColorblindPatch
     [HarmonyPatch(nameof(CosmeticsLayer.GetColorBlindText))]
     public static bool CosmeticsLayerPatch(CosmeticsLayer __instance, ref string __result)
     {
-        PlayerControl player = __instance.transform.parent.gameObject.GetComponent<PlayerControl>();
+        var player = __instance.transform.parent.gameObject.GetComponent<PlayerControl>();
         if (player == null) return true;
 
         PlayerGradientData comp;
 
         if (player.TryGetComponent(out comp))
         {
-            string defaultColor = Helpers.FirstLetterToUpper(Palette.GetColorName(player.cosmetics.ColorId).ToLower());
-            string gradientColor = Helpers.FirstLetterToUpper(Palette.GetColorName(comp.gradientColor).ToLower());
+            var defaultColor = Helpers.FirstLetterToUpper(Palette.GetColorName(player.cosmetics.ColorId).ToLower());
+            var gradientColor = Helpers.FirstLetterToUpper(Palette.GetColorName(comp.gradientColor).ToLower());
 
             if (defaultColor == gradientColor || gradientColor == "???")
             {

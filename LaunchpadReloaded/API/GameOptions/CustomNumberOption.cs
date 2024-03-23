@@ -1,7 +1,5 @@
 ﻿using BepInEx.Configuration;
 using System;
-using LaunchpadReloaded.Networking;
-using Reactor.Networking.Attributes;
 using UnityEngine;
 
 namespace LaunchpadReloaded.API.GameOptions;

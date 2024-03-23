@@ -8,6 +8,7 @@ using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using System.Linq;
+using LaunchpadReloaded.Features.Managers;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Patches.Generic;

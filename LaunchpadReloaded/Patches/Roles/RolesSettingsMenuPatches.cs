@@ -34,7 +34,7 @@ public static class RolesSettingsMenuPatches
                 option.gameObject.Destroy();
             }
 
-            float startOffset = 0.5f;
+            var startOffset = 0.5f;
 
             foreach (var customOption in CustomOptionsManager.CustomOptions)
             {
@@ -89,7 +89,7 @@ public static class RolesSettingsMenuPatches
             }
         }
 
-        Scroller scroll = __instance.GetComponentInChildren<Scroller>();
+        var scroll = __instance.GetComponentInChildren<Scroller>();
         scroll.active = true;
         scroll.ContentYBounds.max = __instance.Children.Count * 0.02f;
 

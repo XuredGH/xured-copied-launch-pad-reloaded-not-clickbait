@@ -44,7 +44,7 @@ public static class ToHudStringPatch
     /// </summary>
     public static void Postfix(IGameOptions __instance, ref string __result)
     {
-        /// Hide and Seek isn't compatible with Launchpad currently, so check if current mode is Hide and Seek and then return
+        // Hide and Seek isn't compatible with Launchpad currently, so check if current mode is Hide and Seek and then return
         if (GameManager.Instance is null || GameManager.Instance.IsHideAndSeek()) return;
 
         if (ShowCustom || !CustomGameModeManager.ActiveMode.CanAccessSettingsTab())

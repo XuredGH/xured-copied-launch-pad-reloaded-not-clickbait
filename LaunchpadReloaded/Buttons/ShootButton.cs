@@ -51,7 +51,7 @@ public class ShootButton : CustomActionButton
     {
         PlayerControl.LocalPlayer.RpcMurderPlayer(CurrentTarget, true);
         if (CurrentTarget.Data.Role.TeamType == RoleTeamTypes.Crewmate && !TutorialManager.InstanceExists
-            ) PlayerControl.LocalPlayer.RpcMurderPlayer(PlayerControl.LocalPlayer, true); ;
+            ) PlayerControl.LocalPlayer.RpcMurderPlayer(PlayerControl.LocalPlayer, true);
 
         CurrentTarget = null;
     }

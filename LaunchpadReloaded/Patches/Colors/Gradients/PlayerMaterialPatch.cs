@@ -1,9 +1,9 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.Components;
-using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Features.Managers;
 using UnityEngine;
 
-namespace LaunchpadReloaded.Patches.Colors.GradientColor;
+namespace LaunchpadReloaded.Patches.Colors.Gradients;
 
 [HarmonyPatch(typeof(PlayerMaterial), "SetColors", typeof(int), typeof(Renderer))]
 public static class PlayerMaterialPatch
@@ -19,7 +19,7 @@ public static class PlayerMaterialPatch
 
         if (PlayerCustomizationMenu.Instance && PlayerTabPatches.SelectGradient)
         {
-            PlayerTab plrTab = PlayerCustomizationMenu.Instance.GetComponentInChildren<PlayerTab>();
+            var plrTab = PlayerCustomizationMenu.Instance.GetComponentInChildren<PlayerTab>();
             color2 = plrTab != null ? plrTab.currentColor : 0;
         }
 

@@ -12,7 +12,7 @@ public static class ImpostorValidTargetPatch
 {
     public static bool Prefix(ImpostorRole __instance, [HarmonyArgument(0)] GameData.PlayerInfo target, ref bool __result)
     {
-        CustomGameModeManager.ActiveMode.CanKill(out bool runOriginal, out bool result, target.Object);
+        CustomGameModeManager.ActiveMode.CanKill(out var runOriginal, out var result, target.Object);
         if (LaunchpadGameOptions.Instance.FriendlyFire.Value || !runOriginal && result)
         {
             __result = target is { Disconnected: false, IsDead: false } &&

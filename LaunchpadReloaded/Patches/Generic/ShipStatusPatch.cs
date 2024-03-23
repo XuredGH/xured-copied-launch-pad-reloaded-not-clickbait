@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Features.Managers;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Patches.Generic;

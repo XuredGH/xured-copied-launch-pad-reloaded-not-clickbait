@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
-using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Features.Managers;
 
-namespace LaunchpadReloaded.Patches.Colors.GradientColor;
+namespace LaunchpadReloaded.Patches.Colors.Gradients;
 
 [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnPlayerJoined))]
 public static class AmongUsClientPatch

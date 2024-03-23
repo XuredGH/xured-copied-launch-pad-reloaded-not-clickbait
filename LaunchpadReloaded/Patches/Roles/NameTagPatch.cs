@@ -1,8 +1,8 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.Features;
-using LaunchpadReloaded.GameModes;
 using System;
+using LaunchpadReloaded.Gamemodes;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Patches.Roles;

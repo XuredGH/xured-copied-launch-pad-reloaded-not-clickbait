@@ -1,10 +1,11 @@
-﻿using Reactor.Utilities;
+﻿using System;
+using LaunchpadReloaded.Utilities;
+using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
-using System;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace LaunchpadReloaded.Utilities;
+namespace LaunchpadReloaded.Features;
 
 public static class LaunchpadAssets
 {

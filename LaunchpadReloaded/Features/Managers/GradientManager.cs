@@ -1,10 +1,10 @@
-﻿using LaunchpadReloaded.Components;
+﻿using System.Collections;
+using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Networking;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities;
-using System.Collections;
 
-namespace LaunchpadReloaded.Features;
+namespace LaunchpadReloaded.Features.Managers;
 
 
 public static class GradientManager

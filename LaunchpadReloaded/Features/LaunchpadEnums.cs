@@ -1,6 +1,6 @@
 ﻿namespace LaunchpadReloaded.Features
 {
-    public enum CustomGameOverReason : int
+    public enum CustomGameOverReason
     {
         JesterWins = 9,
     }

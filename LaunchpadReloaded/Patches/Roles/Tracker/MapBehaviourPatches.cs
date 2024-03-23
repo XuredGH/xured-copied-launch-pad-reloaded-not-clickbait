@@ -1,6 +1,6 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.API.GameModes;
-using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using UnityEngine;

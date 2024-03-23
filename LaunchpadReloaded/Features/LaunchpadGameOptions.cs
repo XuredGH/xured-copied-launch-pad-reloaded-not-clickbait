@@ -2,7 +2,6 @@ using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
 using System;
-using System.Collections.Generic;
 
 namespace LaunchpadReloaded.Features;
 
@@ -10,22 +9,22 @@ public class LaunchpadGameOptions
 {
     public static LaunchpadGameOptions Instance { get; private set; }
 
-    public CustomStringOption GameModes;
+    public readonly CustomStringOption GameModes;
 
     // General Options
-    public CustomToggleOption OnlyShowRoleColor;
-    public CustomToggleOption DisableMeetingTeleport;
-    public CustomOptionGroup GeneralGroup;
+    public readonly CustomToggleOption OnlyShowRoleColor;
+    public readonly CustomToggleOption DisableMeetingTeleport;
+    public readonly CustomOptionGroup GeneralGroup;
 
     // Battle Royale
-    public CustomToggleOption SeekerCharacter;
-    public CustomToggleOption ShowKnife;
-    public CustomOptionGroup BattleRoyaleGroup;
+    public readonly CustomToggleOption SeekerCharacter;
+    public readonly CustomToggleOption ShowKnife;
+    public readonly CustomOptionGroup BattleRoyaleGroup;
 
     // Fun Options
-    public CustomToggleOption FriendlyFire;
-    public CustomToggleOption UniqueColors;
-    public CustomOptionGroup FunGroup;
+    public readonly CustomToggleOption FriendlyFire;
+    public readonly CustomToggleOption UniqueColors;
+    public readonly CustomOptionGroup FunGroup;
 
     public LaunchpadGameOptions()
     {
@@ -55,7 +54,7 @@ public class LaunchpadGameOptions
         UniqueColors.ChangedEvent = i =>
         {
             if (!AmongUsClient.Instance.AmHost || i == false) return;
-            foreach (PlayerControl plr in PlayerControl.AllPlayerControls)
+            foreach (var plr in PlayerControl.AllPlayerControls)
             {
                 plr.CmdCheckColor((byte)plr.cosmetics.ColorId);
             }
@@ -78,9 +77,9 @@ public class LaunchpadGameOptions
         BattleRoyaleGroup.Hidden = () => GameModes.Value != "Battle Royale";
         GeneralGroup.Hidden = FunGroup.Hidden = () => GameModes.Value != "Default";
 
-        foreach (KeyValuePair<ushort, RoleBehaviour> role in CustomRoleManager.CustomRoles)
+        foreach (var role in CustomRoleManager.CustomRoles)
         {
-            ICustomRole customRole = role.Value as ICustomRole;
+            var customRole = role.Value as ICustomRole;
             if (customRole != null) customRole.CreateOptions();
         }
 
