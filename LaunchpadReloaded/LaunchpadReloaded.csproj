@@ -2,9 +2,8 @@
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
         <LangVersion>latest</LangVersion>
-        <DebugType>embedded</DebugType>        
-        <VersionPrefix>1.0.0</VersionPrefix>
-        <VersionSuffix>dev</VersionSuffix>
+        <DebugType>embedded</DebugType>
+        <Version>0.1.0</Version>
         <Description>Launchpad Mod for new roles and gamemodes</Description>
         <Authors>XtraCube, angxlwtf</Authors>
     </PropertyGroup>

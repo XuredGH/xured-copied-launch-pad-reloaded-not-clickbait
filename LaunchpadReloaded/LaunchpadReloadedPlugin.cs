@@ -10,6 +10,8 @@ using Reactor;
 using Reactor.Networking;
 using Reactor.Networking.Attributes;
 using System.Linq;
+using Reactor.Patches;
+using TMPro;
 
 namespace LaunchpadReloaded;
 
@@ -39,9 +41,17 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
 
         new LaunchpadGameOptions();
 
+
+        ReactorVersionShower.TextUpdated += VersionShower;
+
         Config.Save();
     }
 
+    private static void VersionShower(TextMeshPro textMeshPro)
+    {
+        textMeshPro.text = $"Launchpad {Version[..13]}\n{textMeshPro.text}";
+    }
+    
     private static void RegisterColors()
     {
         var colors =

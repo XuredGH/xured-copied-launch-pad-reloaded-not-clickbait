@@ -16,7 +16,7 @@ public static class PingTrackerPatch
 
         __instance.gameObject.SetActive(true);
         __instance.text.richText = true;
-        __instance.text.text = $"<color=#FF4050FF>All Of Us:</color> Launchpad \n<color=#7785CC>dsc.gg/allofus</color>\n<size=50%>Ping: {AmongUsClient.Instance.Ping} ms</size>";
+        __instance.text.text = $"<align=\"center\"><color=#FF4050FF>All Of Us:</color> Launchpad \n<color=#7785CC>dsc.gg/allofus</color>\n<size=80%>Ping: {AmongUsClient.Instance.Ping} ms</size>";
 
         var x = HudManager.Instance.gameObject.GetComponentInChildren<FriendsListButton>() != null ? 4 : 2.3f;
         aspectPos.DistanceFromEdge = new Vector3(x, 0.1f, 0);

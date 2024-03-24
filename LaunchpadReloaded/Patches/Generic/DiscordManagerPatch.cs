@@ -17,11 +17,11 @@ public static class DiscordManagerPatch
         __instance.presence = new Discord.Discord(1217217004474339418, 1UL);
         var activityManager = __instance.presence.GetActivityManager();
         activityManager.RegisterSteam(945360U);
-        activityManager.OnActivityJoin = (Action<string>)__instance.HandleJoinRequest;
-        SceneManager.sceneLoaded = (Action<Scene, LoadSceneMode>)delegate (Scene scene, LoadSceneMode _)
+        activityManager.add_OnActivityJoin((Action<string>)__instance.HandleJoinRequest);
+        SceneManager.add_sceneLoaded((Action<Scene, LoadSceneMode>)((scene, _)=>
         {
             __instance.OnSceneChange(scene.name);
-        };
+        }));
         __instance.SetInMenus();
         return false;
     }
