@@ -2,6 +2,6 @@
 
 public enum LaunchpadGamemodes
 {
-    BattleRoyale,
+    BattleRoyale = 1,
     
 }
