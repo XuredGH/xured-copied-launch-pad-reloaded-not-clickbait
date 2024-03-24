@@ -17,7 +17,7 @@ public class ReviveButton : CustomActionButton
 
     public override bool CanUse()
     {
-        return (RevivalManager.Instance && DeadBodyTarget is not null) && CanRevive() && PlayerControl.LocalPlayer.CanMove &&
+        return (RevivalManager.Instance && DeadBodyTarget is not null) && CanRevive() && !PlayerControl.LocalPlayer.Data.IsDead && PlayerControl.LocalPlayer.CanMove &&
             !DragManager.Instance.DraggingPlayers.ContainsValue(DeadBodyTarget.ParentId);
     }
 
