@@ -19,7 +19,7 @@ public class HackButton : CustomActionButton
     {
         foreach (var player in PlayerControl.AllPlayerControls)
         {
-            if (player.Data.Role is HackerRole)
+            if (player.Data.Role is HackerRole || player.Data.IsDead || player.Data.Disconnected)
             {
                 continue;
             }

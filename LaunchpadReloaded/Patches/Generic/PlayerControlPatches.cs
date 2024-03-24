@@ -51,6 +51,7 @@ public static class PlayerControlPatches
     public static void UpdatePatch(PlayerControl __instance)
     {
         if (MeetingHud.Instance) return;
+        
         if (__instance.IsRevived()) __instance.cosmetics.SetOutline(true, new Nullable<Color>(LaunchpadPalette.MedicColor));
 
         if (__instance.Data.IsHacked() || (HackingManager.Instance && HackingManager.Instance.AnyActiveNodes() && __instance.Data.Role is HackerRole))
