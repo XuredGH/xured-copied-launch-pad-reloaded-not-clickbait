@@ -1,9 +1,9 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.Components;
-using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Features.Managers;
 using UnityEngine;
 
-namespace LaunchpadReloaded.Patches.Colors.GradientColor;
+namespace LaunchpadReloaded.Patches.Colors.Gradients;
 
 [HarmonyPatch(typeof(PlayerMaterial), "SetColors", typeof(int), typeof(Renderer))]
 public static class PlayerMaterialPatch
@@ -16,14 +16,25 @@ public static class PlayerMaterialPatch
         }
 
         var color2 = GradientManager.LocalGradientId;
-
+        var enabled = true;
+        
         if (PlayerCustomizationMenu.Instance && PlayerTabPatches.SelectGradient)
         {
-            PlayerTab plrTab = PlayerCustomizationMenu.Instance.GetComponentInChildren<PlayerTab>();
-            color2 = plrTab != null ? plrTab.currentColor : 0;
+            var plrTab = PlayerCustomizationMenu.Instance.GetComponentInChildren<PlayerTab>();
+            if (plrTab)
+            {
+                color2 = plrTab.currentColor;
+            }
         }
 
-        if (GameData.Instance)
+        if (renderer.GetComponentInParent<PlayerGradientData>())
+        {
+            var comp = renderer.GetComponentInParent<PlayerGradientData>();
+            color2 = comp.GradientColor;
+            enabled = comp.GradientEnabled;
+        }
+
+        /*if (GameData.Instance)
         {
             byte id = 255;
             if (renderer.GetComponentInParent<PlayerControl>())
@@ -49,7 +60,7 @@ public static class PlayerMaterialPatch
             {
                 color2 = color;
             }
-        }
+        }*/
 
 
 
@@ -59,7 +70,7 @@ public static class PlayerMaterialPatch
             gradColor = renderer.gameObject.AddComponent<GradientColorComponent>();
         }
 
-        gradColor.SetColor(colorId, color2);
+        gradColor.SetColor(colorId, enabled ? color2 : colorId);
 
     }
 }

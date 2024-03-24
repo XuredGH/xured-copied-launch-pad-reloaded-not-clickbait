@@ -4,6 +4,7 @@ using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Attributes;
 using System;
 using System.Collections.Generic;
+using LaunchpadReloaded.Features.Managers;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Components;
@@ -23,7 +24,10 @@ public class ScannerComponent(IntPtr ptr) : MonoBehaviour(ptr)
 
     public void OnTriggerEnter2D(Collider2D collider)
     {
-        if (HackingManager.Instance.AnyActiveNodes()) return;
+        if (HackingManager.Instance.AnyActiveNodes())
+        {
+            return;
+        }
 
         var player = collider.gameObject.GetComponent<PlayerControl>();
         if (player == null)

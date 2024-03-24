@@ -3,12 +3,12 @@ using InnerNet;
 using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Roles;
-using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Patches.Options;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Extensions;
 using System.Text;
+using LaunchpadReloaded.Features.Managers;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Patches.Generic;
@@ -81,7 +81,7 @@ public static class HudManagerPatches
     [HarmonyPostfix, HarmonyPatch("Update")]
     public static void UpdatePostfix(HudManager __instance)
     {
-        PlayerControl local = PlayerControl.LocalPlayer;
+        var local = PlayerControl.LocalPlayer;
         if (!local || MeetingHud.Instance) return;
 
         if (!ShipStatus.Instance) OptionsScrollingLogic(__instance);

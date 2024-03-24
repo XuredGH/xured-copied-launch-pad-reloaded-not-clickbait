@@ -8,6 +8,7 @@ using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using System.Linq;
+using LaunchpadReloaded.Features.Managers;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Patches.Generic;
@@ -37,7 +38,10 @@ public static class PlayerControlPatches
     {
         CustomGameModeManager.ActiveMode.OnDeath(__instance);
         if (__instance.Data.IsHacked())
+        {
             HackingManager.RpcUnHackPlayer(__instance);
+            GradientManager.RpcSetGradientEnabled(__instance, true);
+        }
     }
 
     /// <summary>
@@ -47,6 +51,7 @@ public static class PlayerControlPatches
     public static void UpdatePatch(PlayerControl __instance)
     {
         if (MeetingHud.Instance) return;
+        
         if (__instance.IsRevived()) __instance.cosmetics.SetOutline(true, new Nullable<Color>(LaunchpadPalette.MedicColor));
 
         if (__instance.Data.IsHacked() || (HackingManager.Instance && HackingManager.Instance.AnyActiveNodes() && __instance.Data.Role is HackerRole))
@@ -69,7 +74,10 @@ public static class PlayerControlPatches
         if (__instance.Data.Role is ICustomRole customRole) customRole.PlayerControlFixedUpdate(__instance);
 
         var knife = __instance.gameObject.transform.FindChild("BodyForms/Seeker/KnifeHand");
-        if (knife is null) return;
+        if (knife is null)
+        {
+            return;
+        }
 
         knife.gameObject.SetActive(!__instance.Data.IsDead && __instance.CanMove);
     }
@@ -81,9 +89,10 @@ public static class PlayerControlPatches
     public static void StartPrefix(PlayerControl __instance)
     {
         var gradColorComponent = __instance.gameObject.AddComponent<PlayerGradientData>();
+        gradColorComponent.playerId = __instance.PlayerId;
         if (__instance.AmOwner)
         {
-            gradColorComponent.gradientColor = GradientManager.LocalGradientId;
+            gradColorComponent.GradientColor = GradientManager.LocalGradientId;
             GradientManager.RpcSetGradient(__instance, GradientManager.LocalGradientId);
         }
     }
@@ -108,7 +117,7 @@ public static class PlayerControlPatches
         var playerGradient = __instance.GetComponent<PlayerGradientData>();
         if (playerGradient)
         {
-            renderer.GetComponent<GradientColorComponent>().SetColor(__instance.Data.DefaultOutfit.ColorId, playerGradient.gradientColor);
+            renderer.GetComponent<GradientColorComponent>().SetColor(__instance.Data.DefaultOutfit.ColorId, playerGradient.GradientColor);
         }
     }
 

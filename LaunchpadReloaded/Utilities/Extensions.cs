@@ -1,8 +1,9 @@
 using LaunchpadReloaded.API.Roles;
-using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Components;
 using Reactor.Utilities.Extensions;
 using System.Linq;
 using System.Reflection;
+using LaunchpadReloaded.Features.Managers;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Utilities;
@@ -10,6 +11,16 @@ namespace LaunchpadReloaded.Utilities;
 public static class Extensions
 {
     private static readonly ContactFilter2D Filter = ContactFilter2D.CreateLegacyFilter(Constants.NotShipMask, float.MinValue, float.MaxValue);
+
+    public static void SetGradientData(this GameObject gameObject, byte playerId)
+    {
+        var data = gameObject.GetComponent<PlayerGradientData>();
+        if (!data)
+        {
+            data = gameObject.AddComponent<PlayerGradientData>();
+        }
+        data.playerId = playerId;
+    }
 
     public static bool ButtonTimerEnabled(this PlayerControl playerControl)
     {
@@ -28,7 +39,11 @@ public static class Extensions
 
     public static bool IsRevived(this PlayerControl player)
     {
-        if (RevivalManager.Instance is null) return false;
+        if (RevivalManager.Instance is null)
+        {
+            return false;
+        }
+
         return RevivalManager.Instance.RevivedPlayers.Contains(player.PlayerId);
     }
 

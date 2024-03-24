@@ -73,11 +73,9 @@ public static class ConsolePatch
             {
                 return canUse = couldUse = !pc.IsHacked();
             }
-            else
-            {
-                canUse = couldUse = false;
-                return false;
-            }
+
+            canUse = couldUse = false;
+            return false;
         }
 
         canUse = couldUse = true;

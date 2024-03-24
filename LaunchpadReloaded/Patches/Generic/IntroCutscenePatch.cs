@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.API.Roles;
+using LaunchpadReloaded.Utilities;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Patches.Generic;
@@ -32,11 +33,11 @@ public static class IntroCutscenePatch
         {
             if (!customRole.IsOutcast) return true;
 
-            Vector3 position = __instance.BackgroundBar.transform.position;
+            var position = __instance.BackgroundBar.transform.position;
             position.y -= 0.25f;
             __instance.BackgroundBar.transform.position = position;
 
-            __instance.BackgroundBar.material.SetColor("_Color", Color.gray);
+            __instance.BackgroundBar.material.SetColor(ShaderID.Color, Color.gray);
             __instance.TeamTitle.text = "OUTCAST";
             __instance.impostorScale = 1f;
             __instance.ImpostorText.text = "You are an Outcast. You do not have a team.";

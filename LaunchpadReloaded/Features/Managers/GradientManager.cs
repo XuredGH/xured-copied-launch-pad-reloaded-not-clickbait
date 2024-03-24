@@ -1,22 +1,36 @@
-﻿using LaunchpadReloaded.Components;
+﻿using System.Collections;
+using BepInEx.Configuration;
+using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Networking;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities;
-using System.Collections;
 
-namespace LaunchpadReloaded.Features;
+namespace LaunchpadReloaded.Features.Managers;
 
 
 public static class GradientManager
 {
-    public static int LocalGradientId { get; set; }
+    private static readonly ConfigEntry<int> GradientConfig =
+        LaunchpadReloadedPlugin.Instance.Config.Bind("Gradient", "Secondary", 0, "Gradient ID");
+
+    public static int LocalGradientId
+    {
+        get => GradientConfig.Value;
+        set => GradientConfig.Value = value;
+    }
 
 
     [MethodRpc((uint)LaunchpadRPC.SyncGradient)]
     public static void RpcSetGradient(PlayerControl pc, int colorId)
     {
-        pc.GetComponent<PlayerGradientData>().gradientColor = colorId;
+        pc.GetComponent<PlayerGradientData>().GradientColor = colorId;
         Coroutines.Start(WaitForDataCoroutine(pc));
+    }
+
+    [MethodRpc((uint)LaunchpadRPC.SetGradientEnabled)]
+    public static void RpcSetGradientEnabled(PlayerControl pc, bool enabled)
+    {
+        pc.GetComponent<PlayerGradientData>().GradientEnabled = enabled;
     }
 
     private static IEnumerator WaitForDataCoroutine(PlayerControl pc)
@@ -34,14 +48,30 @@ public static class GradientManager
         if (data != null && data.Object)
         {
             var colorData = data.Object.GetComponent<PlayerGradientData>();
-            if (colorData && colorData.gradientColor != 255)
+            if (colorData && colorData.GradientColor != 255)
             {
-                color = (byte)colorData.gradientColor;
+                color = (byte)colorData.GradientColor;
                 return true;
             }
         }
 
         color = 0;
+        return false;
+    }
+    public static bool TryGetEnabled(byte id, out bool enabled)
+    {
+        var data = GameData.Instance.GetPlayerById(id);
+        if (data != null && data.Object)
+        {
+            var colorData = data.Object.GetComponent<PlayerGradientData>();
+            if (colorData && colorData.GradientColor != 255)
+            {
+                enabled = colorData.GradientEnabled;
+                return true;
+            }
+        }
+
+        enabled = false;
         return false;
     }
 }

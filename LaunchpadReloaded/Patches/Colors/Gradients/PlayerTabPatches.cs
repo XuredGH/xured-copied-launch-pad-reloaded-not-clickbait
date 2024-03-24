@@ -1,14 +1,14 @@
 ﻿using AmongUs.Data;
 using HarmonyLib;
 using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Utilities;
+using LaunchpadReloaded.Features.Managers;
 using Reactor.Utilities.Extensions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using Object = UnityEngine.Object;
 
-namespace LaunchpadReloaded.Patches.Colors.GradientColor;
+namespace LaunchpadReloaded.Patches.Colors.Gradients;
 
 [HarmonyPatch(typeof(PlayerTab))]
 public static class PlayerTabPatches

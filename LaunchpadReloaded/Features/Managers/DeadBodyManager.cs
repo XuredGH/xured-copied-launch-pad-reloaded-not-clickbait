@@ -1,11 +1,11 @@
-﻿using LaunchpadReloaded.Components;
+﻿using System.Linq;
+using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Utilities;
 using Reactor.Networking.Attributes;
-using System.Linq;
 using UnityEngine;
 
-namespace LaunchpadReloaded.Features;
+namespace LaunchpadReloaded.Features.Managers;
 
 public static class DeadBodyManager
 {

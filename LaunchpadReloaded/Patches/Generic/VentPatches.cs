@@ -2,7 +2,7 @@
 using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Components;
-using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Features.Managers;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Patches.Generic;
@@ -22,17 +22,17 @@ public static class VentPatches
             return couldUse = canUse = false;
         }
 
-        float num = float.MaxValue;
-        PlayerControl @object = pc.Object;
-        bool customRoleUsable = false;
+        var num = float.MaxValue;
+        var @object = pc.Object;
+        var customRoleUsable = false;
         if (pc.Role.IsImpostor) customRoleUsable = true;
         if (pc.Role is ICustomRole role) customRoleUsable = role.CanUseVent;
 
         canUse = couldUse = customRoleUsable && !pc.IsDead && (@object.CanMove || @object.inVent);
         if (canUse)
         {
-            Vector3 center = @object.Collider.bounds.center;
-            Vector3 position = __instance.transform.position;
+            var center = @object.Collider.bounds.center;
+            var position = __instance.transform.position;
             num = Vector2.Distance(center, position);
             canUse &= num <= __instance.UsableDistance && !PhysicsHelpers.AnythingBetween(@object.Collider, center, position, Constants.ShipOnlyMask, false);
         }
@@ -47,7 +47,7 @@ public static class VentPatches
     [HarmonyPatch("SetOutline")]
     public static bool SetOutlinePatch(Vent __instance, [HarmonyArgument(0)] bool on, [HarmonyArgument(1)] bool mainTarget)
     {
-        Color color = PlayerControl.LocalPlayer.Data.Role is ICustomRole role
+        var color = PlayerControl.LocalPlayer.Data.Role is ICustomRole role
             ? role.RoleColor : PlayerControl.LocalPlayer.Data.Role.IsImpostor ? Palette.ImpostorRed : Palette.CrewmateBlue;
         __instance.myRend.material.SetFloat("_Outline", on ? 1 : 0);
         __instance.myRend.material.SetColor("_OutlineColor", color);

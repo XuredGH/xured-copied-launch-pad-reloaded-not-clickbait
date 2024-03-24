@@ -43,7 +43,11 @@ public static class GameOptionsMenuPatch
             option.OptionBehaviour.enabled = !option.Hidden();
             option.OptionBehaviour.gameObject.SetActive(!option.Hidden());
 
-            if (!option.Hidden()) startOffset -= 0.7f;
+            if (!option.Hidden())
+            {
+                startOffset -= 0.7f;
+            }
+
             var transform = option.OptionBehaviour.transform;
             var optionPosition = transform.localPosition;
             transform.localPosition = new Vector3(optionPosition.x, startOffset, optionPosition.z);
@@ -51,21 +55,36 @@ public static class GameOptionsMenuPatch
 
         foreach (var group in CustomOptionsManager.CustomGroups.Where(group => group.AdvancedRole == null))
         {
-            if (group.Header == null) continue;
+            if (group.Header == null)
+            {
+                continue;
+            }
+
             group.Header.SetActive(!group.Hidden());
 
-            if (!group.Hidden()) startOffset -= 0.5f;
+            if (!group.Hidden())
+            {
+                startOffset -= 0.5f;
+            }
+
             var position = group.Header.transform.localPosition;
             group.Header.transform.localPosition = new Vector3(position.x, startOffset, position.z);
 
             foreach (var option in group.Options)
             {
-                if (!option.OptionBehaviour) continue;
+                if (!option.OptionBehaviour)
+                {
+                    continue;
+                }
 
                 option.OptionBehaviour.enabled = !group.Hidden() && !option.Hidden();
                 option.OptionBehaviour.gameObject.SetActive(!group.Hidden() && !option.Hidden());
 
-                if (!group.Hidden() && !option.Hidden()) startOffset -= 0.5f;
+                if (!group.Hidden() && !option.Hidden())
+                {
+                    startOffset -= 0.5f;
+                }
+
                 var transform = option.OptionBehaviour.transform;
                 var optionPosition = transform.localPosition;
                 transform.localPosition = new Vector3(optionPosition.x, startOffset, optionPosition.z);

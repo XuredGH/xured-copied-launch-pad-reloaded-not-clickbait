@@ -44,7 +44,11 @@ public static class CustomOptionsManager
 
         foreach (var option in CustomOptions)
         {
-            if (option.OptionBehaviour is null) continue;
+            if (option.OptionBehaviour is null)
+            {
+                continue;
+            }
+
             option.ValueChanged(option.OptionBehaviour);
         }
     }

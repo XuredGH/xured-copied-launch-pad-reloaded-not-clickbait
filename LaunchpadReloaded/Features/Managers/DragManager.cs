@@ -1,11 +1,11 @@
-﻿using LaunchpadReloaded.Buttons;
+﻿using System.Collections.Generic;
+using LaunchpadReloaded.Buttons;
 using LaunchpadReloaded.Networking;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities.Attributes;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace LaunchpadReloaded.Features;
+namespace LaunchpadReloaded.Features.Managers;
 
 [RegisterInIl2Cpp]
 public class DragManager(System.IntPtr ptr) : MonoBehaviour(ptr)

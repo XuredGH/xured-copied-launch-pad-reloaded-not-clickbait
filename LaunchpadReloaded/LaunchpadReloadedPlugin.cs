@@ -1,4 +1,5 @@
-﻿using BepInEx;
+﻿using System;
+using BepInEx;
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using LaunchpadReloaded.API.GameModes;
@@ -10,6 +11,8 @@ using Reactor;
 using Reactor.Networking;
 using Reactor.Networking.Attributes;
 using System.Linq;
+using Reactor.Patches;
+using TMPro;
 
 namespace LaunchpadReloaded;
 
@@ -39,9 +42,24 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
 
         new LaunchpadGameOptions();
 
+
+        ReactorVersionShower.TextUpdated += VersionShower;
+
         Config.Save();
     }
 
+    private static void VersionShower(TextMeshPro textMeshPro)
+    {
+        textMeshPro.text = $"Launchpad {GetShortHashVersion(Version)}\n{textMeshPro.text}";
+    }
+
+    private static string GetShortHashVersion(string version)
+    {
+        var index = version.IndexOf("+", StringComparison.Ordinal);
+
+        return index < 0 ? version : version[..(index + 8)];
+    }
+    
     private static void RegisterColors()
     {
         var colors =

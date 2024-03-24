@@ -1,7 +1,7 @@
 ﻿using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Roles;
-using LaunchpadReloaded.Utilities;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
@@ -17,13 +17,16 @@ public class ReviveButton : CustomActionButton
 
     public override bool CanUse()
     {
-        return (RevivalManager.Instance && DeadBodyTarget is not null) && CanRevive() && PlayerControl.LocalPlayer.CanMove &&
+        return (RevivalManager.Instance && DeadBodyTarget is not null) && CanRevive() && !PlayerControl.LocalPlayer.Data.IsDead && PlayerControl.LocalPlayer.CanMove &&
             !DragManager.Instance.DraggingPlayers.ContainsValue(DeadBodyTarget.ParentId);
     }
 
     public bool CanRevive()
     {
-        if (!MedicRole.OnlyAllowInMedbay.Value) return true;
+        if (!MedicRole.OnlyAllowInMedbay.Value)
+        {
+            return true;
+        }
 
         try
         {

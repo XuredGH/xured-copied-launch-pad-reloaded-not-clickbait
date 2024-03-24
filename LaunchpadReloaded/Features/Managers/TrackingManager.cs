@@ -1,10 +1,9 @@
-using LaunchpadReloaded.Roles;
-using LaunchpadReloaded.Utilities;
-using Reactor.Utilities.Attributes;
 using System;
+using LaunchpadReloaded.Roles;
+using Reactor.Utilities.Attributes;
 using UnityEngine;
 
-namespace LaunchpadReloaded.Features;
+namespace LaunchpadReloaded.Features.Managers;
 [RegisterInIl2Cpp]
 public class TrackingManager(IntPtr ptr) : MonoBehaviour(ptr)
 {

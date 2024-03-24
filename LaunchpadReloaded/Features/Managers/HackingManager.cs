@@ -1,15 +1,14 @@
-﻿using LaunchpadReloaded.Components;
-using LaunchpadReloaded.Networking;
-using LaunchpadReloaded.Roles;
-using LaunchpadReloaded.Utilities;
-using Reactor.Networking.Attributes;
-using Reactor.Utilities.Attributes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LaunchpadReloaded.Components;
+using LaunchpadReloaded.Networking;
+using LaunchpadReloaded.Roles;
+using Reactor.Networking.Attributes;
+using Reactor.Utilities.Attributes;
 using UnityEngine;
 
-namespace LaunchpadReloaded.Features;
+namespace LaunchpadReloaded.Features.Managers;
 
 [RegisterInIl2Cpp]
 public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
@@ -132,9 +131,11 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
             if (!value)
             {
                 player.Object.SetColor((byte)player.DefaultOutfit.ColorId);
+                GradientManager.RpcSetGradientEnabled(player.Object, true);
             }
             else
             {
+                GradientManager.RpcSetGradientEnabled(player.Object, false);
                 player.Object.RawSetColor(15);
             }
 

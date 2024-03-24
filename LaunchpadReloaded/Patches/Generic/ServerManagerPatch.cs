@@ -5,7 +5,7 @@ namespace LaunchpadReloaded.Patches.Generic;
 /// <summary>
 /// Add Launchpad Server
 /// </summary>
-[HarmonyPatch(typeof(ServerManager), "LoadServers")]
+//[HarmonyPatch(typeof(ServerManager), nameof(ServerManager.LoadServers))]
 public static class ServerManagerPatch
 {
     public static void Postfix(ServerManager __instance)

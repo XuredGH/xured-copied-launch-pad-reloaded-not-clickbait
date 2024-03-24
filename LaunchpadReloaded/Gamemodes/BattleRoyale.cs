@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Linq;
 using AmongUs.GameOptions;
 using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.Features;
@@ -5,18 +7,16 @@ using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
-using System.Collections;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 
-namespace LaunchpadReloaded.GameModes;
+namespace LaunchpadReloaded.Gamemodes;
 public class BattleRoyale : CustomGameMode
 {
     public override string Name => "Battle Royale";
     public override string Description => "Everyone can kill.\n<b><i>Last one standing wins.</b></i>";
 
-    public override int Id => 1;
+    public override int Id => (int)LaunchpadGamemodes.BattleRoyale;
     public TextMeshPro PlayerCount;
     public TextMeshPro DeathNotif;
     public override void Initialize()
@@ -26,12 +26,14 @@ public class BattleRoyale : CustomGameMode
 
         var random = ShipStatus.Instance.DummyLocations.Random();
 
-        foreach (GameData.PlayerInfo player in GameData.Instance.AllPlayers)
+        foreach (var player in GameData.Instance.AllPlayers)
             player.Object.cosmetics.TogglePet(false);
 
         PlayerControl.LocalPlayer.NetTransform.RpcSnapTo(random.position);
         if (LaunchpadGameOptions.Instance.SeekerCharacter.Value)
+        {
             GenericRPC.RpcSetBodyType(PlayerControl.LocalPlayer, 6);
+        }
     }
 
     public IEnumerator DeathNotification(PlayerControl player)
@@ -44,11 +46,15 @@ public class BattleRoyale : CustomGameMode
     }
     public override void OnDeath(PlayerControl player)
     {
-        var alivePlayers = GameData.Instance.AllPlayers.ToArray().Where(player => !player.Disconnected && !player.IsDead).Count();
+        var alivePlayers = GameData.Instance.AllPlayers.ToArray().Count(info => !info.Disconnected && !info.IsDead);
         player.roleAssigned = false;
         player.RpcSetRole(RoleTypes.CrewmateGhost);
 
-        if (alivePlayers == 1) return;
+        if (alivePlayers == 1)
+        {
+            return;
+        }
+
         Coroutines.Start(DeathNotification(player));
     }
     public override void HudStart(HudManager instance)

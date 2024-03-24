@@ -1,14 +1,14 @@
-﻿using AmongUs.GameOptions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using AmongUs.GameOptions;
 using LaunchpadReloaded.Networking;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities.Attributes;
 using Reactor.Utilities.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
-namespace LaunchpadReloaded.Features;
+namespace LaunchpadReloaded.Features.Managers;
 
 [RegisterInIl2Cpp]
 public class RevivalManager(IntPtr ptr) : MonoBehaviour(ptr)

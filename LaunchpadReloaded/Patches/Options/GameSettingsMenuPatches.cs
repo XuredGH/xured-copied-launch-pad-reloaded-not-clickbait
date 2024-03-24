@@ -17,7 +17,11 @@ public static class GameSettingsMenuPatches
     [HarmonyPrefix, HarmonyPatch("Start")]
     public static void StartPrefix(GameSettingMenu __instance)
     {
-        if (CustomOptionsTab.CustomTab != null) return;
+        if (CustomOptionsTab.CustomTab != null)
+        {
+            return;
+        }
+
         __instance.Tabs.transform.position += new Vector3(0.5f, 0, 0);
         GameBtn = __instance.transform.FindChild("Header/Tabs/GameTab").gameObject;
         RoleBtn = __instance.transform.FindChild("Header/Tabs/RoleTab").gameObject;
@@ -48,7 +52,10 @@ public static class GameSettingsMenuPatches
     [HarmonyPostfix, HarmonyPatch("Update")]
     public static void UpdatePatch(GameSettingMenu __instance)
     {
-        if (CustomGameModeManager.ActiveMode == null) return;
+        if (CustomGameModeManager.ActiveMode == null)
+        {
+            return;
+        }
 
         GameBtn.SetActive(CustomGameModeManager.ActiveMode.CanAccessSettingsTab());
         RoleBtn.SetActive(CustomGameModeManager.ActiveMode.CanAccessRolesTab());
