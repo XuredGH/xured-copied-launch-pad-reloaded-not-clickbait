@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using BepInEx.Configuration;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Networking;
 using Reactor.Networking.Attributes;
@@ -9,7 +10,14 @@ namespace LaunchpadReloaded.Features.Managers;
 
 public static class GradientManager
 {
-    public static int LocalGradientId { get; set; }
+    private static readonly ConfigEntry<int> GradientConfig =
+        LaunchpadReloadedPlugin.Instance.Config.Bind("Gradient", "Secondary", 0, "Gradient ID");
+
+    public static int LocalGradientId
+    {
+        get => GradientConfig.Value;
+        set => GradientConfig.Value = value;
+    }
 
 
     [MethodRpc((uint)LaunchpadRPC.SyncGradient)]
