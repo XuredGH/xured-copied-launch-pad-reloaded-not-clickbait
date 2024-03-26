@@ -25,14 +25,24 @@ public static class ColorblindPatch
         
         var defaultColor = Helpers.FirstLetterToUpper(Palette.GetColorName(__instance.ColorId).ToLower());
         var gradientColor = Helpers.FirstLetterToUpper(Palette.GetColorName(comp.GradientColor).ToLower());
-
+        
         if (defaultColor == gradientColor || gradientColor == "???")
         {
             __result = defaultColor;
             return false;
         }
 
-        __result = $"{gradientColor}-{defaultColor}";
+        if (!__instance.GetComponentInParent<PlayerVoteArea>() && 
+            !__instance.GetComponentInParent<PlayerControl>() &&
+            !__instance.GetComponentInParent<ShapeshifterPanel>())
+        {
+            __result = $"{gradientColor}\n{defaultColor}";
+        }
+        else
+        {
+            __result = $"{gradientColor}-{defaultColor}";
+        }
+        
         return false;
     }
 }
