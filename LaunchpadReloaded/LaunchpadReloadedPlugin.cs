@@ -11,6 +11,7 @@ using Reactor;
 using Reactor.Networking;
 using Reactor.Networking.Attributes;
 using System.Linq;
+using System.Text;
 using Reactor.Patches;
 using TMPro;
 
@@ -50,7 +51,11 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
 
     private static void VersionShower(TextMeshPro textMeshPro)
     {
-        textMeshPro.text = $"Launchpad {GetShortHashVersion(Version)}\n{textMeshPro.text}";
+        textMeshPro.text = new StringBuilder("<color=#FF4050FF>Launchpad</color> ")
+            .Append(GetShortHashVersion(Version))
+            .Append("\nPowered by <color=#FFB793>CrowdedMod</color>\n& <color=#348feb>Mini.RegionInstall</color>\n")
+            .Append(textMeshPro.text)
+            .ToString();
     }
 
     private static string GetShortHashVersion(string version)
