@@ -9,7 +9,7 @@ namespace LaunchpadReloaded.Patches.Colors.Gradients;
 public static class ColorblindPatch
 {
     [HarmonyPrefix, HarmonyPatch(nameof(CosmeticsLayer.GetColorBlindText))]
-    public static bool CosmeticsLayerPatch(CosmeticsLayer __instance, ref string __result)
+    public static bool GetColorBlindTextPrefix(CosmeticsLayer __instance, ref string __result)
     {
         if (!__instance.TryGetComponent(out PlayerGradientData comp) &&
             !__instance.transform.parent.TryGetComponent(out comp))

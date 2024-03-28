@@ -73,7 +73,6 @@ public class GradientColorComponent(IntPtr ptr) : MonoBehaviour(ptr)
             return;
         }
 
-        mat.SetInt(ShaderID.Flip, renderer.flipX ? 1 : 0);
-
+        mat.SetFloat(ShaderID.Flip, renderer.flipX ? 1 : 0);
     }
 }
