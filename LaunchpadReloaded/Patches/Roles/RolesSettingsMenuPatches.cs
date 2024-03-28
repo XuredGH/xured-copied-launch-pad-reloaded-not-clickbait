@@ -72,6 +72,9 @@ public static class RolesSettingsMenuPatches
             };
 
             __instance.AllAdvancedSettingTabs.Add(newAdvSet);
+
+            toggleSet.gameObject.Destroy();
+            numberSet.gameObject.Destroy();
         }
     }
 
@@ -109,7 +112,6 @@ public static class RolesSettingsMenuPatches
             {
                 continue;
             }
-
             var newOption = Object.Instantiate(__instance.SettingPrefab, parent);
             newOption.Role = role;
             __instance.AllRoleSettings.Add(newOption);

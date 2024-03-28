@@ -11,6 +11,9 @@ public class LaunchpadGameOptions
 
     public readonly CustomStringOption GameModes;
 
+    /*    public readonly CustomStringOption VotingType;
+        public readonly CustomNumberOption MaxVotes;*/
+
     // General Options
     public readonly CustomToggleOption OnlyShowRoleColor;
     public readonly CustomToggleOption DisableMeetingTeleport;
@@ -34,13 +37,13 @@ public class LaunchpadGameOptions
         }
 
         GameModes = new CustomStringOption("Gamemode", 0, ["Default", "Battle Royale"]);
-        GameModes.ChangedEvent = i =>
-        {
-            if (AmongUsClient.Instance.AmHost)
-            {
-                CustomGameModeManager.RpcSetGameMode(PlayerControl.LocalPlayer, i);
-            }
-        };
+        GameModes.ChangedEvent = i => CustomGameModeManager.RpcSetGameMode(GameData.Instance, i);
+
+        /*        VotingType = new CustomStringOption("Voting Type", 0, ["Classic", "Chance", "Multiple", "Combined"]);
+                VotingType.ChangedEvent = i => VotingTypesManager.RpcSetType(GameData.Instance, VotingType.IndexValue);
+
+                MaxVotes = new CustomNumberOption("Max Votes", 3, 2, 10, 1, NumberSuffixes.None);
+                MaxVotes.Hidden = () => !VotingTypesManager.CanVoteMultiple();*/
 
         DisableMeetingTeleport = new CustomToggleOption("Disable Meeting Teleport", false);
         OnlyShowRoleColor = new CustomToggleOption("Reveal Crewmate Roles", false);

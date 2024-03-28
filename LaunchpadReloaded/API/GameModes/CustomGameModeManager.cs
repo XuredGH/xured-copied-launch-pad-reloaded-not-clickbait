@@ -1,10 +1,10 @@
 ﻿using LaunchpadReloaded.Networking;
 using Reactor.Networking.Attributes;
+using Reactor.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Reactor.Utilities;
 
 namespace LaunchpadReloaded.API.GameModes;
 
@@ -17,7 +17,7 @@ public static class CustomGameModeManager
     /// List of registered gamemodes
     /// </summary>
     public static readonly List<CustomGameMode> GameModes = [];
-    
+
     /// <summary>
     /// Current gamemode
     /// </summary>
@@ -40,7 +40,7 @@ public static class CustomGameModeManager
     /// </summary>
     /// <param name="id">Gamemode ID</param>
     [MethodRpc((uint)LaunchpadRPC.SetGameMode)]
-    public static void RpcSetGameMode(PlayerControl pc, int id)
+    public static void RpcSetGameMode(GameData lobby, int id)
     {
         SetGameMode(id);
     }
@@ -67,13 +67,13 @@ public static class CustomGameModeManager
         }
 
         var gameMode = (CustomGameMode)Activator.CreateInstance(gameModeType);
-        
+
         if (GameModes.Any(x => x.Id == gameMode.Id))
         {
             Logger<LaunchpadReloadedPlugin>.Error($"ID for gamemode {gameMode.Name} already exists!");
             return;
         }
-        
+
         GameModes.Add(gameMode);
     }
 }

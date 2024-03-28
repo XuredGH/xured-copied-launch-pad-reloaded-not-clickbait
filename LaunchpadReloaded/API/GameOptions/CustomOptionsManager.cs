@@ -17,13 +17,32 @@ public static class CustomOptionsManager
         {
             return;
         }
-        
+
         var toggles = CustomToggleOptions.Select(x => x.Value).ToArray();
         var numbers = CustomNumberOptions.Select(x => x.Value).ToArray();
         var strings = CustomStringOptions.Select(x => x.IndexValue).ToArray();
 
         Rpc<SyncOptionsRpc>.Instance.Send(new SyncOptionsRpc.Data(toggles, numbers, strings));
     }
+
+    public static void UpdateToConfig()
+    {
+        foreach (CustomNumberOption numberOpt in CustomOptionsManager.CustomNumberOptions)
+        {
+            numberOpt.SetValue(numberOpt.Save ? numberOpt.Config.Value : numberOpt.Default);
+        }
+
+        foreach (CustomToggleOption toggleOpt in CustomOptionsManager.CustomToggleOptions)
+        {
+            toggleOpt.SetValue(toggleOpt.Save ? toggleOpt.Config.Value : toggleOpt.Default);
+        }
+
+        foreach (CustomStringOption stringOpt in CustomOptionsManager.CustomStringOptions)
+        {
+            stringOpt.SetValue(stringOpt.Save ? stringOpt.Config.Value : stringOpt.Default);
+        }
+    }
+
 
     public static void ResetToDefault()
     {
