@@ -1,5 +1,7 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.Components;
+using LaunchpadReloaded.Features.Managers;
+using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities;
 
@@ -18,21 +20,29 @@ public static class ColorblindPatch
             return true;
         }
 
+        GameData.PlayerInfo plr = GameData.Instance.GetPlayerById(comp.playerId);
+
+        if (plr.IsHacked() || (HackingManager.Instance && HackingManager.Instance.AnyActiveNodes() && plr.Role is HackerRole))
+        {
+            __result = "???";
+            return false;
+        }
+
         if (!comp.GradientEnabled)
         {
             return true;
         }
-        
+
         var defaultColor = Helpers.FirstLetterToUpper(Palette.GetColorName(__instance.ColorId).ToLower());
         var gradientColor = Helpers.FirstLetterToUpper(Palette.GetColorName(comp.GradientColor).ToLower());
-        
+
         if (defaultColor == gradientColor || gradientColor == "???")
         {
             __result = defaultColor;
             return false;
         }
 
-        if (!__instance.GetComponentInParent<PlayerVoteArea>() && 
+        if (!__instance.GetComponentInParent<PlayerVoteArea>() &&
             !__instance.GetComponentInParent<PlayerControl>() &&
             !__instance.GetComponentInParent<ShapeshifterPanel>())
         {
@@ -42,7 +52,7 @@ public static class ColorblindPatch
         {
             __result = $"{gradientColor}-{defaultColor}";
         }
-        
+
         return false;
     }
 }

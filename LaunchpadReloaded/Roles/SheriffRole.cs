@@ -1,6 +1,7 @@
 ﻿using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Attributes;
 using System;
 using UnityEngine;
@@ -21,6 +22,7 @@ public class SheriffRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
 
     public RoleTeamTypes Team => RoleTeamTypes.Crewmate;
     public bool CanUseKill => true;
+    public LoadableAsset<Sprite> Icon => LaunchpadAssets.ShootButton;
 
     public static CustomNumberOption ShootCooldown;
     public static CustomNumberOption Shots;

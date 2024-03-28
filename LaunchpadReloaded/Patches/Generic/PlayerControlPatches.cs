@@ -5,10 +5,10 @@ using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using System.Linq;
-using LaunchpadReloaded.Features.Managers;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Patches.Generic;
@@ -40,7 +40,6 @@ public static class PlayerControlPatches
         if (__instance.Data.IsHacked())
         {
             HackingManager.RpcUnHackPlayer(__instance);
-            GradientManager.RpcSetGradientEnabled(__instance, true);
         }
     }
 
@@ -51,7 +50,7 @@ public static class PlayerControlPatches
     public static void UpdatePatch(PlayerControl __instance)
     {
         if (MeetingHud.Instance) return;
-        
+
         if (__instance.IsRevived()) __instance.cosmetics.SetOutline(true, new Nullable<Color>(LaunchpadPalette.MedicColor));
 
         if (__instance.Data.IsHacked() || (HackingManager.Instance && HackingManager.Instance.AnyActiveNodes() && __instance.Data.Role is HackerRole))
