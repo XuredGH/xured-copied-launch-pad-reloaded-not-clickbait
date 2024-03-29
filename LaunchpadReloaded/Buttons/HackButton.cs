@@ -13,7 +13,7 @@ public class HackButton : CustomActionButton
     public override int MaxUses => (int)HackerRole.HackUses.Value;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.HackButton;
     public override bool Enabled(RoleBehaviour role) => role is HackerRole;
-    public override bool CanUse() => !HackingManager.Instance.AnyActiveNodes() && !TutorialManager.InstanceExists;
+    public override bool CanUse() => !HackingManager.Instance.AnyActiveNodes();
 
     protected override void OnClick()
     {

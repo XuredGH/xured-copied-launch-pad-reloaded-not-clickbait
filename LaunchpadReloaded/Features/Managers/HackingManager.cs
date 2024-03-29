@@ -1,11 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Roles;
+using LaunchpadReloaded.Utilities;
 using Reactor.Networking.Attributes;
+using Reactor.Utilities;
 using Reactor.Utilities.Attributes;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Features.Managers;
@@ -74,13 +77,63 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
         return nodes.Any(node => node.IsActive);
     }
 
+    public static IEnumerator HackEffect()
+    {
+        System.Random random = new System.Random();
+        HudManager.Instance.TaskPanel.open = false;
+        Vector3 originalPos = HudManager.Instance.ReportButton.transform.localPosition;
+        Vector3 originalPos2 = HudManager.Instance.UseButton.transform.localPosition;
+        ProgressTracker taskBar = HudManager.Instance.gameObject.GetComponentInChildren<ProgressTracker>();
+
+        while (PlayerControl.LocalPlayer.Data.IsHacked())
+        {
+            HudManager.Instance.FullScreen.color = new Color32(0, 255, 0, 100);
+            HudManager.Instance.FullScreen.gameObject.SetActive(!HudManager.Instance.FullScreen.gameObject.active);
+            SoundManager.Instance.PlaySound(LaunchpadAssets.HackingSound.LoadAsset(), false, 0.6f);
+            taskBar.curValue = random.NextSingle();
+            if (random.Next(0, 2) == 1)
+            {
+                HudManager.Instance.TaskPanel.open = true;
+                yield return new WaitForSeconds(0.1f);
+                HudManager.Instance.TaskPanel.open = false;
+            }
+
+            if (random.Next(0, 2) == 1)
+            {
+                HudManager.Instance.ReportButton.transform.localPosition += new Vector3(-random.NextSingle() + 1, random.NextSingle() + 1);
+                yield return new WaitForSeconds(0.2f);
+                HudManager.Instance.ReportButton.transform.localPosition = originalPos;
+            }
+
+            if (random.Next(0, 2) == 1)
+            {
+                HudManager.Instance.UseButton.transform.localPosition += new Vector3(-random.NextSingle() + 1, random.NextSingle() + 1);
+                yield return new WaitForSeconds(0.2f);
+                HudManager.Instance.UseButton.transform.localPosition = originalPos2;
+            }
+
+            yield return new WaitForSeconds(0.6f);
+        }
+
+        if (HudManager.InstanceExists)
+        {
+            SoundManager.Instance.StopSound(LaunchpadAssets.HackingSound.LoadAsset());
+            HudManager.Instance.FullScreen.gameObject.SetActive(false);
+            HudManager.Instance.UseButton.transform.localPosition = originalPos2;
+            HudManager.Instance.ReportButton.transform.localPosition = originalPos;
+        }
+        yield break;
+    }
+
+
     [MethodRpc((uint)LaunchpadRPC.HackPlayer)]
     public static void RpcHackPlayer(PlayerControl player)
     {
-        Debug.Log(player.Data.PlayerName + " is being hacked on local client.");
         Instance.hackedPlayers.Add(player.PlayerId);
-        player.RawSetName("<b><i>???</b></i>");
+        GradientManager.SetGradientEnabled(player, false);
         player.RawSetColor(15);
+
+        if (player.AmOwner) Coroutines.Start(HackEffect());
     }
 
     [MethodRpc((uint)LaunchpadRPC.UnHackPlayer)]
@@ -88,6 +141,7 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
     {
         Instance.hackedPlayers.Remove(player.PlayerId);
         player.SetName(player.Data.PlayerName);
+        GradientManager.SetGradientEnabled(player, true);
         player.SetColor((byte)player.Data.DefaultOutfit.ColorId);
         player.cosmetics.gameObject.SetActive(true);
 
@@ -130,12 +184,12 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
 
             if (!value)
             {
+                GradientManager.SetGradientEnabled(player.Object, true);
                 player.Object.SetColor((byte)player.DefaultOutfit.ColorId);
-                GradientManager.RpcSetGradientEnabled(player.Object, true);
             }
             else
             {
-                GradientManager.RpcSetGradientEnabled(player.Object, false);
+                GradientManager.SetGradientEnabled(player.Object, false);
                 player.Object.RawSetColor(15);
             }
 

@@ -10,10 +10,10 @@ public class GradientColorComponent(IntPtr ptr) : MonoBehaviour(ptr)
 {
     public SpriteRenderer renderer;
     public Material mat;
-    
+
     public int primaryColor;
     public int secondaryColor;
-    
+
     public void SetColor(int color1, int color2)
     {
         renderer = GetComponent<SpriteRenderer>();
@@ -22,7 +22,7 @@ public class GradientColorComponent(IntPtr ptr) : MonoBehaviour(ptr)
             return;
         }
 
-        if (color2 > Palette.PlayerColors.Length || color2<0)
+        if (color2 > Palette.PlayerColors.Length || color2 < 0)
         {
             if (color1 >= 0 && color1 < Palette.PlayerColors.Length)
             {
@@ -30,7 +30,7 @@ public class GradientColorComponent(IntPtr ptr) : MonoBehaviour(ptr)
             }
             return;
         }
-        
+
         primaryColor = color1;
         secondaryColor = color2;
 
@@ -41,7 +41,7 @@ public class GradientColorComponent(IntPtr ptr) : MonoBehaviour(ptr)
         mat.SetColor(ShaderID.SecondaryBodyColor, Palette.PlayerColors[secondaryColor]);
         mat.SetColor(ShaderID.SecondaryShadowColor, Palette.ShadowColors[secondaryColor]);
     }
-    
+
     public void SetColor(int gradientColor)
     {
         renderer = GetComponent<SpriteRenderer>();
@@ -58,18 +58,14 @@ public class GradientColorComponent(IntPtr ptr) : MonoBehaviour(ptr)
         secondaryColor = gradientColor;
 
         mat = renderer.material;
-        
+
         mat.SetColor(ShaderID.SecondaryBodyColor, Palette.PlayerColors[secondaryColor]);
         mat.SetColor(ShaderID.SecondaryShadowColor, Palette.ShadowColors[secondaryColor]);
     }
 
     public void Update()
     {
-        if (!renderer)
-        {
-            return;
-        }
-
+        if (!renderer || !mat) return;
         mat.SetFloat(ShaderID.Flip, renderer.flipX ? 1 : 0);
     }
 }

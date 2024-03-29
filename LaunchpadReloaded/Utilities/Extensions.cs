@@ -1,9 +1,9 @@
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Components;
+using LaunchpadReloaded.Features.Managers;
 using Reactor.Utilities.Extensions;
 using System.Linq;
 using System.Reflection;
-using LaunchpadReloaded.Features.Managers;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Utilities;
@@ -29,10 +29,7 @@ public static class Extensions
 
     public static bool IsHacked(this GameData.PlayerInfo playerInfo)
     {
-        if (!HackingManager.Instance)
-        {
-            return false;
-        }
+        if (!HackingManager.Instance) return false;
 
         return HackingManager.Instance.hackedPlayers.Contains(playerInfo.PlayerId);
     }

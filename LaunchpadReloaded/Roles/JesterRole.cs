@@ -14,14 +14,14 @@ public class JesterRole(IntPtr ptr) : RoleBehaviour(ptr), ICustomRole
     public string RoleName => "Jester";
     public ushort RoleId => (ushort)LaunchpadRoles.Jester;
     public string RoleDescription => "Get ejected to win";
-    public string RoleLongDescription => "Convince the crew to vote you out!";
+    public string RoleLongDescription => "Convince the crew to vote you out by being suspicious. If you get voted out, you win the game.";
     public Color RoleColor => LaunchpadPalette.JesterColor;
     public RoleTeamTypes Team => RoleTeamTypes.Crewmate;
     public bool IsOutcast => true;
     public bool TasksCount => false;
     public bool CanUseVent => CanUseVents is not null ? CanUseVents.Value : true;
     public override bool IsDead => false;
-    public LoadableAsset<Sprite> Icon => LaunchpadAssets.ZoomButton;
+    public LoadableAsset<Sprite> Icon => LaunchpadAssets.JesterIcon;
 
     public override void AppendTaskHint(StringBuilder taskStringBuilder) { }
     public override bool DidWin(GameOverReason reason)

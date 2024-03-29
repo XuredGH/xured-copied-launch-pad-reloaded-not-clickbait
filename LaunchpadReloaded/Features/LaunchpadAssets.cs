@@ -1,7 +1,7 @@
-﻿using System;
-using LaunchpadReloaded.Utilities;
+﻿using LaunchpadReloaded.Utilities;
 using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
+using System;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -14,7 +14,7 @@ public static class LaunchpadAssets
 
     // Materials
     public static readonly LoadableAsset<Material> GradientMaterial = new("GradientPlayerMaterial");
-    public static readonly LoadableAsset<Material> MaskedGradientMaterial = new ("MaskedGradientMaterial");
+    public static readonly LoadableAsset<Material> MaskedGradientMaterial = new("MaskedGradientMaterial");
 
     // Sprites
     public static readonly LoadableAsset<Sprite> BlankButton = new("BlankButton");
@@ -29,6 +29,7 @@ public static class LaunchpadAssets
     public static readonly LoadableAsset<Sprite> ScannerButton = new("Place_Scanner.png", false);
     public static readonly LoadableAsset<Sprite> TrackButton = new("Track.png", false);
     public static readonly LoadableAsset<Sprite> ShootButton = new("Shoot.png", false);
+    public static readonly LoadableAsset<Sprite> JesterIcon = new("Jester.png", false);
 
     // Object Sprites
     public static readonly LoadableAsset<Sprite> ScannerSprite = new("Scanner.png", false);
@@ -37,6 +38,7 @@ public static class LaunchpadAssets
     // Sounds
     public static readonly LoadableAsset<AudioClip> BeepSound = new("Beep.wav");
     public static readonly LoadableAsset<AudioClip> PingSound = new("Ping.mp3");
+    public static readonly LoadableAsset<AudioClip> HackingSound = new("HackAmbience.mp3");
 }
 
 public class LoadableAsset<T>(string name, bool useBundle = true)

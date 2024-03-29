@@ -1,9 +1,9 @@
-﻿using System.Collections;
-using BepInEx.Configuration;
+﻿using BepInEx.Configuration;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Networking;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities;
+using System.Collections;
 
 namespace LaunchpadReloaded.Features.Managers;
 
@@ -27,11 +27,14 @@ public static class GradientManager
         Coroutines.Start(WaitForDataCoroutine(pc));
     }
 
-    [MethodRpc((uint)LaunchpadRPC.SetGradientEnabled)]
-    public static void RpcSetGradientEnabled(PlayerControl pc, bool enabled)
+    public static void SetGradientEnabled(PlayerControl pc, bool enabled)
     {
         pc.GetComponent<PlayerGradientData>().GradientEnabled = enabled;
+        Coroutines.Start(WaitForDataCoroutine(pc));
     }
+
+    [MethodRpc((uint)LaunchpadRPC.SetGradientEnabled)]
+    public static void RpcSetGradientEnabled(PlayerControl pc, bool enabled) => SetGradientEnabled(pc, enabled);
 
     private static IEnumerator WaitForDataCoroutine(PlayerControl pc)
     {
