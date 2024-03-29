@@ -12,6 +12,7 @@ using Reactor.Networking;
 using Reactor.Networking.Attributes;
 using System.Linq;
 using System.Text;
+using LaunchpadReloaded.CustomSettings;
 using Reactor.Patches;
 using TMPro;
 
@@ -42,6 +43,7 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
         CustomButtonManager.RegisterAllButtons();
 
         new LaunchpadGameOptions();
+        new LaunchpadSettings();
 
 
         ReactorVersionShower.TextUpdated += VersionShower;
