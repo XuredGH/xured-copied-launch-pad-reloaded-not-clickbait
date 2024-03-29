@@ -42,10 +42,6 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
         CustomRoleManager.RegisterAllRoles();
         CustomButtonManager.RegisterAllButtons();
 
-        new LaunchpadGameOptions();
-        new LaunchpadSettings();
-
-
         ReactorVersionShower.TextUpdated += VersionShower;
 
         Config.Save();
