@@ -1,3 +1,4 @@
+using System.Linq;
 using HarmonyLib;
 using Il2CppSystem;
 using LaunchpadReloaded.API.GameModes;
@@ -8,7 +9,6 @@ using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
-using System.Linq;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Patches.Generic;

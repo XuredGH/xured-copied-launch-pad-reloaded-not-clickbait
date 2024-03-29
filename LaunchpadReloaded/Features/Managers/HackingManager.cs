@@ -1,3 +1,7 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Roles;
@@ -5,11 +9,8 @@ using LaunchpadReloaded.Utilities;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities;
 using Reactor.Utilities.Attributes;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
+using Random = System.Random;
 
 namespace LaunchpadReloaded.Features.Managers;
 
@@ -79,11 +80,11 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
 
     public static IEnumerator HackEffect()
     {
-        System.Random random = new System.Random();
+        var random = new Random();
         HudManager.Instance.TaskPanel.open = false;
-        Vector3 originalPos = HudManager.Instance.ReportButton.transform.localPosition;
-        Vector3 originalPos2 = HudManager.Instance.UseButton.transform.localPosition;
-        ProgressTracker taskBar = HudManager.Instance.gameObject.GetComponentInChildren<ProgressTracker>();
+        var originalPos = HudManager.Instance.ReportButton.transform.localPosition;
+        var originalPos2 = HudManager.Instance.UseButton.transform.localPosition;
+        var taskBar = HudManager.Instance.gameObject.GetComponentInChildren<ProgressTracker>();
 
         while (PlayerControl.LocalPlayer.Data.IsHacked())
         {
@@ -122,7 +123,6 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
             HudManager.Instance.UseButton.transform.localPosition = originalPos2;
             HudManager.Instance.ReportButton.transform.localPosition = originalPos;
         }
-        yield break;
     }
 
 
@@ -147,7 +147,7 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
 
         if (Instance.hackedPlayers.Count <= 0)
         {
-            foreach (var node in HackingManager.Instance.nodes)
+            foreach (var node in Instance.nodes)
                 RpcToggleNode(ShipStatus.Instance, node.Id, false);
         }
     }

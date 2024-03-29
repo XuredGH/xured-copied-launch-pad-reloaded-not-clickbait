@@ -1,7 +1,7 @@
-﻿using HarmonyLib;
+﻿using System.Linq;
+using HarmonyLib;
 using Il2CppSystem;
 using LaunchpadReloaded.API.GameOptions;
-using System.Linq;
 using UnityEngine;
 using Object = UnityEngine.Object;
 

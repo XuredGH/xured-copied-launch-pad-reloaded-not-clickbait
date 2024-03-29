@@ -92,10 +92,7 @@ public static class TaskAdderPatch
             if (taskAddButton.MyTask.TaskType == TaskTypes.DivertPower)
             {
                 var targetSystem = taskAddButton.MyTask.Cast<DivertPowerTask>().TargetSystem;
-                taskAddButton.Text.text = DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.DivertPowerTo, new Il2CppSystem.Object[]
-                {
-                        DestroyableSingleton<TranslationController>.Instance.GetString(targetSystem)
-                });
+                taskAddButton.Text.text = DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.DivertPowerTo, DestroyableSingleton<TranslationController>.Instance.GetString(targetSystem));
             }
             else if (taskAddButton.MyTask.TaskType == TaskTypes.FixWeatherNode)
             {

@@ -1,6 +1,6 @@
 ﻿using AmongUs.Data;
 using HarmonyLib;
-using LaunchpadReloaded.CustomSettings;
+using LaunchpadReloaded.Features;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Patches.Generic;

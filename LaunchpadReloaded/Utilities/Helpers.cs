@@ -1,11 +1,12 @@
-﻿using LaunchpadReloaded.API.Roles;
-using System;
+﻿using System;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Features.Managers;
 using TMPro;
 using UnityEngine;
+using Object = UnityEngine.Object;
 using Random = System.Random;
 
 namespace LaunchpadReloaded.Utilities;
@@ -29,7 +30,7 @@ public static class Helpers
 
     public static DeadBody GetBodyById(byte id)
     {
-        return UnityEngine.Object.FindObjectsOfType<DeadBody>().FirstOrDefault(body => body.ParentId == id);
+        return Object.FindObjectsOfType<DeadBody>().FirstOrDefault(body => body.ParentId == id);
     }
 
     public static TextMeshPro CreateTextLabel(string name, Transform parent,

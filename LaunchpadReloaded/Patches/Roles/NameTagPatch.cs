@@ -1,7 +1,6 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.Features;
-using System;
 using LaunchpadReloaded.Gamemodes;
 using UnityEngine;
 
@@ -13,7 +12,7 @@ namespace LaunchpadReloaded.Patches.Roles;
 [HarmonyPatch(typeof(PlayerNameColor))]
 public static class NameTagPatch
 {
-    [HarmonyPrefix, HarmonyPatch("Get", new Type[] { typeof(RoleBehaviour) })]
+    [HarmonyPrefix, HarmonyPatch("Get", typeof(RoleBehaviour))]
     public static bool GetPatch([HarmonyArgument(0)] RoleBehaviour otherPlayerRole, ref Color __result)
     {
         if (LaunchpadGameOptions.Instance.OnlyShowRoleColor.Value || CustomGameModeManager.ActiveMode is BattleRoyale)

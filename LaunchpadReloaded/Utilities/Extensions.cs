@@ -1,9 +1,10 @@
+using System.Linq;
+using System.Reflection;
+using Il2CppSystem.Collections.Generic;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features.Managers;
 using Reactor.Utilities.Extensions;
-using System.Linq;
-using System.Reflection;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Utilities;
@@ -95,7 +96,7 @@ public static class Extensions
 
     public static DeadBody NearestDeadBody(this PlayerControl playerControl)
     {
-        var results = new Il2CppSystem.Collections.Generic.List<Collider2D>();
+        var results = new List<Collider2D>();
         Physics2D.OverlapCircle(playerControl.GetTruePosition(), playerControl.MaxReportDistance / 4f, Filter, results);
         return results.ToArray()
             .Where(collider2D => collider2D.CompareTag("DeadBody"))

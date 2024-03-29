@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Text;
 using BepInEx;
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
@@ -10,9 +12,6 @@ using LaunchpadReloaded.Features.Colors;
 using Reactor;
 using Reactor.Networking;
 using Reactor.Networking.Attributes;
-using System.Linq;
-using System.Text;
-using LaunchpadReloaded.CustomSettings;
 using Reactor.Patches;
 using TMPro;
 
@@ -41,6 +40,9 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
         CustomGameModeManager.SetGameMode(0);
         CustomRoleManager.RegisterAllRoles();
         CustomButtonManager.RegisterAllButtons();
+
+        LaunchpadGameOptions.Initialize();
+        LaunchpadSettings.Initialize();
 
         ReactorVersionShower.TextUpdated += VersionShower;
 

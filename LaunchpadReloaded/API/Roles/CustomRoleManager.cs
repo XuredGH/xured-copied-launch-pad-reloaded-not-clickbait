@@ -1,12 +1,12 @@
-﻿using AmongUs.GameOptions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using AmongUs.GameOptions;
 using Il2CppInterop.Runtime;
 using Reactor.Localization.Utilities;
 using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using TMPro;
 using UnityEngine;
 using Object = UnityEngine.Object;

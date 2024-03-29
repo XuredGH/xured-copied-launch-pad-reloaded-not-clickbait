@@ -1,8 +1,8 @@
-﻿using AmongUs.GameOptions;
+﻿using System.Text;
+using AmongUs.GameOptions;
 using BepInEx.Configuration;
-using LaunchpadReloaded.Utilities;
-using System.Text;
 using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Utilities;
 using UnityEngine;
 
 namespace LaunchpadReloaded.API.Roles;

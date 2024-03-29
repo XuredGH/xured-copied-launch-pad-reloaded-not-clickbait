@@ -20,7 +20,7 @@ public static class ColorblindPatch
             return true;
         }
 
-        GameData.PlayerInfo plr = GameData.Instance.GetPlayerById(comp.playerId);
+        var plr = GameData.Instance.GetPlayerById(comp.playerId);
 
         if (plr.IsHacked() || (HackingManager.Instance && HackingManager.Instance.AnyActiveNodes() && plr.Role is HackerRole))
         {

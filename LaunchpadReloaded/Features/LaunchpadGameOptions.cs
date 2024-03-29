@@ -1,7 +1,6 @@
 using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
-using System;
 
 namespace LaunchpadReloaded.Features;
 
@@ -95,5 +94,10 @@ public class LaunchpadGameOptions
                 customRole.CreateOptions();
             }
         }
+    }
+
+    public static void Initialize()
+    {
+        _instance = new LaunchpadGameOptions();
     }
 }

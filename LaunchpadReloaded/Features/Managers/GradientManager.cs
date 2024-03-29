@@ -1,9 +1,9 @@
-﻿using BepInEx.Configuration;
+﻿using System.Collections;
+using BepInEx.Configuration;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Networking;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities;
-using System.Collections;
 
 namespace LaunchpadReloaded.Features.Managers;
 

@@ -1,11 +1,11 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using AmongUs.GameOptions;
 using HarmonyLib;
 using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.Utilities;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace LaunchpadReloaded.Patches.Options;
 
@@ -75,7 +75,7 @@ public static class ToHudStringPatch
             var customOptionGroups = groupsWithRoles as CustomOptionGroup[] ?? groupsWithRoles.ToArray();
             if (customOptionGroups.Any() && CustomGameModeManager.ActiveMode.CanAccessRolesTab())
             {
-                sb.AppendLine($"\n<size=160%><b>Roles</b></size>");
+                sb.AppendLine("\n<size=160%><b>Roles</b></size>");
 
                 foreach (var group in customOptionGroups)
                 {

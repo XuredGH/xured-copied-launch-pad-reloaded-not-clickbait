@@ -1,8 +1,8 @@
-﻿using HarmonyLib;
+﻿using System.Linq;
+using HarmonyLib;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
-using System.Linq;
 using LaunchpadReloaded.Utilities;
 
 namespace LaunchpadReloaded.Patches.Roles.Jester;
@@ -15,7 +15,7 @@ public static class JesterPatches
     [HarmonyPostfix, HarmonyPatch(typeof(EndGameManager), nameof(EndGameManager.SetEverythingUp))]
     public static void SetUp(EndGameManager __instance)
     {
-        var didWin = TempData.winners.ToArray().Any((h) => h.IsYou);
+        var didWin = TempData.winners.ToArray().Any(h => h.IsYou);
 
         if (TempData.EndReason != (GameOverReason)GameOverReasons.JesterWins)
         {

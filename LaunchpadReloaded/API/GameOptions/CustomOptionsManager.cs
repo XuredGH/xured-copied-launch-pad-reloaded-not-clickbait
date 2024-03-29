@@ -1,6 +1,6 @@
-﻿using Reactor.Networking.Rpc;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Reactor.Networking.Rpc;
 
 namespace LaunchpadReloaded.API.GameOptions;
 
@@ -27,17 +27,17 @@ public static class CustomOptionsManager
 
     public static void UpdateToConfig()
     {
-        foreach (CustomNumberOption numberOpt in CustomOptionsManager.CustomNumberOptions)
+        foreach (var numberOpt in CustomNumberOptions)
         {
             numberOpt.SetValue(numberOpt.Save ? numberOpt.Config.Value : numberOpt.Default);
         }
 
-        foreach (CustomToggleOption toggleOpt in CustomOptionsManager.CustomToggleOptions)
+        foreach (var toggleOpt in CustomToggleOptions)
         {
             toggleOpt.SetValue(toggleOpt.Save ? toggleOpt.Config.Value : toggleOpt.Default);
         }
 
-        foreach (CustomStringOption stringOpt in CustomOptionsManager.CustomStringOptions)
+        foreach (var stringOpt in CustomStringOptions)
         {
             stringOpt.SetValue(stringOpt.Save ? stringOpt.Config.Value : stringOpt.Default);
         }

@@ -1,8 +1,8 @@
+using System.Collections.Generic;
+using System.Linq;
 using HarmonyLib;
 using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.API.GameOptions;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using Object = UnityEngine.Object;
 

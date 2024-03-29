@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using LaunchpadReloaded.Buttons;
 using LaunchpadReloaded.Networking;
 using Reactor.Networking.Attributes;
@@ -8,7 +9,7 @@ using UnityEngine;
 namespace LaunchpadReloaded.Features.Managers;
 
 [RegisterInIl2Cpp]
-public class DragManager(System.IntPtr ptr) : MonoBehaviour(ptr)
+public class DragManager(IntPtr ptr) : MonoBehaviour(ptr)
 {
     public Dictionary<byte, byte> DraggingPlayers;
     public static DragManager Instance;

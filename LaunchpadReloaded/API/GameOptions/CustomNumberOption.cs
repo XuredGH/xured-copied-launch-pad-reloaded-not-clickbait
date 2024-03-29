@@ -1,5 +1,5 @@
-﻿using BepInEx.Configuration;
-using System;
+﻿using System;
+using BepInEx.Configuration;
 using UnityEngine;
 
 namespace LaunchpadReloaded.API.GameOptions;

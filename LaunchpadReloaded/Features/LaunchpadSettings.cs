@@ -1,6 +1,6 @@
 ﻿using LaunchpadReloaded.API.Settings;
 
-namespace LaunchpadReloaded.CustomSettings;
+namespace LaunchpadReloaded.Features;
 
 public class LaunchpadSettings
 {
@@ -16,5 +16,10 @@ public class LaunchpadSettings
     private LaunchpadSettings()
     {
         LockedCamera = new CustomSetting("Locked Camera");
+    }
+
+    public static void Initialize()
+    {
+        _instance = new LaunchpadSettings();
     }
 }

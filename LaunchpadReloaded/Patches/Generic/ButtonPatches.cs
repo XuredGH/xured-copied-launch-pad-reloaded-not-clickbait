@@ -1,8 +1,8 @@
-﻿using HarmonyLib;
-using LaunchpadReloaded.Utilities;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using HarmonyLib;
+using LaunchpadReloaded.Utilities;
 
 namespace LaunchpadReloaded.Patches.Generic;
 

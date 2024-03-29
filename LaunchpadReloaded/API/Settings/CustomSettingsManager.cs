@@ -8,15 +8,15 @@ namespace LaunchpadReloaded.API.Settings;
 
 public static class CustomSettingsManager
 {
-    public static readonly List<CustomSetting> CustomSettings = new();
+    public static readonly List<CustomSetting> CustomSettings = [];
 
     public static void CreateTab(OptionsMenuBehaviour optionsMenu) 
     {
-        // replace help tab (its unusued in game iirc)
+        // replace help tab (its unused in game iirc)
 
         var startX = HudManager.InstanceExists ? -1.65f : -2.45f;
         var yOffset = HudManager.InstanceExists ? .1f : 0;
-        for (int i = 0; i < optionsMenu.Tabs.Count; i++)
+        for (var i = 0; i < optionsMenu.Tabs.Count; i++)
         {
             var pos = optionsMenu.Tabs[i].transform.localPosition; 
             optionsMenu.Tabs[i].transform.localPosition = new Vector3(startX + i*1.65f, pos.y+yOffset, pos.z);
