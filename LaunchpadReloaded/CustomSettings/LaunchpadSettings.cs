@@ -4,14 +4,17 @@ namespace LaunchpadReloaded.CustomSettings;
 
 public class LaunchpadSettings
 {
-    public static LaunchpadSettings Instance { get; private set; }
+    private static LaunchpadSettings _instance;
+    
+    public static LaunchpadSettings Instance
+    {
+        get { return _instance ??= new LaunchpadSettings(); }
+    }
 
-    public CustomSetting LockedCamera;
+    public readonly CustomSetting LockedCamera;
 
-    public LaunchpadSettings()
+    private LaunchpadSettings()
     {
         LockedCamera = new CustomSetting("Locked Camera");
-
-        Instance = this;
     }
 }

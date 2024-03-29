@@ -7,7 +7,12 @@ namespace LaunchpadReloaded.Features;
 
 public class LaunchpadGameOptions
 {
-    public static LaunchpadGameOptions Instance { get; private set; }
+    private static LaunchpadGameOptions _instance;
+
+    public static LaunchpadGameOptions Instance
+    {
+        get { return _instance ??= new LaunchpadGameOptions(); }
+    }
 
     public readonly CustomStringOption GameModes;
 
@@ -29,15 +34,12 @@ public class LaunchpadGameOptions
     public readonly CustomToggleOption UniqueColors;
     public readonly CustomOptionGroup FunGroup;
 
-    public LaunchpadGameOptions()
+    private LaunchpadGameOptions()
     {
-        if (Instance != null)
+        GameModes = new CustomStringOption("Gamemode", 0, ["Default", "Battle Royale"])
         {
-            throw new Exception("Can't have more than one Launchpad Options");
-        }
-
-        GameModes = new CustomStringOption("Gamemode", 0, ["Default", "Battle Royale"]);
-        GameModes.ChangedEvent = i => CustomGameModeManager.RpcSetGameMode(GameData.Instance, i);
+            ChangedEvent = i => CustomGameModeManager.RpcSetGameMode(GameData.Instance, i)
+        };
 
         /*        VotingType = new CustomStringOption("Voting Type", 0, ["Classic", "Chance", "Multiple", "Combined"]);
                 VotingType.ChangedEvent = i => VotingTypesManager.RpcSetType(GameData.Instance, VotingType.IndexValue);
@@ -53,13 +55,15 @@ public class LaunchpadGameOptions
             numberOpt: []);
 
         FriendlyFire = new CustomToggleOption("Friendly Fire", false);
-        UniqueColors = new CustomToggleOption("Unique Colors", true);
-        UniqueColors.ChangedEvent = i =>
+        UniqueColors = new CustomToggleOption("Unique Colors", true)
         {
-            if (!AmongUsClient.Instance.AmHost || i == false) return;
-            foreach (var plr in PlayerControl.AllPlayerControls)
+            ChangedEvent = i =>
             {
-                plr.CmdCheckColor((byte)plr.cosmetics.ColorId);
+                if (!AmongUsClient.Instance.AmHost || i == false) return;
+                foreach (var plr in PlayerControl.AllPlayerControls)
+                {
+                    plr.CmdCheckColor((byte)plr.cosmetics.ColorId);
+                }
             }
         };
 
@@ -69,26 +73,27 @@ public class LaunchpadGameOptions
             numberOpt: []);
 
         SeekerCharacter = new CustomToggleOption("Use Seeker Character", true);
-        ShowKnife = new CustomToggleOption("Show Knife", true);
-        ShowKnife.Hidden = () => SeekerCharacter.Value == false;
+        ShowKnife = new CustomToggleOption("Show Knife", true)
+        {
+            Hidden = () => SeekerCharacter.Value == false
+        };
 
         BattleRoyaleGroup = new CustomOptionGroup("Battle Royale Options",
             toggleOpt: [SeekerCharacter, ShowKnife],
             stringOpt: [],
-            numberOpt: []);
+            numberOpt: [])
+        {
+            Hidden = () => GameModes.Value != "Battle Royale"
+        };
 
-        BattleRoyaleGroup.Hidden = () => GameModes.Value != "Battle Royale";
         GeneralGroup.Hidden = FunGroup.Hidden = () => GameModes.Value != "Default";
 
         foreach (var role in CustomRoleManager.CustomRoles)
         {
-            var customRole = role.Value as ICustomRole;
-            if (customRole != null)
+            if (role.Value is ICustomRole customRole)
             {
                 customRole.CreateOptions();
             }
         }
-
-        Instance = this;
     }
 }
