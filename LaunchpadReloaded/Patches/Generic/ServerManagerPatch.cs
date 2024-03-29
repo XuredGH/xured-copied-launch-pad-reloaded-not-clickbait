@@ -1,6 +1,4 @@
-﻿using HarmonyLib;
-
-namespace LaunchpadReloaded.Patches.Generic;
+﻿namespace LaunchpadReloaded.Patches.Generic;
 
 /// <summary>
 /// Add Launchpad Server
