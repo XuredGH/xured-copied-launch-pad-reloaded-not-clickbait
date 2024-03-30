@@ -37,7 +37,7 @@ public class ShootButton : CustomActionButton
                 CurrentTarget.cosmetics.currentBodySprite.BodySprite.material.SetColor(ShaderID.OutlineColor, LaunchpadPalette.SheriffColor);
             }
         }
-        else if (UsesLeft <= 0 && CurrentTarget is not null)
+        else if (UsesLeft <= 0 && CurrentTarget)
         {
             CurrentTarget.cosmetics.currentBodySprite.BodySprite.material.SetColor(ShaderID.OutlineColor, Color.clear);
             CurrentTarget.cosmetics.currentBodySprite.BodySprite.material.SetFloat(ShaderID.Outline, 0);

@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using InnerNet;
 using LaunchpadReloaded.API.GameOptions;
+using LaunchpadReloaded.API.Roles;
 
 namespace LaunchpadReloaded.Patches.Options;
 [HarmonyPatch(typeof(AmongUsClient))]
@@ -14,6 +15,7 @@ public static class AmongUsClientPatch
     {
         if (!AmongUsClient.Instance.AmHost) return;
         CustomOptionsManager.SyncOptions();
+        CustomRoleManager.SyncRoleSettings();
     }
 
     /// <summary>

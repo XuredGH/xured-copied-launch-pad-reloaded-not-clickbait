@@ -15,7 +15,11 @@ public static class ScrollingColorsPatch
     [HarmonyPostfix, HarmonyPatch("OnEnable")]
     public static void AddScrollingToColorsTabPatch(PlayerTab __instance)
     {
-        if (PlayerCustomizationMenu.Instance is null) return;
+        if (!PlayerCustomizationMenu.Instance)
+        {
+            return;
+        }
+        
         var tab = PlayerCustomizationMenu.Instance.Tabs[1].Tab;
 
         if (__instance.scroller == null)

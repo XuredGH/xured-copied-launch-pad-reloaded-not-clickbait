@@ -28,7 +28,7 @@ public class DragButton : CustomActionButton
 
     public override bool CanUse()
     {
-        return DeadBodyTarget is not null && DragManager.Instance && PlayerControl.LocalPlayer.CanMove && !PlayerControl.LocalPlayer.inVent;
+        return DeadBodyTarget && DragManager.Instance && PlayerControl.LocalPlayer.CanMove && !PlayerControl.LocalPlayer.inVent;
     }
 
     protected override void FixedUpdate(PlayerControl playerControl)

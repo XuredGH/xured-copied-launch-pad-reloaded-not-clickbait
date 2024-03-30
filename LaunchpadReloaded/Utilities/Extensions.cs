@@ -84,7 +84,7 @@ public static class Extensions
         }
 
         target = playerControl.NearestDeadBody();
-        if (target is not null)
+        if (target)
         {
             foreach (var renderer in target.bodyRenderers)
             {

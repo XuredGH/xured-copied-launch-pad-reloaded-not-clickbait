@@ -38,6 +38,7 @@ public static class CustomGameModeManager
     /// <summary>
     /// Sync gamemodes via RPC
     /// </summary>
+    /// <param name="lobby">game data</param>
     /// <param name="id">Gamemode ID</param>
     [MethodRpc((uint)LaunchpadRPC.SetGameMode)]
     public static void RpcSetGameMode(GameData lobby, int id)

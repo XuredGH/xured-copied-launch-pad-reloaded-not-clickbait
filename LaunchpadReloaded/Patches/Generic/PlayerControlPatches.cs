@@ -73,7 +73,7 @@ public static class PlayerControlPatches
         if (__instance.Data.Role is ICustomRole customRole) customRole.PlayerControlFixedUpdate(__instance);
 
         var knife = __instance.gameObject.transform.FindChild("BodyForms/Seeker/KnifeHand");
-        if (knife is null)
+        if (!knife)
         {
             return;
         }
