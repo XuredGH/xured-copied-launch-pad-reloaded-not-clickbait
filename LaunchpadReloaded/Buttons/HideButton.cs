@@ -19,7 +19,7 @@ public class HideButton : CustomActionButton
 
     public override bool CanUse()
     {
-        return DeadBodyTarget is not null &&
+        return DeadBodyTarget &&
                DragManager.Instance.IsDragging(PlayerControl.LocalPlayer.PlayerId) &&
                VentTarget && !VentTarget.gameObject.GetComponent<VentBodyComponent>();
     }

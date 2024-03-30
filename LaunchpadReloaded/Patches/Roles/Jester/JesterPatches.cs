@@ -33,9 +33,12 @@ public static class JesterPatches
     [HarmonyPostfix, HarmonyPatch(typeof(ExileController), nameof(ExileController.Begin))]
     public static void Begin(ExileController __instance)
     {
-        if (__instance.exiled is not null && __instance.exiled.Role is not null && __instance.exiled.Role is ICustomRole role)
+        if (__instance.exiled?.Role != null && __instance.exiled.Role is ICustomRole role)
         {
-            if (role.GetCustomEjectionMessage(__instance.exiled) == null) return;
+            if (role.GetCustomEjectionMessage(__instance.exiled) == null)
+            {
+                return;
+            }
             __instance.completeString = role.GetCustomEjectionMessage(__instance.exiled);
         }
     }

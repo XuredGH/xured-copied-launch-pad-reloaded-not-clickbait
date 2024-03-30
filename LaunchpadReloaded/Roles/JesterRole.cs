@@ -19,7 +19,7 @@ public class JesterRole(IntPtr ptr) : RoleBehaviour(ptr), ICustomRole
     public RoleTeamTypes Team => RoleTeamTypes.Crewmate;
     public bool IsOutcast => true;
     public bool TasksCount => false;
-    public bool CanUseVent => CanUseVents is not null ? CanUseVents.Value : true;
+    public bool CanUseVent => CanUseVents?.Value ?? true;
     public override bool IsDead => false;
     public LoadableAsset<Sprite> Icon => LaunchpadAssets.JesterIcon;
 

@@ -18,7 +18,7 @@ public static class ChatPatches
             return;
         }
 
-        if (__instance.freeChatField is null)
+        if (!__instance.freeChatField)
         {
             return;
         }

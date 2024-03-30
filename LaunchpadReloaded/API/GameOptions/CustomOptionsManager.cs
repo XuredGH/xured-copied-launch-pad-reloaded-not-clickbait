@@ -63,7 +63,7 @@ public static class CustomOptionsManager
 
         foreach (var option in CustomOptions)
         {
-            if (option.OptionBehaviour is null)
+            if (!option.OptionBehaviour)
             {
                 continue;
             }
