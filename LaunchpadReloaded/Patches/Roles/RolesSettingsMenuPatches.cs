@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using AmongUs.GameOptions;
 using HarmonyLib;
+using Il2CppInterop.Runtime;
 using Il2CppSystem;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
@@ -124,8 +125,9 @@ public static class RolesSettingsMenuPatches
     [HarmonyPrefix, HarmonyPatch("ValueChanged")]
     public static bool ValueChangedPrefix(RolesSettingsMenu __instance, [HarmonyArgument(0)] OptionBehaviour obj)
     {
-        if (obj is RoleOptionSetting roleSetting)
+        if (obj.GetIl2CppType()==Il2CppType.Of<RoleOptionSetting>())
         {
+            var roleSetting = obj.Cast<RoleOptionSetting>();
             if (roleSetting.Role is ICustomRole role)
             {
                 LaunchpadReloadedPlugin.Instance.Config.TryGetEntry<int>(role.NumConfigDefinition, out var numEntry);
@@ -136,6 +138,7 @@ public static class RolesSettingsMenuPatches
 
                 roleSetting.UpdateValuesAndText(GameOptionsManager.Instance.CurrentGameOptions.RoleOptions);
 
+                CustomRoleManager.SyncRoleSettings();
                 GameOptionsManager.Instance.GameHostOptions = GameOptionsManager.Instance.CurrentGameOptions;
                 return false;
             }

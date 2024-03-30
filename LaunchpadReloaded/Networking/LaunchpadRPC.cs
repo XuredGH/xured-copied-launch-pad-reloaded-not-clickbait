@@ -17,4 +17,5 @@ public enum LaunchpadRPC : uint
     SyncGradient = 14,
     SyncGameOptions = 15,
     SetGradientEnabled = 16,
+    SyncRoleOption = 17
 }

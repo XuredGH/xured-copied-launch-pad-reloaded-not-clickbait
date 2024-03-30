@@ -1,4 +1,5 @@
-﻿using Hazel;
+﻿using System.Collections.Generic;
+using Hazel;
 using LaunchpadReloaded.Networking;
 using Reactor.Networking.Attributes;
 using Reactor.Networking.Rpc;
@@ -18,7 +19,6 @@ public class SyncOptionsRpc : PlayerCustomRpc<LaunchpadReloadedPlugin, SyncOptio
     public readonly struct Data
     {
         public readonly bool[] Toggles;
-
         public readonly float[] Numbers;
         public readonly int[] StringIDs;
 
