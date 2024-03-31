@@ -30,6 +30,46 @@ public static class PlayerControlPatches
         }
     }
 
+    [HarmonyPrefix, HarmonyPatch(nameof(PlayerControl.CheckMurder))]
+    public static bool CheckMurderPrefix(PlayerControl __instance, [HarmonyArgument(0)] PlayerControl target)
+    {
+        __instance.logger.Debug(
+            $"Checking if {__instance.PlayerId} murdered {(target == null ? "null player" : target.PlayerId.ToString())}");
+        __instance.isKilling = false;
+        if (AmongUsClient.Instance.IsGameOver || !AmongUsClient.Instance.AmHost)
+        {
+            return false;
+        }
+
+        CustomRoleManager.GetCustomRoleBehaviour(__instance.Data.RoleType, out var customRole);
+        
+        if (!target || __instance.Data.IsDead || !__instance.Data.Role.IsImpostor || __instance.Data.Disconnected || !customRole.CanUseKill)
+        {
+            var num = target ? target.PlayerId : -1;
+            __instance.logger.Warning($"Bad kill from {__instance.PlayerId} to {num}");
+            __instance.RpcMurderPlayer(target, false);
+            return false;
+        }
+        var data = target.Data;
+        if (data == null || data.IsDead || target.inVent || target.MyPhysics.Animations.IsPlayingEnterVentAnimation() || target.MyPhysics.Animations.IsPlayingAnyLadderAnimation() || target.inMovingPlat)
+        {
+            __instance.logger.Warning("Invalid target data for kill");
+            __instance.RpcMurderPlayer(target, false);
+            return false;
+        }
+        if (MeetingHud.Instance)
+        {
+            __instance.logger.Warning("Tried to kill while a meeting was starting");
+            __instance.RpcMurderPlayer(target, false);
+            return false;
+        }
+        __instance.isKilling = true;
+        __instance.RpcMurderPlayer(target, true);
+
+        return false;
+    }
+    
+    
     /// <summary>
     /// Unhack when players die, and trigger custom gamemode
     /// </summary>
