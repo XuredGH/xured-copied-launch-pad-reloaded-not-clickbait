@@ -16,6 +16,5 @@ public enum LaunchpadRPC : uint
     Revive = 13,
     SyncGradient = 14,
     SyncGameOptions = 15,
-    SetGradientEnabled = 16,
-    SyncRoleOption = 17
+    SyncRoleOption = 16
 }
