@@ -9,7 +9,7 @@ public static class GenericRPC
     [MethodRpc((uint)LaunchpadRPC.SetBodyType)]
     public static void RpcSetBodyType(this PlayerControl player, int bodyType)
     {
-        if (!AmongUsClient.Instance.AmHost)
+        if (player.NetId!=AmongUsClient.Instance.HostId)
         {
             return;
         }
