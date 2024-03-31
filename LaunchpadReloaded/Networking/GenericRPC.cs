@@ -9,6 +9,11 @@ public static class GenericRPC
     [MethodRpc((uint)LaunchpadRPC.SetBodyType)]
     public static void RpcSetBodyType(PlayerControl player, int bodyType)
     {
+        if (!AmongUsClient.Instance.AmHost)
+        {
+            return;
+        }
+        
         if (bodyType == 6)
         {
             player.MyPhysics.SetBodyType(PlayerBodyTypes.Seeker);
