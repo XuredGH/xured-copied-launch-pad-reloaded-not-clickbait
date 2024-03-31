@@ -31,6 +31,7 @@ public class LaunchpadGameOptions
     // Fun Options
     public readonly CustomToggleOption FriendlyFire;
     public readonly CustomToggleOption UniqueColors;
+    public readonly CustomStringOption Character;
     public readonly CustomOptionGroup FunGroup;
 
     private LaunchpadGameOptions()
@@ -66,9 +67,34 @@ public class LaunchpadGameOptions
             }
         };
 
+        Character = new CustomStringOption("Character", 0, ["Default", "Horse", "Long"]);
+        Character.ChangedEvent = i =>
+        {
+            PlayerBodyTypes bodyType;
+            switch (Character.Value)
+            {
+                default:
+                case "Default":
+                    bodyType = PlayerBodyTypes.Normal;
+                    break;
+                case "Horse":
+                    bodyType = PlayerBodyTypes.Horse;
+                    break;
+                case "Long":
+                    bodyType = PlayerBodyTypes.Long;
+                    break;
+            }
+
+            foreach (PlayerControl plr in PlayerControl.AllPlayerControls)
+            {
+                plr.MyPhysics.SetBodyType(bodyType);
+                if (bodyType == PlayerBodyTypes.Normal) plr.cosmetics.currentBodySprite.BodySprite.transform.localScale = new(0.5f, 0.5f, 1f);
+            }
+        };
+
         FunGroup = new CustomOptionGroup("Fun Options",
             toggleOpt: [FriendlyFire, UniqueColors],
-            stringOpt: [],
+            stringOpt: [Character],
             numberOpt: []);
 
         SeekerCharacter = new CustomToggleOption("Use Seeker Character", true);
