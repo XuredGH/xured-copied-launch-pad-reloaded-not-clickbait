@@ -50,7 +50,7 @@ public class RevivalManager(IntPtr ptr) : MonoBehaviour(ptr)
     public static void Revive(DeadBody body)
     {
         var player = PlayerControl.AllPlayerControls.ToArray().ToList().Find(player => player.PlayerId == body.ParentId);
-        player.transform.position = body.transform.position;
+        player.NetTransform.SnapTo(body.transform.position);
         player.Revive();
 
         player.RemainingEmergencies = GameManager.Instance.LogicOptions.GetNumEmergencyMeetings();
