@@ -24,7 +24,7 @@ public class HackButton : CustomActionButton
                 continue;
             }
 
-            HackingManager.RpcHackPlayer(player);
+            HackingManager.RpcHackPlayer(PlayerControl.LocalPlayer, player);
         }
 
         PlayerControl.LocalPlayer.RawSetColor(15);

@@ -127,18 +127,18 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
 
 
     [MethodRpc((uint)LaunchpadRPC.HackPlayer)]
-    public static void RpcHackPlayer(PlayerControl player)
+    public static void RpcHackPlayer(PlayerControl source, PlayerControl target)
     {
-        if (player.Data.Role is not HackerRole)
+        if (source.Data.Role is not HackerRole)
         {
             return;
         }
         
-        Instance.hackedPlayers.Add(player.PlayerId);
-        GradientManager.SetGradientEnabled(player, false);
-        player.RawSetColor(15);
+        Instance.hackedPlayers.Add(target.PlayerId);
+        GradientManager.SetGradientEnabled(target, false);
+        target.RawSetColor(15);
 
-        if (player.AmOwner) Coroutines.Start(HackEffect());
+        if (target.AmOwner) Coroutines.Start(HackEffect());
     }
 
     [MethodRpc((uint)LaunchpadRPC.UnHackPlayer)]
