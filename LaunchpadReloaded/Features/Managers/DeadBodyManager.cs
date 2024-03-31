@@ -1,6 +1,8 @@
 ﻿using System.Linq;
+using AmongUs.GameOptions;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Networking;
+using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using Reactor.Networking.Attributes;
 using UnityEngine;
@@ -15,10 +17,15 @@ public static class DeadBodyManager
     }
 
     [MethodRpc((uint)LaunchpadRPC.HideBodyInVent)]
-    public static void RpcHideBodyInVent(ShipStatus shipStatus, byte bodyId, int ventId)
+    public static void RpcHideBodyInVent(PlayerControl pc, byte bodyId, int ventId)
     {
+        if (pc.Data.RoleType != (RoleTypes)LaunchpadRoles.Janitor)
+        {
+            return;
+        }
+        
         var body = GetBodyById(bodyId);
-        var vent = shipStatus.AllVents.First(v => v.Id == ventId);
+        var vent = ShipStatus.Instance.AllVents.First(v => v.Id == ventId);
 
         if (!body || !vent)
         {
