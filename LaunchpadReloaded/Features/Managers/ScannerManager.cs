@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Networking;
+using LaunchpadReloaded.Roles;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities.Attributes;
 using UnityEngine;
@@ -22,6 +23,11 @@ public class ScannerManager(IntPtr ptr) : MonoBehaviour(ptr)
     [MethodRpc((uint)LaunchpadRPC.CreateScanner)]
     public static void RpcCreateScanner(PlayerControl playerControl, float x, float y)
     {
+        if (playerControl.Data.Role is not TrackerRole)
+        {
+            return;
+        }
+        
         var newScanner = Instance.CreateScanner(playerControl, new Vector3(x, y, 0.0057f));
         Instance.Scanners.Add(newScanner);
     }

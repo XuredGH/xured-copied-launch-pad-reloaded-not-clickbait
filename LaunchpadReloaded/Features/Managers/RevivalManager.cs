@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AmongUs.GameOptions;
 using LaunchpadReloaded.Networking;
+using LaunchpadReloaded.Roles;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities.Attributes;
 using Reactor.Utilities.Extensions;
@@ -28,8 +29,13 @@ public class RevivalManager(IntPtr ptr) : MonoBehaviour(ptr)
     }
 
     [MethodRpc((uint)LaunchpadRPC.Revive)]
-    public static void RpcRevive(ShipStatus shipStatus, byte bodyId)
+    public static void RpcRevive(PlayerControl playerControl, byte bodyId)
     {
+        if (playerControl.Data.Role is not MedicRole)
+        {
+            return;
+        }
+        
         var body = DeadBodyManager.GetBodyById(bodyId);
         if (body)
         {

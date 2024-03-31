@@ -129,6 +129,11 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
     [MethodRpc((uint)LaunchpadRPC.HackPlayer)]
     public static void RpcHackPlayer(PlayerControl player)
     {
+        if (player.Data.Role is not HackerRole)
+        {
+            return;
+        }
+        
         Instance.hackedPlayers.Add(player.PlayerId);
         GradientManager.SetGradientEnabled(player, false);
         player.RawSetColor(15);
@@ -152,7 +157,7 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
         
         foreach (var node in Instance.nodes)
         {
-            RpcToggleNode(ShipStatus.Instance, node.Id, false);
+            RpcToggleNode(PlayerControl.LocalPlayer, node.Id, false);
         }
     }
 
@@ -176,8 +181,13 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
     }
 
     [MethodRpc((uint)LaunchpadRPC.ToggleNode)]
-    public static void RpcToggleNode(ShipStatus shipStatus, int nodeId, bool value)
+    public static void RpcToggleNode(PlayerControl playerControl, int nodeId, bool value)
     {
+        if (playerControl.Data.Role is not HackerRole || !AmongUsClient.Instance.AmHost)
+        {
+            return;
+        }
+        
         var node = Instance.nodes.Find(node => node.Id == nodeId);
         Debug.Log(node.gameObject.transform.position.ToString());
         node.IsActive = value;

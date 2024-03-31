@@ -31,7 +31,7 @@ public class HackButton : CustomActionButton
 
         foreach (var node in HackingManager.Instance.nodes)
         {
-            HackingManager.RpcToggleNode(ShipStatus.Instance, node.Id, true);
+            HackingManager.RpcToggleNode(PlayerControl.LocalPlayer, node.Id, true);
         }
     }
 }

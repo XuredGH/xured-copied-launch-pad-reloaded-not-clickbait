@@ -77,6 +77,11 @@ public class SyncOptionsRpc : PlayerCustomRpc<LaunchpadReloadedPlugin, SyncOptio
 
     public override void Handle(PlayerControl player, Data data)
     {
+        if (player.NetId != AmongUsClient.Instance.HostId)
+        {
+            return;
+        }
+        
         CustomOptionsManager.HandleOptionsSync(data.Toggles, data.Numbers, data.StringIDs);
     }
 }

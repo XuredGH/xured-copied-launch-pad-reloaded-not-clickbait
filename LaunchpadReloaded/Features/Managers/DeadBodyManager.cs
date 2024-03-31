@@ -19,7 +19,7 @@ public static class DeadBodyManager
     [MethodRpc((uint)LaunchpadRPC.HideBodyInVent)]
     public static void RpcHideBodyInVent(PlayerControl pc, byte bodyId, int ventId)
     {
-        if (pc.Data.RoleType != (RoleTypes)LaunchpadRoles.Janitor)
+        if (pc.Data.Role is not JanitorRole)
         {
             return;
         }
@@ -59,9 +59,9 @@ public static class DeadBodyManager
     }
 
     [MethodRpc((uint)LaunchpadRPC.ExposeBody)]
-    public static void RpcExposeBody(ShipStatus shipStatus, int ventId)
+    public static void RpcExposeBody(PlayerControl playerControl, int ventId)
     {
-        var vent = shipStatus.AllVents.First(v => v.Id == ventId);
+        var vent = ShipStatus.Instance.AllVents.First(v => v.Id == ventId);
 
         if (!vent)
         {
