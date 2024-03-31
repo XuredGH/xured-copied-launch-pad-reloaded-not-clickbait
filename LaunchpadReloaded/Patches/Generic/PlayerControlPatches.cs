@@ -89,7 +89,7 @@ public static class PlayerControlPatches
     [HarmonyPostfix, HarmonyPatch(nameof(PlayerControl.FixedUpdate))]
     public static void UpdatePatch(PlayerControl __instance)
     {
-        if (MeetingHud.Instance) return;
+        if (MeetingHud.Instance || __instance.Data is null) return;
 
         if (__instance.IsRevived()) __instance.cosmetics.SetOutline(true, new Nullable<Color>(LaunchpadPalette.MedicColor));
 
