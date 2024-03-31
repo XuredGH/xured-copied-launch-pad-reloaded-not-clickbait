@@ -145,10 +145,14 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
         player.SetColor((byte)player.Data.DefaultOutfit.ColorId);
         player.cosmetics.gameObject.SetActive(true);
 
-        if (Instance.hackedPlayers.Count <= 0)
+        if (!AmongUsClient.Instance.AmHost || Instance.hackedPlayers.Count > 0)
         {
-            foreach (var node in Instance.nodes)
-                RpcToggleNode(ShipStatus.Instance, node.Id, false);
+            return;
+        }
+        
+        foreach (var node in Instance.nodes)
+        {
+            RpcToggleNode(ShipStatus.Instance, node.Id, false);
         }
     }
 
