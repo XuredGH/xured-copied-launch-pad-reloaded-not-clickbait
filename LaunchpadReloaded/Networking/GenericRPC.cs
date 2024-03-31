@@ -7,7 +7,7 @@ namespace LaunchpadReloaded.Networking;
 public static class GenericRPC
 {
     [MethodRpc((uint)LaunchpadRPC.SetBodyType)]
-    public static void RpcSetBodyType(PlayerControl player, int bodyType)
+    public static void RpcSetBodyType(this PlayerControl player, int bodyType)
     {
         if (!AmongUsClient.Instance.AmHost)
         {
