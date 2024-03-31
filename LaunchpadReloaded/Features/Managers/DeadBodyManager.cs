@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using AmongUs.GameOptions;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Roles;

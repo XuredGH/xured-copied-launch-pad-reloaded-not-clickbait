@@ -73,9 +73,9 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
         hackedPlayers.Clear();
     }
 
-    public bool AnyActiveNodes()
+    public bool AnyPlayerHacked()
     {
-        return nodes.Any(node => node.IsActive);
+        return hackedPlayers.Count > 0;
     }
 
     public static IEnumerator HackEffect()
@@ -135,31 +135,78 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
         }
         
         Instance.hackedPlayers.Add(target.PlayerId);
-        GradientManager.SetGradientEnabled(target, false);
-        target.RawSetColor(15);
-
-        if (target.AmOwner) Coroutines.Start(HackEffect());
-    }
-
-    [MethodRpc((uint)LaunchpadRPC.UnHackPlayer)]
-    public static void RpcUnHackPlayer(PlayerControl player)
-    {
-        Instance.hackedPlayers.Remove(player.PlayerId);
-        player.SetName(player.Data.PlayerName);
-        GradientManager.SetGradientEnabled(player, true);
-        player.SetColor((byte)player.Data.DefaultOutfit.ColorId);
-        player.cosmetics.gameObject.SetActive(true);
-
-        if (!AmongUsClient.Instance.AmHost || Instance.hackedPlayers.Count > 0)
+        HackPlayer(target);
+        
+        foreach (var data in GameData.Instance.AllPlayers.ToArray().Where(x => x.Role is HackerRole))
+        {
+            HackPlayer(data.Object);
+        }
+        
+        if (!target.AmOwner)
         {
             return;
         }
         
+        Coroutines.Start(HackEffect());   
         foreach (var node in Instance.nodes)
         {
-            RpcToggleNode(PlayerControl.LocalPlayer, node.Id, false);
+            ToggleNode(node.Id, true);
         }
     }
+
+    [MethodRpc((uint)LaunchpadRPC.UnHackPlayer)]
+    public static void RpcUnHackPlayer(PlayerControl player)
+    { 
+        Instance.hackedPlayers.Remove(player.PlayerId);
+        UnHackPlayer(player);
+
+        if (!Instance.AnyPlayerHacked())
+        {
+            foreach (var data in GameData.Instance.AllPlayers.ToArray().Where(x => x.Role is HackerRole))
+            {
+                UnHackPlayer(data.Object);
+            }
+        }
+        
+        if (!player.AmOwner)
+        {
+            return;
+        }
+        
+        Coroutines.Stop(HackEffect());
+        foreach (var node in Instance.nodes)
+        {
+            ToggleNode(node.Id, false);
+        }
+    }
+
+    private static void HackPlayer(PlayerControl player)
+    {
+        GradientManager.SetGradientEnabled(player, false);
+        player.cosmetics.SetColor(15);
+        player.cosmetics.gameObject.SetActive(false);
+        Coroutines.Start(HackNameCoroutine(player));
+    }
+    
+    private static void UnHackPlayer(PlayerControl player)
+    {
+        GradientManager.SetGradientEnabled(player, true);
+        player.cosmetics.SetColor((byte)player.Data.DefaultOutfit.ColorId);
+        player.cosmetics.gameObject.SetActive(true);
+        Coroutines.Stop(HackNameCoroutine(player));
+        player.SetName(player.Data.PlayerName);
+    }
+
+    private static IEnumerator HackNameCoroutine(PlayerControl playerControl)
+    {
+        while (playerControl.Data.IsHacked())
+        { 
+            var randomString = Helpers.RandomString(Helpers.Random.Next(4, 8), "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#!?$^$#&@*<>?,.(???#@)[]{}\\|$@@@@0000");
+            playerControl.RawSetName(randomString);
+            yield return null;
+        }
+    }
+    
 
     [MethodRpc((uint)LaunchpadRPC.CreateNodes)]
     public static void RpcCreateNodes(ShipStatus shipStatus)
@@ -180,35 +227,11 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
         }
     }
 
-    [MethodRpc((uint)LaunchpadRPC.ToggleNode)]
-    public static void RpcToggleNode(PlayerControl playerControl, int nodeId, bool value)
+    public static void ToggleNode(int nodeId, bool value)
     {
-        if (playerControl.Data.Role is not HackerRole || !AmongUsClient.Instance.AmHost)
-        {
-            return;
-        }
-        
         var node = Instance.nodes.Find(node => node.Id == nodeId);
         Debug.Log(node.gameObject.transform.position.ToString());
         node.IsActive = value;
-        var hacker = GameData.Instance.AllPlayers.ToArray().Where(player => player.Role is HackerRole);
-        foreach (var player in hacker)
-        {
-            player.Object.SetName(player.PlayerName);
-
-            if (!value)
-            {
-                GradientManager.SetGradientEnabled(player.Object, true);
-                player.Object.SetColor((byte)player.DefaultOutfit.ColorId);
-            }
-            else
-            {
-                GradientManager.SetGradientEnabled(player.Object, false);
-                player.Object.RawSetColor(15);
-            }
-
-            player.Object.cosmetics.gameObject.SetActive(!value);
-        }
     }
 
     public HackNodeComponent CreateNode(ShipStatus shipStatus, int id, Transform parent, Vector3 position)

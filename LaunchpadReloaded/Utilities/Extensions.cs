@@ -4,6 +4,7 @@ using Il2CppSystem.Collections.Generic;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features.Managers;
+using LaunchpadReloaded.Roles;
 using Reactor.Utilities.Extensions;
 using UnityEngine;
 
@@ -30,9 +31,12 @@ public static class Extensions
 
     public static bool IsHacked(this GameData.PlayerInfo playerInfo)
     {
-        if (!HackingManager.Instance) return false;
+        if (!HackingManager.Instance)
+        {
+            return false;
+        }
 
-        return HackingManager.Instance.hackedPlayers.Contains(playerInfo.PlayerId);
+        return HackingManager.Instance.hackedPlayers.Contains(playerInfo.PlayerId) || (playerInfo.Role is HackerRole && HackingManager.Instance.AnyPlayerHacked());
     }
 
     public static bool IsRevived(this PlayerControl player)

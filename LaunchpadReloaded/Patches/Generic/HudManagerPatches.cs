@@ -90,8 +90,8 @@ public static class HudManagerPatches
 
         CustomGameModeManager.ActiveMode.HudUpdate(__instance);
 
-        if (local.Data.IsHacked()) AddHackedTaskString(__instance);
-        else if (HackingManager.Instance && HackingManager.Instance.AnyActiveNodes())
+        if (local.Data.IsHacked() && local.Data.Role is not HackerRole) AddHackedTaskString(__instance);
+        else if (HackingManager.Instance && HackingManager.Instance.AnyPlayerHacked())
         {
             var newB = new StringBuilder();
             newB.Append(Color.green.ToTextColor());
@@ -123,7 +123,7 @@ public static class HudManagerPatches
         else if (_roleTab != null) _roleTab.gameObject.Destroy();
 
         if (DragManager.Instance is null || HackingManager.Instance is null) return;
-        if (HackingManager.Instance.AnyActiveNodes()) __instance.ReportButton.SetDisabled();
+        if (HackingManager.Instance.AnyPlayerHacked()) __instance.ReportButton.SetDisabled();
 
         foreach (var (player, bodyId) in DragManager.Instance.DraggingPlayers)
         {

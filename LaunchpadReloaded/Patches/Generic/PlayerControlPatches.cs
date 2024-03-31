@@ -93,14 +93,6 @@ public static class PlayerControlPatches
 
         if (__instance.IsRevived()) __instance.cosmetics.SetOutline(true, new Nullable<Color>(LaunchpadPalette.MedicColor));
 
-        if (__instance.Data.IsHacked() || (HackingManager.Instance && HackingManager.Instance.AnyActiveNodes() && __instance.Data.Role is HackerRole))
-        {
-            var randomString = Helpers.RandomString(Helpers.Random.Next(4, 6), "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#!?$(???#@)$@@@@0000");
-            __instance.cosmetics.SetName(randomString);
-            __instance.cosmetics.SetNameMask(true);
-            __instance.cosmetics.gameObject.SetActive(false);
-        }
-
         if (__instance.AmOwner)
         {
             foreach (var button in CustomButtonManager.CustomButtons)

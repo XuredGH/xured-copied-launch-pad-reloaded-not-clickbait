@@ -18,7 +18,7 @@ public class ScannerButton : CustomActionButton
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.ScannerButton;
 
     public override bool Enabled(RoleBehaviour role) => role is TrackerRole;
-    public override bool CanUse() => !HackingManager.Instance.AnyActiveNodes();
+    public override bool CanUse() => !HackingManager.Instance.AnyPlayerHacked();
 
     protected override void OnClick()
     {

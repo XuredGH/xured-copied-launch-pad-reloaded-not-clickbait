@@ -21,7 +21,7 @@ public class ZoomButton : CustomActionButton
         return role is CaptainRole;
     }
 
-    public override bool CanUse() => !HackingManager.Instance.AnyActiveNodes();
+    public override bool CanUse() => !HackingManager.Instance.AnyPlayerHacked();
 
     protected override void OnClick()
     {

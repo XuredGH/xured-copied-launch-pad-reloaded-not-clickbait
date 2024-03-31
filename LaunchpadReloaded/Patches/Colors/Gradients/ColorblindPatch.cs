@@ -1,7 +1,5 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.Components;
-using LaunchpadReloaded.Features.Managers;
-using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities;
 
@@ -22,7 +20,7 @@ public static class ColorblindPatch
 
         var plr = GameData.Instance.GetPlayerById(comp.playerId);
 
-        if (plr.IsHacked() || (HackingManager.Instance && HackingManager.Instance.AnyActiveNodes() && plr.Role is HackerRole))
+        if (plr.IsHacked())
         {
             __result = "???";
             return false;
