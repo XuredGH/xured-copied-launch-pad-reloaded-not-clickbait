@@ -1,6 +1,7 @@
 ﻿using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
+using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Roles;
 using UnityEngine;
 
@@ -24,7 +25,7 @@ public class HackButton : CustomActionButton
                 continue;
             }
 
-            HackingManager.RpcHackPlayer(PlayerControl.LocalPlayer, player);
+            PlayerControl.LocalPlayer.RpcHackPlayer(player);
         }
 
         PlayerControl.LocalPlayer.RawSetColor(15);

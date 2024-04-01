@@ -7,6 +7,7 @@ using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
+using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using UnityEngine;
@@ -79,7 +80,7 @@ public static class PlayerControlPatches
         CustomGameModeManager.ActiveMode.OnDeath(__instance);
         if (__instance.Data.IsHacked())
         {
-            HackingManager.RpcUnHackPlayer(__instance);
+            __instance.RpcUnHackPlayer();
         }
     }
 

@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
+using LaunchpadReloaded.Networking;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Patches.Generic;
@@ -22,7 +23,7 @@ public static class ShipStatusPatch
         managers.AddComponent<RevivalManager>();
         managers.AddComponent<DragManager>();
 
-        HackingManager.RpcCreateNodes(__instance);
+        __instance.RpcCreateNodes();
     }
 
     /// <summary>

@@ -22,7 +22,7 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
     public List<byte> hackedPlayers;
     public List<HackNodeComponent> nodes;
 
-    private readonly Dictionary<ShipStatus.MapType, Vector3[]> _mapNodePositions = new()
+    public readonly Dictionary<ShipStatus.MapType, Vector3[]> MapNodePositions = new()
     {
         [ShipStatus.MapType.Ship] = [
             new Vector3(-3.9285f, 5.6983f, 0.0057f),
@@ -50,7 +50,7 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
         [(ShipStatus.MapType)6] = []
     };
 
-    private readonly Vector3[] _airshipPositions = [
+    public readonly Vector3[] AirshipPositions = [
         new Vector3(-5.0792f, 10.9539f, 0.011f),
         new Vector3(16.856f, 14.7769f, 0.0148f),
         new Vector3(37.3283f, -3.7612f, -0.0038f),
@@ -125,62 +125,7 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
         }
     }
 
-
-    [MethodRpc((uint)LaunchpadRpc.HackPlayer)]
-    public static void RpcHackPlayer(PlayerControl source, PlayerControl target)
-    {
-        if (source.Data.Role is not HackerRole)
-        {
-            return;
-        }
-        
-        Instance.hackedPlayers.Add(target.PlayerId);
-        HackPlayer(target);
-        
-        foreach (var data in GameData.Instance.AllPlayers.ToArray().Where(x => x.Role is HackerRole))
-        {
-            HackPlayer(data.Object);
-        }
-        
-        if (!target.AmOwner)
-        {
-            return;
-        }
-        
-        Coroutines.Start(HackEffect());   
-        foreach (var node in Instance.nodes)
-        {
-            ToggleNode(node.Id, true);
-        }
-    }
-
-    [MethodRpc((uint)LaunchpadRpc.UnHackPlayer)]
-    public static void RpcUnHackPlayer(PlayerControl player)
-    { 
-        Instance.hackedPlayers.Remove(player.PlayerId);
-        UnHackPlayer(player);
-
-        if (!Instance.AnyPlayerHacked())
-        {
-            foreach (var data in GameData.Instance.AllPlayers.ToArray().Where(x => x.Role is HackerRole))
-            {
-                UnHackPlayer(data.Object);
-            }
-        }
-        
-        if (!player.AmOwner)
-        {
-            return;
-        }
-        
-        Coroutines.Stop(HackEffect());
-        foreach (var node in Instance.nodes)
-        {
-            ToggleNode(node.Id, false);
-        }
-    }
-
-    private static void HackPlayer(PlayerControl player)
+    public static void HackPlayer(PlayerControl player)
     {
         GradientManager.SetGradientEnabled(player, false);
         player.cosmetics.SetColor(15);
@@ -188,7 +133,7 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
         Coroutines.Start(HackNameCoroutine(player));
     }
     
-    private static void UnHackPlayer(PlayerControl player)
+    public static void UnHackPlayer(PlayerControl player)
     {
         GradientManager.SetGradientEnabled(player, true);
         player.cosmetics.SetColor((byte)player.Data.DefaultOutfit.ColorId);
@@ -204,26 +149,6 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
             var randomString = Helpers.RandomString(Helpers.Random.Next(4, 8), "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#!?$^$#&@*<>?,.(???#@)[]{}\\|$@@@@0000");
             playerControl.RawSetName(randomString);
             yield return null;
-        }
-    }
-    
-
-    [MethodRpc((uint)LaunchpadRpc.CreateNodes)]
-    public static void RpcCreateNodes(ShipStatus shipStatus)
-    {
-        var nodesParent = new GameObject("Nodes");
-        nodesParent.transform.SetParent(shipStatus.transform);
-
-        var nodePositions = Instance._mapNodePositions[shipStatus.Type];
-        if (shipStatus.TryCast<AirshipStatus>())
-        {
-            nodePositions = Instance._airshipPositions;
-        }
-
-        for (var i = 0; i < nodePositions.Length; i++)
-        {
-            var nodePos = nodePositions[i];
-            Instance.CreateNode(shipStatus, i, nodesParent.transform, nodePos);
         }
     }
 

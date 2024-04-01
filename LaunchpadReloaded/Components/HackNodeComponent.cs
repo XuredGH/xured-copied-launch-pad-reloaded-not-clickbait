@@ -1,6 +1,6 @@
 ﻿using System;
 using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Features.Managers;
+using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Attributes;
 using UnityEngine;
@@ -27,7 +27,7 @@ public class HackNodeComponent(IntPtr ptr) : MonoBehaviour(ptr)
     public void Use()
     {
         SoundManager.Instance.PlaySound(LaunchpadAssets.BeepSound.LoadAsset(), false, 0.5f);
-        HackingManager.RpcUnHackPlayer(PlayerControl.LocalPlayer);
+        PlayerControl.LocalPlayer.RpcUnHackPlayer();
     }
 
     public float CanUse(GameData.PlayerInfo pc, out bool canUse, out bool couldUse)
