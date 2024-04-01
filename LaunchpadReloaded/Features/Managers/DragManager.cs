@@ -31,7 +31,7 @@ public class DragManager(IntPtr ptr) : MonoBehaviour(ptr)
         return DraggingPlayers.ContainsKey(playerId);
     }
 
-    [MethodRpc((uint)LaunchpadRPC.StartDrag)]
+    [MethodRpc((uint)LaunchpadRpc.StartDrag)]
     public static void RpcStartDragging(PlayerControl playerControl, byte bodyId)
     {
         if (playerControl.Data.Role is not JanitorRole)
@@ -47,7 +47,7 @@ public class DragManager(IntPtr ptr) : MonoBehaviour(ptr)
         }
     }
 
-    [MethodRpc((uint)LaunchpadRPC.StopDrag)]
+    [MethodRpc((uint)LaunchpadRpc.StopDrag)]
     public static void RpcStopDragging(PlayerControl playerControl)
     {
         Instance.DraggingPlayers.Remove(playerControl.PlayerId);

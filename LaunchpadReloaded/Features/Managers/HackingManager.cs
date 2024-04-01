@@ -126,7 +126,7 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
     }
 
 
-    [MethodRpc((uint)LaunchpadRPC.HackPlayer)]
+    [MethodRpc((uint)LaunchpadRpc.HackPlayer)]
     public static void RpcHackPlayer(PlayerControl source, PlayerControl target)
     {
         if (source.Data.Role is not HackerRole)
@@ -154,7 +154,7 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
         }
     }
 
-    [MethodRpc((uint)LaunchpadRPC.UnHackPlayer)]
+    [MethodRpc((uint)LaunchpadRpc.UnHackPlayer)]
     public static void RpcUnHackPlayer(PlayerControl player)
     { 
         Instance.hackedPlayers.Remove(player.PlayerId);
@@ -208,7 +208,7 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
     }
     
 
-    [MethodRpc((uint)LaunchpadRPC.CreateNodes)]
+    [MethodRpc((uint)LaunchpadRpc.CreateNodes)]
     public static void RpcCreateNodes(ShipStatus shipStatus)
     {
         var nodesParent = new GameObject("Nodes");

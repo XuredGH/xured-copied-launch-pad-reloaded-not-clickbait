@@ -133,7 +133,7 @@ public static class CustomRoleManager
         }
     }
     
-    [MethodRpc((uint)LaunchpadRPC.SyncRoleOption)]
+    [MethodRpc((uint)LaunchpadRpc.SyncRoleOption)]
     private static void RpcSyncRoleOption(GameData _, ushort roleId, int number, int chance)
     {
         GetCustomRoleBehaviour((RoleTypes)roleId, out var role);

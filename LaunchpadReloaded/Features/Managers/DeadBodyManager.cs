@@ -15,7 +15,7 @@ public static class DeadBodyManager
         return Object.FindObjectsOfType<DeadBody>().FirstOrDefault(body => body.ParentId == id);
     }
 
-    [MethodRpc((uint)LaunchpadRPC.HideBodyInVent)]
+    [MethodRpc((uint)LaunchpadRpc.HideBodyInVent)]
     public static void RpcHideBodyInVent(PlayerControl pc, byte bodyId, int ventId)
     {
         if (pc.Data.Role is not JanitorRole)
@@ -44,7 +44,7 @@ public static class DeadBodyManager
         ventBody.deadBody = body;
     }
 
-    [MethodRpc((uint)LaunchpadRPC.RemoveBody)]
+    [MethodRpc((uint)LaunchpadRpc.RemoveBody)]
     public static void RpcRemoveBody(ShipStatus shipStatus, byte bodyId)
     {
         var body = GetBodyById(bodyId);
@@ -57,7 +57,7 @@ public static class DeadBodyManager
         body.HideBody();
     }
 
-    [MethodRpc((uint)LaunchpadRPC.ExposeBody)]
+    [MethodRpc((uint)LaunchpadRpc.ExposeBody)]
     public static void RpcExposeBody(PlayerControl playerControl, int ventId)
     {
         var vent = ShipStatus.Instance.AllVents.First(v => v.Id == ventId);

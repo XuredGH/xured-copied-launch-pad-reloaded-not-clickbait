@@ -40,7 +40,7 @@ public static class CustomGameModeManager
     /// </summary>
     /// <param name="lobby">game data</param>
     /// <param name="id">Gamemode ID</param>
-    [MethodRpc((uint)LaunchpadRPC.SetGameMode)]
+    [MethodRpc((uint)LaunchpadRpc.SetGameMode)]
     public static void RpcSetGameMode(GameData lobby, int id)
     {
         if (!AmongUsClient.Instance.AmHost)

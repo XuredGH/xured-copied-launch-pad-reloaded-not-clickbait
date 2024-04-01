@@ -20,7 +20,7 @@ public class ScannerManager(IntPtr ptr) : MonoBehaviour(ptr)
         Scanners = new List<ScannerComponent>();
     }
 
-    [MethodRpc((uint)LaunchpadRPC.CreateScanner)]
+    [MethodRpc((uint)LaunchpadRpc.CreateScanner)]
     public static void RpcCreateScanner(PlayerControl playerControl, float x, float y)
     {
         if (playerControl.Data.Role is not TrackerRole)

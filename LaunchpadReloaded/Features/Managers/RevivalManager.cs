@@ -28,7 +28,7 @@ public class RevivalManager(IntPtr ptr) : MonoBehaviour(ptr)
         RevivedPlayers.Clear();
     }
 
-    [MethodRpc((uint)LaunchpadRPC.Revive)]
+    [MethodRpc((uint)LaunchpadRpc.Revive)]
     public static void RpcRevive(PlayerControl playerControl, byte bodyId)
     {
         if (playerControl.Data.Role is not MedicRole)

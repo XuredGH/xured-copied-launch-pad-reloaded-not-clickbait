@@ -20,7 +20,7 @@ public static class GradientManager
     }
 
 
-    [MethodRpc((uint)LaunchpadRPC.SyncGradient)]
+    [MethodRpc((uint)LaunchpadRpc.SyncGradient)]
     public static void RpcSetGradient(PlayerControl pc, int colorId)
     {
         pc.GetComponent<PlayerGradientData>().GradientColor = colorId;

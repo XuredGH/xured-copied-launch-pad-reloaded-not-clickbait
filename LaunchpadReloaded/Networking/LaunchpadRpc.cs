@@ -1,5 +1,5 @@
 namespace LaunchpadReloaded.Networking;
-public enum LaunchpadRPC : uint
+public enum LaunchpadRpc : uint
 {
     HackPlayer,
     UnHackPlayer,

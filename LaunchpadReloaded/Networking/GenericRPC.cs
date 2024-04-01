@@ -6,7 +6,7 @@ using UnityEngine;
 namespace LaunchpadReloaded.Networking;
 public static class GenericRPC
 {
-    [MethodRpc((uint)LaunchpadRPC.SetBodyType)]
+    [MethodRpc((uint)LaunchpadRpc.SetBodyType)]
     public static void RpcSetBodyType(this GameData gameData, PlayerControl player, int bodyType)
     {
         if (bodyType == 6)
