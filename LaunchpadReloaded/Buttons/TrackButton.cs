@@ -45,7 +45,7 @@ public class TrackButton : CustomActionButton
         }
     }
 
-    public override bool CanUse() => CurrentTarget != null && !HackingManager.Instance.AnyActiveNodes();
+    public override bool CanUse() => CurrentTarget != null && !HackingManager.Instance.AnyPlayerHacked();
 
     protected override void OnClick()
     {

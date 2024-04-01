@@ -32,10 +32,7 @@ public static class GradientManager
         pc.GetComponent<PlayerGradientData>().GradientEnabled = enabled;
         Coroutines.Start(WaitForDataCoroutine(pc));
     }
-
-    [MethodRpc((uint)LaunchpadRPC.SetGradientEnabled)]
-    public static void RpcSetGradientEnabled(PlayerControl pc, bool enabled) => SetGradientEnabled(pc, enabled);
-
+    
     private static IEnumerator WaitForDataCoroutine(PlayerControl pc)
     {
         while (pc.Data is null)

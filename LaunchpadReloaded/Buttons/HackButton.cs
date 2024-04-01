@@ -13,7 +13,7 @@ public class HackButton : CustomActionButton
     public override int MaxUses => (int)HackerRole.HackUses.Value;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.HackButton;
     public override bool Enabled(RoleBehaviour role) => role is HackerRole;
-    public override bool CanUse() => !HackingManager.Instance.AnyActiveNodes();
+    public override bool CanUse() => !HackingManager.Instance.AnyPlayerHacked();
 
     protected override void OnClick()
     {
@@ -24,14 +24,9 @@ public class HackButton : CustomActionButton
                 continue;
             }
 
-            HackingManager.RpcHackPlayer(player);
+            HackingManager.RpcHackPlayer(PlayerControl.LocalPlayer, player);
         }
 
         PlayerControl.LocalPlayer.RawSetColor(15);
-
-        foreach (var node in HackingManager.Instance.nodes)
-        {
-            HackingManager.RpcToggleNode(ShipStatus.Instance, node.Id, true);
-        }
     }
 }

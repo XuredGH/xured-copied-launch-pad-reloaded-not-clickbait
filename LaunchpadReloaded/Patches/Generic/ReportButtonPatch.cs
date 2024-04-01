@@ -11,6 +11,6 @@ public static class ReportButtonPatch
     {
         if (HackingManager.Instance is null) return true;
 
-        return !HackingManager.Instance.AnyActiveNodes();
+        return !HackingManager.Instance.AnyPlayerHacked();
     }
 }

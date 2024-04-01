@@ -34,7 +34,7 @@ public class HackNodeComponent(IntPtr ptr) : MonoBehaviour(ptr)
     {
         var num = float.MaxValue;
         var @object = pc.Object;
-        couldUse = (!pc.IsDead && @object.CanMove && IsActive && pc.IsHacked());
+        couldUse = !pc.IsDead && @object.CanMove && IsActive && pc.IsHacked();
         canUse = couldUse;
         if (canUse)
         {

@@ -17,7 +17,7 @@ using TMPro;
 
 namespace LaunchpadReloaded;
 
-[BepInAutoPlugin]
+[BepInAutoPlugin("dev.xtracube.launchpad","LaunchpadReloaded")]
 [BepInProcess("Among Us.exe")]
 [BepInDependency(ReactorPlugin.Id)]
 [ReactorModFlags(ModFlags.RequireOnAllClients)]
@@ -25,9 +25,6 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
 {
     public Harmony Harmony { get; } = new(Id);
     public static LaunchpadReloadedPlugin Instance { get; private set; }
-
-    public const string LaunchpadServerAddress = "brand-lauderdale.gl.at.ply.gg";
-    public const ushort LaunchpadServerPort = 7764;
 
     public override void Load()
     {

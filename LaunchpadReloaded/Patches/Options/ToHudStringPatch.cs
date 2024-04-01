@@ -1,11 +1,12 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using AmongUs.GameOptions;
 using HarmonyLib;
 using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.API.GameOptions;
+using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Utilities;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace LaunchpadReloaded.Patches.Options;
 
@@ -39,6 +40,20 @@ public static class ToHudStringPatch
         }
     }
 
+    public static void Prefix()
+    {
+        if (GameManager.Instance is null || GameManager.Instance.IsHideAndSeek())
+        {
+            return;
+        }
+
+        foreach (RoleBehaviour role in CustomRoleManager.CustomRoles.Values)
+        {
+            ICustomRole customRole = role as ICustomRole;
+            if (customRole.IsGhostRole) role.Role = RoleTypes.CrewmateGhost;
+        }
+    }
+
     /// <summary>
     /// Update the HudOptions on the left of the screen if player is using Launchpad options
     /// </summary>
@@ -48,6 +63,12 @@ public static class ToHudStringPatch
         if (GameManager.Instance is null || GameManager.Instance.IsHideAndSeek())
         {
             return;
+        }
+
+        foreach (RoleBehaviour role in CustomRoleManager.CustomRoles.Values)
+        {
+            ICustomRole customRole = role as ICustomRole;
+            if (customRole.IsGhostRole) role.Role = (RoleTypes)customRole.RoleId;
         }
 
         if (ShowCustom || !CustomGameModeManager.ActiveMode.CanAccessSettingsTab())

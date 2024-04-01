@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Hazel;
+﻿using Hazel;
 using LaunchpadReloaded.Networking;
 using Reactor.Networking.Attributes;
 using Reactor.Networking.Rpc;
@@ -8,7 +7,7 @@ namespace LaunchpadReloaded.API.GameOptions;
 
 // METHOD RPC DOESNT WORK WITH THE ARRAYS AND STUFF SO THIS IS HOW WE WILL DO IT FOR NOW
 [RegisterCustomRpc((uint)LaunchpadRPC.SyncGameOptions)]
-public class SyncOptionsRpc : PlayerCustomRpc<LaunchpadReloadedPlugin, SyncOptionsRpc.Data>
+public class SyncOptionsRpc : CustomRpc<LaunchpadReloadedPlugin, GameData, SyncOptionsRpc.Data>
 {
     public SyncOptionsRpc(LaunchpadReloadedPlugin plugin, uint id) : base(plugin, id)
     {
@@ -75,7 +74,7 @@ public class SyncOptionsRpc : PlayerCustomRpc<LaunchpadReloadedPlugin, SyncOptio
         return new Data(toggles, numbers, strings);
     }
 
-    public override void Handle(PlayerControl player, Data data)
+    public override void Handle(GameData gameData, Data data)
     {
         CustomOptionsManager.HandleOptionsSync(data.Toggles, data.Numbers, data.StringIDs);
     }

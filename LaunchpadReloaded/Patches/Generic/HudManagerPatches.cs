@@ -1,14 +1,13 @@
-﻿using System.Text;
-using HarmonyLib;
+﻿using HarmonyLib;
 using InnerNet;
 using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Patches.Options;
-using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Extensions;
+using System.Text;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Patches.Generic;
@@ -90,18 +89,20 @@ public static class HudManagerPatches
 
         CustomGameModeManager.ActiveMode.HudUpdate(__instance);
 
-        if (local.Data.IsHacked()) AddHackedTaskString(__instance);
-        else if (HackingManager.Instance && HackingManager.Instance.AnyActiveNodes())
+        if (local.Data.IsHacked() && !local.Data.Role.IsImpostor) AddHackedTaskString(__instance);
+        else if (HackingManager.Instance && HackingManager.Instance.AnyPlayerHacked())
         {
             var newB = new StringBuilder();
             newB.Append(Color.green.ToTextColor());
-            newB.Append(local.Data.Role is HackerRole ?
-                "\n\nYou have hacked the crewmates! They will not be able to\ncomplete tasks or call meetings until they reverse the hack."
+            newB.Append(local.Data.Role.IsImpostor ?
+                "\n\n The crewmates are hacked! They will not be able to\ncomplete tasks or call meetings until they reverse the hack."
                 : "\n\nYou will still not be able to report bodies or \ncall meetings until all crewmates reverse the hack.");
             newB.Append($"\n{HackingManager.Instance.hackedPlayers.Count} players are still hacked.");
             newB.Append("</color>");
             __instance.TaskPanel.SetTaskText(__instance.tasksString.ToString() + newB);
         }
+
+        if (HackingManager.Instance.AnyPlayerHacked()) __instance.ReportButton.SetActive(false);
 
         if (local.Data.Role is ICustomRole customRole)
         {
@@ -119,11 +120,12 @@ public static class HudManagerPatches
                 if (_roleTab == null) _roleTab = CustomRoleManager.CreateRoleTab(customRole);
                 else CustomRoleManager.UpdateRoleTab(_roleTab, customRole);
             }
+            else if (customRole.SetTabText() == null && _roleTab) _roleTab.gameObject.Destroy();
         }
-        else if (_roleTab != null) _roleTab.gameObject.Destroy();
+        else if (_roleTab) _roleTab.gameObject.Destroy();
 
         if (DragManager.Instance is null || HackingManager.Instance is null) return;
-        if (HackingManager.Instance.AnyActiveNodes()) __instance.ReportButton.SetDisabled();
+        if (HackingManager.Instance.AnyPlayerHacked()) __instance.ReportButton.SetDisabled();
 
         foreach (var (player, bodyId) in DragManager.Instance.DraggingPlayers)
         {

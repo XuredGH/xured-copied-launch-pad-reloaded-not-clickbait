@@ -19,7 +19,7 @@ public class CallButton : CustomActionButton
         return role is CaptainRole;
     }
 
-    public override bool CanUse() => !ZoomButton.IsZoom && !HackingManager.Instance.AnyActiveNodes();
+    public override bool CanUse() => !ZoomButton.IsZoom && !HackingManager.Instance.AnyPlayerHacked();
 
     protected override void OnClick()
     {

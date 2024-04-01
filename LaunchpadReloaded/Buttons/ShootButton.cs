@@ -49,9 +49,9 @@ public class ShootButton : CustomActionButton
 
     protected override void OnClick()
     {
-        PlayerControl.LocalPlayer.RpcMurderPlayer(CurrentTarget, true);
+        PlayerControl.LocalPlayer.CmdCheckMurder(CurrentTarget);
         if (CurrentTarget.Data.Role.TeamType == RoleTeamTypes.Crewmate && !TutorialManager.InstanceExists
-            ) PlayerControl.LocalPlayer.RpcMurderPlayer(PlayerControl.LocalPlayer, true);
+            ) PlayerControl.LocalPlayer.CmdCheckMurder(PlayerControl.LocalPlayer);
 
         CurrentTarget = null;
     }

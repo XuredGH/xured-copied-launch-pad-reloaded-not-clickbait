@@ -41,7 +41,14 @@ public class LaunchpadGameOptions
     {
         GameModes = new CustomStringOption("Gamemode", 0, ["Default", "Battle Royale"])
         {
-            ChangedEvent = i => CustomGameModeManager.RpcSetGameMode(GameData.Instance, i)
+            ChangedEvent = i =>
+            {
+                if (!AmongUsClient.Instance.AmHost)
+                {
+                    return;
+                }
+                CustomGameModeManager.RpcSetGameMode(GameData.Instance, i);
+            }
         };
 
         VotingType = new CustomStringOption("Voting Type", 0, ["Classic", "Chance", "Multiple", "Combined"]);
@@ -49,7 +56,6 @@ public class LaunchpadGameOptions
         MaxVotes = new CustomNumberOption("Max Votes", 3, 2, 10, 1, NumberSuffixes.None);
         MaxVotes.Hidden = () => !VotingTypesManager.CanVoteMultiple();
 
-        LiveUpdating = new CustomToggleOption("Live Voting Update", true);
         AllowVotingForSamePerson = new CustomToggleOption("Allow Voting Same Person Again", true);
         AllowVotingForSamePerson.Hidden = () => !VotingTypesManager.CanVoteMultiple();
 

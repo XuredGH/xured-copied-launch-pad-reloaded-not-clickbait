@@ -22,7 +22,7 @@ public static class CustomOptionsManager
         var numbers = CustomNumberOptions.Select(x => x.Value).ToArray();
         var strings = CustomStringOptions.Select(x => x.IndexValue).ToArray();
 
-        Rpc<SyncOptionsRpc>.Instance.Send(new SyncOptionsRpc.Data(toggles, numbers, strings));
+        Rpc<SyncOptionsRpc>.Instance.Send(GameData.Instance, new SyncOptionsRpc.Data(toggles, numbers, strings));
     }
 
     public static void UpdateToConfig()

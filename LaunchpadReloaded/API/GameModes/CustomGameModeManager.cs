@@ -43,6 +43,11 @@ public static class CustomGameModeManager
     [MethodRpc((uint)LaunchpadRPC.SetGameMode)]
     public static void RpcSetGameMode(GameData lobby, int id)
     {
+        if (!AmongUsClient.Instance.AmHost)
+        {
+            return;
+        }
+        
         SetGameMode(id);
     }
 
