@@ -17,7 +17,7 @@ using TMPro;
 
 namespace LaunchpadReloaded;
 
-[BepInAutoPlugin]
+[BepInAutoPlugin("dev.xtracube.launchpad","LaunchpadReloaded")]
 [BepInProcess("Among Us.exe")]
 [BepInDependency(ReactorPlugin.Id)]
 [ReactorModFlags(ModFlags.RequireOnAllClients)]
