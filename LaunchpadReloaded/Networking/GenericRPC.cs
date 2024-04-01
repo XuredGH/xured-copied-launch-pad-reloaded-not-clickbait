@@ -7,13 +7,8 @@ namespace LaunchpadReloaded.Networking;
 public static class GenericRPC
 {
     [MethodRpc((uint)LaunchpadRPC.SetBodyType)]
-    public static void RpcSetBodyType(this PlayerControl player, int bodyType)
+    public static void RpcSetBodyType(this GameData gameData, PlayerControl player, int bodyType)
     {
-        if (player.NetId!=AmongUsClient.Instance.HostId)
-        {
-            return;
-        }
-        
         if (bodyType == 6)
         {
             player.MyPhysics.SetBodyType(PlayerBodyTypes.Seeker);

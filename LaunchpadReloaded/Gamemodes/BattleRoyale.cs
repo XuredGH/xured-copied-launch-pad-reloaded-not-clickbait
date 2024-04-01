@@ -30,9 +30,12 @@ public class BattleRoyale : CustomGameMode
             player.Object.cosmetics.TogglePet(false);
 
         PlayerControl.LocalPlayer.NetTransform.RpcSnapTo(random.position);
-        if (LaunchpadGameOptions.Instance.SeekerCharacter.Value)
+        if (LaunchpadGameOptions.Instance.SeekerCharacter.Value && AmongUsClient.Instance.AmHost)
         {
-            GenericRPC.RpcSetBodyType(PlayerControl.LocalPlayer, 6);
+            foreach (var player in PlayerControl.AllPlayerControls)
+            {
+                GameData.Instance.RpcSetBodyType(player, 6);
+            }
         }
     }
 
