@@ -1,8 +1,8 @@
-﻿using System.Text;
-using AmongUs.GameOptions;
+﻿using AmongUs.GameOptions;
 using BepInEx.Configuration;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Utilities;
+using System.Text;
 using UnityEngine;
 
 namespace LaunchpadReloaded.API.Roles;
@@ -34,10 +34,10 @@ public interface ICustomRole
     bool CanUseKill => Team == RoleTeamTypes.Impostor;
     bool CanUseVent => Team == RoleTeamTypes.Impostor;
     bool TasksCount => Team == RoleTeamTypes.Crewmate;
-
+    bool IsGhostRole => false;
     bool TargetsBodies => false;
     bool CreateCustomTab => true;
-
+    bool HideSettings => IsGhostRole;
     RoleTypes GhostRole => Team == RoleTeamTypes.Crewmate ? RoleTypes.CrewmateGhost : RoleTypes.ImpostorGhost;
 
     void CreateOptions() { }

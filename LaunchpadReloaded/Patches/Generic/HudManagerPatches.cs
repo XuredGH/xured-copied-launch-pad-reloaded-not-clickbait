@@ -1,5 +1,4 @@
-﻿using System.Text;
-using HarmonyLib;
+﻿using HarmonyLib;
 using InnerNet;
 using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.API.Hud;
@@ -9,6 +8,7 @@ using LaunchpadReloaded.Patches.Options;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Extensions;
+using System.Text;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Patches.Generic;
@@ -119,8 +119,9 @@ public static class HudManagerPatches
                 if (_roleTab == null) _roleTab = CustomRoleManager.CreateRoleTab(customRole);
                 else CustomRoleManager.UpdateRoleTab(_roleTab, customRole);
             }
+            else if (customRole.SetTabText() == null && _roleTab) _roleTab.gameObject.Destroy();
         }
-        else if (_roleTab != null) _roleTab.gameObject.Destroy();
+        else if (_roleTab) _roleTab.gameObject.Destroy();
 
         if (DragManager.Instance is null || HackingManager.Instance is null) return;
         if (HackingManager.Instance.AnyActiveNodes()) __instance.ReportButton.SetDisabled();
