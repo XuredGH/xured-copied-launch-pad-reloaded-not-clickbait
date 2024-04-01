@@ -5,7 +5,7 @@ namespace LaunchpadReloaded.Features;
 public class LaunchpadSettings
 {
     private static LaunchpadSettings _instance;
-    
+
     public static LaunchpadSettings Instance
     {
         get { return _instance ??= new LaunchpadSettings(); }

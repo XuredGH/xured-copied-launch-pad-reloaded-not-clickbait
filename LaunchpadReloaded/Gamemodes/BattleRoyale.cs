@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Linq;
 using AmongUs.GameOptions;
 using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.Features;
@@ -7,6 +5,8 @@ using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
+using System.Collections;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -112,6 +112,12 @@ public class BattleRoyale : CustomGameMode
         var alivePlayers = GameData.Instance.AllPlayers.ToArray().Where(player => !player.Disconnected && !player.IsDead);
         if (alivePlayers.Count() == 1)
         {
+            foreach (GameData.PlayerInfo plr in GameData.Instance.AllPlayers.ToArray().Where((info) => info.Disconnected))
+            {
+                plr.Object.roleAssigned = false;
+                plr.Object.RpcSetRole(RoleTypes.CrewmateGhost);
+            }
+
             instance.Manager.RpcEndGame(GameOverReason.ImpostorByKill, false);
         }
     }

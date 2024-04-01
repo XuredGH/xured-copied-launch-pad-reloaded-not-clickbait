@@ -5,7 +5,6 @@ using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Patches.Options;
-using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Extensions;
 using System.Text;
@@ -90,18 +89,20 @@ public static class HudManagerPatches
 
         CustomGameModeManager.ActiveMode.HudUpdate(__instance);
 
-        if (local.Data.IsHacked() && local.Data.Role is not HackerRole) AddHackedTaskString(__instance);
+        if (local.Data.IsHacked() && !local.Data.Role.IsImpostor) AddHackedTaskString(__instance);
         else if (HackingManager.Instance && HackingManager.Instance.AnyPlayerHacked())
         {
             var newB = new StringBuilder();
             newB.Append(Color.green.ToTextColor());
-            newB.Append(local.Data.Role is HackerRole ?
-                "\n\nYou have hacked the crewmates! They will not be able to\ncomplete tasks or call meetings until they reverse the hack."
+            newB.Append(local.Data.Role.IsImpostor ?
+                "\n\n The crewmates are hacked! They will not be able to\ncomplete tasks or call meetings until they reverse the hack."
                 : "\n\nYou will still not be able to report bodies or \ncall meetings until all crewmates reverse the hack.");
             newB.Append($"\n{HackingManager.Instance.hackedPlayers.Count} players are still hacked.");
             newB.Append("</color>");
             __instance.TaskPanel.SetTaskText(__instance.tasksString.ToString() + newB);
         }
+
+        if (HackingManager.Instance.AnyPlayerHacked()) __instance.ReportButton.SetActive(false);
 
         if (local.Data.Role is ICustomRole customRole)
         {

@@ -1,9 +1,9 @@
-﻿using System.Collections;
-using LaunchpadReloaded.API.Hud;
+﻿using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Roles;
+using LaunchpadReloaded.Utilities;
 using Reactor.Utilities;
+using System.Collections;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
@@ -21,7 +21,7 @@ public class ZoomButton : CustomActionButton
         return role is CaptainRole;
     }
 
-    public override bool CanUse() => !HackingManager.Instance.AnyPlayerHacked();
+    public override bool CanUse() => !PlayerControl.LocalPlayer.Data.IsHacked();
 
     protected override void OnClick()
     {

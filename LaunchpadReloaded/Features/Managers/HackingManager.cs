@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Roles;
@@ -9,6 +5,10 @@ using LaunchpadReloaded.Utilities;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities;
 using Reactor.Utilities.Attributes;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Random = System.Random;
 
@@ -133,21 +133,21 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
         {
             return;
         }
-        
+
         Instance.hackedPlayers.Add(target.PlayerId);
         HackPlayer(target);
-        
-        foreach (var data in GameData.Instance.AllPlayers.ToArray().Where(x => x.Role is HackerRole))
+
+        foreach (var data in GameData.Instance.AllPlayers.ToArray().Where(x => x.Role.IsImpostor))
         {
             HackPlayer(data.Object);
         }
-        
+
         if (!target.AmOwner)
         {
             return;
         }
-        
-        Coroutines.Start(HackEffect());   
+
+        Coroutines.Start(HackEffect());
         foreach (var node in Instance.nodes)
         {
             ToggleNode(node.Id, true);
@@ -156,23 +156,23 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
 
     [MethodRpc((uint)LaunchpadRPC.UnHackPlayer)]
     public static void RpcUnHackPlayer(PlayerControl player)
-    { 
+    {
         Instance.hackedPlayers.Remove(player.PlayerId);
         UnHackPlayer(player);
 
         if (!Instance.AnyPlayerHacked())
         {
-            foreach (var data in GameData.Instance.AllPlayers.ToArray().Where(x => x.Role is HackerRole))
+            foreach (var data in GameData.Instance.AllPlayers.ToArray().Where(x => x.Role.IsImpostor))
             {
                 UnHackPlayer(data.Object);
             }
         }
-        
+
         if (!player.AmOwner)
         {
             return;
         }
-        
+
         Coroutines.Stop(HackEffect());
         foreach (var node in Instance.nodes)
         {
@@ -187,7 +187,7 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
         player.cosmetics.gameObject.SetActive(false);
         Coroutines.Start(HackNameCoroutine(player));
     }
-    
+
     private static void UnHackPlayer(PlayerControl player)
     {
         GradientManager.SetGradientEnabled(player, true);
@@ -200,13 +200,13 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
     private static IEnumerator HackNameCoroutine(PlayerControl playerControl)
     {
         while (playerControl.Data.IsHacked())
-        { 
+        {
             var randomString = Helpers.RandomString(Helpers.Random.Next(4, 8), "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#!?$^$#&@*<>?,.(???#@)[]{}\\|$@@@@0000");
             playerControl.RawSetName(randomString);
             yield return null;
         }
     }
-    
+
 
     [MethodRpc((uint)LaunchpadRPC.CreateNodes)]
     public static void RpcCreateNodes(ShipStatus shipStatus)
