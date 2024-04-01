@@ -4,6 +4,7 @@ using Il2CppSystem;
 using Il2CppSystem.Collections.Generic;
 using Il2CppSystem.Text;
 using LaunchpadReloaded.API.Roles;
+using LaunchpadReloaded.Features;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -126,7 +127,7 @@ public static class TaskAdderPatch
             for (var m = 0; m < DestroyableSingleton<RoleManager>.Instance.AllRoles.Length; m++)
             {
                 var roleBehaviour = DestroyableSingleton<RoleManager>.Instance.AllRoles[m];
-                if (roleBehaviour.Role != RoleTypes.ImpostorGhost && roleBehaviour.Role != RoleTypes.CrewmateGhost)
+                if (roleBehaviour.Role != RoleTypes.ImpostorGhost && roleBehaviour.Role != RoleTypes.CrewmateGhost && roleBehaviour.Role != (RoleTypes)LaunchpadRoles.OutcastGhost)
                 {
                     var taskAddButton2 = Object.Instantiate(__instance.RoleButton);
                     taskAddButton2.SafePositionWorld = __instance.SafePositionWorld;
