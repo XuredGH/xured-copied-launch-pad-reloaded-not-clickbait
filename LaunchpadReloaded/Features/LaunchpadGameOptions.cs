@@ -38,7 +38,14 @@ public class LaunchpadGameOptions
     {
         GameModes = new CustomStringOption("Gamemode", 0, ["Default", "Battle Royale"])
         {
-            ChangedEvent = i => CustomGameModeManager.RpcSetGameMode(GameData.Instance, i)
+            ChangedEvent = i =>
+            {
+                if (!AmongUsClient.Instance.AmHost)
+                {
+                    return;
+                }
+                CustomGameModeManager.RpcSetGameMode(GameData.Instance, i);
+            }
         };
 
         /*        VotingType = new CustomStringOption("Voting Type", 0, ["Classic", "Chance", "Multiple", "Combined"]);

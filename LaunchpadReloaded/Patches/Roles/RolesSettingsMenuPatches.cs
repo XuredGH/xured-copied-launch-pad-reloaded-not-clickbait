@@ -145,7 +145,10 @@ public static class RolesSettingsMenuPatches
 
         roleSetting.UpdateValuesAndText(GameOptionsManager.Instance.CurrentGameOptions.RoleOptions);
 
-        CustomRoleManager.SyncRoleSettings();
+        if (AmongUsClient.Instance.AmHost)
+        {
+            CustomRoleManager.SyncRoleSettings();
+        }
         GameOptionsManager.Instance.GameHostOptions = GameOptionsManager.Instance.CurrentGameOptions;
         return false;
 
