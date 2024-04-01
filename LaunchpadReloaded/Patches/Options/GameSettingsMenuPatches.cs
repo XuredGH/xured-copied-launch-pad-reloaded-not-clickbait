@@ -3,6 +3,7 @@ using System.Linq;
 using HarmonyLib;
 using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.API.GameOptions;
+using Reactor.Utilities;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -45,7 +46,7 @@ public static class GameSettingsMenuPatches
 
         if (!numberOpt || !toggleOpt || !stringOpt)
         {
-            Debug.LogError("OPTION PREFABS MISSING");
+            Logger<LaunchpadReloadedPlugin>.Error("OPTION PREFABS MISSING");
         }
     }
 

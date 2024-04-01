@@ -19,21 +19,13 @@ public static class GradientManager
         set => GradientConfig.Value = value;
     }
 
-
-    [MethodRpc((uint)LaunchpadRpc.SyncGradient)]
-    public static void RpcSetGradient(PlayerControl pc, int colorId)
-    {
-        pc.GetComponent<PlayerGradientData>().GradientColor = colorId;
-        Coroutines.Start(WaitForDataCoroutine(pc));
-    }
-
     public static void SetGradientEnabled(PlayerControl pc, bool enabled)
     {
         pc.GetComponent<PlayerGradientData>().GradientEnabled = enabled;
         Coroutines.Start(WaitForDataCoroutine(pc));
     }
     
-    private static IEnumerator WaitForDataCoroutine(PlayerControl pc)
+    public static IEnumerator WaitForDataCoroutine(PlayerControl pc)
     {
         while (pc.Data is null)
         {

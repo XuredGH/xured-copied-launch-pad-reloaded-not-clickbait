@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using LaunchpadReloaded.Components;
-using LaunchpadReloaded.Networking;
-using LaunchpadReloaded.Roles;
-using Reactor.Networking.Attributes;
+using Reactor.Utilities;
 using Reactor.Utilities.Attributes;
 using UnityEngine;
 
@@ -12,25 +10,14 @@ namespace LaunchpadReloaded.Features.Managers;
 public class ScannerManager(IntPtr ptr) : MonoBehaviour(ptr)
 {
     public static ScannerManager Instance;
-    public List<ScannerComponent> Scanners;
+    public List<ScannerComponent> scanners;
 
     private void Awake()
     {
         Instance = this;
-        Scanners = new List<ScannerComponent>();
+        scanners = new List<ScannerComponent>();
     }
-
-    [MethodRpc((uint)LaunchpadRpc.CreateScanner)]
-    public static void RpcCreateScanner(PlayerControl playerControl, float x, float y)
-    {
-        if (playerControl.Data.Role is not TrackerRole)
-        {
-            return;
-        }
-        
-        var newScanner = Instance.CreateScanner(playerControl, new Vector3(x, y, 0.0057f));
-        Instance.Scanners.Add(newScanner);
-    }
+    
 
     public ScannerComponent CreateScanner(PlayerControl playerControl, Vector3 pos)
     {
@@ -53,11 +40,11 @@ public class ScannerManager(IntPtr ptr) : MonoBehaviour(ptr)
 
         var component = scanner.AddComponent<ScannerComponent>();
         component.PlacedBy = playerControl;
-        component.Id = (byte)(Scanners.Count + 1);
+        component.Id = (byte)(scanners.Count + 1);
 
         scanner.SetActive(true);
 
-        Debug.Log($"Scanner {component.Id} placed by {playerControl.Data.PlayerName}");
+        Logger<LaunchpadReloadedPlugin>.Info($"Scanner {component.Id} placed by {playerControl.Data.PlayerName}");
         return component;
     }
 }

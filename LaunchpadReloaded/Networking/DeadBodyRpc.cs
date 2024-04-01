@@ -1,29 +1,23 @@
 ﻿using System.Linq;
 using LaunchpadReloaded.Components;
-using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using Reactor.Networking.Attributes;
 using UnityEngine;
 
-namespace LaunchpadReloaded.Features.Managers;
+namespace LaunchpadReloaded.Networking;
 
-public static class DeadBodyManager
+public static class DeadBodyRpc
 {
-    public static DeadBody GetBodyById(byte id)
-    {
-        return Object.FindObjectsOfType<DeadBody>().FirstOrDefault(body => body.ParentId == id);
-    }
-
     [MethodRpc((uint)LaunchpadRpc.HideBodyInVent)]
-    public static void RpcHideBodyInVent(PlayerControl pc, byte bodyId, int ventId)
+    public static void RpcHideBodyInVent(this PlayerControl pc, byte bodyId, int ventId)
     {
         if (pc.Data.Role is not JanitorRole)
         {
             return;
         }
         
-        var body = GetBodyById(bodyId);
+        var body = Helpers.GetBodyById(bodyId);
         var vent = ShipStatus.Instance.AllVents.First(v => v.Id == ventId);
 
         if (!body || !vent)
@@ -43,23 +37,15 @@ public static class DeadBodyManager
         body.transform.position = new Vector3(pos2.x, pos2.y, pos.z);
         ventBody.deadBody = body;
     }
-
-    [MethodRpc((uint)LaunchpadRpc.RemoveBody)]
-    public static void RpcRemoveBody(ShipStatus shipStatus, byte bodyId)
+    
+    [MethodRpc((uint)LaunchpadRpc.ExposeBody)]
+    public static void RpcExposeBody(this PlayerControl playerControl, int ventId)
     {
-        var body = GetBodyById(bodyId);
-
-        if (!body)
+        if (!playerControl.Data.Role.CanVent)
         {
             return;
         }
-
-        body.HideBody();
-    }
-
-    [MethodRpc((uint)LaunchpadRpc.ExposeBody)]
-    public static void RpcExposeBody(PlayerControl playerControl, int ventId)
-    {
+        
         var vent = ShipStatus.Instance.AllVents.First(v => v.Id == ventId);
 
         if (!vent)
@@ -75,5 +61,4 @@ public static class DeadBodyManager
 
         ventBody.ExposeBody();
     }
-
 }

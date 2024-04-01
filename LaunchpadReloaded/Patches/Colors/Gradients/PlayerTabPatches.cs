@@ -2,6 +2,7 @@
 using HarmonyLib;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
+using LaunchpadReloaded.Networking;
 using Reactor.Utilities.Extensions;
 using TMPro;
 using UnityEngine;
@@ -76,7 +77,7 @@ public static class PlayerTabPatches
             __instance.PlayerPreview.UpdateFromDataManager(PlayerMaterial.MaskType.None);
             if (__instance.HasLocalPlayer())
             {
-                GradientManager.RpcSetGradient(PlayerControl.LocalPlayer, __instance.currentColor);
+                PlayerControl.LocalPlayer.RpcSetGradient(__instance.currentColor);
             }
 
             return false;

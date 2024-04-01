@@ -2,7 +2,7 @@
 using InnerNet;
 using LaunchpadReloaded.Features;
 using System;
-using UnityEngine;
+using Reactor.Utilities;
 using static CosmeticsLayer;
 
 namespace LaunchpadReloaded.Patches.Generic;
@@ -76,7 +76,7 @@ public static class CharacterPatches
     [HarmonyPrefix, HarmonyPatch(typeof(LongBoiPlayerBody), nameof(LongBoiPlayerBody.Start))]
     public static bool LongBodyStartPatch(LongBoiPlayerBody __instance)
     {
-        Debug.Log("hello there should longer");
+        Logger<LaunchpadReloadedPlugin>.Info("hello there should longer");
         __instance.ShouldLongAround = true;
         __instance.skipNeckAnim = true;
         if (__instance.hideCosmeticsQC)

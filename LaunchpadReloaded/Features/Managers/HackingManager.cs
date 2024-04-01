@@ -1,12 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using LaunchpadReloaded.Components;
-using LaunchpadReloaded.Networking;
-using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
-using Reactor.Networking.Attributes;
 using Reactor.Utilities;
 using Reactor.Utilities.Attributes;
 using UnityEngine;
@@ -155,7 +151,6 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
     public static void ToggleNode(int nodeId, bool value)
     {
         var node = Instance.nodes.Find(node => node.Id == nodeId);
-        Debug.Log(node.gameObject.transform.position.ToString());
         node.IsActive = value;
     }
 

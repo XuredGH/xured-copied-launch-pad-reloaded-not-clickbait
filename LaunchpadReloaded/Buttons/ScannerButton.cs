@@ -1,6 +1,7 @@
 ﻿using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
+using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Roles;
 using UnityEngine;
 
@@ -22,7 +23,6 @@ public class ScannerButton : CustomActionButton
 
     protected override void OnClick()
     {
-        ScannerManager.RpcCreateScanner(PlayerControl.LocalPlayer,
-            PlayerControl.LocalPlayer.GetTruePosition().x, PlayerControl.LocalPlayer.GetTruePosition().y);
+        PlayerControl.LocalPlayer.RpcCreateScanner(PlayerControl.LocalPlayer.GetTruePosition().x, PlayerControl.LocalPlayer.GetTruePosition().y);
     }
 }

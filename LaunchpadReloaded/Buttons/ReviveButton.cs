@@ -1,6 +1,7 @@
 ﻿using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
+using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Roles;
 using UnityEngine;
 
@@ -49,7 +50,7 @@ public class ReviveButton : CustomActionButton
     }
     protected override void OnClick()
     {
-        RevivalManager.RpcRevive(PlayerControl.LocalPlayer, DeadBodyTarget.ParentId);
+        PlayerControl.LocalPlayer.RpcRevive(DeadBodyTarget.ParentId);
         DeadBodyTarget = null;
     }
 }

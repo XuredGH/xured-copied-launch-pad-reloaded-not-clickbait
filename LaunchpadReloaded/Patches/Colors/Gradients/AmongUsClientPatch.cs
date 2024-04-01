@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.Features.Managers;
+using LaunchpadReloaded.Networking;
 
 namespace LaunchpadReloaded.Patches.Colors.Gradients;
 
@@ -8,6 +9,6 @@ public static class AmongUsClientPatch
 {
     public static void Postfix()
     {
-        GradientManager.RpcSetGradient(PlayerControl.LocalPlayer, GradientManager.LocalGradientId);
+        PlayerControl.LocalPlayer.RpcSetGradient(GradientManager.LocalGradientId);
     }
 }

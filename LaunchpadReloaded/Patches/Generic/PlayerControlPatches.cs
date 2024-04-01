@@ -125,7 +125,7 @@ public static class PlayerControlPatches
         if (__instance.AmOwner)
         {
             gradColorComponent.GradientColor = GradientManager.LocalGradientId;
-            GradientManager.RpcSetGradient(__instance, GradientManager.LocalGradientId);
+            __instance.RpcSetGradient(GradientManager.LocalGradientId);
         }
     }
 

@@ -127,7 +127,7 @@ public static class HudManagerPatches
 
         foreach (var (player, bodyId) in DragManager.Instance.DraggingPlayers)
         {
-            var bodyById = DeadBodyManager.GetBodyById(bodyId);
+            var bodyById = Helpers.GetBodyById(bodyId);
             bodyById.transform.position = Vector3.Lerp(bodyById.transform.position, GameData.Instance.GetPlayerById(player).Object.transform.position, 5f * Time.deltaTime);
         }
     }

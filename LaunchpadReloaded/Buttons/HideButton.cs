@@ -2,6 +2,7 @@
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
+using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Roles;
 using UnityEngine;
 
@@ -26,8 +27,8 @@ public class HideButton : CustomActionButton
 
     protected override void OnClick()
     {
-        DragManager.RpcStopDragging(PlayerControl.LocalPlayer);
-        DeadBodyManager.RpcHideBodyInVent(PlayerControl.LocalPlayer, DeadBodyTarget.ParentId, VentTarget.Id);
+        PlayerControl.LocalPlayer.RpcStopDragging();
+        PlayerControl.LocalPlayer.RpcHideBodyInVent(DeadBodyTarget.ParentId, VentTarget.Id);
     }
 
     public override bool Enabled(RoleBehaviour role)

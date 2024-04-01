@@ -23,6 +23,7 @@ public static class Helpers
 
         return DragManager.Instance.IsDragging(PlayerControl.LocalPlayer.PlayerId);
     }
+    
     public static string FirstLetterToUpper(string str)
     {
         return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(str.ToLower());

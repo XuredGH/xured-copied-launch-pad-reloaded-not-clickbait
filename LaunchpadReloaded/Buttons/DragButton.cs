@@ -1,6 +1,7 @@
 ﻿using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
+using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Roles;
 using UnityEngine;
 
@@ -71,11 +72,11 @@ public class DragButton : CustomActionButton
     {
         if (DragManager.Instance.IsDragging(PlayerControl.LocalPlayer.PlayerId))
         {
-            DragManager.RpcStopDragging(PlayerControl.LocalPlayer);
+            PlayerControl.LocalPlayer.RpcStopDragging();
         }
         else
         {
-            DragManager.RpcStartDragging(PlayerControl.LocalPlayer, DeadBodyTarget.ParentId);
+            PlayerControl.LocalPlayer.RpcStartDragging(DeadBodyTarget.ParentId);
         }
     }
 

@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Reflection;
+using AmongUs.GameOptions;
 using Il2CppSystem.Collections.Generic;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Components;
@@ -41,14 +42,32 @@ public static class Extensions
 
     public static bool IsRevived(this PlayerControl player)
     {
-        if (RevivalManager.Instance is null)
-        {
-            return false;
-        }
-
-        return RevivalManager.Instance.RevivedPlayers.Contains(player.PlayerId);
+        return RevivalManager.Instance is not null && RevivalManager.Instance.revivedPlayers.Contains(player.PlayerId);
     }
 
+    public static void Revive(this DeadBody body)
+    {
+        var player = PlayerControl.AllPlayerControls.ToArray().ToList().Find(player => player.PlayerId == body.ParentId);
+        player.NetTransform.SnapTo(body.transform.position);
+        player.Revive();
+
+        player.RemainingEmergencies = GameManager.Instance.LogicOptions.GetNumEmergencyMeetings();
+        RoleManager.Instance.SetRole(player, RoleTypes.Crewmate);
+        player.Data.Role.SpawnTaskHeader(player);
+        player.MyPhysics.SetBodyType(player.BodyType);
+
+        if (player.AmOwner)
+        {
+            HudManager.Instance.MapButton.gameObject.SetActive(true);
+            HudManager.Instance.ReportButton.gameObject.SetActive(true);
+            HudManager.Instance.UseButton.gameObject.SetActive(true);
+            player.myTasks.RemoveAt(0);
+        }
+
+        body.gameObject.Destroy();
+        RevivalManager.Instance.revivedPlayers.Add(player.PlayerId);
+    }
+    
     public static void HideBody(this DeadBody body)
     {
         body.Reported = true;
