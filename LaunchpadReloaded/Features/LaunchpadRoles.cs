@@ -8,5 +8,6 @@ public enum LaunchpadRoles : ushort
     Tracker = 13,
     Medic = 14,
     Jester = 15,
-    Sheriff = 16
+    Sheriff = 16,
+    OutcastGhost = 17
 }

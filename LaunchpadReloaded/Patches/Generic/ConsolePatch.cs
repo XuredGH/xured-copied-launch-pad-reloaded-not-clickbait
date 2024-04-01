@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using InnerNet;
 using LaunchpadReloaded.API.GameModes;
+using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Utilities;
 
 namespace LaunchpadReloaded.Patches.Generic;
@@ -50,7 +51,7 @@ public static class ConsolePatch
         {
             if (CustomGameModeManager.ActiveMode.CanUseSystemConsole(__instance))
             {
-                return canUse = couldUse = !pc.IsHacked();
+                return canUse = couldUse = !HackingManager.Instance.AnyActiveNodes();
             }
 
             canUse = couldUse = false;

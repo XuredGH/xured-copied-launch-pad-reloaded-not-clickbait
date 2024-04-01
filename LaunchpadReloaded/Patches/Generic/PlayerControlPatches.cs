@@ -1,4 +1,3 @@
-using System.Linq;
 using HarmonyLib;
 using Il2CppSystem;
 using LaunchpadReloaded.API.GameModes;
@@ -9,6 +8,7 @@ using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
+using System.Linq;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Patches.Generic;
@@ -42,7 +42,7 @@ public static class PlayerControlPatches
         }
 
         CustomRoleManager.GetCustomRoleBehaviour(__instance.Data.RoleType, out var customRole);
-        
+
         if (!target || __instance.Data.IsDead || !__instance.Data.Role.IsImpostor || __instance.Data.Disconnected || !customRole.CanUseKill)
         {
             var num = target ? target.PlayerId : -1;
@@ -68,8 +68,8 @@ public static class PlayerControlPatches
 
         return false;
     }
-    
-    
+
+
     /// <summary>
     /// Unhack when players die, and trigger custom gamemode
     /// </summary>
