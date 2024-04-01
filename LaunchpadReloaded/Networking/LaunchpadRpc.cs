@@ -15,5 +15,7 @@ public enum LaunchpadRpc : uint
     Revive,
     SyncGradient,
     SyncGameOptions,
-    SyncRoleOption
+    SyncRoleOption,
+    CustomCheckMurder,
+    CustomMurder
 }

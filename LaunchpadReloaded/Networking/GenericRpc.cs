@@ -16,7 +16,7 @@ public static class GenericRpc
     {
         if (playerControl.Data.Role is not MedicRole)
         {
-            return;
+            playerControl.KickForCheating();
         }
         
         var body = Helpers.GetBodyById(bodyId);

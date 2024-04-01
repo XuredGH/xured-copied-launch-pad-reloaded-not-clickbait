@@ -14,6 +14,7 @@ public class LaunchpadGameOptions
     }
 
     public readonly CustomStringOption GameModes;
+    public readonly CustomToggleOption BanCheaters;
 
     /*    public readonly CustomStringOption VotingType;
         public readonly CustomNumberOption MaxVotes;*/
@@ -54,6 +55,8 @@ public class LaunchpadGameOptions
                 MaxVotes = new CustomNumberOption("Max Votes", 3, 2, 10, 1, NumberSuffixes.None);
                 MaxVotes.Hidden = () => !VotingTypesManager.CanVoteMultiple();*/
 
+        BanCheaters = new CustomToggleOption("Ban Cheaters", true);
+        
         DisableMeetingTeleport = new CustomToggleOption("Disable Meeting Teleport", false);
         OnlyShowRoleColor = new CustomToggleOption("Reveal Crewmate Roles", false);
         GeneralGroup = new CustomOptionGroup("General Options",
