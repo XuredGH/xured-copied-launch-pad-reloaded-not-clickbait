@@ -30,4 +30,10 @@ public static class ChatPatches
         __instance.freeChatField.textArea.gameObject.SetActive(false);
         __instance.openKeyboardButton.gameObject.SetActive(false);
     }
+    
+    [HarmonyPrefix, HarmonyPatch(nameof(ChatController.SendChat))]
+    public static bool SendChatPatch(ChatController __instance)
+    {
+        return !PlayerControl.LocalPlayer.IsRevived();
+    }
 }
