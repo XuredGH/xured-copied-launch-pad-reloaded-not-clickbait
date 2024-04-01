@@ -1,6 +1,4 @@
-using System.Linq;
 using HarmonyLib;
-using Il2CppSystem;
 using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Roles;
@@ -9,6 +7,7 @@ using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
+using System.Linq;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Patches.Generic;
@@ -37,30 +36,15 @@ public static class PlayerControlPatches
     public static void OnPlayerDie(PlayerControl __instance)
     {
         CustomGameModeManager.ActiveMode.OnDeath(__instance);
-        if (__instance.Data.IsHacked())
-        {
-            HackingManager.RpcUnHackPlayer(__instance);
-        }
+        __instance.GetLpPlayer().OnDeath();
     }
 
     /// <summary>
-    /// Player control update, updates knife and name/cosmetics if hacked
+    /// Player control update
     /// </summary>
     [HarmonyPostfix, HarmonyPatch(nameof(PlayerControl.FixedUpdate))]
     public static void UpdatePatch(PlayerControl __instance)
     {
-        if (MeetingHud.Instance) return;
-
-        if (__instance.IsRevived()) __instance.cosmetics.SetOutline(true, new Nullable<Color>(LaunchpadPalette.MedicColor));
-
-        if (__instance.Data.IsHacked() || (HackingManager.Instance && HackingManager.Instance.AnyActiveNodes() && __instance.Data.Role is HackerRole))
-        {
-            var randomString = Helpers.RandomString(Helpers.Random.Next(4, 6), "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#!?$(???#@)$@@@@0000");
-            __instance.cosmetics.SetName(randomString);
-            __instance.cosmetics.SetNameMask(true);
-            __instance.cosmetics.gameObject.SetActive(false);
-        }
-
         if (__instance.AmOwner)
         {
             foreach (var button in CustomButtonManager.CustomButtons)
@@ -70,15 +54,8 @@ public static class PlayerControlPatches
             }
         }
 
+        if (__instance.Data is null || __instance.Data.Role is null) return;
         if (__instance.Data.Role is ICustomRole customRole) customRole.PlayerControlFixedUpdate(__instance);
-
-        var knife = __instance.gameObject.transform.FindChild("BodyForms/Seeker/KnifeHand");
-        if (!knife)
-        {
-            return;
-        }
-
-        knife.gameObject.SetActive(!__instance.Data.IsDead && __instance.CanMove);
     }
 
     /// <summary>
@@ -94,6 +71,8 @@ public static class PlayerControlPatches
             gradColorComponent.GradientColor = GradientManager.LocalGradientId;
             GradientManager.RpcSetGradient(__instance, GradientManager.LocalGradientId);
         }
+
+        __instance.gameObject.AddComponent<LaunchpadPlayer>();
     }
 
     /// <summary>

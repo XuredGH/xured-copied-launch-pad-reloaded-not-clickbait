@@ -1,10 +1,11 @@
-using System.Linq;
-using System.Reflection;
-using Il2CppSystem.Collections.Generic;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Components;
+using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
 using Reactor.Utilities.Extensions;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Utilities;
@@ -21,6 +22,93 @@ public static class Extensions
             data = gameObject.AddComponent<PlayerGradientData>();
         }
         data.playerId = playerId;
+    }
+
+    public static KeyValuePair<byte, int> MaxPair(this Dictionary<byte, int> self, out bool tie)
+    {
+        tie = true;
+        KeyValuePair<byte, int> result = new KeyValuePair<byte, int>(byte.MaxValue, int.MinValue);
+        foreach (KeyValuePair<byte, int> keyValuePair in self)
+        {
+            if (keyValuePair.Value > result.Value)
+            {
+                result = keyValuePair;
+                tie = false;
+            }
+            else if (keyValuePair.Value == result.Value)
+            {
+                tie = true;
+            }
+        }
+        return result;
+    }
+
+    /*    [MethodRpc((uint)LaunchpadRPC.VoteForPlayer)]
+        public static void RpcVoteFor(this PlayerControl playerControl, byte playerId, bool edit = false, bool clear = false)
+        {
+            LaunchpadPlayer plr = playerControl.GetLpPlayer();
+
+            if (clear)
+            {
+                plr.VotedPlayers.Clear();
+                return;
+            }
+
+            if (edit)
+            {
+                plr.VotesRemaining = playerId;
+                return;
+            }
+
+            plr.VotedPlayers.Add(playerId);
+            if (playerId == 253) plr.VotesRemaining = 0; else plr.VotesRemaining -= 1;
+
+            if (AmongUsClient.Instance.AmHost && MeetingHud.Instance)
+            {
+                MeetingHud.Instance.CheckForEndVoting();
+            }
+
+            *//*        if (LaunchpadGameOptions.Instance.LiveUpdating.Value && MeetingHud.Instance)
+                    {
+                        MeetingHud.Instance.PopulateResults(new MeetingHud.VoterState[MeetingHud.Instance.playerStates.Length]);
+                    }*//*
+        }
+
+        public static void RpcSkipVote(this PlayerControl playerControl)
+        {
+            playerControl.RpcVoteFor(253);
+
+            Debug.Log("Skipping vote for bomoclat ");
+            if (playerControl.AmOwner)
+            {
+                Debug.Log("Blud i am owner");
+                MeetingHud __instance = MeetingHud.Instance;
+                for (int i = 0; i < __instance.playerStates.Length; i++)
+                {
+                    PlayerVoteArea playerVoteArea = __instance.playerStates[i];
+                    playerVoteArea.ClearButtons();
+                    playerVoteArea.voteComplete = true;
+                }
+
+                __instance.SkipVoteButton.ClearButtons();
+                __instance.SkipVoteButton.voteComplete = true;
+                __instance.SkipVoteButton.gameObject.SetActive(false);
+                __instance.state = MeetingHud.VoteStates.Voted;
+
+                PlayerControl.LocalPlayer.RpcSendChatNote(PlayerControl.LocalPlayer.PlayerId, ChatNoteTypes.DidVote);
+                SoundManager.Instance.PlaySound(__instance.VoteLockinSound, false, 1f, null);
+
+                TextMeshPro tmp = MeetingHudPatches.typeText.GetComponent<TextMeshPro>();
+                tmp.text = LaunchpadPlayer.LocalPlayer.VotesRemaining + " votes left";
+            }
+        }
+        public static void RpcEditVotes(this PlayerControl playerControl, byte value) => playerControl.RpcVoteFor(value, edit: true);
+        public static void RpcClearVote(this PlayerControl playerControl) => playerControl.RpcVoteFor(0, clear: true);*/
+
+
+    public static LaunchpadPlayer GetLpPlayer(this PlayerControl playerControl)
+    {
+        return playerControl.gameObject.GetComponent<LaunchpadPlayer>();
     }
 
     public static bool ButtonTimerEnabled(this PlayerControl playerControl)
@@ -96,7 +184,7 @@ public static class Extensions
 
     public static DeadBody NearestDeadBody(this PlayerControl playerControl)
     {
-        var results = new List<Collider2D>();
+        var results = new Il2CppSystem.Collections.Generic.List<Collider2D>();
         Physics2D.OverlapCircle(playerControl.GetTruePosition(), playerControl.MaxReportDistance / 4f, Filter, results);
         return results.ToArray()
             .Where(collider2D => collider2D.CompareTag("DeadBody"))

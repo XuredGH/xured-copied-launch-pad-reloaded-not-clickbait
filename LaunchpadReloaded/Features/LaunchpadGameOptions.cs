@@ -1,6 +1,7 @@
 using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
+using LaunchpadReloaded.Features.Managers;
 
 namespace LaunchpadReloaded.Features;
 
@@ -15,8 +16,10 @@ public class LaunchpadGameOptions
 
     public readonly CustomStringOption GameModes;
 
-    /*    public readonly CustomStringOption VotingType;
-        public readonly CustomNumberOption MaxVotes;*/
+    public readonly CustomStringOption VotingType;
+    public readonly CustomNumberOption MaxVotes;
+    public readonly CustomToggleOption AllowVotingForSamePerson;
+    public readonly CustomToggleOption LiveUpdating;
 
     // General Options
     public readonly CustomToggleOption OnlyShowRoleColor;
@@ -41,11 +44,14 @@ public class LaunchpadGameOptions
             ChangedEvent = i => CustomGameModeManager.RpcSetGameMode(GameData.Instance, i)
         };
 
-        /*        VotingType = new CustomStringOption("Voting Type", 0, ["Classic", "Chance", "Multiple", "Combined"]);
-                VotingType.ChangedEvent = i => VotingTypesManager.RpcSetType(GameData.Instance, VotingType.IndexValue);
+        VotingType = new CustomStringOption("Voting Type", 0, ["Classic", "Chance", "Multiple", "Combined"]);
+        VotingType.ChangedEvent = i => VotingTypesManager.RpcSetType(GameData.Instance, VotingType.IndexValue);
+        MaxVotes = new CustomNumberOption("Max Votes", 3, 2, 10, 1, NumberSuffixes.None);
+        MaxVotes.Hidden = () => !VotingTypesManager.CanVoteMultiple();
 
-                MaxVotes = new CustomNumberOption("Max Votes", 3, 2, 10, 1, NumberSuffixes.None);
-                MaxVotes.Hidden = () => !VotingTypesManager.CanVoteMultiple();*/
+        LiveUpdating = new CustomToggleOption("Live Voting Update", true);
+        AllowVotingForSamePerson = new CustomToggleOption("Allow Voting Same Person Again", true);
+        AllowVotingForSamePerson.Hidden = () => !VotingTypesManager.CanVoteMultiple();
 
         DisableMeetingTeleport = new CustomToggleOption("Disable Meeting Teleport", false);
         OnlyShowRoleColor = new CustomToggleOption("Reveal Crewmate Roles", false);
@@ -111,7 +117,8 @@ public class LaunchpadGameOptions
             Hidden = () => GameModes.Value != "Battle Royale"
         };
 
-        GeneralGroup.Hidden = FunGroup.Hidden = () => GameModes.Value != "Default";
+        BattleRoyaleGroup.Hidden = () => GameModes.Value != "Battle Royale";
+        GeneralGroup.Hidden = FunGroup.Hidden = VotingType.Hidden = () => GameModes.Value != "Default";
 
         foreach (var role in CustomRoleManager.CustomRoles)
         {
