@@ -9,7 +9,7 @@ using Reactor.Utilities;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Networking;
-public static class GenericRPC
+public static class GenericRpc
 {
     [MethodRpc((uint)LaunchpadRpc.Revive)]
     public static void RpcRevive(this PlayerControl playerControl, byte bodyId)
