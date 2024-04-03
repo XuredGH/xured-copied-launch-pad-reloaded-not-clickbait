@@ -15,7 +15,7 @@ public static class NameTagPatch
     [HarmonyPrefix, HarmonyPatch("Get", typeof(RoleBehaviour))]
     public static bool GetPatch([HarmonyArgument(0)] RoleBehaviour otherPlayerRole, ref Color __result)
     {
-        if (LaunchpadGameOptions.Instance.OnlyShowRoleColor.Value || CustomGameModeManager.ActiveMode is BattleRoyale)
+        if (LaunchpadGameOptions.Instance.OnlyShowRoleColor.Value || CustomGameModeManager.ActiveMode is BattleRoyale || GameManager.Instance.IsHideAndSeek())
         {
             return true;
         }
@@ -25,14 +25,7 @@ public static class NameTagPatch
             __result = Color.white;
         }
 
-        if (PlayerControl.LocalPlayer.Data.Role == otherPlayerRole)
-        {
-            __result = otherPlayerRole.NameColor;
-        }
-        else
-        {
-            __result = Color.white;
-        }
+        __result = PlayerControl.LocalPlayer.Data?.Role == otherPlayerRole ? otherPlayerRole.NameColor : Color.white;
 
         return false;
     }
