@@ -27,18 +27,34 @@ public static class GameSettingsMenuPatches
         GameBtn = __instance.transform.FindChild("Header/Tabs/GameTab").gameObject;
         RoleBtn = __instance.transform.FindChild("Header/Tabs/RoleTab").gameObject;
 
+        
         var numberOpt = __instance.RegularGameSettings.GetComponentInChildren<NumberOption>();
         var toggleOpt = Object.FindObjectOfType<ToggleOption>();
         var stringOpt = __instance.RegularGameSettings.GetComponentInChildren<StringOption>();
-        var container = CustomOptionsTab.Initialize(__instance).transform;
+        var container = GameManager.Instance.IsNormal() ? CustomOptionsTab.Initialize(__instance).transform : __instance.HideAndSeekScroller.Inner;
 
         foreach (var group in CustomOptionsManager.CustomGroups.Where(group => group.AdvancedRole == null))
         {
+            if (GameManager.Instance.IsNormal())
+            {
+                group.Header = CustomOptionsTab.CreateHeader(toggleOpt, container, group.Title);
+                CreateOptionsFor(__instance, toggleOpt, numberOpt, stringOpt, container,
+                    group.CustomToggleOptions, group.CustomNumberOptions, group.CustomStringOptions);
+                continue;
+            }
+            
+            if (!group.Options.Any(x=>x.ShowInHideNSeek))
+            {
+                continue;
+            }
+           
             group.Header = CustomOptionsTab.CreateHeader(toggleOpt, container, group.Title);
+            __instance.AllHideAndSeekItems = __instance.AllHideAndSeekItems.Append(group.Header.transform).ToArray();
+         
             CreateOptionsFor(__instance, toggleOpt, numberOpt, stringOpt, container,
                 group.CustomToggleOptions, group.CustomNumberOptions, group.CustomStringOptions);
         }
-
+        
         CreateOptionsFor(__instance, toggleOpt, numberOpt, stringOpt, container,
             CustomOptionsManager.CustomToggleOptions.Where(option => option.Group == null),
             CustomOptionsManager.CustomNumberOptions.Where(option => option.Group == null),
@@ -74,7 +90,7 @@ public static class GameSettingsMenuPatches
         }
     }
 
-    public static void CreateOptionsFor(GameSettingMenu __instance, ToggleOption toggleOpt, NumberOption numberOpt, StringOption stringOpt, Transform container,
+    public static void CreateOptionsFor(GameSettingMenu __instance, ToggleOption togglePrefab, NumberOption numberPrefab, StringOption stringPrefab, Transform container,
         IEnumerable<CustomToggleOption> toggles, IEnumerable<CustomNumberOption> numbers, IEnumerable<CustomStringOption> strings)
     {
         foreach (var customToggleOption in toggles)
@@ -84,9 +100,23 @@ public static class GameSettingsMenuPatches
                 continue;
             }
 
-            var newOpt = Object.Instantiate(toggleOpt, container);
-            customToggleOption.CreateToggleOption(newOpt);
-            __instance.AllItems = __instance.AllItems.AddItem(newOpt.transform).ToArray();
+            ToggleOption toggleOption;
+            
+            if (GameManager.Instance.IsNormal())
+            {
+                toggleOption = customToggleOption.CreateToggleOption(togglePrefab, container);
+                __instance.AllItems = __instance.AllItems.AddItem(toggleOption.transform).ToArray();
+                continue;
+            }
+
+            if (!customToggleOption.ShowInHideNSeek)
+            {
+                continue;
+            }
+            
+            toggleOption = customToggleOption.CreateToggleOption(togglePrefab, container);
+            __instance.AllHideAndSeekItems = __instance.AllHideAndSeekItems.AddItem(toggleOption.transform).ToArray();
+            
         }
 
         foreach (var customNumberOption in numbers)
@@ -95,10 +125,23 @@ public static class GameSettingsMenuPatches
             {
                 continue;
             }
+            
+            NumberOption numberOption;
+            
+            if (GameManager.Instance.IsNormal())
+            {
+                numberOption = customNumberOption.CreateNumberOption(numberPrefab, container);
+                __instance.AllItems = __instance.AllItems.AddItem(numberOption.transform).ToArray();
+                continue;
+            }
 
-            var newOpt = Object.Instantiate(numberOpt, container);
-            customNumberOption.CreateNumberOption(newOpt);
-            __instance.AllItems = __instance.AllItems.AddItem(newOpt.transform).ToArray();
+            if (!customNumberOption.ShowInHideNSeek)
+            {
+                continue;
+            }
+            
+            numberOption = customNumberOption.CreateNumberOption(numberPrefab, container);
+            __instance.AllHideAndSeekItems = __instance.AllHideAndSeekItems.AddItem(numberOption.transform).ToArray();
         }
 
         foreach (var customStringOption in strings)
@@ -108,9 +151,22 @@ public static class GameSettingsMenuPatches
                 continue;
             }
 
-            var newOpt = Object.Instantiate(stringOpt, container);
-            customStringOption.CreateStringOption(newOpt);
-            __instance.AllItems = __instance.AllItems.AddItem(newOpt.transform).ToArray();
+            StringOption stringOption;
+            
+            if (GameManager.Instance.IsNormal())
+            {
+                stringOption = customStringOption.CreateStringOption(stringPrefab, container);
+                __instance.AllItems = __instance.AllItems.AddItem(stringOption.transform).ToArray();
+                continue;
+            }
+
+            if (!customStringOption.ShowInHideNSeek)
+            {
+                continue;
+            }
+            
+            stringOption = customStringOption.CreateStringOption(stringPrefab, container);
+            __instance.AllHideAndSeekItems = __instance.AllHideAndSeekItems.AddItem(stringOption.transform).ToArray();
         }
     }
 }

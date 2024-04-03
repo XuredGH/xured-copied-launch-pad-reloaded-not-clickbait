@@ -53,20 +53,6 @@ public static class PlayerControlPatches
         return false;
     }
     
-    
-    /// <summary>
-    /// Unhack when players die, and trigger custom gamemode
-    /// </summary>
-    [HarmonyPostfix, HarmonyPatch(nameof(PlayerControl.Die))]
-    public static void OnPlayerDie(PlayerControl __instance)
-    {
-        CustomGameModeManager.ActiveMode.OnDeath(__instance);
-        if (__instance.Data.IsHacked())
-        {
-            __instance.RpcUnHackPlayer();
-        }
-    }
-
     /// <summary>
     /// Player control update, updates knife and name/cosmetics if hacked
     /// </summary>

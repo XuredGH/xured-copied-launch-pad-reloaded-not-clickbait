@@ -3,6 +3,7 @@ using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Networking;
+using LaunchpadReloaded.Utilities;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Patches.Generic;
@@ -24,8 +25,7 @@ public static class VentPatches
 
         var num = float.MaxValue;
         var @object = pc.Object;
-        var customRoleUsable = false;
-        if (pc.Role.IsImpostor) customRoleUsable = true;
+        var customRoleUsable = pc.Role.IsImpostor;
         if (pc.Role is ICustomRole role) customRoleUsable = role.CanUseVent;
 
         canUse = couldUse = customRoleUsable && !pc.IsDead && (@object.CanMove || @object.inVent);
@@ -49,9 +49,9 @@ public static class VentPatches
     {
         var color = PlayerControl.LocalPlayer.Data.Role is ICustomRole role
             ? role.RoleColor : PlayerControl.LocalPlayer.Data.Role.IsImpostor ? Palette.ImpostorRed : Palette.CrewmateBlue;
-        __instance.myRend.material.SetFloat("_Outline", on ? 1 : 0);
-        __instance.myRend.material.SetColor("_OutlineColor", color);
-        __instance.myRend.material.SetColor("_AddColor", mainTarget ? color : Color.clear);
+        __instance.myRend.material.SetFloat(ShaderID.Outline, on ? 1 : 0);
+        __instance.myRend.material.SetColor(ShaderID.OutlineColor, color);
+        __instance.myRend.material.SetColor(ShaderID.AddColor, mainTarget ? color : Color.clear);
 
         return false;
     }

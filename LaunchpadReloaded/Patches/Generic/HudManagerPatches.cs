@@ -37,11 +37,16 @@ public static class HudManagerPatches
 
         var numPlayers = GameData.Instance ? GameData.Instance.PlayerCount : 10;
         HudManager.Instance.GameSettings.text = GameOptionsManager.Instance.CurrentGameOptions.ToHudString(numPlayers);
+        var pos = __instance.GameSettings.transform.localPosition;
 
         if (!PlayerControl.LocalPlayer.CanMove) return;
-        if (!ToHudStringPatch.ShowCustom) return;
+        
+        if (!ToHudStringPatch.ShowCustom)
+        {
+            __instance.GameSettings.transform.localPosition = new Vector3(pos.x, _bounds.min, pos.z);
+            return;
+        }
 
-        var pos = __instance.GameSettings.transform.localPosition;
         if (Input.mouseScrollDelta.y > 0f)
         {
             pos =

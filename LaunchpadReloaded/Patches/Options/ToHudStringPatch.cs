@@ -5,7 +5,9 @@ using AmongUs.GameOptions;
 using HarmonyLib;
 using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.API.GameOptions;
+using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Utilities;
+using Reactor.Utilities;
 
 namespace LaunchpadReloaded.Patches.Options;
 
@@ -25,16 +27,31 @@ public static class ToHudStringPatch
     {
         foreach (var numberOption in numberOptions)
         {
+            if (GameManager.Instance.IsHideAndSeek() && !numberOption.ShowInHideNSeek)
+            {
+                continue;
+            }
+            
             sb.AppendLine(numberOption.Title + ": " + numberOption.Value + Helpers.GetSuffix(numberOption.SuffixType));
         }
 
         foreach (var toggleOption in toggleOptions)
         {
+            if (GameManager.Instance.IsHideAndSeek() && !toggleOption.ShowInHideNSeek)
+            {
+                continue;
+            }
+
             sb.AppendLine(toggleOption.Title + ": " + (toggleOption.Value ? "On" : "Off"));
         }
 
         foreach (var stringOption in stringOptions)
         {
+            if (GameManager.Instance.IsHideAndSeek() && !stringOption.ShowInHideNSeek)
+            {
+                continue;
+            }
+
             sb.AppendLine(stringOption.Title + ": " + stringOption.Value);
         }
     }
@@ -44,8 +61,7 @@ public static class ToHudStringPatch
     /// </summary>
     public static void Postfix(IGameOptions __instance, ref string __result)
     {
-        // Hide and Seek isn't compatible with Launchpad currently, so check if current mode is Hide and Seek and then return
-        if (GameManager.Instance is null || GameManager.Instance.IsHideAndSeek())
+        if (GameManager.Instance is null)
         {
             return;
         }
@@ -55,15 +71,19 @@ public static class ToHudStringPatch
             var sb = new StringBuilder("<size=180%><b>Launchpad Options:</b></size>\n<size=130%>");
             var groupsWithRoles = CustomOptionsManager.CustomGroups.Where(group => group.AdvancedRole != null);
             var groupsWithoutRoles = CustomOptionsManager.CustomGroups.Where(group => group.AdvancedRole == null);
-
+            
+            var suffix = CustomGameModeManager.ActiveMode.CanAccessSettingsTab() ? "\nPress <b>Tab</b> to view Normal Options" :
+                $"\n<b>You can not access Normal Options on {CustomGameModeManager.ActiveMode.Name} mode.</b>";
+            
             AddOptions(sb,
                 CustomOptionsManager.CustomNumberOptions.Where(option => option.Group == null && !option.Hidden()),
                 CustomOptionsManager.CustomStringOptions.Where(option => option.Group == null && !option.Hidden()),
-                CustomOptionsManager.CustomToggleOptions.Where(option => option.Group == null && !option.Hidden()));
+                CustomOptionsManager.CustomToggleOptions.Where(option => option.Group == null && !option.Hidden())
+                );
 
             foreach (var group in groupsWithoutRoles)
             {
-                if (group.Hidden())
+                if (group.Hidden() || (GameManager.Instance.IsHideAndSeek() && !group.Options.Any(x=>x.ShowInHideNSeek)))
                 {
                     continue;
                 }
@@ -72,6 +92,12 @@ public static class ToHudStringPatch
                 AddOptions(sb, group.CustomNumberOptions, group.CustomStringOptions, group.CustomToggleOptions);
             }
 
+            if (GameManager.Instance.IsHideAndSeek())
+            {
+                __result = sb + suffix;
+                return;
+            }
+            
             var customOptionGroups = groupsWithRoles as CustomOptionGroup[] ?? groupsWithRoles.ToArray();
             if (customOptionGroups.Any() && CustomGameModeManager.ActiveMode.CanAccessRolesTab())
             {
@@ -89,9 +115,6 @@ public static class ToHudStringPatch
                     sb.Append("</size>\n");
                 }
             }
-
-            var suffix = CustomGameModeManager.ActiveMode.CanAccessSettingsTab() ? "\nPress <b>Tab</b> to view Normal Options" :
-                $"\n<b>You can not access Normal Options on {CustomGameModeManager.ActiveMode.Name} mode.</b>";
 
             __result = sb + suffix;
             return;
