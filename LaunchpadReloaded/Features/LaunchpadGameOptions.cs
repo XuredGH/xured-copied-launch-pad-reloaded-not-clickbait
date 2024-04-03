@@ -80,7 +80,7 @@ public class LaunchpadGameOptions
 
                 foreach (var player in PlayerControl.AllPlayerControls)
                 {
-                    if (GradientManager.TryGetColor(player.PlayerId, out var grad) && !player.AmOwner)
+                    if (GradientManager.TryGetColor(player.PlayerId, out var grad))// && !player.AmOwner)
                     {
                         Rpc<CustomCheckColorRpc>.Instance.Handle(player, new CustomCheckColorRpc.Data((byte)player.Data.DefaultOutfit.ColorId, grad));
                     }
