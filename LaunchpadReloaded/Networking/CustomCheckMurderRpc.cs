@@ -1,5 +1,6 @@
 ﻿using Hazel;
 using InnerNet;
+using LaunchpadReloaded.API.Roles;
 using Reactor.Networking.Attributes;
 using Reactor.Networking.Rpc;
 
@@ -31,6 +32,17 @@ public class CustomCheckMurderRpc : PlayerCustomRpc<LaunchpadReloadedPlugin, Pla
                  player.MyPhysics.Animations.IsPlayingAnyLadderAnimation() || player.inMovingPlat);
     }
 
+    private static bool VerifyKiller(PlayerControl player)
+    {
+        var data = player.Data;
+        if (data is null) return false;
+        if (CustomRoleManager.GetCustomRoleBehaviour(data.RoleType, out var customRole))
+        {
+            return customRole.CanKill && !data.Disconnected;
+        }
+
+        return data.Role.CanUseKillButton && !(data.IsDead || !data.Role.IsImpostor || data.Disconnected);
+    }
     
     public override void Handle(PlayerControl source, PlayerControl target)
     {
@@ -40,7 +52,7 @@ public class CustomCheckMurderRpc : PlayerCustomRpc<LaunchpadReloadedPlugin, Pla
         }
         
         if (AmongUsClient.Instance.IsGameOver || MeetingHud.Instance || 
-            !VerifyTarget(target) || !VerifyTarget(source) || !source.Data.Role.CanUseKillButton) 
+            !VerifyTarget(target) || !VerifyKiller(source)) 
         {
             GameData.Instance.CustomMurderPlayer(source, target, false);
             return;

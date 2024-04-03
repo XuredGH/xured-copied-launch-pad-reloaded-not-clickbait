@@ -20,7 +20,7 @@ public class SheriffRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
     public Color RoleColor => LaunchpadPalette.SheriffColor;
 
     public RoleTeamTypes Team => RoleTeamTypes.Crewmate;
-    public bool CanUseKill => true;
+    public bool CanKill => true;
     public LoadableAsset<Sprite> Icon => LaunchpadAssets.ShootButton;
 
     public static CustomNumberOption ShootCooldown;
