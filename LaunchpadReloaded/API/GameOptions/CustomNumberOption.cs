@@ -1,5 +1,6 @@
 ﻿using System;
 using BepInEx.Configuration;
+using Reactor.Utilities;
 using UnityEngine;
 
 namespace LaunchpadReloaded.API.GameOptions;
@@ -27,7 +28,14 @@ public class CustomNumberOption : AbstractGameOption
         NumberFormat = numberFormat;
         if (Save)
         {
-            Config = LaunchpadReloadedPlugin.Instance.Config.Bind("Number Options", title, defaultValue);
+            try
+            {
+                Config = LaunchpadReloadedPlugin.Instance.Config.Bind("Number Options", title, defaultValue);
+            }
+            catch (Exception e)
+            {
+                Logger<LaunchpadReloadedPlugin>.Error(e.ToString());
+            }
         }
 
         CustomOptionsManager.CustomNumberOptions.Add(this);
@@ -40,7 +48,15 @@ public class CustomNumberOption : AbstractGameOption
 
         if (Save)
         {
-            Config.Value = newValue;
+            try
+            {
+                Config.Value = newValue;
+
+            }
+            catch (Exception e)
+            {
+                Logger<LaunchpadReloadedPlugin>.Error(e.ToString());
+            }
         }
 
         Value = newValue;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BepInEx.Configuration;
 using Reactor.Localization.Utilities;
+using Reactor.Utilities;
 
 namespace LaunchpadReloaded.API.GameOptions;
 
@@ -24,7 +25,14 @@ public class CustomStringOption : AbstractGameOption
 
         if (Save)
         {
-            Config = LaunchpadReloadedPlugin.Instance.Config.Bind("String Options", title, defaultValue);
+            try
+            {
+                Config = LaunchpadReloadedPlugin.Instance.Config.Bind("String Options", title, defaultValue);
+            }
+            catch (Exception e)
+            {
+                Logger<LaunchpadReloadedPlugin>.Error(e.ToString());
+            }
         }
 
         SetValue(Save ? Config.Value : defaultValue);
@@ -34,7 +42,15 @@ public class CustomStringOption : AbstractGameOption
     {
         if (Save)
         {
-            Config.Value = newValue;
+            try
+            {
+                Config.Value = newValue;
+
+            }
+            catch (Exception e)
+            {
+                Logger<LaunchpadReloadedPlugin>.Error(e.ToString());
+            }
         }
 
         IndexValue = newValue;

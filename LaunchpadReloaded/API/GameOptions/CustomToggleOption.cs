@@ -1,5 +1,6 @@
 ﻿using System;
 using BepInEx.Configuration;
+using Reactor.Utilities;
 
 namespace LaunchpadReloaded.API.GameOptions;
 
@@ -14,7 +15,14 @@ public class CustomToggleOption : AbstractGameOption
         Default = defaultValue;
         if (Save)
         {
-            Config = LaunchpadReloadedPlugin.Instance.Config.Bind("Toggle Options", title, defaultValue);
+            try
+            {
+                Config = LaunchpadReloadedPlugin.Instance.Config.Bind("Toggle Options", title, defaultValue);
+            }
+            catch (Exception e)
+            {
+                Logger<LaunchpadReloadedPlugin>.Error(e.ToString());
+            }
         }
         CustomOptionsManager.CustomToggleOptions.Add(this);
         SetValue(Save ? Config.Value : defaultValue);
@@ -24,7 +32,15 @@ public class CustomToggleOption : AbstractGameOption
     {
         if (Save)
         {
-            Config.Value = newValue;
+            try
+            {
+                Config.Value = newValue;
+
+            }
+            catch (Exception e)
+            {
+                Logger<LaunchpadReloadedPlugin>.Error(e.ToString());
+            }
         }
         Value = newValue;
 
