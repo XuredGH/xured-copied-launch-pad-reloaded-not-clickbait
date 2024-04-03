@@ -1,7 +1,9 @@
-﻿namespace LaunchpadReloaded.API.GameModes;
+﻿using LaunchpadReloaded.Features;
+
+namespace LaunchpadReloaded.API.GameModes;
 public class DefaultMode : CustomGameMode
 {
     public override string Name => "Default";
     public override string Description => "Default Among Us GameMode";
-    public override int Id => 0;
+    public override int Id => (int)LaunchpadGamemodes.Default;
 }
