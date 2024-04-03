@@ -1,6 +1,6 @@
 ﻿using Hazel;
 using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Patches.VotingTypes;
+using LaunchpadReloaded.Features.Managers;
 using Reactor.Networking.Attributes;
 using Reactor.Networking.Rpc;
 using System.Collections.Generic;
@@ -67,6 +67,7 @@ public class PopulateResultsRpc : PlayerCustomRpc<LaunchpadReloadedPlugin, Popul
         {
             votes.Add(new CustomVote(data.Voters[i], data.VotedFor[i]));
         }
-        MeetingHudPatches.HandlePopulateResults(votes);
+
+        VotingTypesManager.HandlePopulateResults(votes);
     }
 }

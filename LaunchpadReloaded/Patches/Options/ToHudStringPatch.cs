@@ -24,19 +24,22 @@ public static class ToHudStringPatch
     public static void AddOptions(StringBuilder sb,
         IEnumerable<CustomNumberOption> numberOptions, IEnumerable<CustomStringOption> stringOptions, IEnumerable<CustomToggleOption> toggleOptions)
     {
+        foreach (var stringOption in stringOptions)
+        {
+            if (stringOption.Hidden()) continue;
+            sb.AppendLine(stringOption.Title + ": " + stringOption.Value);
+        }
+
         foreach (var numberOption in numberOptions)
         {
+            if (numberOption.Hidden()) continue;
             sb.AppendLine(numberOption.Title + ": " + numberOption.Value + Helpers.GetSuffix(numberOption.SuffixType));
         }
 
         foreach (var toggleOption in toggleOptions)
         {
+            if (toggleOption.Hidden()) continue;
             sb.AppendLine(toggleOption.Title + ": " + (toggleOption.Value ? "On" : "Off"));
-        }
-
-        foreach (var stringOption in stringOptions)
-        {
-            sb.AppendLine(stringOption.Title + ": " + stringOption.Value);
         }
     }
 

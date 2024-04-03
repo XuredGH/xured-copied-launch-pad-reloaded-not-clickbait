@@ -1,8 +1,8 @@
-using System.Collections.Generic;
-using System.Linq;
 using HarmonyLib;
 using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.API.GameOptions;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -76,15 +76,15 @@ public static class GameSettingsMenuPatches
     public static void CreateOptionsFor(GameSettingMenu __instance, ToggleOption toggleOpt, NumberOption numberOpt, StringOption stringOpt, Transform container,
         IEnumerable<CustomToggleOption> toggles, IEnumerable<CustomNumberOption> numbers, IEnumerable<CustomStringOption> strings)
     {
-        foreach (var customToggleOption in toggles)
+        foreach (var customStringOption in strings)
         {
-            if (customToggleOption.AdvancedRole is not null || customToggleOption.OptionBehaviour)
+            if (customStringOption.AdvancedRole is not null || customStringOption.OptionBehaviour)
             {
                 continue;
             }
 
-            var newOpt = Object.Instantiate(toggleOpt, container);
-            customToggleOption.CreateToggleOption(newOpt);
+            var newOpt = Object.Instantiate(stringOpt, container);
+            customStringOption.CreateStringOption(newOpt);
             __instance.AllItems = __instance.AllItems.AddItem(newOpt.transform).ToArray();
         }
 
@@ -100,15 +100,15 @@ public static class GameSettingsMenuPatches
             __instance.AllItems = __instance.AllItems.AddItem(newOpt.transform).ToArray();
         }
 
-        foreach (var customStringOption in strings)
+        foreach (var customToggleOption in toggles)
         {
-            if (customStringOption.AdvancedRole is not null || customStringOption.OptionBehaviour)
+            if (customToggleOption.AdvancedRole is not null || customToggleOption.OptionBehaviour)
             {
                 continue;
             }
 
-            var newOpt = Object.Instantiate(stringOpt, container);
-            customStringOption.CreateStringOption(newOpt);
+            var newOpt = Object.Instantiate(toggleOpt, container);
+            customToggleOption.CreateToggleOption(newOpt);
             __instance.AllItems = __instance.AllItems.AddItem(newOpt.transform).ToArray();
         }
     }

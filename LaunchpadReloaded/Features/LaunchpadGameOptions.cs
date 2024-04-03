@@ -16,10 +16,13 @@ public class LaunchpadGameOptions
 
     public readonly CustomStringOption GameModes;
 
+    // Voting Types
     public readonly CustomStringOption VotingType;
     public readonly CustomNumberOption MaxVotes;
     public readonly CustomToggleOption AllowVotingForSamePerson;
-    public readonly CustomToggleOption LiveUpdating;
+    public readonly CustomToggleOption AllowConfirmingVotes;
+    public readonly CustomToggleOption ShowPercentages;
+    public readonly CustomOptionGroup VotingGroup;
 
     // General Options
     public readonly CustomToggleOption OnlyShowRoleColor;
@@ -51,13 +54,23 @@ public class LaunchpadGameOptions
             }
         };
 
-        VotingType = new CustomStringOption("Voting Type", 0, ["Classic", "Chance", "Multiple", "Combined"]);
+        VotingType = new CustomStringOption("Voting Type", 0, ["Classic", "Multiple", "Chance", "Combined"]);
         VotingType.ChangedEvent = i => VotingTypesManager.RpcSetType(GameData.Instance, VotingType.IndexValue);
-        MaxVotes = new CustomNumberOption("Max Votes", 3, 2, 10, 1, NumberSuffixes.None);
-        MaxVotes.Hidden = () => !VotingTypesManager.CanVoteMultiple();
 
-        AllowVotingForSamePerson = new CustomToggleOption("Allow Voting Same Person Again", true);
-        AllowVotingForSamePerson.Hidden = () => !VotingTypesManager.CanVoteMultiple();
+        MaxVotes = new CustomNumberOption("Max Votes", 2, 2, 5, 1, NumberSuffixes.None);
+        AllowVotingForSamePerson = new CustomToggleOption("Allow Voting Same Person Again", false);
+        ShowPercentages = new CustomToggleOption("Show Percentages", false);
+        AllowConfirmingVotes = new CustomToggleOption("Allow Confirming Votes", false);
+
+        ShowPercentages.Hidden = VotingTypesManager.UseChance;
+        AllowConfirmingVotes.Hidden = VotingTypesManager.CanVoteMultiple;
+
+        AllowVotingForSamePerson.Hidden = MaxVotes.Hidden = () => !VotingTypesManager.CanVoteMultiple();
+
+        VotingGroup = new CustomOptionGroup("Voting Type",
+            toggleOpt: [AllowVotingForSamePerson, ShowPercentages, AllowConfirmingVotes],
+            stringOpt: [],
+            numberOpt: [MaxVotes]);
 
         DisableMeetingTeleport = new CustomToggleOption("Disable Meeting Teleport", false);
         OnlyShowRoleColor = new CustomToggleOption("Reveal Crewmate Roles", false);
@@ -124,7 +137,7 @@ public class LaunchpadGameOptions
         };
 
         BattleRoyaleGroup.Hidden = () => GameModes.Value != "Battle Royale";
-        GeneralGroup.Hidden = FunGroup.Hidden = VotingType.Hidden = () => GameModes.Value != "Default";
+        GeneralGroup.Hidden = VotingType.Hidden = FunGroup.Hidden = VotingGroup.Hidden = () => GameModes.Value != "Default";
 
         foreach (var role in CustomRoleManager.CustomRoles)
         {

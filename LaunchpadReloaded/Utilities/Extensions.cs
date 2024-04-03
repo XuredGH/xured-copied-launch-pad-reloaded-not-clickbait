@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace LaunchpadReloaded.Utilities;
 
@@ -30,6 +31,25 @@ public static class Extensions
         tie = true;
         KeyValuePair<byte, int> result = new KeyValuePair<byte, int>(byte.MaxValue, int.MinValue);
         foreach (KeyValuePair<byte, int> keyValuePair in self)
+        {
+            if (keyValuePair.Value > result.Value)
+            {
+                result = keyValuePair;
+                tie = false;
+            }
+            else if (keyValuePair.Value == result.Value)
+            {
+                tie = true;
+            }
+        }
+        return result;
+    }
+
+    public static KeyValuePair<byte, float> MaxPair(this Dictionary<byte, float> self, out bool tie)
+    {
+        tie = true;
+        KeyValuePair<byte, float> result = new KeyValuePair<byte, float>(byte.MaxValue, int.MinValue);
+        foreach (KeyValuePair<byte, float> keyValuePair in self)
         {
             if (keyValuePair.Value > result.Value)
             {

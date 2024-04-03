@@ -1,5 +1,4 @@
 ﻿using LaunchpadReloaded.Features.Managers;
-using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Attributes;
 using System;
@@ -43,14 +42,6 @@ public class LaunchpadPlayer(IntPtr ptr) : MonoBehaviour(ptr)
     {
         if (MeetingHud.Instance) return;
         if (Player.IsRevived()) Player.cosmetics.SetOutline(true, new Il2CppSystem.Nullable<Color>(LaunchpadPalette.MedicColor));
-
-        if (Player.Data.IsHacked() || (HackingManager.Instance && HackingManager.Instance.AnyActiveNodes() && Player.Data.Role is HackerRole))
-        {
-            var randomString = Helpers.RandomString(Helpers.Random.Next(4, 6), "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#!?$(???#@)$@@@@0000");
-            Player.cosmetics.SetName(randomString);
-            Player.cosmetics.SetNameMask(true);
-            Player.cosmetics.gameObject.SetActive(false);
-        }
 
         if (Knife is null)
         {

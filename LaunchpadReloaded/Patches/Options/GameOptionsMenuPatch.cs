@@ -1,7 +1,7 @@
-﻿using System.Linq;
-using HarmonyLib;
+﻿using HarmonyLib;
 using Il2CppSystem;
 using LaunchpadReloaded.API.GameOptions;
+using System.Linq;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -45,7 +45,7 @@ public static class GameOptionsMenuPatch
 
             if (!option.Hidden())
             {
-                startOffset -= 0.7f;
+                startOffset -= 0.55f;
             }
 
             var transform = option.OptionBehaviour.transform;

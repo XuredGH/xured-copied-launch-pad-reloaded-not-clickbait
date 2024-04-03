@@ -1,5 +1,4 @@
 using HarmonyLib;
-using Il2CppSystem;
 using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Roles;
@@ -87,8 +86,6 @@ public static class PlayerControlPatches
     public static void UpdatePatch(PlayerControl __instance)
     {
         if (MeetingHud.Instance || __instance.Data is null) return;
-
-        if (__instance.IsRevived()) __instance.cosmetics.SetOutline(true, new Nullable<Color>(LaunchpadPalette.MedicColor));
 
         if (__instance.AmOwner)
         {

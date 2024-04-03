@@ -15,15 +15,12 @@ public class BattleRoyale : CustomGameMode
 {
     public override string Name => "Battle Royale";
     public override string Description => "Everyone can kill.\n<b><i>Last one standing wins.</b></i>";
-
     public override int Id => (int)LaunchpadGamemodes.BattleRoyale;
     public TextMeshPro PlayerCount;
     public TextMeshPro DeathNotif;
     public override void Initialize()
     {
-        var tasks = PlayerControl.LocalPlayer.myTasks;
-        tasks.Clear();
-
+        PlayerControl.LocalPlayer.myTasks.Clear();
         var random = ShipStatus.Instance.DummyLocations.Random();
 
         foreach (var player in GameData.Instance.AllPlayers)
