@@ -29,7 +29,7 @@ public static class DiscordManagerPatch
     [HarmonyPrefix, HarmonyPatch(typeof(ActivityManager), "UpdateActivity")]
     public static void Prefix(ActivityManager __instance, [HarmonyArgument(0)] Activity activity)
     {
-        activity.Details += "All Of Us: Launchpad | Modded Among Us";
+        activity.Details += " All Of Us: Launchpad";
         activity.State += " | dsc.gg/allofus";
     }
 }
