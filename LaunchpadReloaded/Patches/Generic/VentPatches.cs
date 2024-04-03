@@ -27,8 +27,7 @@ public static class VentPatches
 
         var num = float.MaxValue;
         var @object = pc.Object;
-        var customRoleUsable = pc.Role.IsImpostor;
-        if (pc.Role is ICustomRole role) customRoleUsable = role.CanUseVent;
+        var customRoleUsable = role.CanUseVent;
 
         canUse = couldUse = customRoleUsable && !pc.IsDead && (@object.CanMove || @object.inVent);
         if (canUse)
