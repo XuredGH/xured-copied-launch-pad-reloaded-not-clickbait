@@ -67,7 +67,15 @@ public static class CustomRoleManager
         roleBehaviour.CanVent = customRole.CanUseVent;
         roleBehaviour.DefaultGhostRole = customRole.GhostRole;
         roleBehaviour.MaxCount = 15;
+
+        if (customRole.IsGhostRole)
+        {
+            RoleManager.GhostRoles.Add(roleBehaviour.Role);
+        }
+
         CustomRoles.Add(customRole.RoleId, roleBehaviour);
+
+        if (customRole.HideSettings) return;
 
         var config = PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config;
         config.Bind(customRole.NumConfigDefinition, 1);
@@ -124,8 +132,10 @@ public static class CustomRoleManager
 
     public static void SyncRoleSettings()
     {
-        foreach (var role in CustomRoles.Values.Select(x=>(ICustomRole)x))
+        foreach (var role in CustomRoles.Values.Select(x => (ICustomRole)x))
         {
+            if (role.HideSettings) continue;
+
             PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config.TryGetEntry<int>(role.NumConfigDefinition, out var numEntry);
             PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config.TryGetEntry<int>(role.ChanceConfigDefinition, out var chanceEntry);
 
@@ -142,7 +152,7 @@ public static class CustomRoleManager
         {
             return;
         }
-        
+
         PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config.TryGetEntry<int>(role.NumConfigDefinition, out var numEntry);
         numEntry.Value = number;
 

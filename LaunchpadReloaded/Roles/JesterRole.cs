@@ -1,9 +1,10 @@
-using System;
+using AmongUs.GameOptions;
 using Il2CppSystem.Text;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Features;
 using Reactor.Utilities.Attributes;
+using System;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
@@ -20,6 +21,7 @@ public class JesterRole(IntPtr ptr) : RoleBehaviour(ptr), ICustomRole
     public bool IsOutcast => true;
     public bool TasksCount => false;
     public bool CanUseVent => CanUseVents?.Value ?? true;
+    public RoleTypes GhostRole => (RoleTypes)LaunchpadRoles.OutcastGhost;
     public override bool IsDead => false;
     public LoadableAsset<Sprite> Icon => LaunchpadAssets.JesterIcon;
 

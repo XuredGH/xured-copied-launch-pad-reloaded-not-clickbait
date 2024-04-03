@@ -1,6 +1,5 @@
 using HarmonyLib;
 using Il2CppSystem;
-using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Components;
@@ -41,7 +40,7 @@ public static class PlayerControlPatches
         Rpc<CustomCheckMurderRpc>.Instance.SendTo(__instance, AmongUsClient.Instance.HostId, target);
         return false;
     }
-
+    
     /// <summary>
     /// Use Custom check color RPC
     /// </summary>
@@ -52,7 +51,7 @@ public static class PlayerControlPatches
             new CustomCheckColorRpc.Data(bodyColor, (byte)GradientManager.LocalGradientId));
         return false;
     }
-    
+
     /// <summary>
     /// Player control update, updates knife and name/cosmetics if hacked
     /// </summary>
