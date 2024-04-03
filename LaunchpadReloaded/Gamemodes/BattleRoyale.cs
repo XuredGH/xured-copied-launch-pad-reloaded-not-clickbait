@@ -23,20 +23,25 @@ public class BattleRoyale : CustomGameMode
     {
         var tasks = PlayerControl.LocalPlayer.myTasks;
         tasks.Clear();
-
+        
+        foreach (var player in GameData.Instance.AllPlayers) player.Object.cosmetics.TogglePet(false);
+        
         var random = ShipStatus.Instance.DummyLocations.Random();
-
-        foreach (var player in GameData.Instance.AllPlayers)
-            player.Object.cosmetics.TogglePet(false);
-
         PlayerControl.LocalPlayer.NetTransform.RpcSnapTo(random.position);
-        if (LaunchpadGameOptions.Instance.SeekerCharacter.Value && AmongUsClient.Instance.AmHost)
+        
+        if (!AmongUsClient.Instance.AmHost)
         {
-            foreach (var player in PlayerControl.AllPlayerControls)
+            return;
+        }
+    
+        foreach (var player in PlayerControl.AllPlayerControls)
+        {
+            if (LaunchpadGameOptions.Instance.SeekerCharacter.Value)
             {
                 GameData.Instance.RpcSetBodyType(player, 6);
             }
         }
+        
     }
 
     public IEnumerator DeathNotification(PlayerControl player)

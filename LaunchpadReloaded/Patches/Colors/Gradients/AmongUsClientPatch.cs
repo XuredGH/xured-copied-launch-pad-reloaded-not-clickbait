@@ -9,6 +9,18 @@ public static class AmongUsClientPatch
 {
     public static void Postfix()
     {
-        PlayerControl.LocalPlayer.RpcSetGradient(GradientManager.LocalGradientId);
+        if (!AmongUsClient.Instance.AmHost)
+        {
+            return;
+        }
+        
+        foreach (var player in PlayerControl.AllPlayerControls)
+        {
+            if (GradientManager.TryGetColor(player.PlayerId, out var color))
+            {
+                GameData.Instance.CustomSetColor(player, (byte)player.Data.DefaultOutfit.ColorId, color);
+                
+            }
+        }
     }
 }

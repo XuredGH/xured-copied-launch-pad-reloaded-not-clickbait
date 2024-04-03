@@ -1,6 +1,4 @@
-﻿using LaunchpadReloaded.Components;
-using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Features.Managers;
+﻿using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using PowerTools;
@@ -28,13 +26,6 @@ public static class GenericRpc
         {
             Logger<LaunchpadReloadedPlugin>.Warning($"Body for id {bodyId} not found");
         }
-    }
-    
-    [MethodRpc((uint)LaunchpadRpc.SyncGradient)]
-    public static void RpcSetGradient(this PlayerControl pc, int colorId)
-    {
-        pc.GetComponent<PlayerGradientData>().GradientColor = colorId;
-        Coroutines.Start(GradientManager.WaitForDataCoroutine(pc));
     }
     
     

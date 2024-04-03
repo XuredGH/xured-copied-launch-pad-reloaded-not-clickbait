@@ -14,7 +14,7 @@ namespace LaunchpadReloaded.Utilities;
 public static class Extensions
 {
     private static readonly ContactFilter2D Filter = ContactFilter2D.CreateLegacyFilter(Constants.NotShipMask, float.MinValue, float.MaxValue);
-
+    
     public static void SetGradientData(this GameObject gameObject, byte playerId)
     {
         var data = gameObject.GetComponent<PlayerGradientData>();

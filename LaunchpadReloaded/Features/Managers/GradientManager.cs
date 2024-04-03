@@ -1,8 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using BepInEx.Configuration;
 using LaunchpadReloaded.Components;
-using LaunchpadReloaded.Networking;
-using Reactor.Networking.Attributes;
 using Reactor.Utilities;
 
 namespace LaunchpadReloaded.Features.Managers;
@@ -16,21 +15,42 @@ public static class GradientManager
     public static int LocalGradientId
     {
         get => GradientConfig.Value;
-        set => GradientConfig.Value = value;
+        set
+        {
+            try
+            {
+                GradientConfig.Value = value;
+            }
+            catch (Exception e)
+            {
+                Logger<LaunchpadReloadedPlugin>.Error(e.ToString());
+            }
+        }
     }
 
-    public static void SetGradientEnabled(PlayerControl pc, bool enabled)
+    public static void SetGradient(this PlayerControl pc, int colorId)
     {
-        pc.GetComponent<PlayerGradientData>().GradientEnabled = enabled;
-        Coroutines.Start(WaitForDataCoroutine(pc));
+        Coroutines.Start(WaitForDataCoroutine(pc, colorId));
     }
     
-    public static IEnumerator WaitForDataCoroutine(PlayerControl pc)
+    public static void SetGradientEnabled(PlayerControl pc, bool enabled)
     {
-        while (pc.Data is null)
+        var gradData = pc.GetComponent<PlayerGradientData>();
+        gradData.GradientEnabled = enabled;
+        Coroutines.Start(WaitForDataCoroutine(pc, gradData.GradientColor));
+    }
+
+    private static IEnumerator WaitForDataCoroutine(PlayerControl pc, int colorId)
+    {
+        var gradData = pc.GetComponent<PlayerGradientData>();
+        
+        while (pc.Data is null || !gradData)
         {
             yield return null;
         }
+        
+        gradData.GradientColor = colorId;
+        
         pc.SetColor(pc.Data.DefaultOutfit.ColorId);
     }
 

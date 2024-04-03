@@ -1,4 +1,3 @@
-using System.Linq;
 using HarmonyLib;
 using Il2CppSystem;
 using LaunchpadReloaded.API.GameModes;
@@ -10,6 +9,7 @@ using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
+using Reactor.Networking.Rpc;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Patches.Generic;
@@ -31,42 +31,25 @@ public static class PlayerControlPatches
         }
     }
 
-    [HarmonyPrefix, HarmonyPatch(nameof(PlayerControl.CheckMurder))]
+    /// <summary>
+    /// Use Custom murder RPC
+    /// </summary>
+    [HarmonyPrefix, HarmonyPatch(nameof(PlayerControl.CmdCheckMurder))]
     public static bool CheckMurderPrefix(PlayerControl __instance, [HarmonyArgument(0)] PlayerControl target)
     {
-        __instance.logger.Debug(
-            $"Checking if {__instance.PlayerId} murdered {(target == null ? "null player" : target.PlayerId.ToString())}");
-        __instance.isKilling = false;
-        if (AmongUsClient.Instance.IsGameOver || !AmongUsClient.Instance.AmHost)
-        {
-            return false;
-        }
-
-        CustomRoleManager.GetCustomRoleBehaviour(__instance.Data.RoleType, out var customRole);
-        
-        if (!target || __instance.Data.IsDead || !__instance.Data.Role.IsImpostor || __instance.Data.Disconnected || !customRole.CanUseKill)
-        {
-            var num = target ? target.PlayerId : -1;
-            __instance.logger.Warning($"Bad kill from {__instance.PlayerId} to {num}");
-            __instance.RpcMurderPlayer(target, false);
-            return false;
-        }
-        var data = target.Data;
-        if (data == null || data.IsDead || target.inVent || target.MyPhysics.Animations.IsPlayingEnterVentAnimation() || target.MyPhysics.Animations.IsPlayingAnyLadderAnimation() || target.inMovingPlat)
-        {
-            __instance.logger.Warning("Invalid target data for kill");
-            __instance.RpcMurderPlayer(target, false);
-            return false;
-        }
-        if (MeetingHud.Instance)
-        {
-            __instance.logger.Warning("Tried to kill while a meeting was starting");
-            __instance.RpcMurderPlayer(target, false);
-            return false;
-        }
         __instance.isKilling = true;
-        __instance.RpcMurderPlayer(target, true);
+        Rpc<CustomCheckMurderRpc>.Instance.SendTo(__instance, AmongUsClient.Instance.HostId, target);
+        return false;
+    }
 
+    /// <summary>
+    /// Use Custom check color RPC
+    /// </summary>
+    [HarmonyPrefix, HarmonyPatch(nameof(PlayerControl.CmdCheckColor))]
+    public static bool CheckColorPatch(PlayerControl __instance, [HarmonyArgument(0)] byte bodyColor)
+    {
+        Rpc<CustomCheckColorRpc>.Instance.SendTo(__instance, AmongUsClient.Instance.HostId, 
+            new CustomCheckColorRpc.Data(bodyColor, (byte)GradientManager.LocalGradientId));
         return false;
     }
     
@@ -122,22 +105,6 @@ public static class PlayerControlPatches
     {
         var gradColorComponent = __instance.gameObject.AddComponent<PlayerGradientData>();
         gradColorComponent.playerId = __instance.PlayerId;
-        if (__instance.AmOwner)
-        {
-            gradColorComponent.GradientColor = GradientManager.LocalGradientId;
-            __instance.RpcSetGradient(GradientManager.LocalGradientId);
-        }
-    }
-
-    /// <summary>
-    /// Patch to allow the same colors for players (if option enabled)
-    /// </summary>
-    [HarmonyPrefix, HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CheckColor))]
-    public static bool CheckColorPatch(PlayerControl __instance, [HarmonyArgument(0)] byte colorId)
-    {
-        if (LaunchpadGameOptions.Instance.UniqueColors.Value) return true;
-        __instance.RpcSetColor(colorId);
-        return false;
     }
 
     /// <summary>
@@ -151,24 +118,5 @@ public static class PlayerControlPatches
         {
             renderer.GetComponent<GradientColorComponent>().SetColor(__instance.Data.DefaultOutfit.ColorId, playerGradient.GradientColor);
         }
-    }
-
-    // TODO: Finish custom check color
-    //[HarmonyPrefix]
-    //[HarmonyPatch(nameof(PlayerControl.CheckColor))]
-    public static bool CheckColorPrefix(PlayerControl __instance, [HarmonyArgument(0)] byte bodyColor)
-    {
-        var allPlayers = GameData.Instance.AllPlayers.ToArray();
-        var num = 0;
-        while (num++ < 100 &&
-               (bodyColor >= Palette.PlayerColors.Length ||
-                allPlayers.Any(p => !p.Disconnected &&
-                                      p.PlayerId != __instance.PlayerId &&
-                                      p.DefaultOutfit.ColorId == bodyColor)))
-        {
-            bodyColor = (byte)((bodyColor + 1) % Palette.PlayerColors.Length);
-        }
-
-        return false;
     }
 }

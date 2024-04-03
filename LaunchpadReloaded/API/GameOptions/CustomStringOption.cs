@@ -53,6 +53,7 @@ public class CustomStringOption : AbstractGameOption
             }
         }
 
+        var oldValue = IndexValue;
         IndexValue = newValue;
 
         var behaviour = (StringOption)OptionBehaviour;
@@ -61,7 +62,10 @@ public class CustomStringOption : AbstractGameOption
             behaviour.Value = newValue;
         }
 
-        ChangedEvent?.Invoke(newValue);
+        if (oldValue != newValue)
+        {
+            ChangedEvent?.Invoke(newValue);
+        }
     }
 
     public void SetValue(string newValue) => SetValue(Options.ToList().IndexOf(newValue));

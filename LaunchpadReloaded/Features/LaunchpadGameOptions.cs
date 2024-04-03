@@ -1,6 +1,10 @@
+using AmongUs.Data;
 using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
+using LaunchpadReloaded.Features.Managers;
+using LaunchpadReloaded.Networking;
+using Reactor.Networking.Rpc;
 
 namespace LaunchpadReloaded.Features;
 
@@ -67,12 +71,19 @@ public class LaunchpadGameOptions
         FriendlyFire = new CustomToggleOption("Friendly Fire", false);
         UniqueColors = new CustomToggleOption("Unique Colors", true)
         {
-            ChangedEvent = i =>
+            ChangedEvent = value =>
             {
-                if (!AmongUsClient.Instance.AmHost || i == false) return;
-                foreach (var plr in PlayerControl.AllPlayerControls)
+                if (!AmongUsClient.Instance.AmHost || !value)
                 {
-                    plr.CmdCheckColor((byte)plr.cosmetics.ColorId);
+                    return;
+                }
+
+                foreach (var player in PlayerControl.AllPlayerControls)
+                {
+                    if (GradientManager.TryGetColor(player.PlayerId, out var grad) && !player.AmOwner)
+                    {
+                        Rpc<CustomCheckColorRpc>.Instance.Handle(player, new CustomCheckColorRpc.Data((byte)player.Data.DefaultOutfit.ColorId, grad));
+                    }
                 }
             }
         };
@@ -118,7 +129,7 @@ public class LaunchpadGameOptions
             stringOpt: [],
             numberOpt: [])
         {
-            Hidden = () => GameModes.Value != "Battle Royale"
+            Hidden = () => GameModes.IndexValue != (int)LaunchpadGamemodes.BattleRoyale
         };
 
         GeneralGroup.Hidden = FunGroup.Hidden = () => GameModes.Value != "Default";

@@ -35,13 +35,14 @@ public class CustomToggleOption : AbstractGameOption
             try
             {
                 Config.Value = newValue;
-
             }
             catch (Exception e)
             {
                 Logger<LaunchpadReloadedPlugin>.Error(e.ToString());
             }
         }
+
+        var oldValue = Value;
         Value = newValue;
 
         var behaviour = (ToggleOption)OptionBehaviour;
@@ -50,7 +51,10 @@ public class CustomToggleOption : AbstractGameOption
             behaviour.CheckMark.enabled = newValue;
         }
 
-        ChangedEvent?.Invoke(newValue);
+        if (newValue != oldValue)
+        {
+            ChangedEvent?.Invoke(newValue);
+        }
     }
 
     protected override void OnValueChanged(OptionBehaviour optionBehaviour)

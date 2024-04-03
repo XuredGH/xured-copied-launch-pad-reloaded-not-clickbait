@@ -13,9 +13,10 @@ public enum LaunchpadRpc : uint
     SetBodyType,
     CreateScanner,
     Revive,
-    SyncGradient,
     SyncGameOptions,
     SyncRoleOption,
     CustomCheckMurder,
-    CustomMurder
+    CustomMurder,
+    CustomCheckColor,
+    CustomSetColor
 }
