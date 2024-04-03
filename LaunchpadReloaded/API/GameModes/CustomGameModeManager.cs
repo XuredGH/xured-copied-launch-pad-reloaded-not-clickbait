@@ -63,15 +63,15 @@ public static class CustomGameModeManager
     {
         if (!typeof(CustomGameMode).IsAssignableFrom(gameModeType))
         {
-            Logger<LaunchpadReloadedPlugin>.Warning($"{gameModeType.Name} does not inherit CustomGameMode!");
+            Logger<LaunchpadReloadedPlugin>.Warning($"{gameModeType?.Name} does not inherit CustomGameMode!");
             return;
         }
 
         var gameMode = (CustomGameMode)Activator.CreateInstance(gameModeType);
 
-        if (GameModes.Any(x => x.Id == gameMode.Id))
+        if (GameModes.Any(x => x.Id == gameMode?.Id))
         {
-            Logger<LaunchpadReloadedPlugin>.Error($"ID for gamemode {gameMode.Name} already exists!");
+            Logger<LaunchpadReloadedPlugin>.Error($"ID for gamemode {gameMode?.Name} already exists!");
             return;
         }
 
