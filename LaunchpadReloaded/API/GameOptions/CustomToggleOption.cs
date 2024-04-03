@@ -1,6 +1,8 @@
 ﻿using System;
 using BepInEx.Configuration;
 using Reactor.Utilities;
+using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace LaunchpadReloaded.API.GameOptions;
 
@@ -9,7 +11,7 @@ public class CustomToggleOption : AbstractGameOption
     public bool Value { get; private set; }
     public bool Default { get; }
     public ConfigEntry<bool> Config { get; }
-    public Action<bool> ChangedEvent = null;
+    public Action<bool> ChangedEvent { get; init; }
     public CustomToggleOption(string title, bool defaultValue, Type role = null, bool save = true) : base(title, role, save)
     {
         Default = defaultValue;
@@ -62,13 +64,16 @@ public class CustomToggleOption : AbstractGameOption
         SetValue(optionBehaviour.GetBool());
     }
 
-    public void CreateToggleOption(ToggleOption toggleOption)
+    public ToggleOption CreateToggleOption(ToggleOption original, Transform container)
     {
+        var toggleOption = Object.Instantiate(original, container);
+        
         toggleOption.name = Title;
         toggleOption.Title = StringName;
         toggleOption.CheckMark.enabled = Value;
         toggleOption.OnValueChanged = (Il2CppSystem.Action<OptionBehaviour>)ValueChanged;
         toggleOption.OnEnable();
         OptionBehaviour = toggleOption;
+        return toggleOption;
     }
 }

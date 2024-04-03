@@ -46,17 +46,13 @@ public static class RolesSettingsMenuPatches
                     switch (customOption)
                     {
                         case CustomNumberOption numberOption:
-                            var numOpt = Object.Instantiate(numberSet, newTab.transform);
+                            var numOpt = numberOption.CreateNumberOption(numberSet, newTab.transform);
                             numOpt.transform.localPosition = new Vector3(-1.25f, startOffset, 0);
-                            numberOption.CreateNumberOption(numOpt);
-
                             break;
 
                         case CustomToggleOption toggleOption:
-                            var togOpt = Object.Instantiate(toggleSet, newTab.transform);
+                            var togOpt = toggleOption.CreateToggleOption(toggleSet, newTab.transform);
                             togOpt.transform.localPosition = new Vector3(-1.25f, startOffset, 0);
-                            toggleOption.CreateToggleOption(togOpt);
-
                             break;
                     }
                 }

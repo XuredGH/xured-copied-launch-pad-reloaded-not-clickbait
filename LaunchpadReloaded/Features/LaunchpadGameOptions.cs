@@ -1,4 +1,3 @@
-using AmongUs.Data;
 using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
@@ -10,12 +9,7 @@ namespace LaunchpadReloaded.Features;
 
 public class LaunchpadGameOptions
 {
-    private static LaunchpadGameOptions _instance;
-
-    public static LaunchpadGameOptions Instance
-    {
-        get { return _instance ??= new LaunchpadGameOptions(); }
-    }
+    public static LaunchpadGameOptions Instance { get; private set; }
 
     public readonly CustomStringOption GameModes;
     public readonly CustomToggleOption BanCheaters;
@@ -45,7 +39,7 @@ public class LaunchpadGameOptions
         {
             ChangedEvent = i =>
             {
-                if (!AmongUsClient.Instance.AmHost)
+                if (!AmongUsClient.Instance || !AmongUsClient.Instance.AmHost)
                 {
                     return;
                 }
@@ -59,18 +53,21 @@ public class LaunchpadGameOptions
                 MaxVotes = new CustomNumberOption("Max Votes", 3, 2, 10, 1, NumberSuffixes.None);
                 MaxVotes.Hidden = () => !VotingTypesManager.CanVoteMultiple();*/
 
-        BanCheaters = new CustomToggleOption("Ban Cheaters", true);
-        
+        BanCheaters = new CustomToggleOption("Ban Cheaters", true)
+        {
+            ShowInHideNSeek = true
+        };
         DisableMeetingTeleport = new CustomToggleOption("Disable Meeting Teleport", false);
         OnlyShowRoleColor = new CustomToggleOption("Reveal Crewmate Roles", false);
         GeneralGroup = new CustomOptionGroup("General Options",
-            toggleOpt: [OnlyShowRoleColor, DisableMeetingTeleport],
+            toggleOpt: [BanCheaters, OnlyShowRoleColor, DisableMeetingTeleport],
             stringOpt: [],
             numberOpt: []);
 
         FriendlyFire = new CustomToggleOption("Friendly Fire", false);
         UniqueColors = new CustomToggleOption("Unique Colors", true)
         {
+            ShowInHideNSeek = true,
             ChangedEvent = value =>
             {
                 if (!AmongUsClient.Instance.AmHost || !value)
@@ -88,28 +85,30 @@ public class LaunchpadGameOptions
             }
         };
 
-        Character = new CustomStringOption("Character", 0, ["Default", "Horse", "Long"]);
-        Character.ChangedEvent = i =>
+        Character = new CustomStringOption("Character", 0, ["Default", "Horse", "Long"])
         {
-            PlayerBodyTypes bodyType;
-            switch (Character.Value)
+            ChangedEvent = i =>
             {
-                default:
-                case "Default":
-                    bodyType = PlayerBodyTypes.Normal;
-                    break;
-                case "Horse":
-                    bodyType = PlayerBodyTypes.Horse;
-                    break;
-                case "Long":
-                    bodyType = PlayerBodyTypes.Long;
-                    break;
-            }
+                PlayerBodyTypes bodyType;
+                switch (Character?.Options[i])
+                {
+                    default:
+                    case "Default":
+                        bodyType = PlayerBodyTypes.Normal;
+                        break;
+                    case "Horse":
+                        bodyType = PlayerBodyTypes.Horse;
+                        break;
+                    case "Long":
+                        bodyType = PlayerBodyTypes.Long;
+                        break;
+                }
 
-            foreach (PlayerControl plr in PlayerControl.AllPlayerControls)
-            {
-                plr.MyPhysics.SetBodyType(bodyType);
-                if (bodyType == PlayerBodyTypes.Normal) plr.cosmetics.currentBodySprite.BodySprite.transform.localScale = new(0.5f, 0.5f, 1f);
+                foreach (PlayerControl plr in PlayerControl.AllPlayerControls)
+                {
+                    plr.MyPhysics.SetBodyType(bodyType);
+                    if (bodyType == PlayerBodyTypes.Normal) plr.cosmetics.currentBodySprite.BodySprite.transform.localScale = new(0.5f, 0.5f, 1f);
+                }
             }
         };
 
@@ -132,7 +131,7 @@ public class LaunchpadGameOptions
             Hidden = () => GameModes.IndexValue != (int)LaunchpadGamemodes.BattleRoyale
         };
 
-        GeneralGroup.Hidden = FunGroup.Hidden = () => GameModes.Value != "Default";
+        GeneralGroup.Hidden = FunGroup.Hidden = () => CustomGameModeManager.ActiveMode.Id != (int)LaunchpadGamemodes.Default;
 
         foreach (var role in CustomRoleManager.CustomRoles)
         {
@@ -145,6 +144,6 @@ public class LaunchpadGameOptions
 
     public static void Initialize()
     {
-        _instance = new LaunchpadGameOptions();
+        Instance = new LaunchpadGameOptions();
     }
 }

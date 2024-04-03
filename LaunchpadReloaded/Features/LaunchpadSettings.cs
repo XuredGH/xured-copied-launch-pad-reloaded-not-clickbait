@@ -4,12 +4,7 @@ namespace LaunchpadReloaded.Features;
 
 public class LaunchpadSettings
 {
-    private static LaunchpadSettings _instance;
-    
-    public static LaunchpadSettings Instance
-    {
-        get { return _instance ??= new LaunchpadSettings(); }
-    }
+    public static LaunchpadSettings Instance { get; private set; }
 
     public readonly CustomSetting LockedCamera;
 
@@ -20,6 +15,6 @@ public class LaunchpadSettings
 
     public static void Initialize()
     {
-        _instance = new LaunchpadSettings();
+        Instance = new LaunchpadSettings();
     }
 }

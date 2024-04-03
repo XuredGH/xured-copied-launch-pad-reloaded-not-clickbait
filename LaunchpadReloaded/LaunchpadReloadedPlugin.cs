@@ -30,17 +30,17 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
     {
         Instance = this;
         Harmony.PatchAll();
+        
 
         RegisterColors();
 
         CustomGameModeManager.RegisterAllGameModes();
-        CustomGameModeManager.SetGameMode(0);
         CustomRoleManager.RegisterAllRoles();
         CustomButtonManager.RegisterAllButtons();
 
         LaunchpadGameOptions.Initialize();
         LaunchpadSettings.Initialize();
-
+        
         ReactorVersionShower.TextUpdated += VersionShower;
 
         Config.Save();

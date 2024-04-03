@@ -18,7 +18,7 @@ public static class GameOptionsMenuPatch
     {
         foreach (var customOption in CustomOptionsManager.CustomOptions)
         {
-            if (customOption.AdvancedRole is not null)
+            if (customOption.AdvancedRole is not null || !customOption.OptionBehaviour)
             {
                 continue;
             }
@@ -33,7 +33,7 @@ public static class GameOptionsMenuPatch
     public static void UpdatePostfix(GameOptionsMenu __instance)
     {
         var menu = Object.FindObjectsOfType<GameSettingMenu>().First();
-        if (menu.RegularGameSettings.active || menu.RolesSettings.gameObject.active) return;
+        if (menu.RegularGameSettings.active || menu.RolesSettings.gameObject.active || menu.HideNSeekSettings.active) return;
 
         var startOffset = 2.15f;
         __instance.GetComponentInParent<Scroller>().ContentYBounds.max = startOffset + __instance.Children.Count * 0.5f;
@@ -77,8 +77,10 @@ public static class GameOptionsMenuPatch
                     continue;
                 }
 
-                option.OptionBehaviour.enabled = !group.Hidden() && !option.Hidden();
-                option.OptionBehaviour.gameObject.SetActive(!group.Hidden() && !option.Hidden());
+                var enabled = !group.Hidden() && !option.Hidden();
+
+                option.OptionBehaviour.enabled = enabled;
+                option.OptionBehaviour.gameObject.SetActive(enabled);
 
                 if (!group.Hidden() && !option.Hidden())
                 {

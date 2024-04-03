@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using BepInEx.Configuration;
 using Reactor.Localization.Utilities;
 using Reactor.Utilities;
+using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace LaunchpadReloaded.API.GameOptions;
 
@@ -14,15 +15,14 @@ public class CustomStringOption : AbstractGameOption
     public int Default { get; }
     public string[] Options { get; private set; }
     public ConfigEntry<int> Config { get; }
-    public Action<int> ChangedEvent { get; set; }
+    public Action<int> ChangedEvent { get; init; }
     public CustomStringOption(string title, int defaultValue, string[] options, Type role = null, bool save = true) : base(title, role, save)
     {
         IndexValue = defaultValue;
         Options = options;
         Default = defaultValue;
+        
         CustomOptionsManager.CustomStringOptions.Add(this);
-        ChangedEvent = null;
-
         if (Save)
         {
             try
@@ -75,20 +75,19 @@ public class CustomStringOption : AbstractGameOption
         SetValue(optionBehaviour.GetInt());
     }
 
-    public void CreateStringOption(StringOption stringOption)
+    public StringOption CreateStringOption(StringOption original, Transform container)
     {
-        var values = new List<StringNames>();
-        foreach (var val in Options)
-        {
-            values.Add(CustomStringName.CreateAndRegister(val));
-        }
-
+        var stringOption = Object.Instantiate(original, container);
+        
         stringOption.name = Title;
         stringOption.Title = StringName;
         stringOption.Value = Options.ToList().IndexOf(Value);
-        stringOption.Values = values.ToArray();
+        stringOption.Values = Options.Select(CustomStringName.CreateAndRegister).ToArray();
         stringOption.OnValueChanged = (Il2CppSystem.Action<OptionBehaviour>)ValueChanged;
         stringOption.OnEnable();
+        
         OptionBehaviour = stringOption;
+
+        return stringOption;
     }
 }
