@@ -69,18 +69,22 @@ public class LaunchpadGameOptions
         {
             Hidden = ()=> !VotingTypesManager.CanVoteMultiple()
         };
-        VotingType = new CustomStringOption("Voting Type", 0, ["Classic", "Multiple", "Chance", "Combined"]);
 
         MaxVotes = new CustomNumberOption("Max Votes", 2, 2, 5, 1, NumberSuffixes.None);
         AllowVotingForSamePerson = new CustomToggleOption("Allow Voting Same Person Again", false);
-        ShowPercentages = new CustomToggleOption("Show Percentages", false);
-        AllowConfirmingVotes = new CustomToggleOption("Allow Confirming Votes", false);
+        ShowPercentages = new CustomToggleOption("Show Percentages", false)
+        {
+            Hidden = VotingTypesManager.UseChance
+        };
+        AllowConfirmingVotes = new CustomToggleOption("Allow Confirming Votes", false)
+        {
+            Hidden = VotingTypesManager.CanVoteMultiple
+        };
 
-        ShowPercentages.Hidden = VotingTypesManager.UseChance;
-        AllowConfirmingVotes.Hidden = VotingTypesManager.CanVoteMultiple;
-
-        DisableDynamicVoting = new CustomToggleOption("Disable Dynamic Votes", false);
-        DisableDynamicVoting.Hidden = () => !AllowVotingForSamePerson.Value;
+        DisableDynamicVoting = new CustomToggleOption("Disable Dynamic Votes", false)
+        {
+            Hidden = () => !AllowVotingForSamePerson.Value
+        };
 
         AllowVotingForSamePerson = new CustomToggleOption("Allow Voting Same Person Again", true)
         {
