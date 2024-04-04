@@ -32,9 +32,10 @@ public static class DeadBodyRpc
         }
 
         body.HideBody();
-        var pos = body.transform.position;
+        var transform = body.transform;
+        var pos = transform.position;
         var pos2 = vent.transform.position;
-        body.transform.position = new Vector3(pos2.x, pos2.y, pos.z);
+        transform.position = new Vector3(pos2.x, pos2.y, pos.z);
         ventBody.deadBody = body;
     }
     
