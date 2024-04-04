@@ -48,8 +48,8 @@ public static class Extensions
     public static KeyValuePair<byte, float> MaxPair(this Dictionary<byte, float> self, out bool tie)
     {
         tie = true;
-        KeyValuePair<byte, float> result = new KeyValuePair<byte, float>(byte.MaxValue, int.MinValue);
-        foreach (KeyValuePair<byte, float> keyValuePair in self)
+        var result = new KeyValuePair<byte, float>(byte.MaxValue, int.MinValue);
+        foreach (var keyValuePair in self)
         {
             if (keyValuePair.Value > result.Value)
             {

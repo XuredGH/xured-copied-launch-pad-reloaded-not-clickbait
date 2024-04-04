@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using Object = UnityEngine.Object;
 using Random = System.Random;
 
 namespace LaunchpadReloaded.Features.Managers;
@@ -17,16 +18,16 @@ public static class VotingTypesManager
         set => LaunchpadGameOptions.Instance.VotingType.SetValue((int)value);
     }
 
-    public static readonly byte[] RecommendedVotes = new byte[]
-    {
+    public static readonly byte[] RecommendedVotes =
+    [
         1, 1, 1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5
-    };
+    ];
 
     [MethodRpc((uint)LaunchpadRpc.SetVotingType)]
     public static void RpcSetType(GameData lobby, int type) => SetType((VotingTypes)type);
     public static void SetType(VotingTypes type) => SelectedType = type;
 
-    public static int GetDynamicVotes() => (int)Math.Min(RecommendedVotes[Math.Min(Math.Clamp(LaunchpadPlayer.GetAllAlivePlayers().Count, 0, 15), RecommendedVotes.Length)], LaunchpadGameOptions.Instance.MaxVotes.Value);
+    public static int GetDynamicVotes() => (int)Math.Min(RecommendedVotes[Math.Min(Math.Clamp(LaunchpadPlayer.GetAllAlivePlayers().Count(), 0, 15), RecommendedVotes.Length)], LaunchpadGameOptions.Instance.MaxVotes.Value);
 
     public static int GetVotes()
     {
@@ -47,24 +48,14 @@ public static class VotingTypesManager
     #region Vote calculations
     public static List<CustomVote> CalculateVotes()
     {
-        List<CustomVote> votes = new List<CustomVote>();
-
-        foreach (LaunchpadPlayer player in LaunchpadPlayer.GetAllAlivePlayers())
-        {
-            foreach (byte vote in player.VotedPlayers)
-            {
-                votes.Add(new CustomVote(player.Player.PlayerId, vote));
-            }
-        }
-
-        return votes;
+        return (from player in LaunchpadPlayer.GetAllAlivePlayers() from vote in player.VoteData.VotedPlayers select new CustomVote(player.player.PlayerId, vote)).ToList();
     }
 
     public static Dictionary<byte, float> GetChancePercents(List<CustomVote> votes)
     {
-        Dictionary<byte, float> dict = new Dictionary<byte, float>();
+        var dict = new Dictionary<byte, float>();
 
-        foreach (KeyValuePair<byte, float> pair in CalculateNumVotes(votes))
+        foreach (var pair in CalculateNumVotes(votes))
             dict[pair.Key] = (pair.Value / votes.Count) * 100;
 
         return dict;
@@ -74,18 +65,18 @@ public static class VotingTypesManager
     public static bool CanVoteMultiple() => SelectedType is VotingTypes.Multiple or VotingTypes.Combined;
     public static byte GetVotedPlayerByChance(List<CustomVote> votes)
     {
-        Random rand = new Random();
+        var rand = new Random();
         List<byte> plrs = [.. votes.Select((vote) => vote.VotedFor)];
         return plrs[rand.Next(plrs.Count)];
     }
 
     public static Dictionary<byte, float> CalculateNumVotes(List<CustomVote> votes)
     {
-        Dictionary<byte, float> dictionary = new Dictionary<byte, float>();
+        var dictionary = new Dictionary<byte, float>();
 
-        foreach (byte vote in votes.Select((vote) => vote.VotedFor))
+        foreach (var vote in votes.Select((vote) => vote.VotedFor))
         {
-            if (dictionary.TryGetValue(vote, out float num))
+            if (dictionary.TryGetValue(vote, out var num))
             {
                 dictionary[vote] = num + 1;
             }
@@ -105,9 +96,9 @@ public static class VotingTypesManager
     {
         MeetingHud.Instance.TitleText.text = DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.MeetingVotingResults, Il2CppSystem.Array.Empty<Il2CppSystem.Object>());
 
-        int num2 = 0;
+        var num2 = 0;
 
-        foreach (CustomVote vote in votes)
+        foreach (var vote in votes)
         {
             if (vote.VotedFor == 253)
             {
@@ -116,35 +107,35 @@ public static class VotingTypesManager
                 continue;
             }
 
-            PlayerVoteArea playerVoteArea = MeetingHud.Instance.playerStates[vote.VotedFor];
-            int num = 0;
+            var playerVoteArea = MeetingHud.Instance.playerStates[vote.VotedFor];
+            var num = 0;
             MeetingHud.Instance.BloopAVoteIcon(GameData.Instance.GetPlayerById(vote.Voter), num, playerVoteArea.transform);
             num++;
         }
 
-        Dictionary<byte, float> chances = GetChancePercents(votes);
+        var chances = GetChancePercents(votes);
         if (UseChance() || LaunchpadGameOptions.Instance.ShowPercentages.Value)
         {
-            GameObject skipText = MeetingHud.Instance.SkippedVoting;
+            var skipText = MeetingHud.Instance.SkippedVoting;
             skipText.GetComponentInChildren<TextTranslatorTMP>().Destroy();
 
-            chances.TryGetValue(253, out float skips);
+            chances.TryGetValue(253, out var skips);
             skipText.GetComponentInChildren<TextMeshPro>().text += "\n<size=110%>" + Math.Round(skips, 0) + "%</size>";
 
-            foreach (PlayerVoteArea voteArea in MeetingHud.Instance.playerStates)
+            foreach (var voteArea in MeetingHud.Instance.playerStates)
             {
-                chances.TryGetValue(voteArea.TargetPlayerId, out float val);
+                chances.TryGetValue(voteArea.TargetPlayerId, out var val);
                 if (voteArea.AmDead || val < 1) continue;
 
-                string text = $"{Math.Round(val, 0)}%";
-                GameObject chanceThing = GameObject.Instantiate(voteArea.LevelNumberText.transform.parent, voteArea.transform).gameObject;
+                var text = $"{Math.Round(val, 0)}%";
+                var chanceThing = Object.Instantiate(voteArea.LevelNumberText.transform.parent, voteArea.transform).gameObject;
                 chanceThing.gameObject.name = "ChanceCircle";
                 chanceThing.transform.localPosition = new Vector3(1.2801f, -0.2431f, -2.5401f);
                 chanceThing.transform.localScale = new Vector3(0.35f, 0.35f, 1);
                 chanceThing.transform.GetChild(0).gameObject.SetActive(false);
                 chanceThing.GetComponent<SpriteRenderer>().color = new Color(1, 0, 0);
 
-                TextMeshPro tmp = chanceThing.transform.GetChild(1).gameObject.GetComponent<TextMeshPro>();
+                var tmp = chanceThing.transform.GetChild(1).gameObject.GetComponent<TextMeshPro>();
                 tmp.fontSize = 3f;
                 tmp.text = text;
                 tmp.transform.localPosition = new Vector3(0, 0, 0);

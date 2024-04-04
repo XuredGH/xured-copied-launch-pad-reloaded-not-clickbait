@@ -9,7 +9,7 @@ public static class DummyBehaviourPatches
     [HarmonyPostfix, HarmonyPatch("Update")]
     public static void DummyUpdatePatch(DummyBehaviour __instance)
     {
-        __instance.voted = __instance.myPlayer.GetLpPlayer().VotesRemaining == 0;
+        __instance.voted = __instance.myPlayer.GetLpPlayer().VoteData.VotesRemaining == 0;
     }
 
     [HarmonyPostfix, HarmonyPatch("Start")]
