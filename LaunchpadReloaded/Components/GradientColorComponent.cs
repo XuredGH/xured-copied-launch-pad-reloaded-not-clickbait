@@ -63,6 +63,22 @@ public class GradientColorComponent(IntPtr ptr) : MonoBehaviour(ptr)
         mat.SetColor(ShaderID.SecondaryShadowColor, Palette.ShadowColors[secondaryColor]);
     }
 
+    public void SetColor(Color baseColor, Color gradientColor)
+    {
+        renderer = GetComponent<SpriteRenderer>();
+        if (!renderer)
+        {
+            return;
+        }
+
+        mat = renderer.material;
+
+        PlayerMaterial.SetColors(baseColor, mat);
+
+        mat.SetColor(ShaderID.SecondaryBodyColor, gradientColor);
+        mat.SetColor(ShaderID.SecondaryShadowColor, gradientColor);
+    }
+
     public void Update()
     {
         if (!renderer || !mat)
