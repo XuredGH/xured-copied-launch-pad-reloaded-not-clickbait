@@ -27,7 +27,6 @@ public static class GameSettingsMenuPatches
         GameBtn = __instance.transform.FindChild("Header/Tabs/GameTab").gameObject;
         RoleBtn = __instance.transform.FindChild("Header/Tabs/RoleTab").gameObject;
 
-        
         var numberOpt = __instance.RegularGameSettings.GetComponentInChildren<NumberOption>();
         var toggleOpt = Object.FindObjectOfType<ToggleOption>();
         var stringOpt = __instance.RegularGameSettings.GetComponentInChildren<StringOption>();

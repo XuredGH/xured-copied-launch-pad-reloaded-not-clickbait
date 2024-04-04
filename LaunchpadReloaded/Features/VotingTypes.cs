@@ -2,7 +2,7 @@
 public enum VotingTypes
 {
     Classic,
-    Chance,
     Multiple,
+    Chance,
     Combined
 }

@@ -1,4 +1,5 @@
-﻿using LaunchpadReloaded.Utilities;
+using LaunchpadReloaded.Utilities;
+using LaunchpadReloaded.Features.Managers;
 using Reactor.Utilities.Attributes;
 using System;
 using System.Collections.Generic;

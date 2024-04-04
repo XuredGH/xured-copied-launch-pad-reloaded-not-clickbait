@@ -14,10 +14,14 @@ public class LaunchpadGameOptions
     public readonly CustomStringOption GameModes;
     public readonly CustomToggleOption BanCheaters;
 
+    // Voting Types
     public readonly CustomStringOption VotingType;
     public readonly CustomNumberOption MaxVotes;
     public readonly CustomToggleOption AllowVotingForSamePerson;
-    public readonly CustomToggleOption LiveUpdating;
+    public readonly CustomToggleOption AllowConfirmingVotes;
+    public readonly CustomToggleOption DisableDynamicVoting;
+    public readonly CustomToggleOption ShowPercentages;
+    public readonly CustomOptionGroup VotingGroup;
 
     // General Options
     public readonly CustomToggleOption OnlyShowRoleColor;
@@ -65,11 +69,28 @@ public class LaunchpadGameOptions
         {
             Hidden = ()=> !VotingTypesManager.CanVoteMultiple()
         };
+        VotingType = new CustomStringOption("Voting Type", 0, ["Classic", "Multiple", "Chance", "Combined"]);
+
+        MaxVotes = new CustomNumberOption("Max Votes", 2, 2, 5, 1, NumberSuffixes.None);
+        AllowVotingForSamePerson = new CustomToggleOption("Allow Voting Same Person Again", false);
+        ShowPercentages = new CustomToggleOption("Show Percentages", false);
+        AllowConfirmingVotes = new CustomToggleOption("Allow Confirming Votes", false);
+
+        ShowPercentages.Hidden = VotingTypesManager.UseChance;
+        AllowConfirmingVotes.Hidden = VotingTypesManager.CanVoteMultiple;
+
+        DisableDynamicVoting = new CustomToggleOption("Disable Dynamic Votes", false);
+        DisableDynamicVoting.Hidden = () => !AllowVotingForSamePerson.Value;
 
         AllowVotingForSamePerson = new CustomToggleOption("Allow Voting Same Person Again", true)
         {
             Hidden = () => !VotingTypesManager.CanVoteMultiple()
         };
+
+        VotingGroup = new CustomOptionGroup("Voting Type",
+            toggleOpt: [AllowVotingForSamePerson, ShowPercentages, AllowConfirmingVotes, DisableDynamicVoting],
+            stringOpt: [],
+            numberOpt: [MaxVotes]);
 
         BanCheaters = new CustomToggleOption("Ban Cheaters", true)
         {
@@ -152,7 +173,7 @@ public class LaunchpadGameOptions
             Hidden = () => GameModes.IndexValue != (int)LaunchpadGamemodes.BattleRoyale
         };
 
-        GeneralGroup.Hidden = FunGroup.Hidden = VotingType.Hidden = () => !CustomGameModeManager.IsDefault();
+        GeneralGroup.Hidden = FunGroup.Hidden = VotingType.Hidden = VotingGroup.Hidden = () => !CustomGameModeManager.IsDefault();
 
         foreach (var role in CustomRoleManager.CustomRoles)
         {

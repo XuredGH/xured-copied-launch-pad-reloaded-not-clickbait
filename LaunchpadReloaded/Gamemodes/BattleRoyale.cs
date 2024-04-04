@@ -16,18 +16,16 @@ public class BattleRoyale : CustomGameMode
 {
     public override string Name => "Battle Royale";
     public override string Description => "Everyone can kill.\n<b><i>Last one standing wins.</b></i>";
-
     public override int Id => (int)LaunchpadGamemodes.BattleRoyale;
     public TextMeshPro PlayerCount;
     public TextMeshPro DeathNotif;
     public override void Initialize()
     {
-        var tasks = PlayerControl.LocalPlayer.myTasks;
-        tasks.Clear();
-        
-        foreach (var player in GameData.Instance.AllPlayers) player.Object.cosmetics.TogglePet(false);
-        
+        PlayerControl.LocalPlayer.myTasks.Clear();
         var random = ShipStatus.Instance.DummyLocations.Random();
+
+        foreach (var player in GameData.Instance.AllPlayers) player.Object.cosmetics.TogglePet(false);
+
         PlayerControl.LocalPlayer.NetTransform.RpcSnapTo(random.position);
         
         if (!AmongUsClient.Instance.AmHost)
@@ -42,7 +40,6 @@ public class BattleRoyale : CustomGameMode
                 GameData.Instance.RpcSetBodyType(player, 6);
             }
         }
-        
     }
 
     public IEnumerator DeathNotification(PlayerControl player)
