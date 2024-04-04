@@ -51,7 +51,14 @@ public class LaunchpadGameOptions
 
         VotingType = new CustomStringOption("Voting Type", 0, ["Classic", "Chance", "Multiple", "Combined"])
         {
-            ChangedEvent = i => VotingTypesManager.RpcSetType(GameData.Instance, i),
+            ChangedEvent = i =>
+            {
+                if (!AmongUsClient.Instance || !AmongUsClient.Instance.AmHost)
+                {
+                    return;
+                }
+                VotingTypesManager.RpcSetType(GameData.Instance, i);
+            },
             
         };
         MaxVotes = new CustomNumberOption("Max Votes", 3, 2, 10, 1, NumberSuffixes.None)
