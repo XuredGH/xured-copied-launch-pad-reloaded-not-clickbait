@@ -4,7 +4,11 @@ using Reactor.Networking.Attributes;
 namespace LaunchpadReloaded.Features.Managers;
 public static class VotingTypesManager
 {
-    public static VotingTypes SelectedType = VotingTypes.Classic;
+    public static VotingTypes SelectedType
+    {
+        get => (VotingTypes)LaunchpadGameOptions.Instance.VotingType.IndexValue;
+        set => LaunchpadGameOptions.Instance.VotingType.SetValue((int)value);
+    }
 
     public static void SetType(VotingTypes type)
     {
