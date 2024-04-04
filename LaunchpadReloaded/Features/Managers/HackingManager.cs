@@ -15,8 +15,8 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
 {
     public static HackingManager Instance { get; private set; }
 
-    public List<byte> hackedPlayers;
-    public List<HackNodeComponent> nodes;
+    public List<byte> hackedPlayers = [];
+    public List<HackNodeComponent> nodes = [];
 
     public readonly Dictionary<ShipStatus.MapType, Vector3[]> MapNodePositions = new()
     {

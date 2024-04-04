@@ -6,6 +6,7 @@ using LaunchpadReloaded.Utilities;
 using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -56,7 +57,10 @@ public class BattleRoyale : CustomGameMode
     {
         var alivePlayers = GameData.Instance.AllPlayers.ToArray().Count(info => !info.Disconnected && !info.IsDead);
         player.roleAssigned = false;
-        player.RpcSetRole(RoleTypes.CrewmateGhost);
+        if (AmongUsClient.Instance.AmHost)
+        {
+            player.RpcSetRole(RoleTypes.CrewmateGhost);
+        }
 
         if (alivePlayers == 1)
         {
@@ -92,11 +96,12 @@ public class BattleRoyale : CustomGameMode
         instance.ImpostorVentButton.gameObject.SetActive(false);
     }
 
-    /*    public override List<GameData.PlayerInfo> CalculateWinners()
-        {
-            var alivePlayers = GameData.Instance.AllPlayers.ToArray().Where(player => !player.Disconnected && !player.IsDead).ToList();
-            return alivePlayers;
-        }*/
+    public override List<GameData.PlayerInfo> CalculateWinners()
+    {
+        var alivePlayers = GameData.Instance.AllPlayers.ToArray().Where(player => !player.Disconnected && !player.IsDead).ToList();
+        return alivePlayers;
+    }
+    
     public override bool ShowCustomRoleScreen() => true;
 
     public override void CanKill(out bool runOriginal, out bool result, PlayerControl target)
@@ -115,16 +120,11 @@ public class BattleRoyale : CustomGameMode
     {
         runOriginal = false;
         var alivePlayers = GameData.Instance.AllPlayers.ToArray().Where(player => !player.Disconnected && !player.IsDead);
-        if (alivePlayers.Count() == 1)
+        if (alivePlayers.Count() > 1)
         {
-            foreach (GameData.PlayerInfo plr in GameData.Instance.AllPlayers.ToArray().Where((info) => info.Disconnected))
-            {
-                plr.Object.roleAssigned = false;
-                plr.Object.RpcSetRole(RoleTypes.CrewmateGhost);
-            }
-
-            instance.Manager.RpcEndGame(GameOverReason.ImpostorByKill, false);
+            return;
         }
+        instance.Manager.RpcEndGame(GameOverReason.ImpostorByKill, false);
     }
 
     public override void AssignRoles(out bool runOriginal, LogicRoleSelectionNormal instance)

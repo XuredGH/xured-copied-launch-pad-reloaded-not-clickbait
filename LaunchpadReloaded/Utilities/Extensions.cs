@@ -37,7 +37,7 @@ public static class Extensions
             return false;
         }
 
-        return HackingManager.Instance.hackedPlayers.Contains(playerInfo.PlayerId) || (playerInfo.Role is HackerRole && HackingManager.Instance.AnyPlayerHacked());
+        return HackingManager.Instance.hackedPlayers.Contains(playerInfo.PlayerId) || (playerInfo.Role.IsImpostor && HackingManager.Instance.AnyPlayerHacked());
     }
 
     public static bool IsRevived(this PlayerControl player)

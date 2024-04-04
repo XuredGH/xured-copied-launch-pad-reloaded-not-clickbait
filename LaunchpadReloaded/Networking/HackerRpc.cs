@@ -21,7 +21,7 @@ public static class HackerRpc
         HackingManager.Instance.hackedPlayers.Add(target.PlayerId);
         HackingManager.HackPlayer(target);
         
-        foreach (var data in GameData.Instance.AllPlayers.ToArray().Where(x => x.Role is HackerRole))
+        foreach (var data in GameData.Instance.AllPlayers.ToArray().Where(x => x.Role.IsImpostor))
         {
             HackingManager.HackPlayer(data.Object);
         }
@@ -46,7 +46,7 @@ public static class HackerRpc
 
         if (!HackingManager.Instance.AnyPlayerHacked())
         {
-            foreach (var data in GameData.Instance.AllPlayers.ToArray().Where(x => x.Role is HackerRole))
+            foreach (var data in GameData.Instance.AllPlayers.ToArray().Where(x => x.Role.IsImpostor))
             {
                 HackingManager.UnHackPlayer(data.Object);
             }

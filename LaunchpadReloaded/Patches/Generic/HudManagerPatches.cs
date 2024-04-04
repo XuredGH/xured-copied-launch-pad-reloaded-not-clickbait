@@ -86,28 +86,46 @@ public static class HudManagerPatches
     public static void UpdatePostfix(HudManager __instance)
     {
         var local = PlayerControl.LocalPlayer;
-        if (!local || MeetingHud.Instance) return;
+        if (!local || MeetingHud.Instance)
+        {
+            return;
+        }
 
-        if (!ShipStatus.Instance) OptionsScrollingLogic(__instance);
+        if (LobbyBehaviour.Instance)
+        {
+            OptionsScrollingLogic(__instance);
+        }
 
-        if (AmongUsClient.Instance.GameState != InnerNetClient.GameStates.Started && !ShipStatus.Instance) return;
+        if (AmongUsClient.Instance.GameState != InnerNetClient.GameStates.Started && !ShipStatus.Instance)
+        {
+            return;
+        }
 
         CustomGameModeManager.ActiveMode.HudUpdate(__instance);
 
-        if (local.Data.IsHacked() && !local.Data.Role.IsImpostor) AddHackedTaskString(__instance);
-        else if (HackingManager.Instance && HackingManager.Instance.AnyPlayerHacked())
+        if (HackingManager.Instance)
         {
-            var newB = new StringBuilder();
-            newB.Append(Color.green.ToTextColor());
-            newB.Append(local.Data.Role.IsImpostor ?
-                "\n\n The crewmates are hacked! They will not be able to\ncomplete tasks or call meetings until they reverse the hack."
-                : "\n\nYou will still not be able to report bodies or \ncall meetings until all crewmates reverse the hack.");
-            newB.Append($"\n{HackingManager.Instance.hackedPlayers.Count} players are still hacked.");
-            newB.Append("</color>");
-            __instance.TaskPanel.SetTaskText(__instance.tasksString.ToString() + newB);
-        }
+            if (local.Data.IsHacked() && !local.Data.Role.IsImpostor)
+            {
+                AddHackedTaskString(__instance);
+            }
+            else if (HackingManager.Instance.AnyPlayerHacked())
+            {
+                var newB = new StringBuilder();
+                newB.Append(Color.green.ToTextColor());
+                newB.Append(local.Data.Role.IsImpostor ?
+                    "\n\n The crewmates are hacked! They will not be able to\ncomplete tasks or call meetings until they reverse the hack."
+                    : "\n\nYou will still not be able to report bodies or \ncall meetings until all crewmates reverse the hack.");
+                newB.Append($"\n{HackingManager.Instance.hackedPlayers.Count} players are still hacked.");
+                newB.Append("</color>");
+                __instance.TaskPanel.SetTaskText(__instance.tasksString.ToString() + newB);
+            }
 
-        if (HackingManager.Instance.AnyPlayerHacked()) __instance.ReportButton.SetActive(false);
+            if (HackingManager.Instance.AnyPlayerHacked())
+            {
+                __instance.ReportButton.SetActive(false);
+            }
+        }
 
         if (local.Data.Role is ICustomRole customRole)
         {
@@ -125,12 +143,20 @@ public static class HudManagerPatches
                 if (_roleTab == null) _roleTab = CustomRoleManager.CreateRoleTab(customRole);
                 else CustomRoleManager.UpdateRoleTab(_roleTab, customRole);
             }
-            else if (customRole.SetTabText() == null && _roleTab) _roleTab.gameObject.Destroy();
+            else if (customRole.SetTabText() == null && _roleTab)
+            {
+                _roleTab.gameObject.Destroy();
+            }
         }
-        else if (_roleTab) _roleTab.gameObject.Destroy();
+        else if (_roleTab)
+        {
+            _roleTab.gameObject.Destroy();
+        }
 
-        if (DragManager.Instance is null || HackingManager.Instance is null) return;
-        if (HackingManager.Instance.AnyPlayerHacked()) __instance.ReportButton.SetDisabled();
+        if (DragManager.Instance is null)
+        {
+            return;
+        }
 
         foreach (var (player, bodyId) in DragManager.Instance.DraggingPlayers)
         {
