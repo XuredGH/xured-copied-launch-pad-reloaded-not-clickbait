@@ -102,7 +102,7 @@ public static class HudManagerPatches
             __instance.TaskPanel.SetTaskText(__instance.tasksString.ToString() + newB);
         }
 
-        if (HackingManager.Instance.AnyPlayerHacked()) __instance.ReportButton.SetActive(false);
+        if (HackingManager.Instance && HackingManager.Instance.AnyPlayerHacked()) __instance.ReportButton.SetActive(false);
 
         if (local.Data.Role is ICustomRole customRole)
         {

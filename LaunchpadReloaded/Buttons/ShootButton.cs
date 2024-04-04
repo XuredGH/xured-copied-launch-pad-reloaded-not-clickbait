@@ -49,7 +49,11 @@ public class ShootButton : CustomActionButton
 
     protected override void OnClick()
     {
-        PlayerControl.LocalPlayer.CmdCheckMurder(CurrentTarget);
+        if (CurrentTarget.Data.Role.TeamType == RoleTeamTypes.Impostor || (SheriffRole.ShouldCrewmateDie.Value && CurrentTarget.Data.Role.TeamType == RoleTeamTypes.Crewmate))
+        {
+            PlayerControl.LocalPlayer.CmdCheckMurder(CurrentTarget);
+        }
+
         if (CurrentTarget.Data.Role.TeamType == RoleTeamTypes.Crewmate && !TutorialManager.InstanceExists
             ) PlayerControl.LocalPlayer.CmdCheckMurder(PlayerControl.LocalPlayer);
 

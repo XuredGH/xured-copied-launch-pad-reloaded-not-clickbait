@@ -1,5 +1,5 @@
-﻿using System;
-using BepInEx.Configuration;
+﻿using BepInEx.Configuration;
+using System;
 using UnityEngine;
 
 namespace LaunchpadReloaded.API.GameOptions;
@@ -53,7 +53,7 @@ public class CustomNumberOption : AbstractGameOption
 
         ChangedEvent?.Invoke(Value);
     }
-    
+
     public void CreateNumberOption(NumberOption numberOption)
     {
         numberOption.name = Title;

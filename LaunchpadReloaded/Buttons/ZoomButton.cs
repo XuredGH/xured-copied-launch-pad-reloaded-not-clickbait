@@ -11,8 +11,8 @@ namespace LaunchpadReloaded.Buttons;
 public class ZoomButton : CustomActionButton
 {
     public override string Name => "ZOOM";
-    public override float Cooldown => 10;
-    public override float EffectDuration => 5;
+    public override float Cooldown => CaptainRole.ZoomCooldown.Value;
+    public override float EffectDuration => CaptainRole.ZoomDuration.Value;
     public override int MaxUses => 0;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.ZoomButton;
     public static bool IsZoom;
@@ -37,18 +37,21 @@ public class ZoomButton : CustomActionButton
     {
         HudManager.Instance.ShadowQuad.gameObject.SetActive(false);
         IsZoom = true;
-        for (var ft = Camera.main!.orthographicSize; ft < 9; ft += 0.1f)
+        for (var ft = Camera.main!.orthographicSize; ft < CaptainRole.ZoomDistance.Value; ft += 0.3f)
         {
             Camera.main.orthographicSize = MeetingHud.Instance ? 3f : ft;
             ResolutionManager.ResolutionChanged.Invoke((float)Screen.width / Screen.height, Screen.width, Screen.height, Screen.fullScreen);
             foreach (var cam in Camera.allCameras) cam.orthographicSize = Camera.main.orthographicSize;
             yield return null;
         }
+
+        foreach (var cam in Camera.allCameras) cam.orthographicSize = CaptainRole.ZoomDistance.Value;
+        ResolutionManager.ResolutionChanged.Invoke((float)Screen.width / Screen.height, Screen.width, Screen.height, Screen.fullScreen);
     }
 
     public static IEnumerator ZoomInCoroutine()
     {
-        for (var ft = Camera.main!.orthographicSize; ft > 3; ft -= 0.1f)
+        for (var ft = Camera.main!.orthographicSize; ft > 3f; ft -= 0.3f)
         {
             Camera.main.orthographicSize = MeetingHud.Instance ? 3f : ft;
             ResolutionManager.ResolutionChanged.Invoke((float)Screen.width / Screen.height, Screen.width, Screen.height, Screen.fullScreen);
@@ -57,8 +60,11 @@ public class ZoomButton : CustomActionButton
             yield return null;
         }
 
+        foreach (var cam in Camera.allCameras) cam.orthographicSize = 3f;
         HudManager.Instance.ShadowQuad.gameObject.SetActive(true);
         IsZoom = false;
+
+        ResolutionManager.ResolutionChanged.Invoke((float)Screen.width / Screen.height, Screen.width, Screen.height, Screen.fullScreen);
     }
 
     private static void ZoomOut()

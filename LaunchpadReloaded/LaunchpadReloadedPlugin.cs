@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using BepInEx;
+﻿using BepInEx;
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using LaunchpadReloaded.API.GameModes;
@@ -13,11 +10,14 @@ using Reactor;
 using Reactor.Networking;
 using Reactor.Networking.Attributes;
 using Reactor.Patches;
+using System;
+using System.Linq;
+using System.Text;
 using TMPro;
 
 namespace LaunchpadReloaded;
 
-[BepInAutoPlugin("dev.xtracube.launchpad","LaunchpadReloaded")]
+[BepInAutoPlugin("dev.xtracube.launchpad", "LaunchpadReloaded")]
 [BepInProcess("Among Us.exe")]
 [BepInDependency(ReactorPlugin.Id)]
 [ReactorModFlags(ModFlags.RequireOnAllClients)]
@@ -61,7 +61,7 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
 
         return index < 0 ? version : version[..(index + 8)];
     }
-    
+
     private static void RegisterColors()
     {
         var colors =

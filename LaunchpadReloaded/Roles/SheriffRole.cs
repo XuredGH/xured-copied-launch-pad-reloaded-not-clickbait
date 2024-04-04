@@ -1,8 +1,8 @@
-﻿using System;
-using LaunchpadReloaded.API.GameOptions;
+﻿using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Features;
 using Reactor.Utilities.Attributes;
+using System;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
@@ -25,6 +25,7 @@ public class SheriffRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
 
     public static CustomNumberOption ShootCooldown;
     public static CustomNumberOption Shots;
+    public static CustomToggleOption ShouldCrewmateDie;
     public static CustomOptionGroup Group;
 
     public void CreateOptions()
@@ -43,9 +44,11 @@ public class SheriffRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
             suffixType: NumberSuffixes.None,
             role: typeof(SheriffRole));
 
+        ShouldCrewmateDie = new CustomToggleOption("Should Crewmate Die", false, typeof(SheriffRole));
+
         Group = new CustomOptionGroup($"{RoleColor.ToTextColor()}Sheriff</color>",
             numberOpt: [ShootCooldown, Shots],
             stringOpt: [],
-            toggleOpt: [], role: typeof(SheriffRole));
+            toggleOpt: [ShouldCrewmateDie], role: typeof(SheriffRole));
     }
 }
