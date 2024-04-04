@@ -21,8 +21,8 @@ public static class MeetingHudPatches
     {
         foreach (var plr in LaunchpadPlayer.GetAllPlayers())
         {
-            plr.votesRemaining = VotingTypesManager.GetVotes();
-            plr.votedPlayers.Clear();
+            plr.VoteData.VotesRemaining = VotingTypesManager.GetVotes();
+            plr.VoteData.VotedPlayers.Clear();
         }
 
         DragManager.Instance.DraggingPlayers.Clear();
@@ -36,7 +36,7 @@ public static class MeetingHudPatches
         }
 
         var tmp = _typeText.GetComponent<TextMeshPro>();
-        tmp.text = LaunchpadPlayer.LocalPlayer.votesRemaining + " votes left";
+        tmp.text = LaunchpadPlayer.LocalPlayer.VoteData.VotesRemaining + " votes left";
 
         __instance.state = MeetingHud.VoteStates.NotVoted;
     }
@@ -53,7 +53,7 @@ public static class MeetingHudPatches
     [HarmonyPrefix, HarmonyPatch(typeof(MeetingHud), "CheckForEndVoting")]
     public static bool EndCheck(MeetingHud __instance)
     {
-        if (LaunchpadPlayer.GetAllAlivePlayers().Any(plr => plr.votesRemaining > 0))
+        if (LaunchpadPlayer.GetAllAlivePlayers().Any(plr => plr.VoteData.VotesRemaining > 0))
         {
             return false;
         }
@@ -68,7 +68,7 @@ public static class MeetingHudPatches
 
     public static List<CustomVote> CalculateVotes()
     {
-        return (from player in LaunchpadPlayer.GetAllAlivePlayers() from vote in player.votedPlayers select new CustomVote(player.player.PlayerId, vote)).ToList();
+        return (from player in LaunchpadPlayer.GetAllAlivePlayers() from vote in player.VoteData.VotedPlayers select new CustomVote(player.player.PlayerId, vote)).ToList();
     }
 
     public static Dictionary<byte, int> CalculateNumVotes(List<CustomVote> votes)
@@ -99,7 +99,7 @@ public static class MeetingHudPatches
             return true;
         }
 
-        return !LaunchpadPlayer.LocalPlayer.votedPlayers.Contains(suspect);
+        return !LaunchpadPlayer.LocalPlayer.VoteData.VotedPlayers.Contains(suspect);
     }
 
     [HarmonyPrefix, HarmonyPatch(typeof(MeetingHud), "ForceSkipAll")]
@@ -138,7 +138,7 @@ public static class MeetingHudPatches
     [HarmonyPostfix, HarmonyPatch(typeof(DummyBehaviour), nameof(DummyBehaviour.Update))]
     public static void DummyUpdatePatch(DummyBehaviour __instance)
     {
-        __instance.voted = __instance.myPlayer.GetLpPlayer().votesRemaining == 0;
+        __instance.voted = __instance.myPlayer.GetLpPlayer().VoteData.VotesRemaining == 0;
     }
 
     [HarmonyPostfix, HarmonyPatch(typeof(DummyBehaviour), nameof(DummyBehaviour.Start))]
@@ -202,7 +202,7 @@ public static class MeetingHudPatches
     public static bool CastVotePatch(MeetingHud __instance, [HarmonyArgument(0)] byte playerId, [HarmonyArgument(1)] byte suspectIdx)
     {
         var plr = LaunchpadPlayer.GetById(playerId);
-        if (plr.votesRemaining == 0)
+        if (plr.VoteData.VotesRemaining == 0)
         {
             return false;
         }
@@ -214,14 +214,14 @@ public static class MeetingHudPatches
 
         if (suspectIdx == 253)
         {
-            plr.votedPlayers.Clear();
-            plr.votesRemaining = 0;
-            plr.votedPlayers.Add(suspectIdx);
+            plr.VoteData.VotedPlayers.Clear();
+            plr.VoteData.VotesRemaining = 0;
+            plr.VoteData.VotedPlayers.Add(suspectIdx);
         }
         else
         {
-            plr.votesRemaining -= 1;
-            plr.votedPlayers.Add(suspectIdx);
+            plr.VoteData.VotesRemaining -= 1;
+            plr.VoteData.VotedPlayers.Add(suspectIdx);
         }
 
         __instance.SetDirtyBit(1U);
@@ -248,21 +248,21 @@ public static class MeetingHudPatches
             return true;
         }
         
-        if (plr.votesRemaining == 0)
+        if (plr.VoteData.VotesRemaining < 1)
         {
             return false;
         }
 
         if (suspectIdx == 253)
         {
-            plr.votedPlayers.Clear();
-            plr.votesRemaining = 0;
-            plr.votedPlayers.Add(suspectIdx);
+            plr.VoteData.VotedPlayers.Clear();
+            plr.VoteData.VotesRemaining = 0;
+            plr.VoteData.VotedPlayers.Add(suspectIdx);
         }
         else
         {
-            plr.votesRemaining -= 1;
-            plr.votedPlayers.Add(suspectIdx);
+            plr.VoteData.VotesRemaining -= 1;
+            plr.VoteData.VotedPlayers.Add(suspectIdx);
         }
 
         return true;
@@ -275,13 +275,13 @@ public static class MeetingHudPatches
         {
             var playerVoteArea = __instance.playerStates[i];
             playerVoteArea.ClearButtons();
-            if (LaunchpadPlayer.LocalPlayer.votesRemaining == 1 || suspect == 253)
+            if (LaunchpadPlayer.LocalPlayer.VoteData.VotesRemaining == 1 || suspect == 253)
             {
                 playerVoteArea.voteComplete = true;
             }
         }
 
-        if (LaunchpadPlayer.LocalPlayer.votesRemaining == 1 || suspect == 253)
+        if (LaunchpadPlayer.LocalPlayer.VoteData.VotesRemaining == 1 || suspect == 253)
         {
             __instance.SkipVoteButton.ClearButtons();
             __instance.SkipVoteButton.voteComplete = true;
@@ -291,7 +291,7 @@ public static class MeetingHudPatches
         __instance.CmdCastVote(PlayerControl.LocalPlayer.PlayerId, suspect);
 
         var tmp = _typeText.GetComponent<TextMeshPro>();
-        tmp.text = LaunchpadPlayer.LocalPlayer.votesRemaining + " votes left";
+        tmp.text = LaunchpadPlayer.LocalPlayer.VoteData.VotesRemaining + " votes left";
 
         return false;
     }
