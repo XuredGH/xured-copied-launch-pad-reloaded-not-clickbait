@@ -26,11 +26,11 @@ public static class VotingTypesManager
         }
     }
 
-    [MethodRpc((uint)LaunchpadRPC.SetVotingType)]
+    [MethodRpc((uint)LaunchpadRpc.SetVotingType)]
     public static void RpcSetType(GameData lobby, int type)
     {
         SetType((VotingTypes)type);
     }
 
-    public static bool CanVoteMultiple() => SelectedType == VotingTypes.Multiple || SelectedType == VotingTypes.Combined;
+    public static bool CanVoteMultiple() => SelectedType is VotingTypes.Multiple or VotingTypes.Combined;
 }

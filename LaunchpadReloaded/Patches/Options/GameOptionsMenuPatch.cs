@@ -33,7 +33,10 @@ public static class GameOptionsMenuPatch
     public static void UpdatePostfix(GameOptionsMenu __instance)
     {
         var menu = Object.FindObjectsOfType<GameSettingMenu>().First();
-        if (menu.RegularGameSettings.active || menu.RolesSettings.gameObject.active || menu.HideNSeekSettings.active) return;
+        if (menu.RegularGameSettings.active || menu.RolesSettings.gameObject.active || menu.HideNSeekSettings.active)
+        {
+            return;
+        }
 
         var startOffset = 2.15f;
         __instance.GetComponentInParent<Scroller>().ContentYBounds.max = startOffset + __instance.Children.Count * 0.5f;

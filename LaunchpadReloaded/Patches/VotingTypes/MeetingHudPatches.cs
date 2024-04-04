@@ -14,29 +14,29 @@ namespace LaunchpadReloaded.Patches.VotingTypes;
 [HarmonyPatch]
 public static class MeetingHudPatches
 {
-    public static GameObject typeText;
+    private static GameObject _typeText;
 
     [HarmonyPostfix, HarmonyPatch(typeof(MeetingHud), "Start")]
     public static void AwakePostfix(MeetingHud __instance)
     {
-        foreach (LaunchpadPlayer plr in LaunchpadPlayer.GetAllPlayers())
+        foreach (var plr in LaunchpadPlayer.GetAllPlayers())
         {
-            plr.VotesRemaining = VotingTypesManager.GetVotes();
-            plr.VotedPlayers.Clear();
+            plr.votesRemaining = VotingTypesManager.GetVotes();
+            plr.votedPlayers.Clear();
         }
 
         DragManager.Instance.DraggingPlayers.Clear();
 
-        if (typeText == null)
+        if (_typeText == null)
         {
-            typeText = GameObject.Instantiate(__instance.TimerText, __instance.TimerText.transform.parent).gameObject;
-            typeText.GetComponent<TextTranslatorTMP>().Destroy();
-            typeText.transform.localPosition += new Vector3(0, 0.25f, 0);
-            typeText.name = "VoteTypeText";
+            _typeText = Object.Instantiate(__instance.TimerText, __instance.TimerText.transform.parent).gameObject;
+            _typeText.GetComponent<TextTranslatorTMP>().Destroy();
+            _typeText.transform.localPosition += new Vector3(0, 0.25f, 0);
+            _typeText.name = "VoteTypeText";
         }
 
-        TextMeshPro tmp = typeText.GetComponent<TextMeshPro>();
-        tmp.text = LaunchpadPlayer.LocalPlayer.VotesRemaining + " votes left";
+        var tmp = _typeText.GetComponent<TextMeshPro>();
+        tmp.text = LaunchpadPlayer.LocalPlayer.votesRemaining + " votes left";
 
         __instance.state = MeetingHud.VoteStates.NotVoted;
     }
@@ -44,45 +44,40 @@ public static class MeetingHudPatches
     [HarmonyPostfix, HarmonyPatch(typeof(MeetingHud), "SetupProceedButton")]
     public static void ProceedPatch(MeetingHud __instance)
     {
-        if (typeText) typeText.gameObject.SetActive(false);
+        if (_typeText)
+        {
+            _typeText.gameObject.SetActive(false);
+        }
     }
 
     [HarmonyPrefix, HarmonyPatch(typeof(MeetingHud), "CheckForEndVoting")]
     public static bool EndCheck(MeetingHud __instance)
     {
-        if (LaunchpadPlayer.GetAllAlivePlayers().All((plr) => plr.VotesRemaining == 0))
+        if (LaunchpadPlayer.GetAllAlivePlayers().Any(plr => plr.votesRemaining > 0))
         {
-            KeyValuePair<byte, int> max = CalculateNumVotes(CalculateVotes()).MaxPair(out bool isTie);
-            GameData.PlayerInfo exiled = GameData.Instance.AllPlayers.ToArray().FirstOrDefault((GameData.PlayerInfo v) => !isTie && v.PlayerId == max.Key);
-            MeetingHud.VoterState[] array = new MeetingHud.VoterState[__instance.playerStates.Length];
-            __instance.RpcVotingComplete(new MeetingHud.VoterState[__instance.playerStates.Length], exiled, isTie);
+            return false;
         }
+        
+        var max = CalculateNumVotes(CalculateVotes()).MaxPair(out var isTie);
+        var exiled = GameData.Instance.AllPlayers.ToArray().FirstOrDefault(v => !isTie && v.PlayerId == max.Key);
+        var array = new MeetingHud.VoterState[__instance.playerStates.Length];
+        __instance.RpcVotingComplete(array, exiled, isTie);
 
         return false;
     }
 
     public static List<CustomVote> CalculateVotes()
     {
-        List<CustomVote> votes = new List<CustomVote>();
-
-        foreach (LaunchpadPlayer player in LaunchpadPlayer.GetAllAlivePlayers())
-        {
-            foreach (byte vote in player.VotedPlayers)
-            {
-                votes.Add(new CustomVote(player.Player.PlayerId, vote));
-            }
-        }
-
-        return votes;
+        return (from player in LaunchpadPlayer.GetAllAlivePlayers() from vote in player.votedPlayers select new CustomVote(player.player.PlayerId, vote)).ToList();
     }
 
     public static Dictionary<byte, int> CalculateNumVotes(List<CustomVote> votes)
     {
-        Dictionary<byte, int> dictionary = new Dictionary<byte, int>();
+        var dictionary = new Dictionary<byte, int>();
 
-        foreach (byte vote in votes.Select((vote) => vote.VotedFor))
+        foreach (var vote in votes.Select(vote => vote.VotedFor))
         {
-            if (dictionary.TryGetValue(vote, out int num))
+            if (dictionary.TryGetValue(vote, out var num))
             {
                 dictionary[vote] = num + 1;
 
@@ -99,17 +94,21 @@ public static class MeetingHudPatches
     [HarmonyPrefix, HarmonyPatch(typeof(MeetingHud), "Select")]
     public static bool SelectPatch(MeetingHud __instance, [HarmonyArgument(0)] byte suspect)
     {
-        if (LaunchpadGameOptions.Instance.AllowVotingForSamePerson.Value) return true;
-        return !LaunchpadPlayer.LocalPlayer.VotedPlayers.Contains(suspect);
+        if (LaunchpadGameOptions.Instance.AllowVotingForSamePerson.Value)
+        {
+            return true;
+        }
+
+        return !LaunchpadPlayer.LocalPlayer.votedPlayers.Contains(suspect);
     }
 
     [HarmonyPrefix, HarmonyPatch(typeof(MeetingHud), "ForceSkipAll")]
     public static bool SkipAllPatch(MeetingHud __instance)
     {
         Debug.Log("MAN PLEASE JUST CLAL THE FUNCTIONM");
-        foreach (LaunchpadPlayer plr in LaunchpadPlayer.GetAllAlivePlayers())
+        foreach (var plr in LaunchpadPlayer.GetAllAlivePlayers())
         {
-            __instance.CmdCastVote(plr.Player.PlayerId, 253);
+            __instance.CmdCastVote(plr.player.PlayerId, 253);
         }
         __instance.CheckForEndVoting();
 
@@ -139,13 +138,16 @@ public static class MeetingHudPatches
     [HarmonyPostfix, HarmonyPatch(typeof(DummyBehaviour), nameof(DummyBehaviour.Update))]
     public static void DummyUpdatePatch(DummyBehaviour __instance)
     {
-        __instance.voted = __instance.myPlayer.GetLpPlayer().VotesRemaining == 0;
+        __instance.voted = __instance.myPlayer.GetLpPlayer().votesRemaining == 0;
     }
 
     [HarmonyPostfix, HarmonyPatch(typeof(DummyBehaviour), nameof(DummyBehaviour.Start))]
     public static void DummyStartPatch(DummyBehaviour __instance)
     {
-        if (LaunchpadSettings.Instance.UniqueDummies.Enabled) __instance.myPlayer.RpcSetName(AccountManager.Instance.GetRandomName());
+        if (LaunchpadSettings.Instance.UniqueDummies.Enabled)
+        {
+            __instance.myPlayer.RpcSetName(AccountManager.Instance.GetRandomName());
+        }
     }
 
     /*    [HarmonyPostfix, HarmonyPatch(typeof(MeetingHud), "ClearVote")]
@@ -159,9 +161,10 @@ public static class MeetingHudPatches
     {
         MeetingHud.Instance.TitleText.text = DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.MeetingVotingResults, Il2CppSystem.Array.Empty<Il2CppSystem.Object>());
 
-        int num2 = 0;
+        var num2 = 0;
+        var num = 0;
 
-        foreach (CustomVote vote in votes)
+        foreach (var vote in votes)
         {
             if (vote.VotedFor == 253)
             {
@@ -170,9 +173,8 @@ public static class MeetingHudPatches
                 continue;
             }
 
-            PlayerVoteArea playerVoteArea = MeetingHud.Instance.playerStates[vote.VotedFor];
+            var playerVoteArea = MeetingHud.Instance.playerStates[vote.VotedFor];
             playerVoteArea.ClearForResults();
-            int num = 0;
             MeetingHud.Instance.BloopAVoteIcon(GameData.Instance.GetPlayerById(vote.Voter), num, playerVoteArea.transform);
             num++;
         }
@@ -182,14 +184,16 @@ public static class MeetingHudPatches
     [HarmonyPrefix, HarmonyPatch(typeof(MeetingHud), "PopulateResults")]
     public static bool PopulateResultsPatch(MeetingHud __instance)
     {
-        if (AmongUsClient.Instance.AmHost)
+        if (!AmongUsClient.Instance.AmHost)
         {
-            List<CustomVote> votes = CalculateVotes();
-            byte[] votedFor = votes.Select((vote) => vote.VotedFor).ToArray();
-            byte[] voters = votes.Select((vote) => vote.Voter).ToArray();
-
-            Rpc<PopulateResultsRpc>.Instance.Send(new PopulateResultsRpc.Data(votedFor, voters));
+            return false;
         }
+        
+        var votes = CalculateVotes();
+        var votedFor = votes.Select(vote => vote.VotedFor).ToArray();
+        var voters = votes.Select(vote => vote.Voter).ToArray();
+
+        Rpc<PopulateResultsRpc>.Instance.Send(new PopulateResultsRpc.Data(votedFor, voters));
 
         return false;
     }
@@ -197,24 +201,27 @@ public static class MeetingHudPatches
     [HarmonyPrefix, HarmonyPatch(typeof(MeetingHud), "CastVote")]
     public static bool CastVotePatch(MeetingHud __instance, [HarmonyArgument(0)] byte playerId, [HarmonyArgument(1)] byte suspectIdx)
     {
-        LaunchpadPlayer plr = LaunchpadPlayer.GetById(playerId);
-        if (plr.VotesRemaining == 0) return false;
+        var plr = LaunchpadPlayer.GetById(playerId);
+        if (plr.votesRemaining == 0)
+        {
+            return false;
+        }
 
         if (PlayerControl.LocalPlayer.PlayerId == playerId)
         {
-            SoundManager.Instance.PlaySound(__instance.VoteLockinSound, false, 1f, null);
+            SoundManager.Instance.PlaySound(__instance.VoteLockinSound, false);
         }
 
         if (suspectIdx == 253)
         {
-            plr.VotedPlayers.Clear();
-            plr.VotesRemaining = 0;
-            plr.VotedPlayers.Add(suspectIdx);
+            plr.votedPlayers.Clear();
+            plr.votesRemaining = 0;
+            plr.votedPlayers.Add(suspectIdx);
         }
         else
         {
-            plr.VotesRemaining -= 1;
-            plr.VotedPlayers.Add(suspectIdx);
+            plr.votesRemaining -= 1;
+            plr.votedPlayers.Add(suspectIdx);
         }
 
         __instance.SetDirtyBit(1U);
@@ -230,24 +237,32 @@ public static class MeetingHudPatches
     [HarmonyPrefix, HarmonyPatch(typeof(MeetingHud), "CmdCastVote")]
     public static bool CmdCastVotePatch(MeetingHud __instance, [HarmonyArgument(0)] byte playerId, [HarmonyArgument(1)] byte suspectIdx)
     {
-        if (AmongUsClient.Instance.AmHost) return true;
-
-        LaunchpadPlayer plr = LaunchpadPlayer.GetById(playerId);
-        if (plr.Player.isDummy)
+        if (AmongUsClient.Instance.AmHost)
         {
-            if (plr.VotesRemaining == 0) return false;
+            return true;
+        }
 
-            if (suspectIdx == 253)
-            {
-                plr.VotedPlayers.Clear();
-                plr.VotesRemaining = 0;
-                plr.VotedPlayers.Add(suspectIdx);
-            }
-            else
-            {
-                plr.VotesRemaining -= 1;
-                plr.VotedPlayers.Add(suspectIdx);
-            }
+        var plr = LaunchpadPlayer.GetById(playerId);
+        if (!plr.player.isDummy)
+        {
+            return true;
+        }
+        
+        if (plr.votesRemaining == 0)
+        {
+            return false;
+        }
+
+        if (suspectIdx == 253)
+        {
+            plr.votedPlayers.Clear();
+            plr.votesRemaining = 0;
+            plr.votedPlayers.Add(suspectIdx);
+        }
+        else
+        {
+            plr.votesRemaining -= 1;
+            plr.votedPlayers.Add(suspectIdx);
         }
 
         return true;
@@ -256,14 +271,17 @@ public static class MeetingHudPatches
     [HarmonyPrefix, HarmonyPatch(typeof(MeetingHud), "Confirm")]
     public static bool ConfirmPatch(MeetingHud __instance, [HarmonyArgument(0)] byte suspect)
     {
-        for (int i = 0; i < __instance.playerStates.Length; i++)
+        for (var i = 0; i < __instance.playerStates.Length; i++)
         {
-            PlayerVoteArea playerVoteArea = __instance.playerStates[i];
+            var playerVoteArea = __instance.playerStates[i];
             playerVoteArea.ClearButtons();
-            if (LaunchpadPlayer.LocalPlayer.VotesRemaining == 1 || suspect == 253) playerVoteArea.voteComplete = true;
+            if (LaunchpadPlayer.LocalPlayer.votesRemaining == 1 || suspect == 253)
+            {
+                playerVoteArea.voteComplete = true;
+            }
         }
 
-        if (LaunchpadPlayer.LocalPlayer.VotesRemaining == 1 || suspect == 253)
+        if (LaunchpadPlayer.LocalPlayer.votesRemaining == 1 || suspect == 253)
         {
             __instance.SkipVoteButton.ClearButtons();
             __instance.SkipVoteButton.voteComplete = true;
@@ -272,8 +290,8 @@ public static class MeetingHudPatches
 
         __instance.CmdCastVote(PlayerControl.LocalPlayer.PlayerId, suspect);
 
-        TextMeshPro tmp = typeText.GetComponent<TextMeshPro>();
-        tmp.text = LaunchpadPlayer.LocalPlayer.VotesRemaining + " votes left";
+        var tmp = _typeText.GetComponent<TextMeshPro>();
+        tmp.text = LaunchpadPlayer.LocalPlayer.votesRemaining + " votes left";
 
         return false;
     }

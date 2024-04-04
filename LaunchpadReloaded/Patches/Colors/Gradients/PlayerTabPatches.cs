@@ -143,7 +143,10 @@ public static class PlayerTabPatches
         {
             __instance.AvailableColors.Add(i);
         }
-        if (!LaunchpadGameOptions.Instance.UniqueColors.Value) return false;
+        if (!LaunchpadGameOptions.Instance.UniqueColors.Value)
+        {
+            return false;
+        }
 
         if (!GameData.Instance)
         {

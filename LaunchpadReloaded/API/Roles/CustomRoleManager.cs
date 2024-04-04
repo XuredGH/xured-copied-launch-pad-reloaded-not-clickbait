@@ -75,7 +75,10 @@ public static class CustomRoleManager
 
         CustomRoles.Add(customRole.RoleId, roleBehaviour);
 
-        if (customRole.HideSettings) return;
+        if (customRole.HideSettings)
+        {
+            return;
+        }
 
         var config = PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config;
         config.Bind(customRole.NumConfigDefinition, 1);
@@ -134,7 +137,10 @@ public static class CustomRoleManager
     {
         foreach (var role in CustomRoles.Values.Select(x => (ICustomRole)x))
         {
-            if (role.HideSettings) continue;
+            if (role.HideSettings)
+            {
+                continue;
+            }
 
             PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config.TryGetEntry<int>(role.NumConfigDefinition, out var numEntry);
             PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config.TryGetEntry<int>(role.ChanceConfigDefinition, out var chanceEntry);

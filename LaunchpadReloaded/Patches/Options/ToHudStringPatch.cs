@@ -62,10 +62,13 @@ public static class ToHudStringPatch
             return;
         }
 
-        foreach (RoleBehaviour role in CustomRoleManager.CustomRoles.Values)
+        foreach (var role in CustomRoleManager.CustomRoles.Values)
         {
-            ICustomRole customRole = role as ICustomRole;
-            if (customRole.IsGhostRole) role.Role = RoleTypes.CrewmateGhost;
+            var customRole = role as ICustomRole;
+            if (customRole.IsGhostRole)
+            {
+                role.Role = RoleTypes.CrewmateGhost;
+            }
         }
     }
 
@@ -79,10 +82,13 @@ public static class ToHudStringPatch
             return;
         }
 
-        foreach (RoleBehaviour role in CustomRoleManager.CustomRoles.Values)
+        foreach (var role in CustomRoleManager.CustomRoles.Values)
         {
-            ICustomRole customRole = role as ICustomRole;
-            if (customRole.IsGhostRole) role.Role = (RoleTypes)customRole.RoleId;
+            var customRole = role as ICustomRole;
+            if (customRole.IsGhostRole)
+            {
+                role.Role = (RoleTypes)customRole.RoleId;
+            }
         }
 
         if (ShowCustom || !CustomGameModeManager.ActiveMode.CanAccessSettingsTab())

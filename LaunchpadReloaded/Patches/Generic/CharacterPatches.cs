@@ -58,7 +58,7 @@ public static class CharacterPatches
             if (LobbyBehaviour.Instance)
             {
                 __instance.SetupNeckGrowth(false, false);
-                return false; ;
+                return false;
             }
             __instance.SetupNeckGrowth(true, false);
         }
@@ -69,7 +69,7 @@ public static class CharacterPatches
     public static bool NeckSizePatch(LongBoiPlayerBody __instance, ref float distance)
     {
         __instance.targetHeight = distance / 10f + 0.5f;
-        __instance.SetupNeckGrowth(true, true);
+        __instance.SetupNeckGrowth(true);
         return false;
     }
 
@@ -83,10 +83,10 @@ public static class CharacterPatches
         {
             __instance.cosmeticLayer.SetHatVisorVisible(false);
         }
-        __instance.SetupNeckGrowth(true, true);
+        __instance.SetupNeckGrowth(true);
         if (__instance.isExiledPlayer)
         {
-            ShipStatus instance = ShipStatus.Instance;
+            var instance = ShipStatus.Instance;
             if (instance == null || instance.Type != ShipStatus.MapType.Fungle)
             {
                 __instance.cosmeticLayer.AdjustCosmeticRotations(-17.75f);

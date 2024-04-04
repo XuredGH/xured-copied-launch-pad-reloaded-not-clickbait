@@ -49,13 +49,20 @@ public class LaunchpadGameOptions
             }
         };
 
-        VotingType = new CustomStringOption("Voting Type", 0, ["Classic", "Chance", "Multiple", "Combined"]);
-        VotingType.ChangedEvent = i => VotingTypesManager.RpcSetType(GameData.Instance, VotingType.IndexValue);
-        MaxVotes = new CustomNumberOption("Max Votes", 3, 2, 10, 1, NumberSuffixes.None);
-        MaxVotes.Hidden = () => !VotingTypesManager.CanVoteMultiple();
+        VotingType = new CustomStringOption("Voting Type", 0, ["Classic", "Chance", "Multiple", "Combined"])
+        {
+            ChangedEvent = i => VotingTypesManager.RpcSetType(GameData.Instance, i),
+            
+        };
+        MaxVotes = new CustomNumberOption("Max Votes", 3, 2, 10, 1, NumberSuffixes.None)
+        {
+            Hidden = ()=> !VotingTypesManager.CanVoteMultiple()
+        };
 
-        AllowVotingForSamePerson = new CustomToggleOption("Allow Voting Same Person Again", true);
-        AllowVotingForSamePerson.Hidden = () => !VotingTypesManager.CanVoteMultiple();
+        AllowVotingForSamePerson = new CustomToggleOption("Allow Voting Same Person Again", true)
+        {
+            Hidden = () => !VotingTypesManager.CanVoteMultiple()
+        };
 
         BanCheaters = new CustomToggleOption("Ban Cheaters", true)
         {
@@ -108,10 +115,13 @@ public class LaunchpadGameOptions
                         break;
                 }
 
-                foreach (PlayerControl plr in PlayerControl.AllPlayerControls)
+                foreach (var plr in PlayerControl.AllPlayerControls)
                 {
                     plr.MyPhysics.SetBodyType(bodyType);
-                    if (bodyType == PlayerBodyTypes.Normal) plr.cosmetics.currentBodySprite.BodySprite.transform.localScale = new(0.5f, 0.5f, 1f);
+                    if (bodyType == PlayerBodyTypes.Normal)
+                    {
+                        plr.cosmetics.currentBodySprite.BodySprite.transform.localScale = new(0.5f, 0.5f, 1f);
+                    }
                 }
             }
         };
@@ -135,9 +145,7 @@ public class LaunchpadGameOptions
             Hidden = () => GameModes.IndexValue != (int)LaunchpadGamemodes.BattleRoyale
         };
 
-        BattleRoyaleGroup.Hidden = () => GameModes.Value != "Battle Royale";
-        GeneralGroup.Hidden = FunGroup.Hidden = VotingType.Hidden = () => GameModes.Value != "Default";
-        GeneralGroup.Hidden = FunGroup.Hidden = () => CustomGameModeManager.ActiveMode.Id != (int)LaunchpadGamemodes.Default;
+        GeneralGroup.Hidden = FunGroup.Hidden = VotingType.Hidden = () => !CustomGameModeManager.IsDefault();
 
         foreach (var role in CustomRoleManager.CustomRoles)
         {

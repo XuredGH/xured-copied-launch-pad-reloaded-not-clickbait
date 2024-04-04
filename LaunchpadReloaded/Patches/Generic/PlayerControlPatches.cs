@@ -51,8 +51,6 @@ public static class PlayerControlPatches
         Rpc<CustomCheckColorRpc>.Instance.SendTo(__instance, AmongUsClient.Instance.HostId, 
             new CustomCheckColorRpc.Data(bodyColor, (byte)GradientManager.LocalGradientId));
         return false;
-        CustomGameModeManager.ActiveMode.OnDeath(__instance);
-        __instance.GetLpPlayer().OnDeath();
     }
 
     /// <summary>
@@ -61,21 +59,38 @@ public static class PlayerControlPatches
     [HarmonyPostfix, HarmonyPatch(nameof(PlayerControl.FixedUpdate))]
     public static void UpdatePatch(PlayerControl __instance)
     {
-        if (MeetingHud.Instance || __instance.Data is null) return;
+        if (MeetingHud.Instance || __instance.Data is null)
+        {
+            return;
+        }
 
-        if (__instance.IsRevived()) __instance.cosmetics.SetOutline(true, new Nullable<Color>(LaunchpadPalette.MedicColor));
+        if (__instance.IsRevived())
+        {
+            __instance.cosmetics.SetOutline(true, new Nullable<Color>(LaunchpadPalette.MedicColor));
+        }
 
         if (__instance.AmOwner)
         {
             foreach (var button in CustomButtonManager.CustomButtons)
             {
-                if (!button.Enabled(__instance.Data.Role)) continue;
+                if (!button.Enabled(__instance.Data.Role))
+                {
+                    continue;
+                }
+
                 button.UpdateHandler(__instance);
             }
         }
 
-        if (__instance.Data is null || __instance.Data.Role is null) return;
-        if (__instance.Data.Role is ICustomRole customRole) customRole.PlayerControlFixedUpdate(__instance);
+        if (__instance.Data is null || __instance.Data.Role is null)
+        {
+            return;
+        }
+
+        if (__instance.Data.Role is ICustomRole customRole)
+        {
+            customRole.PlayerControlFixedUpdate(__instance);
+        }
     }
 
     /// <summary>
@@ -84,6 +99,7 @@ public static class PlayerControlPatches
     [HarmonyPrefix, HarmonyPatch("Start")]
     public static void StartPrefix(PlayerControl __instance)
     {
+        __instance.gameObject.AddComponent<LaunchpadPlayer>();
         var gradColorComponent = __instance.gameObject.AddComponent<PlayerGradientData>();
         gradColorComponent.playerId = __instance.PlayerId;
     }

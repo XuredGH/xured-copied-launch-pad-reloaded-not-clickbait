@@ -35,7 +35,10 @@ public static class GenericRpc
         if (bodyType == 6)
         {
             player.MyPhysics.SetBodyType(PlayerBodyTypes.Seeker);
-            if (!LaunchpadGameOptions.Instance.ShowKnife.Value) return;
+            if (!LaunchpadGameOptions.Instance.ShowKnife.Value)
+            {
+                return;
+            }
 
             var seekerHand = player.transform.FindChild("BodyForms/Seeker/SeekerHand").gameObject;
             var hand = Object.Instantiate(seekerHand).gameObject;
@@ -44,8 +47,10 @@ public static class GenericRpc
             hand.name = "KnifeHand";
             hand.layer = LayerMask.NameToLayer("Players");
 
-            hand.transform.localPosition = player.transform.localPosition;
-            hand.transform.position = player.transform.position;
+            var transform = player.transform;
+            
+            hand.transform.localPosition = transform.localPosition;
+            hand.transform.position = transform.position;
 
             var nodeSync = hand.GetComponent<SpriteAnimNodeSync>();
             nodeSync.flipOffset = new Vector3(-1.5f, 0.5f, 0);

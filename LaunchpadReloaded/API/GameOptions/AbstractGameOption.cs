@@ -12,7 +12,7 @@ public abstract class AbstractGameOption
     public bool Save { get; }
     public bool ShowInHideNSeek { get; init; }
     public CustomOptionGroup Group { get; set; }
-    public Func<bool> Hidden { get; init; }
+    public Func<bool> Hidden { get; set; }
     public OptionBehaviour OptionBehaviour { get; protected set; }
     public void ValueChanged(OptionBehaviour optionBehaviour)
     {

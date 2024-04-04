@@ -16,7 +16,10 @@ public static class RoleOptionsCollectionPatch
     {
         if (CustomRoleManager.GetCustomRoleBehaviour(roleType, out var customRole))
         {
-            if (customRole.HideSettings) return false;
+            if (customRole.HideSettings)
+            {
+                return false;
+            }
 
             PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config.TryGetEntry<int>(customRole.ChanceConfigDefinition, out var entry);
             __result = entry.Value;
@@ -34,7 +37,10 @@ public static class RoleOptionsCollectionPatch
     {
         if (CustomRoleManager.GetCustomRoleBehaviour(roleType, out var customRole))
         {
-            if (customRole.HideSettings) return false;
+            if (customRole.HideSettings)
+            {
+                return false;
+            }
 
             PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config.TryGetEntry<int>(customRole.NumConfigDefinition, out var entry);
             __result = entry.Value;

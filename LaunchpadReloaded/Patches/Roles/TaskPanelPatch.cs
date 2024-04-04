@@ -15,7 +15,10 @@ public static class TaskPanelPatch
     [HarmonyPatch(nameof(TaskPanelBehaviour.Update))]
     public static bool UpdatePrefix(TaskPanelBehaviour __instance)
     {
-        if (__instance.gameObject.name != "RolePanel") return true;
+        if (__instance.gameObject.name != "RolePanel")
+        {
+            return true;
+        }
 
         var transform = __instance.background.transform;
         var vector = __instance.background.sprite.bounds.extents;

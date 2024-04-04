@@ -4,10 +4,11 @@ using LaunchpadReloaded.Patches.VotingTypes;
 using Reactor.Networking.Attributes;
 using Reactor.Networking.Rpc;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LaunchpadReloaded.Networking;
 
-[RegisterCustomRpc((uint)LaunchpadRPC.PopulateResults)]
+[RegisterCustomRpc((uint)LaunchpadRpc.PopulateResults)]
 public class PopulateResultsRpc : PlayerCustomRpc<LaunchpadReloadedPlugin, PopulateResultsRpc.Data>
 {
     public PopulateResultsRpc(LaunchpadReloadedPlugin plugin, uint id) : base(plugin, id)
@@ -16,15 +17,10 @@ public class PopulateResultsRpc : PlayerCustomRpc<LaunchpadReloadedPlugin, Popul
 
     public override RpcLocalHandling LocalHandling => RpcLocalHandling.After;
 
-    public readonly struct Data
+    public readonly struct Data(byte[] votedFor, byte[] voters)
     {
-        public readonly byte[] VotedFor;
-        public readonly byte[] Voters;
-        public Data(byte[] votedFor, byte[] voters)
-        {
-            VotedFor = votedFor;
-            Voters = voters;
-        }
+        public readonly byte[] VotedFor = votedFor;
+        public readonly byte[] Voters = voters;
     }
 
     public override void Write(MessageWriter writer, Data data)
@@ -62,11 +58,7 @@ public class PopulateResultsRpc : PlayerCustomRpc<LaunchpadReloadedPlugin, Popul
 
     public override void Handle(PlayerControl player, Data data)
     {
-        List<CustomVote> votes = new List<CustomVote>();
-        for (var i = 0; i < data.VotedFor.Length; i++)
-        {
-            votes.Add(new CustomVote(data.Voters[i], data.VotedFor[i]));
-        }
+        var votes = data.VotedFor.Select((votedFor, index) => new CustomVote(data.Voters[index], votedFor)).ToList();
         MeetingHudPatches.HandlePopulateResults(votes);
     }
 }

@@ -1,5 +1,5 @@
 ﻿namespace LaunchpadReloaded.Features;
-public enum VotingTypes : int
+public enum VotingTypes
 {
     Classic,
     Chance,

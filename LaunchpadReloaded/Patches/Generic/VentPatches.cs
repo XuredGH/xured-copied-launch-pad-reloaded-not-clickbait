@@ -23,7 +23,10 @@ public static class VentPatches
             return couldUse = canUse = false;
         }
 
-        if (pc.Role is not ICustomRole role) return couldUse = canUse = true;
+        if (pc.Role is not ICustomRole role)
+        {
+            return couldUse = canUse = true;
+        }
 
         var num = float.MaxValue;
         var @object = pc.Object;

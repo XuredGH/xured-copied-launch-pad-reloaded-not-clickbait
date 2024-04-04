@@ -2,6 +2,7 @@
 using System.Reflection;
 using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
+using Reactor.Utilities.Extensions;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Utilities;
@@ -28,8 +29,7 @@ public static class SpriteTools
         var myStream = assembly.GetManifestResourceStream(resourcePath);
         if (myStream != null)
         {
-            var buttonTexture = new byte[myStream.Length];
-            var read = myStream.Read(buttonTexture, 0, (int)myStream.Length);
+            var buttonTexture = myStream.ReadFully();
             LoadImage(tex, buttonTexture, false);
         }
 

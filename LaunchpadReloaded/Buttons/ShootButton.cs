@@ -55,7 +55,10 @@ public class ShootButton : CustomActionButton
         }
 
         if (CurrentTarget.Data.Role.TeamType == RoleTeamTypes.Crewmate && !TutorialManager.InstanceExists
-            ) PlayerControl.LocalPlayer.CmdCheckMurder(PlayerControl.LocalPlayer);
+            )
+        {
+            PlayerControl.LocalPlayer.CmdCheckMurder(PlayerControl.LocalPlayer);
+        }
 
         CurrentTarget = null;
     }

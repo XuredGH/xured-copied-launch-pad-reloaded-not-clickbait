@@ -1,10 +1,9 @@
-﻿using LaunchpadReloaded.Features.Managers;
-using LaunchpadReloaded.Roles;
-using LaunchpadReloaded.Utilities;
+﻿using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using LaunchpadReloaded.Networking;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Features;
@@ -12,52 +11,62 @@ namespace LaunchpadReloaded.Features;
 [RegisterInIl2Cpp]
 public class LaunchpadPlayer(IntPtr ptr) : MonoBehaviour(ptr)
 {
-    public List<byte> VotedPlayers;
-    public int VotesRemaining;
-    public bool DidSkip;
+    public List<byte> votedPlayers;
+    public int votesRemaining;
+    public bool didSkip;
 
-    public Transform Knife;
+    public Transform knife;
 
-    public PlayerControl Player;
+    public PlayerControl player;
     public static LaunchpadPlayer LocalPlayer;
     public static LaunchpadPlayer GetById(byte id) => GameData.Instance.GetPlayerById(id).Object.GetLpPlayer();
-    public static List<LaunchpadPlayer> GetAllPlayers() => PlayerControl.AllPlayerControls.ToArray().Select((player) => player.GetLpPlayer()).ToList();
-    public static List<LaunchpadPlayer> GetAllAlivePlayers() => GetAllPlayers().Where((plr) => !plr.Player.Data.IsDead && !plr.Player.Data.Disconnected).ToList();
+    public static List<LaunchpadPlayer> GetAllPlayers() => PlayerControl.AllPlayerControls.ToArray().Select(player => player.GetLpPlayer()).ToList();
+    public static IEnumerable<LaunchpadPlayer> GetAllAlivePlayers() => GetAllPlayers().Where(plr => !plr.player.Data.IsDead && !plr.player.Data.Disconnected);
     private void Awake()
     {
-        Player = gameObject.GetComponent<PlayerControl>();
-        VotedPlayers = new List<byte>();
-        if (Player.AmOwner) LocalPlayer = this;
+        player = gameObject.GetComponent<PlayerControl>();
+        votedPlayers = [];
+        if (player.AmOwner)
+        {
+            LocalPlayer = this;
+        }
     }
 
     public void OnDeath()
     {
-        if (Player.Data.IsHacked())
+        if (player.Data.IsHacked() && player.AmOwner)
         {
-            HackingManager.RpcUnHackPlayer(Player);
+            player.RpcUnHackPlayer();
         }
     }
 
 
     private void FixedUpdate()
     {
-        if (MeetingHud.Instance) return;
-        if (Player.IsRevived()) Player.cosmetics.SetOutline(true, new Il2CppSystem.Nullable<Color>(LaunchpadPalette.MedicColor));
-
-        if (Player.Data.IsHacked() || (HackingManager.Instance && HackingManager.Instance.AnyActiveNodes() && Player.Data.Role is HackerRole))
+        if (MeetingHud.Instance)
         {
-            var randomString = Helpers.RandomString(Helpers.Random.Next(4, 6), "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#!?$(???#@)$@@@@0000");
-            Player.cosmetics.SetName(randomString);
-            Player.cosmetics.SetNameMask(true);
-            Player.cosmetics.gameObject.SetActive(false);
-        }
-
-        if (Knife is null)
-        {
-            Knife = Player.gameObject.transform.FindChild("BodyForms/Seeker/KnifeHand");
             return;
         }
 
-        Knife.gameObject.SetActive(!Player.Data.IsDead && Player.CanMove);
+        if (player.IsRevived())
+        {
+            player.cosmetics.SetOutline(true, new Il2CppSystem.Nullable<Color>(LaunchpadPalette.MedicColor));
+        }
+
+        if (player.Data.IsHacked())
+        {
+            var randomString = Helpers.RandomString(Helpers.Random.Next(4, 6), "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#!?$(???#@)$@@@@0000");
+            player.cosmetics.SetName(randomString);
+            player.cosmetics.SetNameMask(true);
+            player.cosmetics.gameObject.SetActive(false);
+        }
+
+        if (knife is null)
+        {
+            knife = player.gameObject.transform.FindChild("BodyForms/Seeker/KnifeHand");
+            return;
+        }
+
+        knife.gameObject.SetActive(!player.Data.IsDead && player.CanMove);
     }
 }

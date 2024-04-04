@@ -23,8 +23,15 @@ public static class RolesSettingsMenuPatches
         var tabPrefab = __instance.AllAdvancedSettingTabs.ToArray()[1].Tab;
         foreach (var (key, role) in CustomRoleManager.CustomRoles)
         {
-            if (__instance.AllAdvancedSettingTabs.ToArray().Any(x => (ushort)x.Type == key)) continue;
-            if ((role as ICustomRole).HideSettings) continue;
+            if (__instance.AllAdvancedSettingTabs.ToArray().Any(x => (ushort)x.Type == key))
+            {
+                continue;
+            }
+
+            if (role is ICustomRole { HideSettings: true })
+            {
+                continue;
+            }
 
             var newTab = Object.Instantiate(tabPrefab, __instance.AdvancedRolesSettings.transform);
             newTab.name = role.NiceName + " Settings";
@@ -106,8 +113,15 @@ public static class RolesSettingsMenuPatches
         var parent = __instance.ItemParent;
         foreach (var (key, role) in CustomRoleManager.CustomRoles)
         {
-            if (__instance.AllRoleSettings.ToArray().Any(x => (ushort)x.Role.Role == key)) continue;
-            if ((role as ICustomRole).HideSettings) continue;
+            if (__instance.AllRoleSettings.ToArray().Any(x => (ushort)x.Role.Role == key))
+            {
+                continue;
+            }
+
+            if (role is ICustomRole {HideSettings: true})
+            {
+                continue;
+            }
 
             var newOption = Object.Instantiate(__instance.SettingPrefab, parent);
             newOption.Role = role;
@@ -130,7 +144,10 @@ public static class RolesSettingsMenuPatches
 
         if (roleSetting.Role is ICustomRole role)
         {
-            if (role.HideSettings) return false;
+            if (role.HideSettings)
+            {
+                return false;
+            }
 
             LaunchpadReloadedPlugin.Instance.Config.TryGetEntry<int>(role.NumConfigDefinition, out var numEntry);
             numEntry.Value = roleSetting.RoleMaxCount;

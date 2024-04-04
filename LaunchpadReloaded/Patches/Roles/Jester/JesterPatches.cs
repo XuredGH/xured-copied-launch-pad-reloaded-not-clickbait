@@ -49,7 +49,10 @@ public static class JesterPatches
     [HarmonyPrefix, HarmonyPatch(typeof(ExileController), nameof(ExileController.WrapUp))]
     public static bool WrapUp(ExileController __instance)
     {
-        if (TutorialManager.InstanceExists) return true;
+        if (TutorialManager.InstanceExists)
+        {
+            return true;
+        }
 
         if (__instance.exiled is not null && __instance.exiled.Role is not null && __instance.exiled.Role is JesterRole)
         {

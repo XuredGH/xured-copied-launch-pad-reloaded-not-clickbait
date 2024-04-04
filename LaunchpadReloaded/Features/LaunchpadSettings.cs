@@ -1,6 +1,5 @@
 ﻿using Il2CppSystem;
 using LaunchpadReloaded.API.Settings;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace LaunchpadReloaded.Features;
@@ -19,13 +18,20 @@ public class LaunchpadSettings
         {
             ChangedEvent = val =>
             {
-                if (!TutorialManager.InstanceExists || !AccountManager.InstanceExists) return;
-                List<DummyBehaviour> dummies = UnityEngine.Object.FindObjectsOfType<DummyBehaviour>().ToArray().Reverse().ToList();
-
-                for (int i = 0; i < dummies.Count; i++)
+                if (!TutorialManager.InstanceExists || !AccountManager.InstanceExists)
                 {
-                    DummyBehaviour dummy = dummies[i];
-                    if (!dummy.myPlayer) continue;
+                    return;
+                }
+
+                var dummies = UnityEngine.Object.FindObjectsOfType<DummyBehaviour>().ToArray().Reverse().ToList();
+
+                for (var i = 0; i < dummies.Count; i++)
+                {
+                    var dummy = dummies[i];
+                    if (!dummy.myPlayer)
+                    {
+                        continue;
+                    }
 
                     dummy.myPlayer.SetName(val ? AccountManager.Instance.GetRandomName() :
                         DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.Dummy, Array.Empty<Object>()) + " " + (i).ToString(), true);

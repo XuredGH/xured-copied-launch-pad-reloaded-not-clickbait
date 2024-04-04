@@ -1,6 +1,5 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.API.GameModes;
-using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Utilities;
 
 namespace LaunchpadReloaded.Patches.Generic;
@@ -12,9 +11,6 @@ public static class GameManagerPatch
     public static void OnDeathPostfix(PlayerControl player)
     {
         CustomGameModeManager.ActiveMode.OnDeath(player);
-        if (player.Data.IsHacked())
-        {
-            player.RpcUnHackPlayer();
-        }
+        player.GetLpPlayer().OnDeath();
     }
 }

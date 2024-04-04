@@ -35,7 +35,11 @@ public class CustomCheckMurderRpc : PlayerCustomRpc<LaunchpadReloadedPlugin, Pla
     private static bool VerifyKiller(PlayerControl player)
     {
         var data = player.Data;
-        if (data is null) return false;
+        if (data is null)
+        {
+            return false;
+        }
+
         if (CustomRoleManager.GetCustomRoleBehaviour(data.RoleType, out var customRole))
         {
             return customRole.CanKill && !data.Disconnected;

@@ -38,8 +38,11 @@ public static class HudManagerPatches
         HudManager.Instance.GameSettings.text = GameOptionsManager.Instance.CurrentGameOptions.ToHudString(numPlayers);
         var pos = __instance.GameSettings.transform.localPosition;
 
-        if (!PlayerControl.LocalPlayer.CanMove) return;
-        
+        if (!PlayerControl.LocalPlayer.CanMove)
+        {
+            return;
+        }
+
         if (!ToHudStringPatch.ShowCustom)
         {
             __instance.GameSettings.transform.localPosition = new Vector3(pos.x, _bounds.min, pos.z);
@@ -76,7 +79,10 @@ public static class HudManagerPatches
         __instance.tasksString.Append("</color>");
         __instance.TaskPanel.SetTaskText(__instance.tasksString.ToString());
 
-        if (_roleTab != null) _roleTab.gameObject.Destroy();
+        if (_roleTab != null)
+        {
+            _roleTab.gameObject.Destroy();
+        }
     }
 
     /// <summary>
@@ -133,15 +139,24 @@ public static class HudManagerPatches
 
             if (PlayerControl.LocalPlayer.Data.IsHacked())
             {
-                if (_roleTab) _roleTab.gameObject.Destroy();
+                if (_roleTab)
+                {
+                    _roleTab.gameObject.Destroy();
+                }
 
                 return;
             }
 
             if (customRole.SetTabText() != null)
             {
-                if (_roleTab == null) _roleTab = CustomRoleManager.CreateRoleTab(customRole);
-                else CustomRoleManager.UpdateRoleTab(_roleTab, customRole);
+                if (_roleTab == null)
+                {
+                    _roleTab = CustomRoleManager.CreateRoleTab(customRole);
+                }
+                else
+                {
+                    CustomRoleManager.UpdateRoleTab(_roleTab, customRole);
+                }
             }
             else if (customRole.SetTabText() == null && _roleTab)
             {
@@ -215,13 +230,22 @@ public static class HudManagerPatches
     [HarmonyPostfix, HarmonyPatch("SetHudActive", typeof(PlayerControl), typeof(RoleBehaviour), typeof(bool))]
     public static void SetHudActivePostfix(HudManager __instance, [HarmonyArgument(0)] PlayerControl player, [HarmonyArgument(1)] RoleBehaviour roleBehaviour, [HarmonyArgument(2)] bool isActive)
     {
-        if (player.Data == null) return;
-        if (_roleTab) _roleTab.gameObject.SetActive(isActive);
+        if (player.Data == null)
+        {
+            return;
+        }
+
+        if (_roleTab)
+        {
+            _roleTab.gameObject.SetActive(isActive);
+        }
 
         foreach (var button in CustomButtonManager.CustomButtons)
             button.SetActive(isActive, roleBehaviour);
 
         if (roleBehaviour is ICustomRole role)
+        {
             __instance.ImpostorVentButton.gameObject.SetActive(isActive && role.CanUseVent);
+        }
     }
 }

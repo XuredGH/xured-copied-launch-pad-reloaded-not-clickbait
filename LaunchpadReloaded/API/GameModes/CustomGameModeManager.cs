@@ -19,6 +19,11 @@ public static class CustomGameModeManager
     /// </summary>
     public static readonly Dictionary<int, CustomGameMode> GameModes = [];
 
+    public static bool IsDefault()
+    {
+        return ActiveMode.Id == (int)LaunchpadGamemodes.Default;
+    }
+    
     
     /// <summary>
     /// Current gamemode
@@ -27,8 +32,11 @@ public static class CustomGameModeManager
     {
         get
         {
-            if (GameManager.Instance.IsHideAndSeek()) return GameModes[(int)LaunchpadGamemodes.Default];
-            
+            if (GameManager.Instance.IsHideAndSeek())
+            {
+                return GameModes[(int)LaunchpadGamemodes.Default];
+            }
+
             return GameModes.TryGetValue(LaunchpadGameOptions.Instance.GameModes.IndexValue, out var gameMode) ? gameMode : GameModes[(int)LaunchpadGamemodes.Default];
         }
         private set => LaunchpadGameOptions.Instance.GameModes.SetValue(value.Id);

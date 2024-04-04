@@ -1,12 +1,11 @@
 using System.Linq;
 using System.Reflection;
 using AmongUs.GameOptions;
-using Il2CppSystem.Collections.Generic;
+using System.Collections.Generic;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
-using LaunchpadReloaded.Roles;
 using Reactor.Utilities.Extensions;
 using UnityEngine;
 
@@ -29,8 +28,8 @@ public static class Extensions
     public static KeyValuePair<byte, int> MaxPair(this Dictionary<byte, int> self, out bool tie)
     {
         tie = true;
-        KeyValuePair<byte, int> result = new KeyValuePair<byte, int>(byte.MaxValue, int.MinValue);
-        foreach (KeyValuePair<byte, int> keyValuePair in self)
+        var result = new KeyValuePair<byte, int>(byte.MaxValue, int.MinValue);
+        foreach (var keyValuePair in self)
         {
             if (keyValuePair.Value > result.Value)
             {
@@ -144,7 +143,7 @@ public static class Extensions
 
     public static DeadBody NearestDeadBody(this PlayerControl playerControl)
     {
-        var results = new List<Collider2D>();
+        var results = new Il2CppSystem.Collections.Generic.List<Collider2D>();
         Physics2D.OverlapCircle(playerControl.GetTruePosition(), playerControl.MaxReportDistance / 4f, Filter, results);
         return results.ToArray()
             .Where(collider2D => collider2D.CompareTag("DeadBody"))
