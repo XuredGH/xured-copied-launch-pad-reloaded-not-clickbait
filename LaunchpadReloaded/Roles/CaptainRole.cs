@@ -1,8 +1,8 @@
-using System;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Features;
 using Reactor.Utilities.Attributes;
+using System;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
@@ -21,6 +21,9 @@ public class CaptainRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
 
     public static CustomNumberOption CaptainMeetingCooldown;
     public static CustomNumberOption CaptainMeetingCount;
+    public static CustomNumberOption ZoomCooldown;
+    public static CustomNumberOption ZoomDuration;
+    public static CustomNumberOption ZoomDistance;
     public static CustomOptionGroup Group;
 
     public void CreateOptions()
@@ -39,8 +42,29 @@ public class CaptainRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
             suffixType: NumberSuffixes.None,
             role: typeof(CaptainRole));
 
+        ZoomCooldown = new CustomNumberOption("Zoom Cooldown",
+            defaultValue: 30,
+            5, 60,
+            increment: 2,
+            suffixType: NumberSuffixes.Seconds,
+            role: typeof(CaptainRole));
+
+        ZoomDuration = new CustomNumberOption("Zoom Duration",
+            defaultValue: 5,
+            5, 25,
+            increment: 1,
+            suffixType: NumberSuffixes.Seconds,
+            role: typeof(CaptainRole));
+
+        ZoomDistance = new CustomNumberOption("Zoom Distance",
+            defaultValue: 6,
+            4, 15,
+            increment: 1,
+            suffixType: NumberSuffixes.None,
+            role: typeof(CaptainRole));
+
         Group = new CustomOptionGroup($"{RoleColor.ToTextColor()}Captain</color>",
-            numberOpt: [CaptainMeetingCooldown, CaptainMeetingCount],
+            numberOpt: [CaptainMeetingCooldown, CaptainMeetingCount, ZoomCooldown, ZoomDuration, ZoomDistance],
             stringOpt: [],
             toggleOpt: [], role: typeof(CaptainRole));
     }
