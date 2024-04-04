@@ -46,7 +46,7 @@ public static class Extensions
 
     public static LaunchpadPlayer GetLpPlayer(this PlayerControl playerControl)
     {
-        return playerControl.gameObject.GetComponent<LaunchpadPlayer>();
+        return playerControl.GetComponent<LaunchpadPlayer>();
     }
 
     public static bool ButtonTimerEnabled(this PlayerControl playerControl)
