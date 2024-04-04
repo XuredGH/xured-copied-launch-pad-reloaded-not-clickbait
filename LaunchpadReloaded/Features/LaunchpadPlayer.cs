@@ -19,11 +19,12 @@ public class LaunchpadPlayer(IntPtr ptr) : MonoBehaviour(ptr)
     
     public static LaunchpadPlayer LocalPlayer { get; private set; }
     public static LaunchpadPlayer GetById(byte id) => GameData.Instance.GetPlayerById(id).Object.GetLpPlayer();
-    public static IEnumerable<LaunchpadPlayer> GetAllPlayers() => PlayerControl.AllPlayerControls.ToArray().Select(player => player.GetLpPlayer()).ToList();
+    public static IEnumerable<LaunchpadPlayer> GetAllPlayers() => PlayerControl.AllPlayerControls.ToArray().Select(player => player.GetLpPlayer());
     public static IEnumerable<LaunchpadPlayer> GetAllAlivePlayers() => GetAllPlayers().Where(plr => !plr.player.Data.IsDead && !plr.player.Data.Disconnected);
     private void Awake()
     {
         player = gameObject.GetComponent<PlayerControl>();
+        VoteData = new CustomVoteData();
         if (player.AmOwner)
         {
             LocalPlayer = this;
@@ -70,7 +71,7 @@ public class LaunchpadPlayer(IntPtr ptr) : MonoBehaviour(ptr)
 
     public struct CustomVoteData()
     {
-        public List<byte> VotedPlayers = [];
+        public readonly List<byte> VotedPlayers = [];
         public int VotesRemaining = (int)LaunchpadGameOptions.Instance.MaxVotes.Value;
         public bool DidSkip = false;
     }
