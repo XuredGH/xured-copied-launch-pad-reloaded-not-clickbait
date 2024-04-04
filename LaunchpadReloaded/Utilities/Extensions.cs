@@ -4,6 +4,7 @@ using AmongUs.GameOptions;
 using Il2CppSystem.Collections.Generic;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Components;
+using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Roles;
 using Reactor.Utilities.Extensions;
@@ -14,7 +15,7 @@ namespace LaunchpadReloaded.Utilities;
 public static class Extensions
 {
     private static readonly ContactFilter2D Filter = ContactFilter2D.CreateLegacyFilter(Constants.NotShipMask, float.MinValue, float.MaxValue);
-    
+
     public static void SetGradientData(this GameObject gameObject, byte playerId)
     {
         var data = gameObject.GetComponent<PlayerGradientData>();
@@ -23,6 +24,30 @@ public static class Extensions
             data = gameObject.AddComponent<PlayerGradientData>();
         }
         data.playerId = playerId;
+    }
+
+    public static KeyValuePair<byte, int> MaxPair(this Dictionary<byte, int> self, out bool tie)
+    {
+        tie = true;
+        KeyValuePair<byte, int> result = new KeyValuePair<byte, int>(byte.MaxValue, int.MinValue);
+        foreach (KeyValuePair<byte, int> keyValuePair in self)
+        {
+            if (keyValuePair.Value > result.Value)
+            {
+                result = keyValuePair;
+                tie = false;
+            }
+            else if (keyValuePair.Value == result.Value)
+            {
+                tie = true;
+            }
+        }
+        return result;
+    }
+
+    public static LaunchpadPlayer GetLpPlayer(this PlayerControl playerControl)
+    {
+        return playerControl.gameObject.GetComponent<LaunchpadPlayer>();
     }
 
     public static bool ButtonTimerEnabled(this PlayerControl playerControl)

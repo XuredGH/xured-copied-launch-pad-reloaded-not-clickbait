@@ -14,8 +14,10 @@ public class LaunchpadGameOptions
     public readonly CustomStringOption GameModes;
     public readonly CustomToggleOption BanCheaters;
 
-    /*    public readonly CustomStringOption VotingType;
-        public readonly CustomNumberOption MaxVotes;*/
+    public readonly CustomStringOption VotingType;
+    public readonly CustomNumberOption MaxVotes;
+    public readonly CustomToggleOption AllowVotingForSamePerson;
+    public readonly CustomToggleOption LiveUpdating;
 
     // General Options
     public readonly CustomToggleOption OnlyShowRoleColor;
@@ -47,11 +49,13 @@ public class LaunchpadGameOptions
             }
         };
 
-        /*        VotingType = new CustomStringOption("Voting Type", 0, ["Classic", "Chance", "Multiple", "Combined"]);
-                VotingType.ChangedEvent = i => VotingTypesManager.RpcSetType(GameData.Instance, VotingType.IndexValue);
+        VotingType = new CustomStringOption("Voting Type", 0, ["Classic", "Chance", "Multiple", "Combined"]);
+        VotingType.ChangedEvent = i => VotingTypesManager.RpcSetType(GameData.Instance, VotingType.IndexValue);
+        MaxVotes = new CustomNumberOption("Max Votes", 3, 2, 10, 1, NumberSuffixes.None);
+        MaxVotes.Hidden = () => !VotingTypesManager.CanVoteMultiple();
 
-                MaxVotes = new CustomNumberOption("Max Votes", 3, 2, 10, 1, NumberSuffixes.None);
-                MaxVotes.Hidden = () => !VotingTypesManager.CanVoteMultiple();*/
+        AllowVotingForSamePerson = new CustomToggleOption("Allow Voting Same Person Again", true);
+        AllowVotingForSamePerson.Hidden = () => !VotingTypesManager.CanVoteMultiple();
 
         BanCheaters = new CustomToggleOption("Ban Cheaters", true)
         {
@@ -131,6 +135,8 @@ public class LaunchpadGameOptions
             Hidden = () => GameModes.IndexValue != (int)LaunchpadGamemodes.BattleRoyale
         };
 
+        BattleRoyaleGroup.Hidden = () => GameModes.Value != "Battle Royale";
+        GeneralGroup.Hidden = FunGroup.Hidden = VotingType.Hidden = () => GameModes.Value != "Default";
         GeneralGroup.Hidden = FunGroup.Hidden = () => CustomGameModeManager.ActiveMode.Id != (int)LaunchpadGamemodes.Default;
 
         foreach (var role in CustomRoleManager.CustomRoles)

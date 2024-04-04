@@ -40,7 +40,8 @@ public static class PlayerControlPatches
         Rpc<CustomCheckMurderRpc>.Instance.SendTo(__instance, AmongUsClient.Instance.HostId, target);
         return false;
     }
-    
+
+
     /// <summary>
     /// Use Custom check color RPC
     /// </summary>
@@ -50,10 +51,12 @@ public static class PlayerControlPatches
         Rpc<CustomCheckColorRpc>.Instance.SendTo(__instance, AmongUsClient.Instance.HostId, 
             new CustomCheckColorRpc.Data(bodyColor, (byte)GradientManager.LocalGradientId));
         return false;
+        CustomGameModeManager.ActiveMode.OnDeath(__instance);
+        __instance.GetLpPlayer().OnDeath();
     }
 
     /// <summary>
-    /// Player control update, updates knife and name/cosmetics if hacked
+    /// Player control update
     /// </summary>
     [HarmonyPostfix, HarmonyPatch(nameof(PlayerControl.FixedUpdate))]
     public static void UpdatePatch(PlayerControl __instance)
@@ -71,15 +74,8 @@ public static class PlayerControlPatches
             }
         }
 
+        if (__instance.Data is null || __instance.Data.Role is null) return;
         if (__instance.Data.Role is ICustomRole customRole) customRole.PlayerControlFixedUpdate(__instance);
-
-        var knife = __instance.gameObject.transform.FindChild("BodyForms/Seeker/KnifeHand");
-        if (!knife)
-        {
-            return;
-        }
-
-        knife.gameObject.SetActive(!__instance.Data.IsDead && __instance.CanMove);
     }
 
     /// <summary>
