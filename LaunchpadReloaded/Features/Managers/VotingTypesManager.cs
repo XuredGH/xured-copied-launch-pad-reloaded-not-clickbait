@@ -30,7 +30,8 @@ public static class VotingTypesManager
         {
             case VotingTypes.Combined:
             case VotingTypes.Multiple:
-                return GetDynamicVotes();
+                return (int)((LaunchpadGameOptions.Instance.AllowVotingForSamePerson.Value && LaunchpadGameOptions.Instance.DisableDynamicVoting.Value) ? LaunchpadGameOptions.Instance.MaxVotes.Value :
+                    GetDynamicVotes());
 
             case VotingTypes.Chance:
             case VotingTypes.Classic:
