@@ -10,17 +10,18 @@ namespace LaunchpadReloaded.Components;
 [RegisterInIl2Cpp]
 public class PlayerGradientData(IntPtr ptr) : MonoBehaviour(ptr)
 {
-    private int _gradientColor = Random.RandomRangeInt(0, Palette.PlayerColors.Length);
-
     public byte playerId;
 
+    public PlayerControl player;
+    
+    private int _gradientColor = Random.RandomRangeInt(0, Palette.PlayerColors.Length);
     private bool _gradientEnabled = true;
 
     public bool GradientEnabled
     {
         get
         {
-            if (GetComponent<PlayerControl>())
+            if (player)
             {
                 return _gradientEnabled;
             }
@@ -40,7 +41,7 @@ public class PlayerGradientData(IntPtr ptr) : MonoBehaviour(ptr)
     {
         get
         {
-            if (GetComponent<PlayerControl>())
+            if (player)
             {
                 return _gradientColor;
             }
@@ -54,5 +55,14 @@ public class PlayerGradientData(IntPtr ptr) : MonoBehaviour(ptr)
             return _gradientColor;
         }
         set => _gradientColor = value;
+    }
+
+    public void Awake()
+    {
+        player = GetComponent<PlayerControl>();
+        if (player)
+        {
+            playerId = player.PlayerId;
+        }
     }
 }

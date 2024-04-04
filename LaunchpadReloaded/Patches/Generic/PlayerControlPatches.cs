@@ -100,8 +100,7 @@ public static class PlayerControlPatches
     public static void StartPrefix(PlayerControl __instance)
     {
         __instance.gameObject.AddComponent<LaunchpadPlayer>();
-        var gradColorComponent = __instance.gameObject.AddComponent<PlayerGradientData>();
-        gradColorComponent.playerId = __instance.PlayerId;
+        __instance.gameObject.AddComponent<PlayerGradientData>();
     }
 
     /// <summary>
