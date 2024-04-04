@@ -33,7 +33,7 @@ public static class PlayerVoteIconPatch
             gradientComp.SetColor(voterPlayer.DefaultOutfit.ColorId, gradient);
         }
 
-        gradientComp.mat.SetFloat(ShaderID.GradientBlend, 20);
+        gradientComp.mat.SetInt(ShaderID.GradientBlend, 10);
         gradientComp.mat.SetColor(ShaderID.GradientOffset, new Vector4(0, .5f, 1, 1));
         
         spriteRenderer.transform.localScale = Vector3.zero;
