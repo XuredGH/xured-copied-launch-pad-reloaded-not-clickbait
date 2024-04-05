@@ -41,7 +41,7 @@ public class HackNodeComponent(IntPtr ptr) : MonoBehaviour(ptr)
             var truePosition = @object.GetTruePosition();
             var position = transform.position;
             num = Vector2.Distance(truePosition, position);
-            canUse &= (num <= UsableDistance);
+            canUse &= num <= UsableDistance;
         }
         return num;
     }
