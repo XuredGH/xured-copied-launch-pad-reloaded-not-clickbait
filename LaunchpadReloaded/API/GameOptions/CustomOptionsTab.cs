@@ -1,5 +1,5 @@
 ﻿using System;
-using LaunchpadReloaded.Utilities;
+using LaunchpadReloaded.Features;
 using Reactor.Utilities.Extensions;
 using TMPro;
 using UnityEngine;
@@ -127,7 +127,7 @@ public static class CustomOptionsTab
         btn.OnClick.AddListener((Action)TabAction);
 
         var spriteRend = inside.GetComponentInChildren<SpriteRenderer>();
-        spriteRend.sprite = SpriteTools.LoadSpriteFromPath("LaunchpadReloaded.Resources.Hack.png");
+        spriteRend.sprite = LaunchpadAssets.HackButton.LoadAsset();
         spriteRend.gameObject.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
 
         return newTab;
