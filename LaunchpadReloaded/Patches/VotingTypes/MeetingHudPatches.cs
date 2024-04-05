@@ -71,7 +71,7 @@ public static class MeetingHudPatches
 
         if (__instance.state == MeetingHud.VoteStates.NotVoted && __instance.discussionTimer >= logicOptionsNormal.GetVotingTime())
         {
-            foreach (var plr in LaunchpadPlayer.GetAllAlivePlayers().Where((plr) => plr.VoteData.VotesRemaining != 0))
+            foreach (var plr in LaunchpadPlayer.GetAllAlivePlayers().Where(plr => plr.VoteData.VotesRemaining != 0))
             {
                 __instance.CmdCastVote(plr.player.PlayerId, 255);
             }
@@ -96,7 +96,7 @@ public static class MeetingHudPatches
             case MeetingHud.VoteStates.Results:
                 if (_confirmVotes) _confirmVotes.SetDisabled();
                 _typeText.gameObject.SetActive(false);
-                foreach (var voteArea in __instance.playerStates.Where((state) => !state.resultsShowing)) voteArea.ClearForResults();
+                foreach (var voteArea in __instance.playerStates.Where(state => !state.resultsShowing)) voteArea.ClearForResults();
                 break;
 
             default:
@@ -109,7 +109,7 @@ public static class MeetingHudPatches
     [HarmonyPrefix, HarmonyPatch(typeof(MeetingHud), "CheckForEndVoting")]
     public static bool EndCheck(MeetingHud __instance)
     {
-        if (LaunchpadPlayer.GetAllAlivePlayers().All(plr => plr.VoteData.VotesRemaining > 0))
+        if (LaunchpadPlayer.GetAllAlivePlayers().Any(plr => plr.VoteData.VotesRemaining > 0))
         {
             return false;
         }
@@ -121,12 +121,12 @@ public static class MeetingHudPatches
         {
             isTie = false;
             var playerId = VotingTypesManager.GetVotedPlayerByChance(VotingTypesManager.CalculateVotes());
-            exiled = GameData.Instance.AllPlayers.ToArray().FirstOrDefault((GameData.PlayerInfo v) => v.PlayerId == playerId);
+            exiled = GameData.Instance.AllPlayers.ToArray().FirstOrDefault(v => v.PlayerId == playerId);
         }
         else
         {
             var max = VotingTypesManager.CalculateNumVotes(VotingTypesManager.CalculateVotes()).MaxPair(out isTie);
-            exiled = GameData.Instance.AllPlayers.ToArray().FirstOrDefault((GameData.PlayerInfo v) => !isTie && v.PlayerId == max.Key);
+            exiled = GameData.Instance.AllPlayers.ToArray().FirstOrDefault(v => !isTie && v.PlayerId == max.Key);
         }
 
         __instance.RpcVotingComplete(new MeetingHud.VoterState[__instance.playerStates.Length], exiled, isTie);
@@ -150,13 +150,13 @@ public static class MeetingHudPatches
     {
         if (!pc || !GameData.Instance) return false;
 
-        var playerVoteArea = __instance.playerStates.First((pv) => pv.TargetPlayerId == pc.PlayerId);
+        var playerVoteArea = __instance.playerStates.First(pv => pv.TargetPlayerId == pc.PlayerId);
         playerVoteArea.AmDead = true;
         playerVoteArea.Overlay.gameObject.SetActive(true);
 
         foreach (var player in LaunchpadPlayer.GetAllAlivePlayers())
         {
-            var pva = __instance.playerStates.First((pv) => pv.TargetPlayerId == player.player.PlayerId);
+            var pva = __instance.playerStates.First(pv => pv.TargetPlayerId == player.player.PlayerId);
 
             if (!pva.AmDead && player.VoteData.VotedPlayers.Contains(pc.PlayerId))
             {
@@ -192,8 +192,8 @@ public static class MeetingHudPatches
         }
         
         var votes = VotingTypesManager.CalculateVotes();
-        var votedFor = votes.Select((vote) => vote.VotedFor).ToArray();
-        var voters = votes.Select((vote) => vote.Voter).ToArray();
+        var votedFor = votes.Select(vote => vote.VotedFor).ToArray();
+        var voters = votes.Select(vote => vote.Voter).ToArray();
 
         Rpc<PopulateResultsRpc>.Instance.Send(new PopulateResultsRpc.Data(votedFor, voters));
         return false;

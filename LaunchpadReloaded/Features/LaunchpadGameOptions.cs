@@ -65,20 +65,25 @@ public class LaunchpadGameOptions
             },
             
         };
+        
         MaxVotes = new CustomNumberOption("Max Votes", 3, 2, 10, 1, NumberSuffixes.None)
         {
             Hidden = ()=> !VotingTypesManager.CanVoteMultiple()
         };
 
-        MaxVotes = new CustomNumberOption("Max Votes", 2, 2, 5, 1, NumberSuffixes.None);
-        AllowVotingForSamePerson = new CustomToggleOption("Allow Voting Same Person Again", false);
         ShowPercentages = new CustomToggleOption("Show Percentages", false)
         {
             Hidden = VotingTypesManager.UseChance
         };
+        
         AllowConfirmingVotes = new CustomToggleOption("Allow Confirming Votes", false)
         {
             Hidden = VotingTypesManager.CanVoteMultiple
+        };
+        
+        AllowVotingForSamePerson = new CustomToggleOption("Allow Voting Same Person Again", true)
+        {
+            Hidden = () => !VotingTypesManager.CanVoteMultiple()
         };
 
         DisableDynamicVoting = new CustomToggleOption("Disable Dynamic Votes", false)
@@ -86,10 +91,6 @@ public class LaunchpadGameOptions
             Hidden = () => !AllowVotingForSamePerson.Value
         };
 
-        AllowVotingForSamePerson = new CustomToggleOption("Allow Voting Same Person Again", true)
-        {
-            Hidden = () => !VotingTypesManager.CanVoteMultiple()
-        };
 
         VotingGroup = new CustomOptionGroup("Voting Type",
             toggleOpt: [AllowVotingForSamePerson, ShowPercentages, AllowConfirmingVotes, DisableDynamicVoting],
@@ -100,14 +101,18 @@ public class LaunchpadGameOptions
         {
             ShowInHideNSeek = true
         };
+        
         DisableMeetingTeleport = new CustomToggleOption("Disable Meeting Teleport", false);
+        
         OnlyShowRoleColor = new CustomToggleOption("Reveal Crewmate Roles", false);
+        
         GeneralGroup = new CustomOptionGroup("General Options",
             toggleOpt: [BanCheaters, OnlyShowRoleColor, DisableMeetingTeleport],
             stringOpt: [],
             numberOpt: []);
 
         FriendlyFire = new CustomToggleOption("Friendly Fire", false);
+        
         UniqueColors = new CustomToggleOption("Unique Colors", true)
         {
             ShowInHideNSeek = true,
