@@ -1,4 +1,5 @@
-﻿using LaunchpadReloaded.Buttons;
+﻿using LaunchpadReloaded.API.Hud;
+using LaunchpadReloaded.Buttons;
 using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Roles;
 using Reactor.Networking.Attributes;
@@ -19,7 +20,7 @@ public static class DragRpc
         playerControl.MyPhysics.Speed = GameOptionsManager.Instance.currentNormalGameOptions.PlayerSpeedMod/2;
         if (playerControl.AmOwner)
         {
-            DragButton.Instance.SetDrop();
+            CustomButtonSingleton<DragButton>.Instance.SetDrop();
         }
     }
 
@@ -30,7 +31,7 @@ public static class DragRpc
         playerControl.MyPhysics.Speed = GameOptionsManager.Instance.currentNormalGameOptions.PlayerSpeedMod;
         if (playerControl.AmOwner)
         {
-            DragButton.Instance.SetDrag();
+            CustomButtonSingleton<DragButton>.Instance.SetDrag();
         }
     }
 
