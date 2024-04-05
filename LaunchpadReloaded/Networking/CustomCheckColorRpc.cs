@@ -9,12 +9,9 @@ using Reactor.Utilities;
 namespace LaunchpadReloaded.Networking;
 
 [RegisterCustomRpc((uint)LaunchpadRpc.CustomCheckColor)]
-public class CustomCheckColorRpc : PlayerCustomRpc<LaunchpadReloadedPlugin, CustomCheckColorRpc.Data>
+public class CustomCheckColorRpc(LaunchpadReloadedPlugin plugin, uint id)
+    : PlayerCustomRpc<LaunchpadReloadedPlugin, CustomCheckColorRpc.Data>(plugin, id)
 {
-    public CustomCheckColorRpc(LaunchpadReloadedPlugin plugin, uint id) : base(plugin, id)
-    {
-    }
-
     public override RpcLocalHandling LocalHandling => RpcLocalHandling.None;
 
     public struct Data(byte color, byte gradient)

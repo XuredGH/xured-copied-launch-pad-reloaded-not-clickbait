@@ -7,12 +7,9 @@ using Reactor.Networking.Rpc;
 namespace LaunchpadReloaded.Networking;
 
 [RegisterCustomRpc((uint)LaunchpadRpc.CustomCheckMurder)]
-public class CustomCheckMurderRpc : PlayerCustomRpc<LaunchpadReloadedPlugin, PlayerControl>
+public class CustomCheckMurderRpc(LaunchpadReloadedPlugin plugin, uint id)
+    : PlayerCustomRpc<LaunchpadReloadedPlugin, PlayerControl>(plugin, id)
 {
-    public CustomCheckMurderRpc(LaunchpadReloadedPlugin plugin, uint id) : base(plugin, id)
-    {
-    }
-
     public override RpcLocalHandling LocalHandling => RpcLocalHandling.None;
     public override void Write(MessageWriter writer, PlayerControl data)
     {
