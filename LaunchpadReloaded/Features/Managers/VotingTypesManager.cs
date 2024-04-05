@@ -25,6 +25,7 @@ public static class VotingTypesManager
 
     [MethodRpc((uint)LaunchpadRpc.SetVotingType)]
     public static void RpcSetType(GameData lobby, int type) => SetType((VotingTypes)type);
+    
     public static void SetType(VotingTypes type) => SelectedType = type;
 
     public static int GetDynamicVotes() => (int)Math.Min(RecommendedVotes[Math.Min(Math.Clamp(LaunchpadPlayer.GetAllAlivePlayers().Count(), 0, 15), RecommendedVotes.Length)], LaunchpadGameOptions.Instance.MaxVotes.Value);
