@@ -34,7 +34,7 @@ public static class HackerRpc
         Coroutines.Start(HackingManager.HackEffect());   
         foreach (var node in HackingManager.Instance.nodes)
         {
-            HackingManager.ToggleNode(node.Id, true);
+            HackingManager.ToggleNode(node.id, true);
         }
     }
 
@@ -60,7 +60,7 @@ public static class HackerRpc
         Coroutines.Stop(HackingManager.HackEffect());
         foreach (var node in HackingManager.Instance.nodes)
         {
-            HackingManager.ToggleNode(node.Id, false);
+            HackingManager.ToggleNode(node.id, false);
         }
     }
     

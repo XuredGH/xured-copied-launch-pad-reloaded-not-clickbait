@@ -12,13 +12,14 @@ public class MapButton : CustomActionButton
     public override int MaxUses => 0;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.MapButton;
 
-    private MapOptions _mapOptions = new()
+    private readonly MapOptions _mapOptions = new()
     {
         IncludeDeadBodies = true,
         AllowMovementWhileMapOpen = true,
         ShowLivePlayerPosition = true,
         Mode = MapOptions.Modes.CountOverlay,
     };
+    
     public override bool Enabled(RoleBehaviour role) => role is HackerRole;
 
     protected override void OnClick()

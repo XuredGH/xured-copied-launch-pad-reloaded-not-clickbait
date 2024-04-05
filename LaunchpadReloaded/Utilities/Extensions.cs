@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Reflection;
 using AmongUs.GameOptions;
@@ -56,7 +57,7 @@ public static class Extensions
                 result = keyValuePair;
                 tie = false;
             }
-            else if (keyValuePair.Value == result.Value)
+            else if (Math.Abs(keyValuePair.Value - result.Value) < .05)
             {
                 tie = true;
             }
@@ -151,12 +152,14 @@ public static class Extensions
         }
 
         target = playerControl.NearestDeadBody();
-        if (target)
+        if (!target)
         {
-            foreach (var renderer in target.bodyRenderers)
-            {
-                renderer.SetOutline(outlineColor);
-            }
+            return;
+        }
+        
+        foreach (var renderer in target.bodyRenderers)
+        {
+            renderer.SetOutline(outlineColor);
         }
 
     }

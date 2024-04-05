@@ -56,21 +56,21 @@ public static class VotingTypesManager
         var dict = new Dictionary<byte, float>();
 
         foreach (var pair in CalculateNumVotes(votes))
-            dict[pair.Key] = pair.Value / votes.Count * 100;
+            dict[pair.Key] = (float)pair.Value / votes.Count * 100;
 
         return dict;
     }
 
-    public static byte GetVotedPlayerByChance(List<CustomVote> votes)
+    public static byte GetVotedPlayerByChance(IEnumerable<CustomVote> votes)
     {
         var rand = new Random();
         List<byte> plrs = [.. votes.Select(vote => vote.VotedFor)];
         return plrs[rand.Next(plrs.Count)];
     }
 
-    public static Dictionary<byte, float> CalculateNumVotes(List<CustomVote> votes)
+    public static Dictionary<byte, int> CalculateNumVotes(IEnumerable<CustomVote> votes)
     {
-        var dictionary = new Dictionary<byte, float>();
+        var dictionary = new Dictionary<byte, int>();
 
         foreach (var vote in votes.Select(vote => vote.VotedFor))
         {

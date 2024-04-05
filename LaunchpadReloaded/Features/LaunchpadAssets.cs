@@ -41,8 +41,7 @@ public static class LaunchpadAssets
     public static readonly LoadableAsset<AudioClip> HackingSound = new("HackAmbience.mp3");
 }
 
-public class LoadableAsset<T>(string name, bool useBundle = true)
-    where T : Object
+public class LoadableAsset<T>(string name, bool useBundle = true) where T : Object
 {
     private const string ResourcesFolder = "LaunchpadReloaded.Resources.";
     public string Name { get; } = name;

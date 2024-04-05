@@ -150,8 +150,8 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
 
     public static void ToggleNode(int nodeId, bool value)
     {
-        var node = Instance.nodes.Find(node => node.Id == nodeId);
-        node.IsActive = value;
+        var node = Instance.nodes.Find(node => node.id == nodeId);
+        node.isActive = value;
     }
 
     public HackNodeComponent CreateNode(ShipStatus shipStatus, int id, Transform parent, Vector3 position)
@@ -172,8 +172,8 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
         collider.offset = new Vector2(-0.01f, -0.3049f);
 
         var nodeComponent = node.AddComponent<HackNodeComponent>();
-        nodeComponent.Image = sprite;
-        nodeComponent.Id = id;
+        nodeComponent.image = sprite;
+        nodeComponent.id = id;
 
         node.SetActive(true);
         nodes.Add(nodeComponent);

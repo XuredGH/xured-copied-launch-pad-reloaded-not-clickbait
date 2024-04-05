@@ -79,18 +79,25 @@ public static class TaskAdderPatch
                 num3 = 0f;
             }
             __instance.ActiveItems.Add(folderTransform);
-            if (taskFolder2 != null && taskFolder2.Button != null)
+            if (!taskFolder2 || !taskFolder2.Button)
             {
-                ControllerManager.Instance.AddSelectableUiElement(taskFolder2.Button);
-                if (!string.IsNullOrEmpty(__instance.restorePreviousSelectionByFolderName) && taskFolder2.FolderName.Equals(__instance.restorePreviousSelectionByFolderName))
-                {
-                    __instance.restorePreviousSelectionFound = taskFolder2.Button;
-                }
+                continue;
+            }
+            
+            ControllerManager.Instance.AddSelectableUiElement(taskFolder2.Button);
+            if (!string.IsNullOrEmpty(__instance.restorePreviousSelectionByFolderName) && taskFolder2.FolderName.Equals(__instance.restorePreviousSelectionByFolderName))
+            {
+                __instance.restorePreviousSelectionFound = taskFolder2.Button;
             }
         }
+        
         var flag = false;
         var list = new List<PlayerTask>();
-        foreach (var item in taskFolder.Children) list.Add(item);
+        
+        foreach (var item in taskFolder.Children)
+        {
+            list.Add(item);
+        }
 
         for (var l = 0; l < list.Count; l++)
         {

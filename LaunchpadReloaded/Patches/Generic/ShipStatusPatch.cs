@@ -10,7 +10,8 @@ namespace LaunchpadReloaded.Patches.Generic;
 public static class ShipStatusPatch
 {
     /// <summary>
-    /// Add all the managers for the game (probably not the best or cleanest way to do it, but it works)
+    /// Add all the managers for the game (probably not the best or cleanest way to do it, but it works).
+    /// Will be replaced with <see cref="LaunchpadPlayer"/> eventually
     /// </summary>
     [HarmonyPostfix, HarmonyPatch("Awake")]
     public static void MapLoadingPatch(ShipStatus __instance)

@@ -18,7 +18,7 @@ public static class GameSettingsMenuPatches
     [HarmonyPrefix, HarmonyPatch("Start")]
     public static void StartPrefix(GameSettingMenu __instance)
     {
-        if (CustomOptionsTab.CustomTab != null)
+        if (CustomOptionsTab.CustomTab)
         {
             return;
         }

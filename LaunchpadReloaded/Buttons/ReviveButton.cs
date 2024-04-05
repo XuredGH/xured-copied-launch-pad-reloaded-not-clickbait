@@ -10,10 +10,15 @@ namespace LaunchpadReloaded.Buttons;
 public class ReviveButton : CustomActionButton
 {
     public override string Name => "REVIVE";
+    
     public override float Cooldown => MedicRole.ReviveCooldown.Value;
+    
     public override float EffectDuration => 0;
+    
     public override int MaxUses => (int)MedicRole.MaxRevives.Value;
+    
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.ReviveButton;
+    
     public override bool Enabled(RoleBehaviour role) => role is MedicRole;
 
     public override bool CanUse()
@@ -48,6 +53,7 @@ public class ReviveButton : CustomActionButton
             }
         }
     }
+    
     protected override void OnClick()
     {
         PlayerControl.LocalPlayer.RpcRevive(DeadBodyTarget.ParentId);

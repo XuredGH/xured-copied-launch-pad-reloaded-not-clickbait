@@ -9,19 +9,19 @@ namespace LaunchpadReloaded.Components;
 
 [RegisterInIl2Cpp(typeof(IUsable))]
 public class HackNodeComponent(IntPtr ptr) : MonoBehaviour(ptr)
-{
-    public bool IsActive;
-    public int Id;
-    public SpriteRenderer Image;
+{ 
+    public bool isActive;
+    public int id;
+    public SpriteRenderer image;
     public ImageNames UseIcon => ImageNames.UseButton;
     public float UsableDistance => 0.8f;
     public float PercentCool => 0;
 
     public void SetOutline(bool on, bool mainTarget)
     {
-        Image.material.SetFloat(ShaderID.Outline, on ? 1 : 0);
-        Image.material.SetColor(ShaderID.OutlineColor, Color.green);
-        Image.material.SetColor(ShaderID.AddColor, mainTarget ? Color.green : Color.clear);
+        image.material.SetFloat(ShaderID.Outline, on ? 1 : 0);
+        image.material.SetColor(ShaderID.OutlineColor, Color.green);
+        image.material.SetColor(ShaderID.AddColor, mainTarget ? Color.green : Color.clear);
     }
 
     public void Use()
@@ -34,7 +34,7 @@ public class HackNodeComponent(IntPtr ptr) : MonoBehaviour(ptr)
     {
         var num = float.MaxValue;
         var @object = pc.Object;
-        couldUse = !pc.IsDead && @object.CanMove && IsActive && pc.IsHacked();
+        couldUse = !pc.IsDead && @object.CanMove && isActive && pc.IsHacked();
         canUse = couldUse;
         if (canUse)
         {
