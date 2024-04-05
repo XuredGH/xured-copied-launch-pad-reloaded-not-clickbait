@@ -4,8 +4,9 @@ namespace LaunchpadReloaded.Utilities;
 
 public static class ShaderID
 {
-    public static readonly int GradientOffset = Shader.PropertyToID("_GradientOffset");
+    public static readonly int GradientAngle = Shader.PropertyToID("_GradientAngle");
     public static readonly int GradientBlend = Shader.PropertyToID("_GradientBlend");
+    public static readonly int GradientOffset = Shader.PropertyToID("_GradientOffset");
     public static readonly int SecondaryBodyColor = Shader.PropertyToID("_BodyColor2");
     public static readonly int SecondaryShadowColor = Shader.PropertyToID("_BackColor2");
     public static readonly int Outline = Shader.PropertyToID("_Outline");

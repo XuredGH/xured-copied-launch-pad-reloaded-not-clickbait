@@ -24,17 +24,17 @@ public static class LaunchpadAssets
     public static readonly LoadableAsset<Sprite> ZoomButton = new("Zoom.png");
     public static readonly LoadableAsset<Sprite> ReviveButton = new("Revive.png");
     public static readonly LoadableAsset<Sprite> HideButton = new("Clean.png");
-    public static readonly LoadableAsset<Sprite> HackButton = new("Hack.png", false);
-    public static readonly LoadableAsset<Sprite> MapButton = new("Map.png", false);
-    public static readonly LoadableAsset<Sprite> ScannerButton = new("Place_Scanner.png", false);
-    public static readonly LoadableAsset<Sprite> TrackButton = new("Track.png", false);
-    public static readonly LoadableAsset<Sprite> ShootButton = new("Shoot.png", false);
-    public static readonly LoadableAsset<Sprite> JesterIcon = new("Jester.png", false);
+    public static readonly LoadableAsset<Sprite> HackButton = new("Hack.png");
+    public static readonly LoadableAsset<Sprite> MapButton = new("Map.png");
+    public static readonly LoadableAsset<Sprite> ScannerButton = new("Place_Scanner.png");
+    public static readonly LoadableAsset<Sprite> TrackButton = new("Track.png");
+    public static readonly LoadableAsset<Sprite> ShootButton = new("Shoot.png");
+    public static readonly LoadableAsset<Sprite> JesterIcon = new("Jester.png");
 
     // Object Sprites
-    public static readonly LoadableAsset<Sprite> ScannerSprite = new("Scanner.png", false);
-    public static readonly LoadableAsset<Sprite> NodeSprite = new("Node.png", false);
-    public static readonly LoadableAsset<Sprite> KnifeHandSprite = new("KnifeHand.png", false);
+    public static readonly LoadableAsset<Sprite> ScannerSprite = new("Scanner.png");
+    public static readonly LoadableAsset<Sprite> NodeSprite = new("Node.png");
+    public static readonly LoadableAsset<Sprite> KnifeHandSprite = new("KnifeHand.png");
     // Sounds
     public static readonly LoadableAsset<AudioClip> BeepSound = new("Beep.wav");
     public static readonly LoadableAsset<AudioClip> PingSound = new("Ping.mp3");
