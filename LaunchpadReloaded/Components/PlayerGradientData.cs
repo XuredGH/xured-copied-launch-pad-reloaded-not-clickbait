@@ -60,9 +60,16 @@ public class PlayerGradientData(IntPtr ptr) : MonoBehaviour(ptr)
     public void Awake()
     {
         player = GetComponent<PlayerControl>();
-        if (player)
+        if (!player)
         {
-            playerId = player.PlayerId;
+            return;
+        }
+        
+        playerId = player.PlayerId;
+
+        if (player.AmOwner && AmongUsClient.Instance.NetworkMode == NetworkModes.FreePlay)
+        {
+            _gradientColor = GradientManager.LocalGradientId;
         }
     }
 }
