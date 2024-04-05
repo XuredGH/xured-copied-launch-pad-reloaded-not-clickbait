@@ -1,23 +1,27 @@
 using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
+using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Networking;
+using Reactor.Networking.Rpc;
 
 namespace LaunchpadReloaded.Features;
 
 public class LaunchpadGameOptions
 {
-    private static LaunchpadGameOptions _instance;
-
-    public static LaunchpadGameOptions Instance
-    {
-        get { return _instance ??= new LaunchpadGameOptions(); }
-    }
+    public static LaunchpadGameOptions Instance { get; private set; }
 
     public readonly CustomStringOption GameModes;
+    public readonly CustomToggleOption BanCheaters;
 
-    /*    public readonly CustomStringOption VotingType;
-        public readonly CustomNumberOption MaxVotes;*/
+    // Voting Types
+    public readonly CustomStringOption VotingType;
+    public readonly CustomNumberOption MaxVotes;
+    public readonly CustomToggleOption AllowVotingForSamePerson;
+    public readonly CustomToggleOption AllowConfirmingVotes;
+    public readonly CustomToggleOption DisableDynamicVoting;
+    public readonly CustomToggleOption ShowPercentages;
+    public readonly CustomOptionGroup VotingGroup;
 
     // General Options
     public readonly CustomToggleOption OnlyShowRoleColor;
@@ -41,7 +45,7 @@ public class LaunchpadGameOptions
         {
             ChangedEvent = i =>
             {
-                if (!AmongUsClient.Instance.AmHost)
+                if (!AmongUsClient.Instance || !AmongUsClient.Instance.AmHost)
                 {
                     return;
                 }
@@ -49,54 +53,113 @@ public class LaunchpadGameOptions
             }
         };
 
-        /*        VotingType = new CustomStringOption("Voting Type", 0, ["Classic", "Chance", "Multiple", "Combined"]);
-                VotingType.ChangedEvent = i => VotingTypesManager.RpcSetType(GameData.Instance, VotingType.IndexValue);
+        VotingType = new CustomStringOption("Voting Type", 0, ["Classic", "Chance", "Multiple", "Combined"])
+        {
+            ChangedEvent = i =>
+            {
+                if (!AmongUsClient.Instance || !AmongUsClient.Instance.AmHost)
+                {
+                    return;
+                }
+                VotingTypesManager.RpcSetType(GameData.Instance, i);
+            },
+            
+        };
+        
+        MaxVotes = new CustomNumberOption("Max Votes", 3, 2, 10, 1, NumberSuffixes.None)
+        {
+            Hidden = ()=> !VotingTypesManager.CanVoteMultiple()
+        };
 
-                MaxVotes = new CustomNumberOption("Max Votes", 3, 2, 10, 1, NumberSuffixes.None);
-                MaxVotes.Hidden = () => !VotingTypesManager.CanVoteMultiple();*/
+        ShowPercentages = new CustomToggleOption("Show Percentages", false)
+        {
+            Hidden = VotingTypesManager.UseChance
+        };
+        
+        AllowConfirmingVotes = new CustomToggleOption("Allow Confirming Votes", false)
+        {
+            Hidden = VotingTypesManager.CanVoteMultiple
+        };
+        
+        AllowVotingForSamePerson = new CustomToggleOption("Allow Voting Same Person Again", true)
+        {
+            Hidden = () => !VotingTypesManager.CanVoteMultiple()
+        };
 
+        DisableDynamicVoting = new CustomToggleOption("Disable Dynamic Votes", false)
+        {
+            Hidden = () => !AllowVotingForSamePerson.Value
+        };
+
+
+        VotingGroup = new CustomOptionGroup("Voting Type",
+            toggleOpt: [AllowVotingForSamePerson, ShowPercentages, AllowConfirmingVotes, DisableDynamicVoting],
+            stringOpt: [],
+            numberOpt: [MaxVotes]);
+
+        BanCheaters = new CustomToggleOption("Ban Cheaters", true)
+        {
+            ShowInHideNSeek = true
+        };
+        
         DisableMeetingTeleport = new CustomToggleOption("Disable Meeting Teleport", false);
+        
         OnlyShowRoleColor = new CustomToggleOption("Reveal Crewmate Roles", false);
+        
         GeneralGroup = new CustomOptionGroup("General Options",
-            toggleOpt: [OnlyShowRoleColor, DisableMeetingTeleport],
+            toggleOpt: [BanCheaters, OnlyShowRoleColor, DisableMeetingTeleport],
             stringOpt: [],
             numberOpt: []);
 
         FriendlyFire = new CustomToggleOption("Friendly Fire", false);
+        
         UniqueColors = new CustomToggleOption("Unique Colors", true)
         {
-            ChangedEvent = i =>
+            ShowInHideNSeek = true,
+            ChangedEvent = value =>
             {
-                if (!AmongUsClient.Instance.AmHost || i == false) return;
-                foreach (var plr in PlayerControl.AllPlayerControls)
+                if (!AmongUsClient.Instance.AmHost || !value)
                 {
-                    plr.CmdCheckColor((byte)plr.cosmetics.ColorId);
+                    return;
+                }
+
+                foreach (var player in PlayerControl.AllPlayerControls)
+                {
+                    if (GradientManager.TryGetColor(player.PlayerId, out var grad))// && !player.AmOwner)
+                    {
+                        Rpc<CustomCheckColorRpc>.Instance.Handle(player, new CustomCheckColorRpc.Data((byte)player.Data.DefaultOutfit.ColorId, grad));
+                    }
                 }
             }
         };
 
-        Character = new CustomStringOption("Character", 0, ["Default", "Horse", "Long"]);
-        Character.ChangedEvent = i =>
+        Character = new CustomStringOption("Character", 0, ["Default", "Horse", "Long"])
         {
-            PlayerBodyTypes bodyType;
-            switch (Character.Value)
+            ChangedEvent = i =>
             {
-                default:
-                case "Default":
-                    bodyType = PlayerBodyTypes.Normal;
-                    break;
-                case "Horse":
-                    bodyType = PlayerBodyTypes.Horse;
-                    break;
-                case "Long":
-                    bodyType = PlayerBodyTypes.Long;
-                    break;
-            }
+                PlayerBodyTypes bodyType;
+                switch (Character?.Options[i])
+                {
+                    default:
+                    case "Default":
+                        bodyType = PlayerBodyTypes.Normal;
+                        break;
+                    case "Horse":
+                        bodyType = PlayerBodyTypes.Horse;
+                        break;
+                    case "Long":
+                        bodyType = PlayerBodyTypes.Long;
+                        break;
+                }
 
-            foreach (PlayerControl plr in PlayerControl.AllPlayerControls)
-            {
-                plr.MyPhysics.SetBodyType(bodyType);
-                if (bodyType == PlayerBodyTypes.Normal) plr.cosmetics.currentBodySprite.BodySprite.transform.localScale = new(0.5f, 0.5f, 1f);
+                foreach (var plr in PlayerControl.AllPlayerControls)
+                {
+                    plr.MyPhysics.SetBodyType(bodyType);
+                    if (bodyType == PlayerBodyTypes.Normal)
+                    {
+                        plr.cosmetics.currentBodySprite.BodySprite.transform.localScale = new(0.5f, 0.5f, 1f);
+                    }
+                }
             }
         };
 
@@ -116,10 +179,10 @@ public class LaunchpadGameOptions
             stringOpt: [],
             numberOpt: [])
         {
-            Hidden = () => GameModes.Value != "Battle Royale"
+            Hidden = () => GameModes.IndexValue != (int)LaunchpadGamemodes.BattleRoyale
         };
 
-        GeneralGroup.Hidden = FunGroup.Hidden = () => GameModes.Value != "Default";
+        GeneralGroup.Hidden = FunGroup.Hidden = VotingType.Hidden = VotingGroup.Hidden = () => !CustomGameModeManager.IsDefault();
 
         foreach (var role in CustomRoleManager.CustomRoles)
         {
@@ -132,6 +195,6 @@ public class LaunchpadGameOptions
 
     public static void Initialize()
     {
-        _instance = new LaunchpadGameOptions();
+        Instance = new LaunchpadGameOptions();
     }
 }

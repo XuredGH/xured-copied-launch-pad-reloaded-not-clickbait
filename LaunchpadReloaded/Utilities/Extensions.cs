@@ -1,12 +1,15 @@
+using System;
 using System.Linq;
 using System.Reflection;
-using Il2CppSystem.Collections.Generic;
+using AmongUs.GameOptions;
+using System.Collections.Generic;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Components;
+using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
-using LaunchpadReloaded.Roles;
 using Reactor.Utilities.Extensions;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace LaunchpadReloaded.Utilities;
 
@@ -24,6 +27,49 @@ public static class Extensions
         data.playerId = playerId;
     }
 
+    public static KeyValuePair<byte, int> MaxPair(this Dictionary<byte, int> self, out bool tie)
+    {
+        tie = true;
+        var result = new KeyValuePair<byte, int>(byte.MaxValue, int.MinValue);
+        foreach (var keyValuePair in self)
+        {
+            if (keyValuePair.Value > result.Value)
+            {
+                result = keyValuePair;
+                tie = false;
+            }
+            else if (keyValuePair.Value == result.Value)
+            {
+                tie = true;
+            }
+        }
+        return result;
+    }
+
+    public static KeyValuePair<byte, float> MaxPair(this Dictionary<byte, float> self, out bool tie)
+    {
+        tie = true;
+        var result = new KeyValuePair<byte, float>(byte.MaxValue, int.MinValue);
+        foreach (var keyValuePair in self)
+        {
+            if (keyValuePair.Value > result.Value)
+            {
+                result = keyValuePair;
+                tie = false;
+            }
+            else if (Math.Abs(keyValuePair.Value - result.Value) < .05)
+            {
+                tie = true;
+            }
+        }
+        return result;
+    }
+
+    public static LaunchpadPlayer GetLpPlayer(this PlayerControl playerControl)
+    {
+        return playerControl.GetComponent<LaunchpadPlayer>();
+    }
+
     public static bool ButtonTimerEnabled(this PlayerControl playerControl)
     {
         return (playerControl.moveable || playerControl.petting) && !playerControl.inVent && !playerControl.shapeshifting && (!DestroyableSingleton<HudManager>.InstanceExists || !DestroyableSingleton<HudManager>.Instance.IsIntroDisplayed) && !MeetingHud.Instance && !PlayerCustomizationMenu.Instance && !ExileController.Instance && !IntroCutscene.Instance;
@@ -36,19 +82,37 @@ public static class Extensions
             return false;
         }
 
-        return HackingManager.Instance.hackedPlayers.Contains(playerInfo.PlayerId) || (playerInfo.Role is HackerRole && HackingManager.Instance.AnyPlayerHacked());
+        return HackingManager.Instance.hackedPlayers.Contains(playerInfo.PlayerId) || (playerInfo.Role.IsImpostor && HackingManager.Instance.AnyPlayerHacked());
     }
 
     public static bool IsRevived(this PlayerControl player)
     {
-        if (RevivalManager.Instance is null)
-        {
-            return false;
-        }
-
-        return RevivalManager.Instance.RevivedPlayers.Contains(player.PlayerId);
+        return RevivalManager.Instance is not null && RevivalManager.Instance.revivedPlayers.Contains(player.PlayerId);
     }
 
+    public static void Revive(this DeadBody body)
+    {
+        var player = PlayerControl.AllPlayerControls.ToArray().ToList().Find(player => player.PlayerId == body.ParentId);
+        player.NetTransform.SnapTo(body.transform.position);
+        player.Revive();
+
+        player.RemainingEmergencies = GameManager.Instance.LogicOptions.GetNumEmergencyMeetings();
+        RoleManager.Instance.SetRole(player, RoleTypes.Crewmate);
+        player.Data.Role.SpawnTaskHeader(player);
+        player.MyPhysics.SetBodyType(player.BodyType);
+
+        if (player.AmOwner)
+        {
+            HudManager.Instance.MapButton.gameObject.SetActive(true);
+            HudManager.Instance.ReportButton.gameObject.SetActive(true);
+            HudManager.Instance.UseButton.gameObject.SetActive(true);
+            player.myTasks.RemoveAt(0);
+        }
+
+        body.gameObject.Destroy();
+        RevivalManager.Instance.revivedPlayers.Add(player.PlayerId);
+    }
+    
     public static void HideBody(this DeadBody body)
     {
         body.Reported = true;
@@ -88,19 +152,21 @@ public static class Extensions
         }
 
         target = playerControl.NearestDeadBody();
-        if (target)
+        if (!target)
         {
-            foreach (var renderer in target.bodyRenderers)
-            {
-                renderer.SetOutline(outlineColor);
-            }
+            return;
+        }
+        
+        foreach (var renderer in target.bodyRenderers)
+        {
+            renderer.SetOutline(outlineColor);
         }
 
     }
 
     public static DeadBody NearestDeadBody(this PlayerControl playerControl)
     {
-        var results = new List<Collider2D>();
+        var results = new Il2CppSystem.Collections.Generic.List<Collider2D>();
         Physics2D.OverlapCircle(playerControl.GetTruePosition(), playerControl.MaxReportDistance / 4f, Filter, results);
         return results.ToArray()
             .Where(collider2D => collider2D.CompareTag("DeadBody"))

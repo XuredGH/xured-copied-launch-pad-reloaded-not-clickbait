@@ -1,9 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using LaunchpadReloaded.Components;
-using LaunchpadReloaded.Networking;
-using LaunchpadReloaded.Roles;
-using Reactor.Networking.Attributes;
+using Reactor.Utilities;
 using Reactor.Utilities.Attributes;
 using UnityEngine;
 
@@ -12,30 +10,24 @@ namespace LaunchpadReloaded.Features.Managers;
 public class ScannerManager(IntPtr ptr) : MonoBehaviour(ptr)
 {
     public static ScannerManager Instance;
-    public List<ScannerComponent> Scanners;
+    public List<ScannerComponent> scanners;
 
     private void Awake()
     {
         Instance = this;
-        Scanners = new List<ScannerComponent>();
+        scanners = [];
     }
-
-    [MethodRpc((uint)LaunchpadRPC.CreateScanner)]
-    public static void RpcCreateScanner(PlayerControl playerControl, float x, float y)
-    {
-        if (playerControl.Data.Role is not TrackerRole)
-        {
-            return;
-        }
-        
-        var newScanner = Instance.CreateScanner(playerControl, new Vector3(x, y, 0.0057f));
-        Instance.Scanners.Add(newScanner);
-    }
+    
 
     public ScannerComponent CreateScanner(PlayerControl playerControl, Vector3 pos)
     {
-        var scanner = new GameObject("Scanner");
-        scanner.transform.position = pos;
+        var scanner = new GameObject("Scanner")
+        {
+            transform =
+            {
+                position = pos
+            }
+        };
         scanner.transform.SetParent(ShipStatus.Instance.transform);
 
         var sprite = scanner.AddComponent<SpriteRenderer>();
@@ -52,12 +44,12 @@ public class ScannerManager(IntPtr ptr) : MonoBehaviour(ptr)
         realCollision.offset = new Vector2(0, -0.2f);
 
         var component = scanner.AddComponent<ScannerComponent>();
-        component.PlacedBy = playerControl;
-        component.Id = (byte)(Scanners.Count + 1);
+        component.placedBy = playerControl;
+        component.id = (byte)(scanners.Count + 1);
 
         scanner.SetActive(true);
 
-        Debug.Log($"Scanner {component.Id} placed by {playerControl.Data.PlayerName}");
+        Logger<LaunchpadReloadedPlugin>.Info($"Scanner {component.id} placed by {playerControl.Data.PlayerName}");
         return component;
     }
 }

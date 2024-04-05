@@ -33,14 +33,16 @@ public static class JesterPatches
     [HarmonyPostfix, HarmonyPatch(typeof(ExileController), nameof(ExileController.Begin))]
     public static void Begin(ExileController __instance)
     {
-        if (__instance.exiled?.Role != null && __instance.exiled.Role is ICustomRole role)
+        if (!__instance.exiled?.Role || __instance.exiled.Role is not ICustomRole role)
         {
-            if (role.GetCustomEjectionMessage(__instance.exiled) == null)
-            {
-                return;
-            }
-            __instance.completeString = role.GetCustomEjectionMessage(__instance.exiled);
+            return;
         }
+        
+        if (role.GetCustomEjectionMessage(__instance.exiled) == null)
+        {
+            return;
+        }
+        __instance.completeString = role.GetCustomEjectionMessage(__instance.exiled);
     }
 
     /// <summary>
@@ -49,7 +51,10 @@ public static class JesterPatches
     [HarmonyPrefix, HarmonyPatch(typeof(ExileController), nameof(ExileController.WrapUp))]
     public static bool WrapUp(ExileController __instance)
     {
-        if (TutorialManager.InstanceExists) return true;
+        if (TutorialManager.InstanceExists)
+        {
+            return true;
+        }
 
         if (__instance.exiled is not null && __instance.exiled.Role is not null && __instance.exiled.Role is JesterRole)
         {

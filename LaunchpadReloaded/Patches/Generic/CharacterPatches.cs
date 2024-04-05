@@ -2,7 +2,7 @@
 using InnerNet;
 using LaunchpadReloaded.Features;
 using System;
-using UnityEngine;
+using Reactor.Utilities;
 using static CosmeticsLayer;
 
 namespace LaunchpadReloaded.Patches.Generic;
@@ -58,7 +58,7 @@ public static class CharacterPatches
             if (LobbyBehaviour.Instance)
             {
                 __instance.SetupNeckGrowth(false, false);
-                return false; ;
+                return false;
             }
             __instance.SetupNeckGrowth(true, false);
         }
@@ -69,24 +69,24 @@ public static class CharacterPatches
     public static bool NeckSizePatch(LongBoiPlayerBody __instance, ref float distance)
     {
         __instance.targetHeight = distance / 10f + 0.5f;
-        __instance.SetupNeckGrowth(true, true);
+        __instance.SetupNeckGrowth(true);
         return false;
     }
 
     [HarmonyPrefix, HarmonyPatch(typeof(LongBoiPlayerBody), nameof(LongBoiPlayerBody.Start))]
     public static bool LongBodyStartPatch(LongBoiPlayerBody __instance)
     {
-        Debug.Log("hello there should longer");
+        Logger<LaunchpadReloadedPlugin>.Info("hello there should longer");
         __instance.ShouldLongAround = true;
         __instance.skipNeckAnim = true;
         if (__instance.hideCosmeticsQC)
         {
             __instance.cosmeticLayer.SetHatVisorVisible(false);
         }
-        __instance.SetupNeckGrowth(true, true);
+        __instance.SetupNeckGrowth(true);
         if (__instance.isExiledPlayer)
         {
-            ShipStatus instance = ShipStatus.Instance;
+            var instance = ShipStatus.Instance;
             if (instance == null || instance.Type != ShipStatus.MapType.Fungle)
             {
                 __instance.cosmeticLayer.AdjustCosmeticRotations(-17.75f);

@@ -13,7 +13,8 @@ public class TrackButton : CustomActionButton
     public override float EffectDuration => 0;
     public override int MaxUses => 1;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.TrackButton;
-    public PlayerControl CurrentTarget;
+    
+    private PlayerControl _currentTarget;
 
     public override bool Enabled(RoleBehaviour role) => role is TrackerRole;
 
@@ -26,30 +27,34 @@ public class TrackButton : CustomActionButton
             TrackingManager.Instance.TrackingUpdate();
             return;
         }
-
-        if (UsesLeft > 0)
+        
+        if (_currentTarget)
         {
-            if (CurrentTarget)
-            {
-                CurrentTarget.cosmetics.currentBodySprite.BodySprite.material.SetFloat(ShaderID.Outline, 0);
-                CurrentTarget = null;
-            }
-
-            CurrentTarget = playerControl.GetClosestPlayer(true, 1.5f);
-
-            if (CurrentTarget)
-            {
-                CurrentTarget.cosmetics.currentBodySprite.BodySprite.material.SetFloat(ShaderID.Outline, 1);
-                CurrentTarget.cosmetics.currentBodySprite.BodySprite.material.SetColor(ShaderID.OutlineColor, Palette.CrewmateBlue);
-            }
+            _currentTarget.cosmetics.currentBodySprite.BodySprite.material.SetFloat(ShaderID.Outline, 0);
+            _currentTarget = null;
         }
+
+        if (UsesLeft <= 0)
+        {
+            return;
+        }
+        
+        _currentTarget = playerControl.GetClosestPlayer(true, 1.5f);
+
+        if (!_currentTarget)
+        {
+            return;
+        }
+
+        _currentTarget.cosmetics.currentBodySprite.BodySprite.material.SetFloat(ShaderID.Outline, 1);
+        _currentTarget.cosmetics.currentBodySprite.BodySprite.material.SetColor(ShaderID.OutlineColor, Palette.CrewmateBlue);
     }
 
-    public override bool CanUse() => CurrentTarget != null && !HackingManager.Instance.AnyPlayerHacked();
+    public override bool CanUse() => _currentTarget && !HackingManager.Instance.AnyPlayerHacked();
 
     protected override void OnClick()
     {
-        TrackingManager.Instance.TrackedPlayer = CurrentTarget;
-        CurrentTarget = null;
+        TrackingManager.Instance.TrackedPlayer = _currentTarget;
+        _currentTarget = null;
     }
 }

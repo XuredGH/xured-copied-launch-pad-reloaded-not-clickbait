@@ -11,11 +11,17 @@ namespace LaunchpadReloaded.Buttons;
 public class ZoomButton : CustomActionButton
 {
     public override string Name => "ZOOM";
+    
     public override float Cooldown => CaptainRole.ZoomCooldown.Value;
+    
     public override float EffectDuration => CaptainRole.ZoomDuration.Value;
+    
     public override int MaxUses => 0;
+    
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.ZoomButton;
-    public static bool IsZoom;
+    
+    public static bool IsZoom { get; private set; }
+    
     public override bool Enabled(RoleBehaviour role)
     {
         return role is CaptainRole;
@@ -25,15 +31,15 @@ public class ZoomButton : CustomActionButton
 
     protected override void OnClick()
     {
-        ZoomOut();
+        Coroutines.Start(ZoomOutCoroutine());
     }
 
     protected override void OnEffectEnd()
     {
-        ZoomIn();
+        Coroutines.Start(ZoomInCoroutine());
     }
 
-    public static IEnumerator ZoomOutCoroutine()
+    private static IEnumerator ZoomOutCoroutine()
     {
         HudManager.Instance.ShadowQuad.gameObject.SetActive(false);
         IsZoom = true;
@@ -49,7 +55,7 @@ public class ZoomButton : CustomActionButton
         ResolutionManager.ResolutionChanged.Invoke((float)Screen.width / Screen.height, Screen.width, Screen.height, Screen.fullScreen);
     }
 
-    public static IEnumerator ZoomInCoroutine()
+    private static IEnumerator ZoomInCoroutine()
     {
         for (var ft = Camera.main!.orthographicSize; ft > 3f; ft -= 0.3f)
         {
@@ -65,15 +71,5 @@ public class ZoomButton : CustomActionButton
         IsZoom = false;
 
         ResolutionManager.ResolutionChanged.Invoke((float)Screen.width / Screen.height, Screen.width, Screen.height, Screen.fullScreen);
-    }
-
-    private static void ZoomOut()
-    {
-        Coroutines.Start(ZoomOutCoroutine());
-    }
-
-    private static void ZoomIn()
-    {
-        Coroutines.Start(ZoomInCoroutine());
     }
 }

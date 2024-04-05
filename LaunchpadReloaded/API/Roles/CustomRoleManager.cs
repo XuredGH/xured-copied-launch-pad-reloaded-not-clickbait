@@ -1,14 +1,14 @@
-﻿using AmongUs.GameOptions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using AmongUs.GameOptions;
 using Il2CppInterop.Runtime;
 using LaunchpadReloaded.Networking;
 using Reactor.Localization.Utilities;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using TMPro;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -62,7 +62,7 @@ public static class CustomRoleManager
         roleBehaviour.BlurbNameLong = CustomStringName.CreateAndRegister(customRole.RoleLongDescription);
         roleBehaviour.AffectedByLightAffectors = customRole.AffectedByLight;
         roleBehaviour.CanBeKilled = customRole.CanGetKilled;
-        roleBehaviour.CanUseKillButton = customRole.CanUseKill;
+        roleBehaviour.CanUseKillButton = customRole.CanKill;
         roleBehaviour.TasksCountTowardProgress = customRole.TasksCount;
         roleBehaviour.CanVent = customRole.CanUseVent;
         roleBehaviour.DefaultGhostRole = customRole.GhostRole;
@@ -75,11 +75,15 @@ public static class CustomRoleManager
 
         CustomRoles.Add(customRole.RoleId, roleBehaviour);
 
-        if (customRole.HideSettings) return;
+        if (customRole.HideSettings)
+        {
+            return;
+        }
 
         var config = PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config;
         config.Bind(customRole.NumConfigDefinition, 1);
         config.Bind(customRole.ChanceConfigDefinition, 100);
+
     }
 
     public static bool GetCustomRoleBehaviour(RoleTypes roleType, out ICustomRole result)
@@ -133,7 +137,10 @@ public static class CustomRoleManager
     {
         foreach (var role in CustomRoles.Values.Select(x => (ICustomRole)x))
         {
-            if (role.HideSettings) continue;
+            if (role.HideSettings)
+            {
+                continue;
+            }
 
             PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config.TryGetEntry<int>(role.NumConfigDefinition, out var numEntry);
             PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config.TryGetEntry<int>(role.ChanceConfigDefinition, out var chanceEntry);
@@ -141,8 +148,8 @@ public static class CustomRoleManager
             RpcSyncRoleOption(GameData.Instance, role.RoleId, numEntry.Value, chanceEntry.Value);
         }
     }
-
-    [MethodRpc((uint)LaunchpadRPC.SyncRoleOption)]
+    
+    [MethodRpc((uint)LaunchpadRpc.SyncRoleOption)]
     private static void RpcSyncRoleOption(GameData _, ushort roleId, int number, int chance)
     {
         GetCustomRoleBehaviour((RoleTypes)roleId, out var role);

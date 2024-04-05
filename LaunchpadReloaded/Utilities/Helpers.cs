@@ -13,16 +13,13 @@ namespace LaunchpadReloaded.Utilities;
 
 public static class Helpers
 {
-    public static Random Random = new Random();
+    public static readonly Random Random = new();
+    
     public static bool ShouldCancelClick()
     {
-        if (DragManager.Instance is null)
-        {
-            return false;
-        }
-
-        return DragManager.Instance.IsDragging(PlayerControl.LocalPlayer.PlayerId);
+        return DragManager.Instance is not null && DragManager.Instance.IsDragging(PlayerControl.LocalPlayer.PlayerId);
     }
+    
     public static string FirstLetterToUpper(string str)
     {
         return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(str.ToLower());
@@ -37,9 +34,14 @@ public static class Helpers
         AspectPosition.EdgeAlignments alignment, Vector3 distance, float fontSize = 2f,
         TextAlignmentOptions textAlignment = TextAlignmentOptions.Center)
     {
-        var textObj = new GameObject(name);
-        textObj.transform.parent = parent;
-        textObj.layer = LayerMask.NameToLayer("UI");
+        var textObj = new GameObject(name)
+        {
+            transform =
+            {
+                parent = parent
+            },
+            layer = LayerMask.NameToLayer("UI")
+        };
 
         var pingTracker = HudManager.Instance.gameObject.GetComponentInChildren<PingTracker>();
         var textMeshPro = textObj.AddComponent<TextMeshPro>();
@@ -63,17 +65,13 @@ public static class Helpers
 
     public static string GetSuffix(NumberSuffixes suffix)
     {
-        switch (suffix)
+        return suffix switch
         {
-            case NumberSuffixes.None:
-                return String.Empty;
-            case NumberSuffixes.Multiplier:
-                return "x";
-            case NumberSuffixes.Seconds:
-                return "s";
-        }
-
-        return String.Empty;
+            NumberSuffixes.None => string.Empty,
+            NumberSuffixes.Multiplier => "x",
+            NumberSuffixes.Seconds => "s",
+            _ => string.Empty
+        };
     }
 
     public static void SendNotification(string text, Color textColor, float duration = 2f, float fontSize = 3f)

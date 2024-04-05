@@ -23,7 +23,7 @@ public class TrackerRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
     {
         var taskStringBuilder = Helpers.CreateForRole(this);
 
-        if (TrackingManager.Instance.TrackedPlayer != null)
+        if (TrackingManager.Instance.TrackedPlayer)
         {
             if (TrackingManager.Instance.TrackerDisconnected)
             {
@@ -36,16 +36,16 @@ public class TrackerRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
             }
         }
 
-        if (ScannerManager.Instance.Scanners.Count > 0)
+        if (ScannerManager.Instance.scanners.Count > 0)
         {
             taskStringBuilder.AppendLine("<b>Created Scanners:</b>");
         }
 
-        foreach (var component in ScannerManager.Instance.Scanners)
+        foreach (var component in ScannerManager.Instance.scanners)
         {
-            if (component.Room != null)
+            if (component.room)
             {
-                taskStringBuilder.AppendLine($"Scanner {component.Id} ({component.Room.RoomId})");
+                taskStringBuilder.AppendLine($"Scanner {component.id} ({component.room.RoomId})");
             }
         }
         return taskStringBuilder;

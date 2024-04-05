@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Networking;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities;
@@ -16,12 +17,30 @@ public static class CustomGameModeManager
     /// <summary>
     /// List of registered gamemodes
     /// </summary>
-    public static readonly List<CustomGameMode> GameModes = [];
+    public static readonly Dictionary<int, CustomGameMode> GameModes = [];
 
+    public static bool IsDefault()
+    {
+        return ActiveMode.Id == (int)LaunchpadGamemodes.Default;
+    }
+    
+    
     /// <summary>
     /// Current gamemode
     /// </summary>
-    public static CustomGameMode ActiveMode;
+    public static CustomGameMode ActiveMode
+    {
+        get
+        {
+            if (GameManager.Instance.IsHideAndSeek())
+            {
+                return GameModes[(int)LaunchpadGamemodes.Default];
+            }
+
+            return GameModes.TryGetValue(LaunchpadGameOptions.Instance.GameModes.IndexValue, out var gameMode) ? gameMode : GameModes[(int)LaunchpadGamemodes.Default];
+        }
+        private set => LaunchpadGameOptions.Instance.GameModes.SetValue(value.Id);
+    }
 
     // TODO: MAKE AN ATTRIBUTE
     public static void RegisterAllGameModes()
@@ -40,14 +59,9 @@ public static class CustomGameModeManager
     /// </summary>
     /// <param name="lobby">game data</param>
     /// <param name="id">Gamemode ID</param>
-    [MethodRpc((uint)LaunchpadRPC.SetGameMode)]
+    [MethodRpc((uint)LaunchpadRpc.SetGameMode)]
     public static void RpcSetGameMode(GameData lobby, int id)
     {
-        if (!AmongUsClient.Instance.AmHost)
-        {
-            return;
-        }
-        
         SetGameMode(id);
     }
 
@@ -57,7 +71,13 @@ public static class CustomGameModeManager
     /// <param name="id">gamemode ID</param>
     public static void SetGameMode(int id)
     {
-        ActiveMode = GameModes.Find(gameMode => gameMode.Id == id);
+        if (GameModes.TryGetValue(id, out var gameMode))
+        {
+            ActiveMode = gameMode;
+            return;
+        }
+        
+        Logger<LaunchpadReloadedPlugin>.Error($"No gamemode with id {id} found!");
     }
 
     /// <summary>
@@ -68,18 +88,21 @@ public static class CustomGameModeManager
     {
         if (!typeof(CustomGameMode).IsAssignableFrom(gameModeType))
         {
-            Logger<LaunchpadReloadedPlugin>.Warning($"{gameModeType.Name} does not inherit CustomGameMode!");
+            Logger<LaunchpadReloadedPlugin>.Warning($"{gameModeType?.Name} does not inherit CustomGameMode!");
             return;
         }
 
         var gameMode = (CustomGameMode)Activator.CreateInstance(gameModeType);
 
-        if (GameModes.Any(x => x.Id == gameMode.Id))
+        if (GameModes.Any(x => x.Key == gameMode?.Id))
         {
-            Logger<LaunchpadReloadedPlugin>.Error($"ID for gamemode {gameMode.Name} already exists!");
+            Logger<LaunchpadReloadedPlugin>.Error($"ID for gamemode {gameMode?.Name} already exists!");
             return;
         }
 
-        GameModes.Add(gameMode);
+        if (gameMode != null)
+        {
+            GameModes.Add(gameMode.Id, gameMode);
+        }
     }
 }

@@ -38,7 +38,6 @@ public class CustomOptionGroup
 
         foreach (var option in Options)
         {
-            Debug.Log(option.Title);
             option.Group = this;
         }
 

@@ -1,6 +1,7 @@
 ﻿using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
+using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Roles;
 using UnityEngine;
 
@@ -18,11 +19,11 @@ public class ScannerButton : CustomActionButton
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.ScannerButton;
 
     public override bool Enabled(RoleBehaviour role) => role is TrackerRole;
+    
     public override bool CanUse() => !HackingManager.Instance.AnyPlayerHacked();
 
     protected override void OnClick()
     {
-        ScannerManager.RpcCreateScanner(PlayerControl.LocalPlayer,
-            PlayerControl.LocalPlayer.GetTruePosition().x, PlayerControl.LocalPlayer.GetTruePosition().y);
+        PlayerControl.LocalPlayer.RpcCreateScanner(PlayerControl.LocalPlayer.GetTruePosition().x, PlayerControl.LocalPlayer.GetTruePosition().y);
     }
 }

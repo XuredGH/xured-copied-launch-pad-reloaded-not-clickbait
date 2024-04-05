@@ -9,7 +9,10 @@ public static class ReportButtonPatch
     [HarmonyPrefix, HarmonyPatch("DoClick")]
     public static bool DoClickPatch()
     {
-        if (HackingManager.Instance is null) return true;
+        if (HackingManager.Instance is null)
+        {
+            return true;
+        }
 
         return !HackingManager.Instance.AnyPlayerHacked();
     }

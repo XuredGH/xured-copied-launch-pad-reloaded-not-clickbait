@@ -1,5 +1,5 @@
 namespace LaunchpadReloaded.Networking;
-public enum LaunchpadRPC : uint
+public enum LaunchpadRpc : uint
 {
     HackPlayer,
     UnHackPlayer,
@@ -13,7 +13,12 @@ public enum LaunchpadRPC : uint
     SetBodyType,
     CreateScanner,
     Revive,
-    SyncGradient,
     SyncGameOptions,
-    SyncRoleOption
+    SyncRoleOption,
+    CustomCheckMurder,
+    CustomMurder,
+    CustomCheckColor,
+    CustomSetColor,
+    SetVotingType,
+    PopulateResults
 }

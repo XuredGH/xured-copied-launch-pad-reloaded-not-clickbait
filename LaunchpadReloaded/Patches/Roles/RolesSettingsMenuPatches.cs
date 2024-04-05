@@ -23,8 +23,15 @@ public static class RolesSettingsMenuPatches
         var tabPrefab = __instance.AllAdvancedSettingTabs.ToArray()[1].Tab;
         foreach (var (key, role) in CustomRoleManager.CustomRoles)
         {
-            if (__instance.AllAdvancedSettingTabs.ToArray().Any(x => (ushort)x.Type == key)) continue;
-            if ((role as ICustomRole).HideSettings) continue;
+            if (__instance.AllAdvancedSettingTabs.ToArray().Any(x => (ushort)x.Type == key))
+            {
+                continue;
+            }
+
+            if (role is ICustomRole { HideSettings: true })
+            {
+                continue;
+            }
 
             var newTab = Object.Instantiate(tabPrefab, __instance.AdvancedRolesSettings.transform);
             newTab.name = role.NiceName + " Settings";
@@ -47,17 +54,13 @@ public static class RolesSettingsMenuPatches
                     switch (customOption)
                     {
                         case CustomNumberOption numberOption:
-                            var numOpt = Object.Instantiate(numberSet, newTab.transform);
+                            var numOpt = numberOption.CreateNumberOption(numberSet, newTab.transform);
                             numOpt.transform.localPosition = new Vector3(-1.25f, startOffset, 0);
-                            numberOption.CreateNumberOption(numOpt);
-
                             break;
 
                         case CustomToggleOption toggleOption:
-                            var togOpt = Object.Instantiate(toggleSet, newTab.transform);
+                            var togOpt = toggleOption.CreateToggleOption(toggleSet, newTab.transform);
                             togOpt.transform.localPosition = new Vector3(-1.25f, startOffset, 0);
-                            toggleOption.CreateToggleOption(togOpt);
-
                             break;
                     }
                 }
@@ -110,8 +113,15 @@ public static class RolesSettingsMenuPatches
         var parent = __instance.ItemParent;
         foreach (var (key, role) in CustomRoleManager.CustomRoles)
         {
-            if (__instance.AllRoleSettings.ToArray().Any(x => (ushort)x.Role.Role == key)) continue;
-            if ((role as ICustomRole).HideSettings) continue;
+            if (__instance.AllRoleSettings.ToArray().Any(x => (ushort)x.Role.Role == key))
+            {
+                continue;
+            }
+
+            if (role is ICustomRole {HideSettings: true})
+            {
+                continue;
+            }
 
             var newOption = Object.Instantiate(__instance.SettingPrefab, parent);
             newOption.Role = role;
@@ -134,7 +144,10 @@ public static class RolesSettingsMenuPatches
 
         if (roleSetting.Role is ICustomRole role)
         {
-            if (role.HideSettings) return false;
+            if (role.HideSettings)
+            {
+                return false;
+            }
 
             LaunchpadReloadedPlugin.Instance.Config.TryGetEntry<int>(role.NumConfigDefinition, out var numEntry);
             numEntry.Value = roleSetting.RoleMaxCount;

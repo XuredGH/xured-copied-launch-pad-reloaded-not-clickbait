@@ -28,5 +28,8 @@ public static class CustomButtonManager
 
         var button = (CustomActionButton)Activator.CreateInstance(buttonType);
         CustomButtons.Add(button);
+        typeof(CustomButtonSingleton<>).MakeGenericType(buttonType)
+            .GetField("_instance", BindingFlags.Static | BindingFlags.NonPublic)!
+            .SetValue(null, button);
     }
 }

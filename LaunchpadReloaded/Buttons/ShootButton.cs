@@ -12,7 +12,8 @@ public class ShootButton : CustomActionButton
     public override float EffectDuration => 0;
     public override int MaxUses => (int)SheriffRole.Shots.Value;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.ShootButton;
-    public PlayerControl CurrentTarget;
+    
+    private PlayerControl _currentTarget;
 
     public override bool Enabled(RoleBehaviour role) => role is SheriffRole;
 
@@ -20,43 +21,43 @@ public class ShootButton : CustomActionButton
     {
         base.FixedUpdate(playerControl);
 
-        if (UsesLeft > 0)
+        if (_currentTarget)
         {
-            if (CurrentTarget)
-            {
-                CurrentTarget.cosmetics.currentBodySprite.BodySprite.material.SetColor(ShaderID.OutlineColor, Color.clear);
-                CurrentTarget.cosmetics.currentBodySprite.BodySprite.material.SetFloat(ShaderID.Outline, 0);
-                CurrentTarget = null;
-            }
-
-            CurrentTarget = playerControl.GetClosestPlayer(true, GameManager.Instance.LogicOptions.GetKillDistance());
-
-            if (CurrentTarget)
-            {
-                CurrentTarget.cosmetics.currentBodySprite.BodySprite.material.SetFloat(ShaderID.Outline, 1);
-                CurrentTarget.cosmetics.currentBodySprite.BodySprite.material.SetColor(ShaderID.OutlineColor, LaunchpadPalette.SheriffColor);
-            }
+            _currentTarget.cosmetics.currentBodySprite.BodySprite.material.SetColor(ShaderID.OutlineColor, Color.clear);
+            _currentTarget.cosmetics.currentBodySprite.BodySprite.material.SetFloat(ShaderID.Outline, 0);
+            _currentTarget = null;
         }
-        else if (UsesLeft <= 0 && CurrentTarget)
+
+        if (UsesLeft <= 0)
         {
-            CurrentTarget.cosmetics.currentBodySprite.BodySprite.material.SetColor(ShaderID.OutlineColor, Color.clear);
-            CurrentTarget.cosmetics.currentBodySprite.BodySprite.material.SetFloat(ShaderID.Outline, 0);
-            CurrentTarget = null;
+            return;
         }
+        
+        _currentTarget = playerControl.GetClosestPlayer(true, GameManager.Instance.LogicOptions.GetKillDistance());
+
+        if (!_currentTarget)
+        {
+            return;
+        }
+        
+        _currentTarget.cosmetics.currentBodySprite.BodySprite.material.SetFloat(ShaderID.Outline, 1);
+        _currentTarget.cosmetics.currentBodySprite.BodySprite.material.SetColor(ShaderID.OutlineColor, LaunchpadPalette.SheriffColor);
     }
 
-    public override bool CanUse() => CurrentTarget != null;
+    public override bool CanUse() => _currentTarget;
 
     protected override void OnClick()
     {
-        if (CurrentTarget.Data.Role.TeamType == RoleTeamTypes.Impostor || (SheriffRole.ShouldCrewmateDie.Value && CurrentTarget.Data.Role.TeamType == RoleTeamTypes.Crewmate))
+        if (_currentTarget.Data.Role.TeamType == RoleTeamTypes.Impostor || (SheriffRole.ShouldCrewmateDie.Value && _currentTarget.Data.Role.TeamType == RoleTeamTypes.Crewmate))
         {
-            PlayerControl.LocalPlayer.CmdCheckMurder(CurrentTarget);
+            PlayerControl.LocalPlayer.CmdCheckMurder(_currentTarget);
         }
 
-        if (CurrentTarget.Data.Role.TeamType == RoleTeamTypes.Crewmate && !TutorialManager.InstanceExists
-            ) PlayerControl.LocalPlayer.CmdCheckMurder(PlayerControl.LocalPlayer);
+        if (_currentTarget.Data.Role.TeamType == RoleTeamTypes.Crewmate && !TutorialManager.InstanceExists)
+        {
+            PlayerControl.LocalPlayer.CmdCheckMurder(PlayerControl.LocalPlayer);
+        }
 
-        CurrentTarget = null;
+        _currentTarget = null;
     }
 }

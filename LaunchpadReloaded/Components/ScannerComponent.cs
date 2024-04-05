@@ -12,14 +12,14 @@ namespace LaunchpadReloaded.Components;
 [RegisterInIl2Cpp]
 public class ScannerComponent(IntPtr ptr) : MonoBehaviour(ptr)
 {
-    public PlayerControl PlacedBy;
-    public byte Id;
-    public List<PlayerControl> PlayersInProximity = [];
-    public PlainShipRoom Room;
+    public PlayerControl placedBy;
+    public byte id;
+    public List<PlayerControl> playersInProximity = [];
+    public PlainShipRoom room;
 
     public void Awake()
     {
-        Room = Helpers.GetRoom(transform.position);
+        room = Helpers.GetRoom(transform.position);
     }
 
     public void OnTriggerEnter2D(Collider2D collider)
@@ -37,7 +37,7 @@ public class ScannerComponent(IntPtr ptr) : MonoBehaviour(ptr)
 
         if (PlayerControl.LocalPlayer.Data.Role is TrackerRole)
         {
-            Helpers.SendNotification($"<b>{Room.RoomId} Scanner:</b>{player.Data.Color.ToTextColor()} {player.Data.PlayerName}</color>", Color.white, 1.4f);
+            Helpers.SendNotification($"<b>{room.RoomId} Scanner:</b>{player.Data.Color.ToTextColor()} {player.Data.PlayerName}</color>", Color.white, 1.4f);
             SoundManager.Instance.PlaySoundImmediate(LaunchpadAssets.BeepSound.LoadAsset(), false, 0.3f);
             return;
         }

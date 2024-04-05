@@ -44,7 +44,7 @@ public abstract class CustomActionButton
 
         Button = Object.Instantiate(HudManager.Instance.AbilityButton, parent);
         Button.name = Name + "Button";
-        Button.OverrideText(Name);
+        Button.OverrideText(Name.ToUpper());
 
         Button.graphic.sprite = Sprite.LoadAsset();
 
@@ -77,7 +77,7 @@ public abstract class CustomActionButton
 
     protected virtual void OnEffectEnd() { }
 
-    public bool CanUseHandler()
+    private bool CanUseHandler()
     {
         return Timer <= 0 && !EffectActive && (!LimitedUses || UsesLeft > 0) && CanUse();
     }

@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
+using LaunchpadReloaded.Networking;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Patches.Generic;
@@ -9,7 +10,8 @@ namespace LaunchpadReloaded.Patches.Generic;
 public static class ShipStatusPatch
 {
     /// <summary>
-    /// Add all the managers for the game (probably not the best or cleanest way to do it, but it works)
+    /// Add all the managers for the game (probably not the best or cleanest way to do it, but it works).
+    /// Will be replaced with <see cref="LaunchpadPlayer"/> eventually
     /// </summary>
     [HarmonyPostfix, HarmonyPatch("Awake")]
     public static void MapLoadingPatch(ShipStatus __instance)
@@ -22,7 +24,7 @@ public static class ShipStatusPatch
         managers.AddComponent<RevivalManager>();
         managers.AddComponent<DragManager>();
 
-        HackingManager.RpcCreateNodes(__instance);
+        __instance.RpcCreateNodes();
     }
 
     /// <summary>
@@ -31,7 +33,6 @@ public static class ShipStatusPatch
     [HarmonyPrefix, HarmonyPatch("SpawnPlayer")]
     public static bool SpawnPlayerPatch([HarmonyArgument(2)] bool initialSpawn)
     {
-        if (initialSpawn == false && LaunchpadGameOptions.Instance.DisableMeetingTeleport.Value) return false;
-        return true;
+        return initialSpawn || !LaunchpadGameOptions.Instance.DisableMeetingTeleport.Value;
     }
 }

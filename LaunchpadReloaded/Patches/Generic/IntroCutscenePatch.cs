@@ -31,11 +31,15 @@ public static class IntroCutscenePatch
     {
         if (PlayerControl.LocalPlayer.Data.Role is ICustomRole customRole)
         {
-            if (!customRole.IsOutcast) return true;
+            if (!customRole.IsOutcast)
+            {
+                return true;
+            }
 
-            var position = __instance.BackgroundBar.transform.position;
+            var barTransform = __instance.BackgroundBar.transform;
+            var position = barTransform.position;
             position.y -= 0.25f;
-            __instance.BackgroundBar.transform.position = position;
+            barTransform.position = position;
 
             __instance.BackgroundBar.material.SetColor(ShaderID.Color, Color.gray);
             __instance.TeamTitle.text = "OUTCAST";

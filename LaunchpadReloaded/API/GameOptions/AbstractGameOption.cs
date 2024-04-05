@@ -8,11 +8,12 @@ public abstract class AbstractGameOption
 {
     public string Title { get; }
     public StringNames StringName { get; }
-    public OptionBehaviour OptionBehaviour { get; set; }
-    public Type AdvancedRole { get; set; }
-    public CustomOptionGroup Group = null;
+    public Type AdvancedRole { get; }
+    public bool Save { get; }
+    public bool ShowInHideNSeek { get; init; }
+    public CustomOptionGroup Group { get; set; }
     public Func<bool> Hidden { get; set; }
-    public bool Save { get; set; }
+    public OptionBehaviour OptionBehaviour { get; protected set; }
     public void ValueChanged(OptionBehaviour optionBehaviour)
     {
         OnValueChanged(optionBehaviour);

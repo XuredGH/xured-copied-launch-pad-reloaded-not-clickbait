@@ -1,14 +1,10 @@
-using LaunchpadReloaded.Components;
-using LaunchpadReloaded.Networking;
-using LaunchpadReloaded.Roles;
-using LaunchpadReloaded.Utilities;
-using Reactor.Networking.Attributes;
-using Reactor.Utilities;
-using Reactor.Utilities.Attributes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+using LaunchpadReloaded.Components;
+using LaunchpadReloaded.Utilities;
+using Reactor.Utilities;
+using Reactor.Utilities.Attributes;
 using UnityEngine;
 using Random = System.Random;
 
@@ -19,10 +15,10 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
 {
     public static HackingManager Instance { get; private set; }
 
-    public List<byte> hackedPlayers;
-    public List<HackNodeComponent> nodes;
+    public List<byte> hackedPlayers = [];
+    public List<HackNodeComponent> nodes = [];
 
-    private readonly Dictionary<ShipStatus.MapType, Vector3[]> _mapNodePositions = new()
+    public readonly Dictionary<ShipStatus.MapType, Vector3[]> MapNodePositions = new()
     {
         [ShipStatus.MapType.Ship] = [
             new Vector3(-3.9285f, 5.6983f, 0.0057f),
@@ -50,7 +46,7 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
         [(ShipStatus.MapType)6] = []
     };
 
-    private readonly Vector3[] _airshipPositions = [
+    public readonly Vector3[] AirshipPositions = [
         new Vector3(-5.0792f, 10.9539f, 0.011f),
         new Vector3(16.856f, 14.7769f, 0.0148f),
         new Vector3(37.3283f, -3.7612f, -0.0038f),
@@ -125,70 +121,15 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
         }
     }
 
-
-    [MethodRpc((uint)LaunchpadRPC.HackPlayer)]
-    public static void RpcHackPlayer(PlayerControl source, PlayerControl target)
-    {
-        if (source.Data.Role is not HackerRole)
-        {
-            return;
-        }
-
-        Instance.hackedPlayers.Add(target.PlayerId);
-        HackPlayer(target);
-
-        foreach (var data in GameData.Instance.AllPlayers.ToArray().Where(x => x.Role.IsImpostor))
-        {
-            HackPlayer(data.Object);
-        }
-
-        if (!target.AmOwner)
-        {
-            return;
-        }
-
-        Coroutines.Start(HackEffect());
-        foreach (var node in Instance.nodes)
-        {
-            ToggleNode(node.Id, true);
-        }
-    }
-
-    [MethodRpc((uint)LaunchpadRPC.UnHackPlayer)]
-    public static void RpcUnHackPlayer(PlayerControl player)
-    {
-        Instance.hackedPlayers.Remove(player.PlayerId);
-        UnHackPlayer(player);
-
-        if (!Instance.AnyPlayerHacked())
-        {
-            foreach (var data in GameData.Instance.AllPlayers.ToArray().Where(x => x.Role.IsImpostor))
-            {
-                UnHackPlayer(data.Object);
-            }
-        }
-
-        if (!player.AmOwner)
-        {
-            return;
-        }
-
-        Coroutines.Stop(HackEffect());
-        foreach (var node in Instance.nodes)
-        {
-            ToggleNode(node.Id, false);
-        }
-    }
-
-    private static void HackPlayer(PlayerControl player)
+    public static void HackPlayer(PlayerControl player)
     {
         GradientManager.SetGradientEnabled(player, false);
         player.cosmetics.SetColor(15);
         player.cosmetics.gameObject.SetActive(false);
         Coroutines.Start(HackNameCoroutine(player));
     }
-
-    private static void UnHackPlayer(PlayerControl player)
+    
+    public static void UnHackPlayer(PlayerControl player)
     {
         GradientManager.SetGradientEnabled(player, true);
         player.cosmetics.SetColor((byte)player.Data.DefaultOutfit.ColorId);
@@ -200,38 +141,17 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
     private static IEnumerator HackNameCoroutine(PlayerControl playerControl)
     {
         while (playerControl.Data.IsHacked())
-        {
+        { 
             var randomString = Helpers.RandomString(Helpers.Random.Next(4, 8), "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#!?$^$#&@*<>?,.(???#@)[]{}\\|$@@@@0000");
             playerControl.RawSetName(randomString);
             yield return null;
         }
     }
 
-
-    [MethodRpc((uint)LaunchpadRPC.CreateNodes)]
-    public static void RpcCreateNodes(ShipStatus shipStatus)
-    {
-        var nodesParent = new GameObject("Nodes");
-        nodesParent.transform.SetParent(shipStatus.transform);
-
-        var nodePositions = Instance._mapNodePositions[shipStatus.Type];
-        if (shipStatus.TryCast<AirshipStatus>())
-        {
-            nodePositions = Instance._airshipPositions;
-        }
-
-        for (var i = 0; i < nodePositions.Length; i++)
-        {
-            var nodePos = nodePositions[i];
-            Instance.CreateNode(shipStatus, i, nodesParent.transform, nodePos);
-        }
-    }
-
     public static void ToggleNode(int nodeId, bool value)
     {
-        var node = Instance.nodes.Find(node => node.Id == nodeId);
-        Debug.Log(node.gameObject.transform.position.ToString());
-        node.IsActive = value;
+        var node = Instance.nodes.Find(node => node.id == nodeId);
+        node.isActive = value;
     }
 
     public HackNodeComponent CreateNode(ShipStatus shipStatus, int id, Transform parent, Vector3 position)
@@ -252,8 +172,8 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
         collider.offset = new Vector2(-0.01f, -0.3049f);
 
         var nodeComponent = node.AddComponent<HackNodeComponent>();
-        nodeComponent.Image = sprite;
-        nodeComponent.Id = id;
+        nodeComponent.image = sprite;
+        nodeComponent.id = id;
 
         node.SetActive(true);
         nodes.Add(nodeComponent);

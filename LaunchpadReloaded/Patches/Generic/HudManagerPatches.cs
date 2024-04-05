@@ -36,11 +36,19 @@ public static class HudManagerPatches
 
         var numPlayers = GameData.Instance ? GameData.Instance.PlayerCount : 10;
         HudManager.Instance.GameSettings.text = GameOptionsManager.Instance.CurrentGameOptions.ToHudString(numPlayers);
-
-        if (!PlayerControl.LocalPlayer.CanMove) return;
-        if (!ToHudStringPatch.ShowCustom) return;
-
         var pos = __instance.GameSettings.transform.localPosition;
+
+        if (!PlayerControl.LocalPlayer.CanMove)
+        {
+            return;
+        }
+
+        if (!ToHudStringPatch.ShowCustom)
+        {
+            __instance.GameSettings.transform.localPosition = new Vector3(pos.x, _bounds.min, pos.z);
+            return;
+        }
+
         if (Input.mouseScrollDelta.y > 0f)
         {
             pos =
@@ -71,7 +79,10 @@ public static class HudManagerPatches
         __instance.tasksString.Append("</color>");
         __instance.TaskPanel.SetTaskText(__instance.tasksString.ToString());
 
-        if (_roleTab != null) _roleTab.gameObject.Destroy();
+        if (_roleTab != null)
+        {
+            _roleTab.gameObject.Destroy();
+        }
     }
 
     /// <summary>
@@ -81,28 +92,46 @@ public static class HudManagerPatches
     public static void UpdatePostfix(HudManager __instance)
     {
         var local = PlayerControl.LocalPlayer;
-        if (!local || MeetingHud.Instance) return;
+        if (!local || MeetingHud.Instance)
+        {
+            return;
+        }
 
-        if (!ShipStatus.Instance) OptionsScrollingLogic(__instance);
+        if (LobbyBehaviour.Instance)
+        {
+            OptionsScrollingLogic(__instance);
+        }
 
-        if (AmongUsClient.Instance.GameState != InnerNetClient.GameStates.Started && !ShipStatus.Instance) return;
+        if (AmongUsClient.Instance.GameState != InnerNetClient.GameStates.Started && !ShipStatus.Instance)
+        {
+            return;
+        }
 
         CustomGameModeManager.ActiveMode.HudUpdate(__instance);
 
-        if (local.Data.IsHacked() && !local.Data.Role.IsImpostor) AddHackedTaskString(__instance);
-        else if (HackingManager.Instance && HackingManager.Instance.AnyPlayerHacked())
+        if (HackingManager.Instance)
         {
-            var newB = new StringBuilder();
-            newB.Append(Color.green.ToTextColor());
-            newB.Append(local.Data.Role.IsImpostor ?
-                "\n\n The crewmates are hacked! They will not be able to\ncomplete tasks or call meetings until they reverse the hack."
-                : "\n\nYou will still not be able to report bodies or \ncall meetings until all crewmates reverse the hack.");
-            newB.Append($"\n{HackingManager.Instance.hackedPlayers.Count} players are still hacked.");
-            newB.Append("</color>");
-            __instance.TaskPanel.SetTaskText(__instance.tasksString.ToString() + newB);
-        }
+            if (local.Data.IsHacked() && !local.Data.Role.IsImpostor)
+            {
+                AddHackedTaskString(__instance);
+            }
+            else if (HackingManager.Instance.AnyPlayerHacked())
+            {
+                var newB = new StringBuilder();
+                newB.Append(Color.green.ToTextColor());
+                newB.Append(local.Data.Role.IsImpostor ?
+                    "\n\n The crewmates are hacked! They will not be able to\ncomplete tasks or call meetings until they reverse the hack."
+                    : "\n\nYou will still not be able to report bodies or \ncall meetings until all crewmates reverse the hack.");
+                newB.Append($"\n{HackingManager.Instance.hackedPlayers.Count} players are still hacked.");
+                newB.Append("</color>");
+                __instance.TaskPanel.SetTaskText(__instance.tasksString.ToString() + newB);
+            }
 
-        if (HackingManager.Instance && HackingManager.Instance.AnyPlayerHacked()) __instance.ReportButton.SetActive(false);
+            if (HackingManager.Instance.AnyPlayerHacked())
+            {
+                __instance.ReportButton.SetActive(false);
+            }
+        }
 
         if (local.Data.Role is ICustomRole customRole)
         {
@@ -110,26 +139,43 @@ public static class HudManagerPatches
 
             if (PlayerControl.LocalPlayer.Data.IsHacked())
             {
-                if (_roleTab) _roleTab.gameObject.Destroy();
+                if (_roleTab)
+                {
+                    _roleTab.gameObject.Destroy();
+                }
 
                 return;
             }
 
             if (customRole.SetTabText() != null)
             {
-                if (_roleTab == null) _roleTab = CustomRoleManager.CreateRoleTab(customRole);
-                else CustomRoleManager.UpdateRoleTab(_roleTab, customRole);
+                if (_roleTab == null)
+                {
+                    _roleTab = CustomRoleManager.CreateRoleTab(customRole);
+                }
+                else
+                {
+                    CustomRoleManager.UpdateRoleTab(_roleTab, customRole);
+                }
             }
-            else if (customRole.SetTabText() == null && _roleTab) _roleTab.gameObject.Destroy();
+            else if (customRole.SetTabText() == null && _roleTab)
+            {
+                _roleTab.gameObject.Destroy();
+            }
         }
-        else if (_roleTab) _roleTab.gameObject.Destroy();
+        else if (_roleTab)
+        {
+            _roleTab.gameObject.Destroy();
+        }
 
-        if (DragManager.Instance is null || HackingManager.Instance is null) return;
-        if (HackingManager.Instance.AnyPlayerHacked()) __instance.ReportButton.SetDisabled();
+        if (DragManager.Instance is null)
+        {
+            return;
+        }
 
         foreach (var (player, bodyId) in DragManager.Instance.DraggingPlayers)
         {
-            var bodyById = DeadBodyManager.GetBodyById(bodyId);
+            var bodyById = Helpers.GetBodyById(bodyId);
             bodyById.transform.position = Vector3.Lerp(bodyById.transform.position, GameData.Instance.GetPlayerById(player).Object.transform.position, 5f * Time.deltaTime);
         }
     }
@@ -184,13 +230,22 @@ public static class HudManagerPatches
     [HarmonyPostfix, HarmonyPatch("SetHudActive", typeof(PlayerControl), typeof(RoleBehaviour), typeof(bool))]
     public static void SetHudActivePostfix(HudManager __instance, [HarmonyArgument(0)] PlayerControl player, [HarmonyArgument(1)] RoleBehaviour roleBehaviour, [HarmonyArgument(2)] bool isActive)
     {
-        if (player.Data == null) return;
-        if (_roleTab) _roleTab.gameObject.SetActive(isActive);
+        if (player.Data == null)
+        {
+            return;
+        }
+
+        if (_roleTab)
+        {
+            _roleTab.gameObject.SetActive(isActive);
+        }
 
         foreach (var button in CustomButtonManager.CustomButtons)
             button.SetActive(isActive, roleBehaviour);
 
         if (roleBehaviour is ICustomRole role)
+        {
             __instance.ImpostorVentButton.gameObject.SetActive(isActive && role.CanUseVent);
+        }
     }
 }

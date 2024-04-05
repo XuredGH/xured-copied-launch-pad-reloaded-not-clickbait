@@ -15,7 +15,7 @@ public class JesterRole(IntPtr ptr) : RoleBehaviour(ptr), ICustomRole
     public string RoleName => "Jester";
     public ushort RoleId => (ushort)LaunchpadRoles.Jester;
     public string RoleDescription => "Get ejected to win";
-    public string RoleLongDescription => "Convince the crew to vote you out by being suspicious. If you get voted out, you win the game.";
+    public string RoleLongDescription => "Convince the crew to vote you out by being suspicious.\nIf you get voted out, you win the game.";
     public Color RoleColor => LaunchpadPalette.JesterColor;
     public RoleTeamTypes Team => RoleTeamTypes.Crewmate;
     public bool IsOutcast => true;

@@ -13,7 +13,11 @@ public static class AmongUsClientPatch
     [HarmonyPostfix, HarmonyPatch("OnPlayerJoined")]
     public static void PlayerJoinedPatch()
     {
-        if (!AmongUsClient.Instance.AmHost) return;
+        if (!AmongUsClient.Instance.AmHost)
+        {
+            return;
+        }
+
         CustomOptionsManager.SyncOptions();
         CustomRoleManager.SyncRoleSettings();
     }

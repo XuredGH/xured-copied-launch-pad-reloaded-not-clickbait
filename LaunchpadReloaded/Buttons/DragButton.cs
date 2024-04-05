@@ -1,6 +1,7 @@
 ﻿using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
+using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Roles;
 using UnityEngine;
 
@@ -13,14 +14,7 @@ public class DragButton : CustomActionButton
     public override float EffectDuration => 0;
     public override int MaxUses => 0;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.DragButton;
-
-    public static DragButton Instance;
-
-    public DragButton()
-    {
-        Instance = this;
-    }
-
+    
     public override bool Enabled(RoleBehaviour role)
     {
         return role is JanitorRole || (MedicRole.DragBodies.Value && role is MedicRole);
@@ -33,16 +27,19 @@ public class DragButton : CustomActionButton
 
     protected override void FixedUpdate(PlayerControl playerControl)
     {
-        if (DragManager.Instance && DragManager.Instance.IsDragging(playerControl.PlayerId))
+        if (!DragManager.Instance || !DragManager.Instance.IsDragging(playerControl.PlayerId))
         {
-            HudManager.Instance.KillButton.SetDisabled();
-            HudManager.Instance.ReportButton.SetDisabled();
-            HudManager.Instance.UseButton.SetDisabled();
-            HudManager.Instance.SabotageButton.SetDisabled();
-            HudManager.Instance.ImpostorVentButton.SetDisabled();
-            HudManager.Instance.AdminButton.SetDisabled();
-            HudManager.Instance.ReportButton.SetDisabled();
+            return;
         }
+        
+        // can probably be improved but whatever
+        HudManager.Instance.KillButton.SetDisabled();
+        HudManager.Instance.ReportButton.SetDisabled();
+        HudManager.Instance.UseButton.SetDisabled();
+        HudManager.Instance.SabotageButton.SetDisabled();
+        HudManager.Instance.ImpostorVentButton.SetDisabled();
+        HudManager.Instance.AdminButton.SetDisabled();
+        HudManager.Instance.ReportButton.SetDisabled();
     }
 
     public void SetDrag()
@@ -71,11 +68,11 @@ public class DragButton : CustomActionButton
     {
         if (DragManager.Instance.IsDragging(PlayerControl.LocalPlayer.PlayerId))
         {
-            DragManager.RpcStopDragging(PlayerControl.LocalPlayer);
+            PlayerControl.LocalPlayer.RpcStopDragging();
         }
         else
         {
-            DragManager.RpcStartDragging(PlayerControl.LocalPlayer, DeadBodyTarget.ParentId);
+            PlayerControl.LocalPlayer.RpcStartDragging(DeadBodyTarget.ParentId);
         }
     }
 

@@ -2,6 +2,8 @@
 using HarmonyLib;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
+using LaunchpadReloaded.Networking;
+using Reactor.Networking.Rpc;
 using Reactor.Utilities.Extensions;
 using TMPro;
 using UnityEngine;
@@ -76,9 +78,11 @@ public static class PlayerTabPatches
             __instance.PlayerPreview.UpdateFromDataManager(PlayerMaterial.MaskType.None);
             if (__instance.HasLocalPlayer())
             {
-                GradientManager.RpcSetGradient(PlayerControl.LocalPlayer, __instance.currentColor);
+                Rpc<CustomCheckColorRpc>.Instance.SendTo(AmongUsClient.Instance.HostId,
+                    new CustomCheckColorRpc.Data(
+                        (byte)PlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId, 
+                        (byte)__instance.currentColor));
             }
-
             return false;
         }
 
@@ -139,7 +143,10 @@ public static class PlayerTabPatches
         {
             __instance.AvailableColors.Add(i);
         }
-        if (!LaunchpadGameOptions.Instance.UniqueColors.Value) return false;
+        if (!LaunchpadGameOptions.Instance.UniqueColors.Value)
+        {
+            return false;
+        }
 
         if (!GameData.Instance)
         {

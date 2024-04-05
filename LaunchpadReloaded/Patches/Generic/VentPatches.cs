@@ -2,7 +2,8 @@
 using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Components;
-using LaunchpadReloaded.Features.Managers;
+using LaunchpadReloaded.Networking;
+using LaunchpadReloaded.Utilities;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Patches.Generic;
@@ -22,13 +23,14 @@ public static class VentPatches
             return couldUse = canUse = false;
         }
 
-        if (pc.Role is not ICustomRole role) return couldUse = canUse = true;
+        if (pc.Role is not ICustomRole role)
+        {
+            return couldUse = canUse = true;
+        }
 
         var num = float.MaxValue;
         var @object = pc.Object;
-        var customRoleUsable = false;
-        if (pc.Role.IsImpostor) customRoleUsable = true;
-        customRoleUsable = role.CanUseVent;
+        var customRoleUsable = role.CanUseVent;
 
         canUse = couldUse = customRoleUsable && !pc.IsDead && (@object.CanMove || @object.inVent);
         if (canUse)
@@ -51,9 +53,9 @@ public static class VentPatches
     {
         var color = PlayerControl.LocalPlayer.Data.Role is ICustomRole role
             ? role.RoleColor : PlayerControl.LocalPlayer.Data.Role.IsImpostor ? Palette.ImpostorRed : Palette.CrewmateBlue;
-        __instance.myRend.material.SetFloat("_Outline", on ? 1 : 0);
-        __instance.myRend.material.SetColor("_OutlineColor", color);
-        __instance.myRend.material.SetColor("_AddColor", mainTarget ? color : Color.clear);
+        __instance.myRend.material.SetFloat(ShaderID.Outline, on ? 1 : 0);
+        __instance.myRend.material.SetColor(ShaderID.OutlineColor, color);
+        __instance.myRend.material.SetColor(ShaderID.AddColor, mainTarget ? color : Color.clear);
 
         return false;
     }
@@ -69,7 +71,7 @@ public static class VentPatches
         var ventBody = __instance.GetComponent<VentBodyComponent>();
         if (ventBody && ventBody.deadBody)
         {
-            DeadBodyManager.RpcExposeBody(PlayerControl.LocalPlayer, __instance.Id);
+            PlayerControl.LocalPlayer.RpcExposeBody(__instance.Id);
         }
     }
 }

@@ -1,9 +1,10 @@
-﻿using HarmonyLib;
+﻿using System.Linq;
+using HarmonyLib;
 using LaunchpadReloaded.API.GameModes;
 
 namespace LaunchpadReloaded.Patches.Gamemodes;
 
-[HarmonyPatch(typeof(EndGameManager), "SetEverythingUp")]
+[HarmonyPatch(typeof(EndGameManager), nameof(EndGameManager.SetEverythingUp))]
 public static class WinningPatch
 {
     /// <summary>
@@ -19,10 +20,8 @@ public static class WinningPatch
 
         TempData.winners.Clear();
 
-        foreach (var winner in gameMode.CalculateWinners())
+        foreach (var data in gameMode.CalculateWinners().Select(winner => new WinningPlayerData(winner)))
         {
-            var data = new WinningPlayerData(winner);
-            data.IsYou = winner.PlayerId == PlayerControl.LocalPlayer.PlayerId;
             TempData.winners.Add(data);
         }
     }

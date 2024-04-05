@@ -31,7 +31,10 @@ public static class TaskAdderPatch
     {
         if (__instance.role is ICustomRole lpRole)
         {
-            if (lpRole.IsOutcast) __instance.FileImage.color = Color.gray;
+            if (lpRole.IsOutcast)
+            {
+                __instance.FileImage.color = Color.gray;
+            }
         }
 
         __instance.RolloverHandler.OutColor = __instance.FileImage.color;
@@ -60,10 +63,13 @@ public static class TaskAdderPatch
         for (var k = 0; k < taskFolder.SubFolders.Count; k++)
         {
             var taskFolder2 = Object.Instantiate(taskFolder.SubFolders.ToArray()[k], __instance.TaskParent);
+            var folderTransform = taskFolder2.transform;
+            
             taskFolder2.gameObject.SetActive(true);
             taskFolder2.Parent = __instance;
-            taskFolder2.transform.localPosition = new Vector3(num, num2, 0f);
-            taskFolder2.transform.localScale = Vector3.one;
+            
+            folderTransform.localPosition = new Vector3(num, num2, 0f);
+            folderTransform.localScale = Vector3.one;
             num3 = Mathf.Max(num3, taskFolder2.Text.bounds.size.y + 1.1f);
             num += __instance.folderWidth;
             if (num > __instance.lineWidth)
@@ -72,19 +78,26 @@ public static class TaskAdderPatch
                 num2 -= num3;
                 num3 = 0f;
             }
-            __instance.ActiveItems.Add(taskFolder2.transform);
-            if (taskFolder2 != null && taskFolder2.Button != null)
+            __instance.ActiveItems.Add(folderTransform);
+            if (!taskFolder2 || !taskFolder2.Button)
             {
-                ControllerManager.Instance.AddSelectableUiElement(taskFolder2.Button);
-                if (!string.IsNullOrEmpty(__instance.restorePreviousSelectionByFolderName) && taskFolder2.FolderName.Equals(__instance.restorePreviousSelectionByFolderName))
-                {
-                    __instance.restorePreviousSelectionFound = taskFolder2.Button;
-                }
+                continue;
+            }
+            
+            ControllerManager.Instance.AddSelectableUiElement(taskFolder2.Button);
+            if (!string.IsNullOrEmpty(__instance.restorePreviousSelectionByFolderName) && taskFolder2.FolderName.Equals(__instance.restorePreviousSelectionByFolderName))
+            {
+                __instance.restorePreviousSelectionFound = taskFolder2.Button;
             }
         }
+        
         var flag = false;
         var list = new List<PlayerTask>();
-        foreach (var item in taskFolder.Children) list.Add(item);
+        
+        foreach (var item in taskFolder.Children)
+        {
+            list.Add(item);
+        }
 
         for (var l = 0; l < list.Count; l++)
         {

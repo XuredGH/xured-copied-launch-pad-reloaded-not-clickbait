@@ -6,7 +6,7 @@ using Reactor.Networking.Rpc;
 namespace LaunchpadReloaded.API.GameOptions;
 
 // METHOD RPC DOESNT WORK WITH THE ARRAYS AND STUFF SO THIS IS HOW WE WILL DO IT FOR NOW
-[RegisterCustomRpc((uint)LaunchpadRPC.SyncGameOptions)]
+[RegisterCustomRpc((uint)LaunchpadRpc.SyncGameOptions)]
 public class SyncOptionsRpc : CustomRpc<LaunchpadReloadedPlugin, GameData, SyncOptionsRpc.Data>
 {
     public SyncOptionsRpc(LaunchpadReloadedPlugin plugin, uint id) : base(plugin, id)

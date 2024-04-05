@@ -1,6 +1,7 @@
 ﻿using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
+using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Roles;
 using UnityEngine;
 
@@ -19,12 +20,12 @@ public class HackButton : CustomActionButton
     {
         foreach (var player in PlayerControl.AllPlayerControls)
         {
-            if (player.Data.Role is HackerRole || player.Data.IsDead || player.Data.Disconnected)
+            if (player.Data.Role.IsImpostor || player.Data.IsDead || player.Data.Disconnected)
             {
                 continue;
             }
 
-            HackingManager.RpcHackPlayer(PlayerControl.LocalPlayer, player);
+            PlayerControl.LocalPlayer.RpcHackPlayer(player);
         }
 
         PlayerControl.LocalPlayer.RawSetColor(15);
