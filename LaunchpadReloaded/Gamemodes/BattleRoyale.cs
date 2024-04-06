@@ -22,7 +22,11 @@ public class BattleRoyale : CustomGameMode
     public TextMeshPro DeathNotif;
     public override void Initialize()
     {
-        PlayerControl.LocalPlayer.myTasks.Clear();
+        if (PlayerControl.LocalPlayer && PlayerControl.LocalPlayer.myTasks is not null)
+        {
+            PlayerControl.LocalPlayer.myTasks.Clear();
+        }
+        
         var random = ShipStatus.Instance.DummyLocations.Random();
 
         foreach (var player in GameData.Instance.AllPlayers) player.Object.cosmetics.TogglePet(false);
