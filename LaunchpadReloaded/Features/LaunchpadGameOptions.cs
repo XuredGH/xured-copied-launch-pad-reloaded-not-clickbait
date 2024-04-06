@@ -26,6 +26,7 @@ public class LaunchpadGameOptions
     // General Options
     public readonly CustomToggleOption OnlyShowRoleColor;
     public readonly CustomToggleOption DisableMeetingTeleport;
+    public readonly CustomToggleOption GhostsSeeRoles;
     public readonly CustomOptionGroup GeneralGroup;
 
     // Battle Royale
@@ -90,8 +91,9 @@ public class LaunchpadGameOptions
 
         OnlyShowRoleColor = new CustomToggleOption("Reveal Crewmate Roles", false);
 
+        GhostsSeeRoles = new CustomToggleOption("Ghosts See Roles", true);
         GeneralGroup = new CustomOptionGroup("General Options",
-            toggleOpt: [BanCheaters, OnlyShowRoleColor, DisableMeetingTeleport],
+            toggleOpt: [BanCheaters, OnlyShowRoleColor, DisableMeetingTeleport, GhostsSeeRoles],
             stringOpt: [],
             numberOpt: []);
 
