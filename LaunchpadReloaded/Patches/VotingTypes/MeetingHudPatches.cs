@@ -5,7 +5,6 @@ using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Utilities;
 using Reactor.Networking.Rpc;
 using Reactor.Utilities.Extensions;
-using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -113,7 +112,7 @@ public static class MeetingHudPatches
         {
             return false;
         }
-        
+
         GameData.PlayerInfo exiled;
         bool isTie;
 
@@ -129,6 +128,7 @@ public static class MeetingHudPatches
             exiled = GameData.Instance.AllPlayers.ToArray().FirstOrDefault(v => !isTie && v.PlayerId == max.Key);
         }
 
+        if (exiled is null || exiled.IsDead || exiled.Disconnected) exiled = null;
         __instance.RpcVotingComplete(new MeetingHud.VoterState[__instance.playerStates.Length], exiled, isTie);
 
         return false;
@@ -148,7 +148,7 @@ public static class MeetingHudPatches
     [HarmonyPrefix, HarmonyPatch(typeof(MeetingHud), "HandleDisconnect", [typeof(PlayerControl), typeof(DisconnectReasons)])]
     public static bool HandleDisconnect(MeetingHud __instance, [HarmonyArgument(0)] PlayerControl pc)
     {
-        if (!pc || !GameData.Instance) return false;
+        if (!AmongUsClient.Instance.AmHost || !pc || !GameData.Instance) return false;
 
         var playerVoteArea = __instance.playerStates.First(pv => pv.TargetPlayerId == pc.PlayerId);
         playerVoteArea.AmDead = true;
@@ -162,13 +162,9 @@ public static class MeetingHudPatches
             {
                 player.VoteData.VotedPlayers.Remove(pc.PlayerId);
                 player.VoteData.VotesRemaining += 1;
-                pva.UnsetVote();
-            }
-        }
 
-        if (!AmongUsClient.Instance.AmHost)
-        {
-            return false;
+                VotingRpc.RpcRemoveVote(PlayerControl.LocalPlayer, player.player.PlayerId, pc.PlayerId);
+            }
         }
 
         __instance.SetDirtyBit(1U);
@@ -190,7 +186,7 @@ public static class MeetingHudPatches
         {
             return false;
         }
-        
+
         var votes = VotingTypesManager.CalculateVotes();
         var votedFor = votes.Select(vote => vote.VotedFor).ToArray();
         var voters = votes.Select(vote => vote.Voter).ToArray();

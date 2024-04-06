@@ -1,6 +1,4 @@
-﻿using LaunchpadReloaded.Networking;
-using Reactor.Networking.Attributes;
-using Reactor.Utilities.Extensions;
+﻿using Reactor.Utilities.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,13 +18,8 @@ public static class VotingTypesManager
 
     public static readonly byte[] RecommendedVotes =
     [
-        1, 1, 1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5
+        1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5
     ];
-
-    [MethodRpc((uint)LaunchpadRpc.SetVotingType)]
-    public static void RpcSetType(GameData lobby, int type) => SetType((VotingTypes)type);
-    
-    public static void SetType(VotingTypes type) => SelectedType = type;
 
     public static int GetDynamicVotes() => (int)Math.Min(RecommendedVotes[Math.Min(Math.Clamp(LaunchpadPlayer.GetAllAlivePlayers().Count(), 0, 15), RecommendedVotes.Length)], LaunchpadGameOptions.Instance.MaxVotes.Value);
 
@@ -36,8 +29,7 @@ public static class VotingTypesManager
         {
             case VotingTypes.Combined:
             case VotingTypes.Multiple:
-                return (int)(LaunchpadGameOptions.Instance.AllowVotingForSamePerson.Value && LaunchpadGameOptions.Instance.DisableDynamicVoting.Value ? LaunchpadGameOptions.Instance.MaxVotes.Value :
-                    GetDynamicVotes());
+                return GetDynamicVotes();
 
             case VotingTypes.Chance:
             case VotingTypes.Classic:
@@ -64,6 +56,8 @@ public static class VotingTypesManager
 
     public static byte GetVotedPlayerByChance(IEnumerable<CustomVote> votes)
     {
+        if (votes.Count() == 0) return 253;
+
         var rand = new Random();
         List<byte> plrs = [.. votes.Select(vote => vote.VotedFor)];
         return plrs[rand.Next(plrs.Count)];
@@ -98,7 +92,7 @@ public static class VotingTypesManager
         var num2 = 0;
         var num = 0;
         var lastVoter = votes[0].Voter;
-        
+
         foreach (var vote in votes)
         {
             if (vote.VotedFor == 253)
@@ -109,6 +103,8 @@ public static class VotingTypesManager
             }
 
             var playerVoteArea = MeetingHud.Instance.playerStates[vote.VotedFor];
+            if (playerVoteArea.AmDead) continue;
+
             MeetingHud.Instance.BloopAVoteIcon(GameData.Instance.GetPlayerById(vote.Voter), num, playerVoteArea.transform);
             if (vote.Voter == lastVoter)
             {
@@ -123,7 +119,7 @@ public static class VotingTypesManager
         {
             return;
         }
-        
+
         var skipText = MeetingHud.Instance.SkippedVoting;
         skipText.GetComponentInChildren<TextTranslatorTMP>().Destroy();
 
