@@ -41,7 +41,10 @@ public static class VotingTypesManager
     #region Vote calculations
     public static List<CustomVote> CalculateVotes()
     {
-        return (from player in LaunchpadPlayer.GetAllAlivePlayers() from vote in player.VoteData.VotedPlayers select new CustomVote(player.player.PlayerId, vote)).ToList();
+        return (from player in LaunchpadPlayer.GetAllAlivePlayers()
+            from vote in player.VoteData.VotedPlayers
+            select new CustomVote(player.player.PlayerId,
+                vote)).ToList();
     }
 
     public static Dictionary<byte, float> GetChancePercents(List<CustomVote> votes)
@@ -49,17 +52,19 @@ public static class VotingTypesManager
         var dict = new Dictionary<byte, float>();
 
         foreach (var pair in CalculateNumVotes(votes))
+        {
             dict[pair.Key] = (float)pair.Value / votes.Count * 100;
+        }
 
         return dict;
     }
 
-    public static byte GetVotedPlayerByChance(IEnumerable<CustomVote> votes)
+    public static byte GetVotedPlayerByChance(List<CustomVote> votes)
     {
-        if (votes.Count() == 0) return 253;
+        if (!votes.Any()) return 253;
 
         var rand = new Random();
-        List<byte> plrs = [.. votes.Select(vote => vote.VotedFor)];
+        List<byte> plrs = [.. votes.Select(vote => vote.Suspect)];
         return plrs[rand.Next(plrs.Count)];
     }
 
@@ -67,15 +72,11 @@ public static class VotingTypesManager
     {
         var dictionary = new Dictionary<byte, int>();
 
-        foreach (var vote in votes.Select(vote => vote.VotedFor))
+        foreach (var vote in votes)
         {
-            if (dictionary.TryGetValue(vote, out var num))
+            if (!dictionary.TryAdd(vote.Suspect, 1))
             {
-                dictionary[vote] = num + 1;
-            }
-            else
-            {
-                dictionary[vote] = 1;
+                dictionary[vote.Suspect] += 1;
             }
         }
 
@@ -91,33 +92,27 @@ public static class VotingTypesManager
 
         var num2 = 0;
         var num = 0;
-        var lastVoter = votes[0].Voter;
 
         foreach (var vote in votes)
         {
-            if (vote.VotedFor == 253)
+            if (vote.Suspect == 253)
             {
                 MeetingHud.Instance.BloopAVoteIcon(GameData.Instance.GetPlayerById(vote.Voter), num2, MeetingHud.Instance.SkippedVoting.transform);
                 num2++;
                 continue;
             }
 
-            var playerVoteArea = MeetingHud.Instance.playerStates[vote.VotedFor];
+            var playerVoteArea = MeetingHud.Instance.playerStates[vote.Suspect];
 
-            MeetingHud.Instance.BloopAVoteIcon(GameData.Instance.GetPlayerById(vote.Voter), num, playerVoteArea.transform);
-            if (vote.Voter == lastVoter)
-            {
-                continue;
-            }
-            num++;
-            lastVoter = vote.Voter;
+            MeetingHud.Instance.BloopAVoteIcon(GameData.Instance.GetPlayerById(vote.Voter), num++, playerVoteArea.transform);
         }
 
-        var chances = GetChancePercents(votes);
         if (!UseChance() && !LaunchpadGameOptions.Instance.ShowPercentages.Value)
         {
             return;
         }
+   
+        var chances = GetChancePercents(votes);
 
         var skipText = MeetingHud.Instance.SkippedVoting;
         skipText.GetComponentInChildren<TextTranslatorTMP>().Destroy();

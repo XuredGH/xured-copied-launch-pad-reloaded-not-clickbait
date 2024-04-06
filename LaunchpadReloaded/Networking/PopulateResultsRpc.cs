@@ -9,12 +9,9 @@ using System.Linq;
 namespace LaunchpadReloaded.Networking;
 
 [RegisterCustomRpc((uint)LaunchpadRpc.PopulateResults)]
-public class PopulateResultsRpc : PlayerCustomRpc<LaunchpadReloadedPlugin, PopulateResultsRpc.Data>
+public class PopulateResultsRpc(LaunchpadReloadedPlugin plugin, uint id)
+    : PlayerCustomRpc<LaunchpadReloadedPlugin, PopulateResultsRpc.Data>(plugin, id)
 {
-    public PopulateResultsRpc(LaunchpadReloadedPlugin plugin, uint id) : base(plugin, id)
-    {
-    }
-
     public override RpcLocalHandling LocalHandling => RpcLocalHandling.After;
 
     public readonly struct Data(byte[] votedFor, byte[] voters)
@@ -58,7 +55,7 @@ public class PopulateResultsRpc : PlayerCustomRpc<LaunchpadReloadedPlugin, Popul
 
     public override void Handle(PlayerControl player, Data data)
     {
-        var votes = data.VotedFor.Select((t, i) => new CustomVote(data.Voters[i], t)).ToList();
+        var votes = data.VotedFor.Select((suspect, voter) => new CustomVote(data.Voters[voter], suspect)).ToList();
 
         VotingTypesManager.HandlePopulateResults(votes);
     }

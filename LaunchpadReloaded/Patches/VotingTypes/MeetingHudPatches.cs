@@ -200,7 +200,7 @@ public static class MeetingHudPatches
         }
 
         var votes = VotingTypesManager.CalculateVotes();
-        var votedFor = votes.Select(vote => vote.VotedFor).ToArray();
+        var votedFor = votes.Select(vote => vote.Suspect).ToArray();
         var voters = votes.Select(vote => vote.Voter).ToArray();
 
         Rpc<PopulateResultsRpc>.Instance.Send(new PopulateResultsRpc.Data(votedFor, voters));
