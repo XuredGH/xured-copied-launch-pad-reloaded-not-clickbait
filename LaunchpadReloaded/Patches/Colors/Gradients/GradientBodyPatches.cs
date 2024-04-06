@@ -1,0 +1,26 @@
+﻿using HarmonyLib;
+using LaunchpadReloaded.Utilities;
+
+namespace LaunchpadReloaded.Patches.Colors.Gradients;
+
+[HarmonyPatch(typeof(LongBoiPlayerBody),nameof(LongBoiPlayerBody.Start))]
+public static class LongBoiPatch
+{
+    public static void Postfix(LongBoiPlayerBody __instance)
+    {
+        __instance.neckSprite.material.SetFloat(ShaderID.GradientOffset, -1);
+        __instance.cosmeticLayer.currentBodySprite.BodySprite.material.SetFloat(ShaderID.GradientOffset, -1);
+        __instance.headSprite.material.SetFloat(ShaderID.GradientOffset, 2);
+    }
+}
+
+[HarmonyPatch(typeof(CosmeticsLayer),nameof(CosmeticsLayer.EnsureInitialized))]
+public static class HorsePatch
+{
+    public static void Postfix(CosmeticsLayer __instance, PlayerBodyTypes bt)
+    {
+        if (bt is not PlayerBodyTypes.Horse) return;
+        
+        __instance.currentBodySprite.BodySprite.material.SetFloat(ShaderID.GradientOffset, 1.5f);
+    }
+}
