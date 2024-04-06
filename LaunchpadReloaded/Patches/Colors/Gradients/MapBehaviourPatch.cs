@@ -16,7 +16,7 @@ public static class MapBehaviourPatch
 
         var mat = __instance.HerePoint.material;
         
-        mat.SetFloat(ShaderID.GradientBlend, 5);
+        mat.SetFloat(ShaderID.GradientBlend, 10);
         mat.SetFloat(ShaderID.GradientOffset, .35f);
         
     }
