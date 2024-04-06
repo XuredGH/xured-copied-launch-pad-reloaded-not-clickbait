@@ -15,6 +15,11 @@ public static class NameTagPatch
     [HarmonyPrefix, HarmonyPatch("Get", typeof(RoleBehaviour))]
     public static bool GetPatch([HarmonyArgument(0)] RoleBehaviour otherPlayerRole, ref Color __result)
     {
+        if (PlayerControl.LocalPlayer.Data.Role.IsImpostor && otherPlayerRole.IsImpostor)
+        {
+            return true;
+        }
+
         if (LaunchpadGameOptions.Instance.OnlyShowRoleColor.Value || CustomGameModeManager.ActiveMode is BattleRoyale || GameManager.Instance.IsHideAndSeek())
         {
             return true;
