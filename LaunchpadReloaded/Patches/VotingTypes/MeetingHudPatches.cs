@@ -2,6 +2,7 @@
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Networking;
+using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using Reactor.Networking.Rpc;
 using Reactor.Utilities.Extensions;
@@ -24,6 +25,11 @@ public static class MeetingHudPatches
         {
             plr.VoteData.VotesRemaining = VotingTypesManager.GetVotes();
             plr.VoteData.VotedPlayers.Clear();
+
+            if (plr.player.Data.Role is MayorRole)
+            {
+                plr.VoteData.VotesRemaining += (int)MayorRole.ExtraVotes.Value;
+            }
         }
 
         DragManager.Instance.DraggingPlayers.Clear();

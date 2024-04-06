@@ -42,9 +42,9 @@ public static class VotingTypesManager
     public static List<CustomVote> CalculateVotes()
     {
         return (from player in LaunchpadPlayer.GetAllAlivePlayers()
-            from vote in player.VoteData.VotedPlayers
-            select new CustomVote(player.player.PlayerId,
-                vote)).ToList();
+                from vote in player.VoteData.VotedPlayers
+                select new CustomVote(player.player.PlayerId,
+                    vote)).ToList();
     }
 
     public static Dictionary<byte, float> GetChancePercents(List<CustomVote> votes)
@@ -90,28 +90,31 @@ public static class VotingTypesManager
     {
         MeetingHud.Instance.TitleText.text = DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.MeetingVotingResults, Il2CppSystem.Array.Empty<Il2CppSystem.Object>());
 
-        var num2 = 0;
-        var num = 0;
-
-        foreach (var vote in votes)
+        if (!LaunchpadGameOptions.Instance.HideVotingIcons.Value)
         {
-            if (vote.Suspect == 253)
+            var num2 = 0;
+            var num = 0;
+
+            foreach (var vote in votes)
             {
-                MeetingHud.Instance.BloopAVoteIcon(GameData.Instance.GetPlayerById(vote.Voter), num2, MeetingHud.Instance.SkippedVoting.transform);
-                num2++;
-                continue;
+                if (vote.Suspect == 253)
+                {
+                    MeetingHud.Instance.BloopAVoteIcon(GameData.Instance.GetPlayerById(vote.Voter), num2, MeetingHud.Instance.SkippedVoting.transform);
+                    num2++;
+                    continue;
+                }
+
+                var playerVoteArea = MeetingHud.Instance.playerStates[vote.Suspect];
+
+                MeetingHud.Instance.BloopAVoteIcon(GameData.Instance.GetPlayerById(vote.Voter), num++, playerVoteArea.transform);
             }
-
-            var playerVoteArea = MeetingHud.Instance.playerStates[vote.Suspect];
-
-            MeetingHud.Instance.BloopAVoteIcon(GameData.Instance.GetPlayerById(vote.Voter), num++, playerVoteArea.transform);
         }
 
         if (!UseChance() && !LaunchpadGameOptions.Instance.ShowPercentages.Value)
         {
             return;
         }
-   
+
         var chances = GetChancePercents(votes);
 
         var skipText = MeetingHud.Instance.SkippedVoting;

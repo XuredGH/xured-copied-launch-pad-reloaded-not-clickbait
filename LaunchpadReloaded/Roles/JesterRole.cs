@@ -4,13 +4,12 @@ using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Features;
 using Reactor.Utilities.Attributes;
-using System;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
 
 [RegisterInIl2Cpp]
-public class JesterRole(IntPtr ptr) : RoleBehaviour(ptr), ICustomRole
+public class JesterRole(System.IntPtr ptr) : RoleBehaviour(ptr), ICustomRole
 {
     public string RoleName => "Jester";
     public ushort RoleId => (ushort)LaunchpadRoles.Jester;
@@ -35,7 +34,29 @@ public class JesterRole(IntPtr ptr) : RoleBehaviour(ptr), ICustomRole
     {
         return $"You've been fooled! {exiled.PlayerName} was The Jester.";
     }
+    public override bool CanUse(IUsable usable)
+    {
+        if (!GameManager.Instance.LogicUsables.CanUse(usable, this.Player))
+        {
+            return false;
+        }
 
+        Console console = usable.TryCast<Console>();
+        return !(console != null) || console.AllowImpostor;
+    }
+
+    public override void SpawnTaskHeader(PlayerControl playerControl)
+    {
+        if (playerControl != PlayerControl.LocalPlayer) return;
+        ImportantTextTask orCreateTask = PlayerTask.GetOrCreateTask<ImportantTextTask>(playerControl, 0);
+        orCreateTask.Text = string.Concat(new string[]
+            {
+                LaunchpadPalette.JesterColor.ToTextColor(),
+                DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.FakeTasks, Il2CppSystem.Array.Empty<Il2CppSystem.Object>()),
+                "</color>"
+            });
+
+    }
     public static CustomToggleOption CanUseVents;
     public static CustomOptionGroup Group;
     public void CreateOptions()
