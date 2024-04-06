@@ -3,6 +3,7 @@ using HarmonyLib;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Networking;
+using LaunchpadReloaded.Utilities;
 using Reactor.Networking.Rpc;
 using Reactor.Utilities.Extensions;
 using TMPro;
@@ -133,6 +134,14 @@ public static class PlayerTabPatches
         {
             __instance.currentColorIsEquipped = __instance.currentColor == GradientManager.LocalGradientId;
         }
+        
+        var mat = __instance.PlayerPreview.cosmetics.currentBodySprite.BodySprite.material;
+    
+        mat.SetFloat(ShaderID.GradientBlend, 2);
+        mat.SetFloat(ShaderID.GradientOffset, .4f);
+    
+
+
     }
 
     [HarmonyPrefix]
