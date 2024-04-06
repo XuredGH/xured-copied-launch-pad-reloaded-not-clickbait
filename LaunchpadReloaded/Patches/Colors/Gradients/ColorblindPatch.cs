@@ -14,7 +14,6 @@ public static class ColorblindPatch
         if (!__instance.TryGetComponent(out PlayerGradientData comp) &&
             !__instance.transform.parent.TryGetComponent(out comp))
         {
-            Logger<LaunchpadReloadedPlugin>.Error(__instance.transform.parent.name);
             return true;
         }
 
