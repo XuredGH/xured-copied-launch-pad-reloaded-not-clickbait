@@ -12,8 +12,8 @@ namespace LaunchpadReloaded.Patches.Options;
 [HarmonyPatch(typeof(GameSettingMenu))]
 public static class GameSettingsMenuPatches
 {
-    public static GameObject GameBtn;
-    public static GameObject RoleBtn;
+    private static GameObject _gameBtn;
+    private static GameObject _roleBtn;
 
     [HarmonyPrefix, HarmonyPatch("Start")]
     public static void StartPrefix(GameSettingMenu __instance)
@@ -24,8 +24,8 @@ public static class GameSettingsMenuPatches
         }
 
         __instance.Tabs.transform.position += new Vector3(0.5f, 0, 0);
-        GameBtn = __instance.transform.FindChild("Header/Tabs/GameTab").gameObject;
-        RoleBtn = __instance.transform.FindChild("Header/Tabs/RoleTab").gameObject;
+        _gameBtn = __instance.transform.FindChild("Header/Tabs/GameTab").gameObject;
+        _roleBtn = __instance.transform.FindChild("Header/Tabs/RoleTab").gameObject;
 
         var numberOpt = __instance.RegularGameSettings.GetComponentInChildren<NumberOption>();
         var toggleOpt = Object.FindObjectOfType<ToggleOption>();
@@ -58,7 +58,7 @@ public static class GameSettingsMenuPatches
             CustomOptionsManager.CustomToggleOptions.Where(option => option.Group == null),
             CustomOptionsManager.CustomNumberOptions.Where(option => option.Group == null),
             CustomOptionsManager.CustomStringOptions.Where(option => option.Group == null));
-
+        
         if (!numberOpt || !toggleOpt || !stringOpt)
         {
             Logger<LaunchpadReloadedPlugin>.Error("OPTION PREFABS MISSING");
@@ -73,8 +73,8 @@ public static class GameSettingsMenuPatches
             return;
         }
 
-        GameBtn.SetActive(CustomGameModeManager.ActiveMode.CanAccessSettingsTab());
-        RoleBtn.SetActive(CustomGameModeManager.ActiveMode.CanAccessRolesTab());
+        _gameBtn.SetActive(CustomGameModeManager.ActiveMode.CanAccessSettingsTab());
+        _roleBtn.SetActive(CustomGameModeManager.ActiveMode.CanAccessRolesTab());
 
         if (!CustomGameModeManager.ActiveMode.CanAccessSettingsTab())
         {
