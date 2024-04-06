@@ -100,7 +100,7 @@ public static class RolesSettingsMenuPatches
 
         var scroll = __instance.GetComponentInChildren<Scroller>();
         scroll.active = true;
-        scroll.ContentYBounds.max = __instance.Children.Count * 0.02f;
+        scroll.ContentYBounds.max = 2*__instance.AllRoleSettings.Count / 10f;
 
         scroll.transform.FindChild("UI_Scrollbar").gameObject.SetActive(true);
     }
