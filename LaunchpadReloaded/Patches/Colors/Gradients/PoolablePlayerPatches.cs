@@ -8,7 +8,7 @@ public static class PoolablePlayerPatches
 {
     [HarmonyPatch(nameof(PoolablePlayer.UpdateFromPlayerData))]
     [HarmonyPatch(nameof(PoolablePlayer.UpdateFromEitherPlayerDataOrCache))]
-    public static void UpdateFromPlayerPrefix(PoolablePlayer __instance, [HarmonyArgument(0)] GameData.PlayerInfo playerInfo)
+    public static void Prefix(PoolablePlayer __instance, [HarmonyArgument(0)] GameData.PlayerInfo playerInfo)
     {
         __instance.gameObject.SetGradientData(playerInfo.PlayerId);
         var mat = __instance.cosmetics.currentBodySprite.BodySprite.material;
