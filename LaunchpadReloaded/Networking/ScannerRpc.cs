@@ -15,7 +15,7 @@ public static class ScannerRpc
             return;
         }
         
-        var newScanner = ScannerManager.Instance.CreateScanner(playerControl, new Vector3(x, y, 0.0057f));
+        var newScanner = ScannerManager.Instance.CreateScanner(playerControl, new Vector3(x, y, -0.005f));
         ScannerManager.Instance.scanners.Add(newScanner);
     }
 }
