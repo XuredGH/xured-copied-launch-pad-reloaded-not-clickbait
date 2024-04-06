@@ -20,11 +20,29 @@ public class ScannerComponent(IntPtr ptr) : MonoBehaviour(ptr)
     public void Awake()
     {
         room = Helpers.GetRoom(transform.position);
+        if (room)
+        {
+            return;
+        }
+        
+        room = gameObject.AddComponent<PlainShipRoom>();
+        switch (ShipStatus.Instance.Type)
+        {
+            case ShipStatus.MapType.Hq:
+            case ShipStatus.MapType.Ship:
+                room.RoomId = SystemTypes.Hallway;
+                break;
+            case ShipStatus.MapType.Pb:
+            case ShipStatus.MapType.Fungle:
+            default:
+                room.RoomId = SystemTypes.Outside;
+                break;
+        }
     }
 
     public void OnTriggerEnter2D(Collider2D collider)
     {
-        if (HackingManager.Instance.AnyPlayerHacked())
+        if (HackingManager.Instance && HackingManager.Instance.AnyPlayerHacked())
         {
             return;
         }
