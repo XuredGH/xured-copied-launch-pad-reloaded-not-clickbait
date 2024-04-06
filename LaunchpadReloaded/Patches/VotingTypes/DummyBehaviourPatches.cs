@@ -15,6 +15,9 @@ public static class DummyBehaviourPatches
     [HarmonyPostfix, HarmonyPatch("Start")]
     public static void DummyStartPatch(DummyBehaviour __instance)
     {
-        if (LaunchpadSettings.Instance.UniqueDummies.Enabled) __instance.myPlayer.RpcSetName(AccountManager.Instance.GetRandomName());
+        if (LaunchpadSettings.Instance.UniqueDummies.Enabled)
+        {
+            __instance.myPlayer.RpcSetName(AccountManager.Instance.GetRandomName());
+        }
     }
 }
