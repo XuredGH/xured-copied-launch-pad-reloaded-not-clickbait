@@ -51,7 +51,11 @@ public class PlayerGradientData(IntPtr ptr) : MonoBehaviour(ptr)
                 return color;
             }
 
-            Logger<LaunchpadReloadedPlugin>.Error("No gradient color found!");
+            if (GameData.Instance)
+            {
+                Logger<LaunchpadReloadedPlugin>.Error("No gradient color found!");
+            }
+            
             return _gradientColor;
         }
         set => _gradientColor = value;
