@@ -26,13 +26,21 @@ public static class GameOptionsMenuPatch
             customOption.OptionBehaviour.OnValueChanged = (Action<OptionBehaviour>)customOption.ValueChanged;
         }
     }
+
+    private static GameSettingMenu menu;
+    
+    
     /// <summary>
     /// Set the position and offset of all custom game options
     /// </summary>
     [HarmonyPostfix, HarmonyPatch("Update")]
     public static void UpdatePostfix(GameOptionsMenu __instance)
     {
-        var menu = Object.FindObjectsOfType<GameSettingMenu>().First();
+        if (!menu)
+        {
+            menu = Object.FindObjectsOfType<GameSettingMenu>().First();
+        }
+        
         if (menu.RegularGameSettings.active || menu.RolesSettings.gameObject.active || menu.HideNSeekSettings.active)
         {
             return;
