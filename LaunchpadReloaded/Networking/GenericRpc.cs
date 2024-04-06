@@ -16,7 +16,7 @@ public static class GenericRpc
         {
             playerControl.KickForCheating();
         }
-        
+
         var body = Helpers.GetBodyById(bodyId);
         if (body)
         {
@@ -27,8 +27,8 @@ public static class GenericRpc
             Logger<LaunchpadReloadedPlugin>.Warning($"Body for id {bodyId} not found");
         }
     }
-    
-    
+
+
     [MethodRpc((uint)LaunchpadRpc.SetBodyType)]
     public static void RpcSetBodyType(this GameData gameData, PlayerControl player, int bodyType)
     {
@@ -48,7 +48,7 @@ public static class GenericRpc
             hand.layer = LayerMask.NameToLayer("Players");
 
             var transform = player.transform;
-            
+
             hand.transform.localPosition = transform.localPosition;
             hand.transform.position = transform.position;
 
