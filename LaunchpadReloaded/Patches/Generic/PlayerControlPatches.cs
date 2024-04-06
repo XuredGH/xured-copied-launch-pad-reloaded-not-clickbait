@@ -37,6 +37,12 @@ public static class PlayerControlPatches
     public static bool CheckMurderPrefix(PlayerControl __instance, [HarmonyArgument(0)] PlayerControl target)
     {
         __instance.isKilling = true;
+        if (AmongUsClient.Instance.AmHost)
+        {
+            Rpc<CustomCheckMurderRpc>.Instance.Handle(__instance, target);
+            return false;
+        }
+        
         Rpc<CustomCheckMurderRpc>.Instance.SendTo(__instance, AmongUsClient.Instance.HostId, target);
         return false;
     }

@@ -10,16 +10,16 @@ public static class AmongUsClientPatch
     /// <summary>
     /// This patch is used for syncing game options when a player joins.
     /// </summary>
-    [HarmonyPostfix, HarmonyPatch("OnPlayerJoined")]
-    public static void PlayerJoinedPatch()
+    [HarmonyPostfix, HarmonyPatch(nameof(AmongUsClient.OnPlayerJoined))]
+    public static void PlayerJoinedPatch(ClientData data)
     {
-        if (!AmongUsClient.Instance.AmHost)
+        if (!AmongUsClient.Instance.AmHost || !data.InScene)
         {
             return;
         }
 
-        CustomOptionsManager.SyncOptions();
-        CustomRoleManager.SyncRoleSettings();
+        CustomOptionsManager.SyncOptions(data.Id);
+        CustomRoleManager.SyncRoleSettings(data.Id);
     }
 
     /// <summary>

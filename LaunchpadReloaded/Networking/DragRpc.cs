@@ -17,7 +17,7 @@ public static class DragRpc
         }
         
         DragManager.Instance.DraggingPlayers.Add(playerControl.PlayerId, bodyId);
-        playerControl.MyPhysics.Speed = GameOptionsManager.Instance.currentNormalGameOptions.PlayerSpeedMod/2;
+        playerControl.MyPhysics.Speed = 1.5f;
         if (playerControl.AmOwner)
         {
             CustomButtonSingleton<DragButton>.Instance.SetDrop();
@@ -28,7 +28,7 @@ public static class DragRpc
     public static void RpcStopDragging(this PlayerControl playerControl)
     {
         DragManager.Instance.DraggingPlayers.Remove(playerControl.PlayerId);
-        playerControl.MyPhysics.Speed = GameOptionsManager.Instance.currentNormalGameOptions.PlayerSpeedMod;
+        playerControl.MyPhysics.Speed = 2.5f;
         if (playerControl.AmOwner)
         {
             CustomButtonSingleton<DragButton>.Instance.SetDrag();

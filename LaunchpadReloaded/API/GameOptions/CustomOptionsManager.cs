@@ -23,6 +23,20 @@ public static class CustomOptionsManager
         var strings = CustomStringOptions.Select(x => x.IndexValue).ToArray();
 
         Rpc<SyncOptionsRpc>.Instance.Send(GameData.Instance, new SyncOptionsRpc.Data(toggles, numbers, strings));
+    } 
+    
+    public static void SyncOptions(int targetId)
+    {
+        if (!AmongUsClient.Instance.AmHost)
+        {
+            return;
+        }
+
+        var toggles = CustomToggleOptions.Select(x => x.Value).ToArray();
+        var numbers = CustomNumberOptions.Select(x => x.Value).ToArray();
+        var strings = CustomStringOptions.Select(x => x.IndexValue).ToArray();
+
+        Rpc<SyncOptionsRpc>.Instance.SendTo(GameData.Instance, targetId, new SyncOptionsRpc.Data(toggles, numbers, strings));
     }
 
     public static void UpdateToConfig()

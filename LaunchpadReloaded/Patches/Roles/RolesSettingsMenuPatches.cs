@@ -5,6 +5,7 @@ using Il2CppInterop.Runtime;
 using Il2CppSystem;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
+using Reactor.Networking.Rpc;
 using Reactor.Utilities.Extensions;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -159,7 +160,7 @@ public static class RolesSettingsMenuPatches
 
             if (AmongUsClient.Instance.AmHost)
             {
-                CustomRoleManager.SyncRoleSettings();
+                Rpc<SyncRoleOptionsRpc>.Instance.Send(GameData.Instance, new SyncRoleOptionsRpc.Data(role.RoleId, numEntry.Value, chanceEntry.Value));
             }
             GameOptionsManager.Instance.GameHostOptions = GameOptionsManager.Instance.CurrentGameOptions;
             return false;

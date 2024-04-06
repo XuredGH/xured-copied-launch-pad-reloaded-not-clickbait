@@ -19,7 +19,7 @@ public class LaunchpadGameOptions
     public readonly CustomNumberOption MaxVotes;
     public readonly CustomToggleOption AllowVotingForSamePerson;
     public readonly CustomToggleOption AllowConfirmingVotes;
-    public readonly CustomToggleOption DisableDynamicVoting;
+    public readonly CustomToggleOption HideVotingIcons;
     public readonly CustomToggleOption ShowPercentages;
     public readonly CustomOptionGroup VotingGroup;
 
@@ -61,6 +61,11 @@ public class LaunchpadGameOptions
             Hidden = () => !VotingTypesManager.CanVoteMultiple()
         };
 
+        HideVotingIcons = new CustomToggleOption("Hide Voting Icons", false)
+        {
+            Hidden = () => !VotingTypesManager.UseChance() && !ShowPercentages.Value
+        };
+
         ShowPercentages = new CustomToggleOption("Show Percentages", false)
         {
             Hidden = VotingTypesManager.UseChance
@@ -78,7 +83,7 @@ public class LaunchpadGameOptions
 
 
         VotingGroup = new CustomOptionGroup("Voting Type",
-            toggleOpt: [AllowVotingForSamePerson, ShowPercentages, AllowConfirmingVotes],
+            toggleOpt: [AllowVotingForSamePerson, ShowPercentages, AllowConfirmingVotes, HideVotingIcons],
             stringOpt: [],
             numberOpt: [MaxVotes]);
 

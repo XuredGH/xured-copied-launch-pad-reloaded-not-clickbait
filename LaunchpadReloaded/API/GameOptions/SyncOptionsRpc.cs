@@ -7,13 +7,10 @@ namespace LaunchpadReloaded.API.GameOptions;
 
 // METHOD RPC DOESNT WORK WITH THE ARRAYS AND STUFF SO THIS IS HOW WE WILL DO IT FOR NOW
 [RegisterCustomRpc((uint)LaunchpadRpc.SyncGameOptions)]
-public class SyncOptionsRpc : CustomRpc<LaunchpadReloadedPlugin, GameData, SyncOptionsRpc.Data>
+public class SyncOptionsRpc(LaunchpadReloadedPlugin plugin, uint id)
+    : CustomRpc<LaunchpadReloadedPlugin, GameData, SyncOptionsRpc.Data>(plugin, id)
 {
-    public SyncOptionsRpc(LaunchpadReloadedPlugin plugin, uint id) : base(plugin, id)
-    {
-    }
-
-    public override RpcLocalHandling LocalHandling => RpcLocalHandling.Before;
+    public override RpcLocalHandling LocalHandling => RpcLocalHandling.None;
 
     public readonly struct Data
     {

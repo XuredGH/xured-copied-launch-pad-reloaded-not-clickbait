@@ -1,9 +1,9 @@
-﻿using System.Linq;
-using HarmonyLib;
+﻿using HarmonyLib;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
+using System.Linq;
 
 namespace LaunchpadReloaded.Patches.Roles.Jester;
 [HarmonyPatch]
@@ -21,7 +21,7 @@ public static class JesterPatches
         {
             return;
         }
-        
+
         __instance.WinText.text += didWin ? "\n<size=30%>You Win.</size>" : "\n<size=30%>Jester Wins.</size>";
         __instance.BackgroundBar.material.SetColor(ShaderID.Color, LaunchpadPalette.JesterColor);
         __instance.WinText.color = LaunchpadPalette.JesterColor;
@@ -33,11 +33,17 @@ public static class JesterPatches
     [HarmonyPostfix, HarmonyPatch(typeof(ExileController), nameof(ExileController.Begin))]
     public static void Begin(ExileController __instance)
     {
+        if (__instance.exiled?.Role is ShapeshifterRole)
+        {
+            __instance.completeString = $"{__instance.exiled.PlayerName} was The Shapeshifter";
+            return;
+        }
+
         if (!__instance.exiled?.Role || __instance.exiled.Role is not ICustomRole role)
         {
             return;
         }
-        
+
         if (role.GetCustomEjectionMessage(__instance.exiled) == null)
         {
             return;
