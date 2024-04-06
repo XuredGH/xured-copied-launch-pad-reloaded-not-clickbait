@@ -32,7 +32,7 @@ public class PlayerGradientData(IntPtr ptr) : MonoBehaviour(ptr)
             }
 
             Logger<LaunchpadReloadedPlugin>.Error("No gradient data found!");
-            return true;
+            return _gradientEnabled;
         }
         set => _gradientEnabled = value;
     }

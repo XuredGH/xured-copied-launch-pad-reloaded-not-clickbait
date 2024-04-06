@@ -3,6 +3,7 @@ using System.Collections;
 using BepInEx.Configuration;
 using LaunchpadReloaded.Components;
 using Reactor.Utilities;
+using Random = UnityEngine.Random;
 
 namespace LaunchpadReloaded.Features.Managers;
 
@@ -56,6 +57,12 @@ public static class GradientManager
 
     public static bool TryGetColor(byte id, out byte color)
     {
+        if (!GameData.Instance)
+        {
+            color = (byte)Random.RandomRangeInt(0, Palette.PlayerColors.Length);
+            return false;
+        }
+        
         var data = GameData.Instance.GetPlayerById(id);
         if (data != null && data.Object)
         {
