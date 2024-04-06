@@ -4,9 +4,8 @@ using System.Linq;
 using System.Reflection;
 using AmongUs.GameOptions;
 using Il2CppInterop.Runtime;
-using LaunchpadReloaded.Networking;
 using Reactor.Localization.Utilities;
-using Reactor.Networking.Attributes;
+using Reactor.Networking.Rpc;
 using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
 using TMPro;
@@ -133,7 +132,7 @@ public static class CustomRoleManager
         panel.SetTaskText(role.SetTabText().ToString());
     }
 
-    public static void SyncRoleSettings()
+    public static void SyncRoleSettings(int targetId)
     {
         foreach (var role in CustomRoles.Values.Select(x => (ICustomRole)x))
         {
@@ -145,24 +144,7 @@ public static class CustomRoleManager
             PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config.TryGetEntry<int>(role.NumConfigDefinition, out var numEntry);
             PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config.TryGetEntry<int>(role.ChanceConfigDefinition, out var chanceEntry);
 
-            RpcSyncRoleOption(GameData.Instance, role.RoleId, numEntry.Value, chanceEntry.Value);
+            Rpc<SyncRoleOptionsRpc>.Instance.SendTo(GameData.Instance, targetId, new SyncRoleOptionsRpc.Data(role.RoleId, numEntry.Value, chanceEntry.Value));
         }
-    }
-    
-    [MethodRpc((uint)LaunchpadRpc.SyncRoleOption)]
-    private static void RpcSyncRoleOption(GameData _, ushort roleId, int number, int chance)
-    {
-        GetCustomRoleBehaviour((RoleTypes)roleId, out var role);
-
-        if (role is null)
-        {
-            return;
-        }
-
-        PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config.TryGetEntry<int>(role.NumConfigDefinition, out var numEntry);
-        numEntry.Value = number;
-
-        PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config.TryGetEntry<int>(role.ChanceConfigDefinition, out var chanceEntry);
-        chanceEntry.Value = chance;
     }
 }
