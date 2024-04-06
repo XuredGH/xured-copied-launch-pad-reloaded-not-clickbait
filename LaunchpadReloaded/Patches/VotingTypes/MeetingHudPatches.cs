@@ -76,6 +76,18 @@ public static class MeetingHudPatches
             }
         }
 
+        if (PlayerControl.LocalPlayer.Data.IsDead)
+        {
+            if (_confirmVotes) _confirmVotes.SetDisabled();
+            _typeText.gameObject.SetActive(false);
+            if (__instance.state == MeetingHud.VoteStates.Results)
+            {
+                foreach (var voteArea in __instance.playerStates.Where(state => !state.resultsShowing)) voteArea.ClearForResults();
+            }
+
+            return;
+        }
+
         switch (__instance.state)
         {
             case MeetingHud.VoteStates.Voted:

@@ -103,7 +103,6 @@ public static class VotingTypesManager
             }
 
             var playerVoteArea = MeetingHud.Instance.playerStates[vote.VotedFor];
-            if (playerVoteArea.AmDead) continue;
 
             MeetingHud.Instance.BloopAVoteIcon(GameData.Instance.GetPlayerById(vote.Voter), num, playerVoteArea.transform);
             if (vote.Voter == lastVoter)
