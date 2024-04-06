@@ -24,7 +24,7 @@ public static class ToHudStringPatch
     public static void AddOptions(StringBuilder sb,
         IEnumerable<CustomNumberOption> numberOptions, IEnumerable<CustomStringOption> stringOptions, IEnumerable<CustomToggleOption> toggleOptions)
     {
-        foreach (var numberOption in numberOptions)
+        foreach (var numberOption in numberOptions.Where(x=>!x.Hidden()))
         {
             if (GameManager.Instance.IsHideAndSeek() && !numberOption.ShowInHideNSeek)
             {
@@ -34,7 +34,7 @@ public static class ToHudStringPatch
             sb.AppendLine(numberOption.Title + ": " + numberOption.Value + Helpers.GetSuffix(numberOption.SuffixType));
         }
 
-        foreach (var toggleOption in toggleOptions)
+        foreach (var toggleOption in toggleOptions.Where(x=>!x.Hidden()))
         {
             if (GameManager.Instance.IsHideAndSeek() && !toggleOption.ShowInHideNSeek)
             {
@@ -44,7 +44,7 @@ public static class ToHudStringPatch
             sb.AppendLine(toggleOption.Title + ": " + (toggleOption.Value ? "On" : "Off"));
         }
 
-        foreach (var stringOption in stringOptions)
+        foreach (var stringOption in stringOptions.Where(x=>!x.Hidden()))
         {
             if (GameManager.Instance.IsHideAndSeek() && !stringOption.ShowInHideNSeek)
             {

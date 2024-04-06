@@ -17,10 +17,13 @@ public static class HudManagerPatches
 {
     /// Custom buttons parent
     private static GameObject _bottomLeft;
+    
     /// Custom role tab
-    public static TaskPanelBehaviour _roleTab;
+    private static TaskPanelBehaviour _roleTab;
+
     /// Scrolling increment
-    private static float _increment = 0.3f;
+    private const float Increment = 0.3f;
+
     /// Bounds for scrolling 
     private static FloatRange _bounds = new FloatRange(2.9f, 4.6f);
 
@@ -49,18 +52,16 @@ public static class HudManagerPatches
             return;
         }
 
-        if (Input.mouseScrollDelta.y > 0f)
+        _bounds.max = __instance.GameSettings.rectTransform.sizeDelta.y + _bounds.min;
+
+        var delta = Input.mouseScrollDelta.y switch
         {
-            pos =
-                new Vector3(pos.x,
-                    Mathf.Clamp(pos.y - _increment, _bounds.min, _bounds.max), pos.z);
-        }
-        else if (Input.mouseScrollDelta.y < 0f)
-        {
-            pos =
-                new Vector3(pos.x,
-                    Mathf.Clamp(pos.y + _increment, _bounds.min, _bounds.max), pos.z);
-        }
+            > 0f => -Increment,
+            < 0f => Increment,
+            _ => 0f
+        };
+
+        pos = new Vector3(pos.x, Mathf.Clamp(pos.y + delta, _bounds.min, _bounds.max), pos.z);
 
         __instance.GameSettings.transform.localPosition = pos;
     }
