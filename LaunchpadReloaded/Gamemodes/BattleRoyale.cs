@@ -8,6 +8,7 @@ using Reactor.Utilities.Extensions;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using InnerNet;
 using TMPro;
 using UnityEngine;
 
@@ -127,7 +128,28 @@ public class BattleRoyale : CustomGameMode
     public override void AssignRoles(out bool runOriginal, LogicRoleSelectionNormal instance)
     {
         runOriginal = false;
-        foreach (var player in GameData.Instance.AllPlayers)
+        
+        var list1 = new Il2CppSystem.Collections.Generic.List<ClientData>();
+        AmongUsClient.Instance.GetAllClients(list1);
+
+        var list2 = list1.ToArray();
+        
+        var list3 = (from c in list2
+            where c.Character != null
+            where c.Character.Data != null
+            where !c.Character.Data.Disconnected && !c.Character.Data.IsDead
+            orderby c.Id
+            select c.Character.Data).ToList();
+        
+        foreach (var playerInfo in GameData.Instance.AllPlayers)
+        {
+            if (playerInfo.Object != null && playerInfo.Object.isDummy)
+            {
+                list3.Add(playerInfo);
+            }
+        }
+        
+        foreach (var player in list3)
         {
             player.Object.RpcSetRole(RoleTypes.Impostor);
         }
