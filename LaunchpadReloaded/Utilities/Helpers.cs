@@ -59,7 +59,7 @@ public static class Helpers
     public static string RandomString(int length, string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
     {
         return new string(Enumerable.Repeat(chars, length)
-            .Select(s => s[Random.Next(s.Length)]).ToArray());
+            .Select(s => s[UnityEngine.Random.RandomRangeInt(0,s.Length)]).ToArray());
     }
 
     public static string GetSuffix(NumberSuffixes suffix)

@@ -126,7 +126,6 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
         GradientManager.SetGradientEnabled(player, false);
         player.cosmetics.SetColor(15);
         player.cosmetics.gameObject.SetActive(false);
-        Coroutines.Start(HackNameCoroutine(player));
     }
     
     public static void UnHackPlayer(PlayerControl player)
@@ -134,18 +133,7 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
         GradientManager.SetGradientEnabled(player, true);
         player.cosmetics.SetColor((byte)player.Data.DefaultOutfit.ColorId);
         player.cosmetics.gameObject.SetActive(true);
-        Coroutines.Stop(HackNameCoroutine(player));
         player.SetName(player.Data.PlayerName);
-    }
-
-    private static IEnumerator HackNameCoroutine(PlayerControl playerControl)
-    {
-        while (playerControl.Data.IsHacked())
-        { 
-            var randomString = Helpers.RandomString(Helpers.Random.Next(4, 8), "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#!?$^$#&@*<>?,.(???#@)[]{}\\|$@@@@0000");
-            playerControl.RawSetName(randomString);
-            yield return null;
-        }
     }
 
     public static void ToggleNode(int nodeId, bool value)
