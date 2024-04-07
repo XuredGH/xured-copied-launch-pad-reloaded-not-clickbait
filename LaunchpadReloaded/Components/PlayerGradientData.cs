@@ -31,7 +31,10 @@ public class PlayerGradientData(IntPtr ptr) : MonoBehaviour(ptr)
                 return gradEnabled;
             }
 
-            Logger<LaunchpadReloadedPlugin>.Error("No gradient data found!");
+            if (GameData.Instance)
+            {
+                Logger<LaunchpadReloadedPlugin>.Warning($"No gradient data found for id {playerId}, player: {(bool)player}!");
+            }
             return _gradientEnabled;
         }
         set => _gradientEnabled = value;
@@ -53,7 +56,7 @@ public class PlayerGradientData(IntPtr ptr) : MonoBehaviour(ptr)
 
             if (GameData.Instance)
             {
-                Logger<LaunchpadReloadedPlugin>.Error("No gradient color found!");
+                Logger<LaunchpadReloadedPlugin>.Error($"No gradient color found for id {playerId}, player: {(bool)player}!");
             }
             
             return _gradientColor;
