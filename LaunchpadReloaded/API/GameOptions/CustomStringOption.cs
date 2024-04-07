@@ -31,7 +31,7 @@ public class CustomStringOption : AbstractGameOption
             }
             catch (Exception e)
             {
-                Logger<LaunchpadReloadedPlugin>.Error(e.ToString());
+                Logger<LaunchpadReloadedPlugin>.Warning(e.ToString());
             }
         }
 
@@ -49,7 +49,7 @@ public class CustomStringOption : AbstractGameOption
             }
             catch (Exception e)
             {
-                Logger<LaunchpadReloadedPlugin>.Error(e.ToString());
+                Logger<LaunchpadReloadedPlugin>.Warning(e.ToString());
             }
         }
 

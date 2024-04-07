@@ -23,7 +23,7 @@ public class CustomToggleOption : AbstractGameOption
             }
             catch (Exception e)
             {
-                Logger<LaunchpadReloadedPlugin>.Error(e.ToString());
+                Logger<LaunchpadReloadedPlugin>.Warning(e.ToString());
             }
         }
         CustomOptionsManager.CustomToggleOptions.Add(this);
@@ -40,7 +40,7 @@ public class CustomToggleOption : AbstractGameOption
             }
             catch (Exception e)
             {
-                Logger<LaunchpadReloadedPlugin>.Error(e.ToString());
+                Logger<LaunchpadReloadedPlugin>.Warning(e.ToString());
             }
         }
 

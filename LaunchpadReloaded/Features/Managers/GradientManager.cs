@@ -24,7 +24,7 @@ public static class GradientManager
             }
             catch (Exception e)
             {
-                Logger<LaunchpadReloadedPlugin>.Error(e.ToString());
+                Logger<LaunchpadReloadedPlugin>.Warning(e.ToString());
             }
         }
     }
