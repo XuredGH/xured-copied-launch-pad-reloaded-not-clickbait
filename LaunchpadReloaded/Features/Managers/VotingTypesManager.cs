@@ -43,8 +43,7 @@ public static class VotingTypesManager
     {
         return (from player in LaunchpadPlayer.GetAllAlivePlayers()
                 from vote in player.VoteData.VotedPlayers
-                select new CustomVote(player.player.PlayerId,
-                    vote)).ToList();
+                select new CustomVote(player.player.PlayerId, vote)).ToList();
     }
 
     public static Dictionary<byte, float> GetChancePercents(List<CustomVote> votes)
@@ -92,9 +91,9 @@ public static class VotingTypesManager
 
         if (!LaunchpadGameOptions.Instance.HideVotingIcons.Value)
         {
+            var delays = new Dictionary<byte, int>();
             var num2 = 0;
-            var num = 0;
-
+            
             foreach (var vote in votes)
             {
                 if (vote.Suspect == 253)
@@ -106,7 +105,12 @@ public static class VotingTypesManager
 
                 var playerVoteArea = MeetingHud.Instance.playerStates[vote.Suspect];
 
-                MeetingHud.Instance.BloopAVoteIcon(GameData.Instance.GetPlayerById(vote.Voter), num++, playerVoteArea.transform);
+                if (!delays.TryAdd(vote.Voter, 0))
+                {
+                    delays[vote.Voter]++;
+                }
+                
+                MeetingHud.Instance.BloopAVoteIcon(GameData.Instance.GetPlayerById(vote.Voter), delays[vote.Voter], playerVoteArea.transform);
             }
         }
 

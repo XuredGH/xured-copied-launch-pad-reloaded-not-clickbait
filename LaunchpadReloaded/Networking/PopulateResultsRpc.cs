@@ -13,49 +13,35 @@ public class PopulateResultsRpc(LaunchpadReloadedPlugin plugin, uint id)
 {
     public override RpcLocalHandling LocalHandling => RpcLocalHandling.After;
 
-    public readonly struct Data(byte[] votedFor, byte[] voters)
+    public readonly struct Data(CustomVote[] votes)
     {
-        public readonly byte[] VotedFor = votedFor;
-        public readonly byte[] Voters = voters;
+        public readonly CustomVote[] Votes = votes;
     }
 
     public override void Write(MessageWriter writer, Data data)
     {
-        writer.WritePacked((uint)data.VotedFor.Length);
-        foreach (var t in data.VotedFor)
+        writer.WritePacked((uint)data.Votes.Length);
+        foreach (var t in data.Votes)
         {
-            writer.Write(t);
-        }
-
-        writer.WritePacked((uint)data.Voters.Length);
-        foreach (var n in data.Voters)
-        {
-            writer.Write(n);
+            writer.Write(t.Voter);
+            writer.Write(t.Suspect);
         }
     }
 
     public override Data Read(MessageReader reader)
     {
-        var votedFor = new byte[reader.ReadPackedUInt32()];
-        for (var i = 0; i < votedFor.Length; i++)
+        var votes = new CustomVote[reader.ReadPackedUInt32()];
+        
+        for (var i = 0; i < votes.Length; i++)
         {
-            votedFor[i] = reader.ReadByte();
+            votes[i] = new CustomVote(reader.ReadByte(), reader.ReadByte());
         }
 
-        var voters = new byte[reader.ReadPackedUInt32()];
-        for (var i = 0; i < voters.Length; i++)
-        {
-            voters[i] = reader.ReadByte();
-        }
-
-
-        return new Data(votedFor, voters);
+        return new Data(votes);
     }
 
     public override void Handle(PlayerControl player, Data data)
     {
-        var votes = data.VotedFor.Select((suspect, voter) => new CustomVote(data.Voters[voter], suspect)).ToList();
-
-        VotingTypesManager.HandlePopulateResults(votes);
+        VotingTypesManager.HandlePopulateResults(data.Votes.ToList());
     }
 }
