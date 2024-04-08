@@ -6,6 +6,7 @@ using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Attributes;
 using System;
 using System.Text;
+using Il2CppInterop.Runtime.Attributes;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
@@ -18,7 +19,11 @@ public class TrackerRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
     public string RoleLongDescription => "Place a tracker on a player to track their movements on the map.\nPlace scanners to detect nearby player movement.\n";
     public Color RoleColor => LaunchpadPalette.TrackerColor;
     public RoleTeamTypes Team => RoleTeamTypes.Crewmate;
+    
+    [HideFromIl2Cpp]
     public LoadableAsset<Sprite> Icon => LaunchpadAssets.TrackButton;
+    
+    [HideFromIl2Cpp]
     public StringBuilder SetTabText()
     {
         var taskStringBuilder = Helpers.CreateForRole(this);

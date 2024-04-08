@@ -3,6 +3,7 @@ using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Features;
 using Reactor.Utilities.Attributes;
 using System;
+using Il2CppInterop.Runtime.Attributes;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
@@ -17,6 +18,7 @@ public class CaptainRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
     public Color RoleColor => LaunchpadPalette.CaptainColor;
     public RoleTeamTypes Team => RoleTeamTypes.Crewmate;
     public override bool IsDead => false;
+    [HideFromIl2Cpp]
     public LoadableAsset<Sprite> Icon => LaunchpadAssets.ZoomButton;
 
     public static CustomNumberOption CaptainMeetingCooldown;

@@ -3,6 +3,7 @@ using LaunchpadReloaded.Features;
 using Reactor.Utilities.Attributes;
 using System;
 using System.Text;
+using Il2CppInterop.Runtime.Attributes;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
@@ -27,6 +28,8 @@ public class OutcastGhostRole(IntPtr ptr) : CrewmateGhostRole(ptr), ICustomRole
         playerControl.ClearTasks();
         PlayerTask.GetOrCreateTask<ImportantTextTask>(playerControl).Text = $"{Color.gray.ToTextColor()}You are dead, you cannot do tasks.\nThere is no way to win. You have lost.";
     }
+    
+    [HideFromIl2Cpp]
     public StringBuilder SetTabText() => null;
     public override bool DidWin(GameOverReason gameOverReason)
     {

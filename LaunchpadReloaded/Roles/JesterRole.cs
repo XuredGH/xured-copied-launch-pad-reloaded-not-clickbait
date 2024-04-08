@@ -1,4 +1,5 @@
 using AmongUs.GameOptions;
+using Il2CppInterop.Runtime.Attributes;
 using Il2CppSystem.Text;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
@@ -22,6 +23,8 @@ public class JesterRole(System.IntPtr ptr) : RoleBehaviour(ptr), ICustomRole
     public bool CanUseVent => CanUseVents?.Value ?? true;
     public RoleTypes GhostRole => (RoleTypes)LaunchpadRoles.OutcastGhost;
     public override bool IsDead => false;
+    
+    [HideFromIl2Cpp]
     public LoadableAsset<Sprite> Icon => LaunchpadAssets.JesterIcon;
 
     public override void AppendTaskHint(StringBuilder taskStringBuilder) { }
