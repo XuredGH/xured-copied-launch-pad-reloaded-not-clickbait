@@ -3,6 +3,7 @@ using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Networking;
+using LaunchpadReloaded.Networking.Data;
 using Reactor.Networking.Rpc;
 
 namespace LaunchpadReloaded.Features;
@@ -118,7 +119,7 @@ public class LaunchpadGameOptions
                 {
                     if (GradientManager.TryGetColor(player.PlayerId, out var grad))// && !player.AmOwner)
                     {
-                        Rpc<CustomCheckColorRpc>.Instance.Handle(player, new CustomCheckColorRpc.Data((byte)player.Data.DefaultOutfit.ColorId, grad));
+                        Rpc<CustomCheckColorRpc>.Instance.Handle(player, new CustomColorData((byte)player.Data.DefaultOutfit.ColorId, grad));
                     }
                 }
             }

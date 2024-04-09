@@ -6,6 +6,7 @@ using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Networking;
+using LaunchpadReloaded.Networking.Data;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using Reactor.Networking.Rpc;
@@ -54,7 +55,13 @@ public static class PlayerControlPatches
     [HarmonyPrefix, HarmonyPatch(nameof(PlayerControl.CmdCheckColor))]
     public static bool CheckColorPatch(PlayerControl __instance, [HarmonyArgument(0)] byte bodyColor)
     {
-        Rpc<CustomCheckColorRpc>.Instance.SendTo(AmongUsClient.Instance.HostId, new CustomCheckColorRpc.Data(bodyColor, (byte)GradientManager.LocalGradientId));
+        if (AmongUsClient.Instance.AmHost)
+        {
+            Rpc<CustomCheckColorRpc>.Instance.Handle(__instance, new CustomColorData(bodyColor, (byte)GradientManager.LocalGradientId));
+            return false;
+        }
+        
+        Rpc<CustomCheckColorRpc>.Instance.SendTo(AmongUsClient.Instance.HostId, new CustomColorData(bodyColor, (byte)GradientManager.LocalGradientId));
         return false;
     }
 

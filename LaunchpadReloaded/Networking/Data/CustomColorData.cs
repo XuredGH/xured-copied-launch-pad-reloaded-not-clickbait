@@ -1,4 +1,4 @@
-﻿namespace LaunchpadReloaded.Networking;
+﻿namespace LaunchpadReloaded.Networking.Data;
 
 public struct CustomColorData(byte color, byte gradient)
 {

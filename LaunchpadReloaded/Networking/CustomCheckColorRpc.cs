@@ -2,6 +2,7 @@
 using Hazel;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
+using LaunchpadReloaded.Networking.Data;
 using Reactor.Networking.Attributes;
 using Reactor.Networking.Rpc;
 using Reactor.Utilities;
@@ -9,37 +10,30 @@ using Reactor.Utilities;
 namespace LaunchpadReloaded.Networking;
 
 [RegisterCustomRpc((uint)LaunchpadRpc.CustomCheckColor)]
-public class CustomCheckColorRpc(LaunchpadReloadedPlugin plugin, uint id)
-    : PlayerCustomRpc<LaunchpadReloadedPlugin, CustomCheckColorRpc.Data>(plugin, id)
+public class CustomCheckColorRpc(LaunchpadReloadedPlugin plugin, uint id) : PlayerCustomRpc<LaunchpadReloadedPlugin, CustomColorData>(plugin, id)
 {
     public override RpcLocalHandling LocalHandling => RpcLocalHandling.None;
 
-    public struct Data(byte color, byte gradient)
+    public override void Write(MessageWriter writer, CustomColorData data)
     {
-        public readonly byte Color = color;
-        public readonly byte Gradient = gradient;
-    }
-    
-    public override void Write(MessageWriter writer, Data data)
-    {
-        writer.Write(data.Color);
-        writer.Write(data.Gradient);
+        writer.Write(data.ColorId);
+        writer.Write(data.GradientId);
     }
 
-    public override Data Read(MessageReader reader)
+    public override CustomColorData Read(MessageReader reader)
     {
-        return new Data(reader.ReadByte(), reader.ReadByte());
+        return new CustomColorData(reader.ReadByte(), reader.ReadByte());
     }
     
-    public override void Handle(PlayerControl source, Data data)
+    public override void Handle(PlayerControl source, CustomColorData data)
     {
         if (!AmongUsClient.Instance.AmHost)
         {
             return;
         }
         
-        var bodyColor = data.Color;
-        var gradColor = data.Gradient;
+        var bodyColor = data.ColorId;
+        var gradColor = data.GradientId;
 
         if (!LaunchpadGameOptions.Instance.UniqueColors.Value)
         {

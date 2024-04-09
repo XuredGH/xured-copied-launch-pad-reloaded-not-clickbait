@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Hazel;
+using LaunchpadReloaded.Networking.Data;
 using Reactor.Networking.Attributes;
 using Reactor.Networking.Rpc;
 

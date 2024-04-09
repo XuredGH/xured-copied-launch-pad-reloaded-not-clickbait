@@ -7,10 +7,10 @@ using Reactor.Networking.Rpc;
 namespace LaunchpadReloaded.Networking;
 
 [RegisterCustomRpc((uint)LaunchpadRpc.CustomCheckMurder)]
-public class CustomCheckMurderRpc(LaunchpadReloadedPlugin plugin, uint id)
-    : PlayerCustomRpc<LaunchpadReloadedPlugin, PlayerControl>(plugin, id)
+public class CustomCheckMurderRpc(LaunchpadReloadedPlugin plugin, uint id) : PlayerCustomRpc<LaunchpadReloadedPlugin, PlayerControl>(plugin, id)
 {
     public override RpcLocalHandling LocalHandling => RpcLocalHandling.None;
+    
     public override void Write(MessageWriter writer, PlayerControl data)
     {
         writer.WriteNetObject(data);
@@ -52,8 +52,7 @@ public class CustomCheckMurderRpc(LaunchpadReloadedPlugin plugin, uint id)
             return;
         }
         
-        if (AmongUsClient.Instance.IsGameOver || MeetingHud.Instance || 
-            !VerifyTarget(target) || !VerifyKiller(source)) 
+        if (AmongUsClient.Instance.IsGameOver || MeetingHud.Instance || !VerifyTarget(target) || !VerifyKiller(source)) 
         {
             GameData.Instance.CustomMurderPlayer(source, target, false);
             return;

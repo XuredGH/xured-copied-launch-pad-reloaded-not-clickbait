@@ -3,6 +3,7 @@ using HarmonyLib;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Networking;
+using LaunchpadReloaded.Networking.Data;
 using LaunchpadReloaded.Utilities;
 using Reactor.Networking.Rpc;
 using Reactor.Utilities.Extensions;
@@ -80,7 +81,7 @@ public static class PlayerTabPatches
             if (__instance.HasLocalPlayer())
             {
                 Rpc<CustomCheckColorRpc>.Instance.SendTo(AmongUsClient.Instance.HostId,
-                    new CustomCheckColorRpc.Data(
+                    new CustomColorData(
                         (byte)PlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId, 
                         (byte)__instance.currentColor));
             }

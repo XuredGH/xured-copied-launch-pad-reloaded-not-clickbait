@@ -4,7 +4,6 @@ namespace LaunchpadReloaded.Networking;
 
 public static class CustomRpcProtocols
 {
-    
     [MethodRpc((uint)LaunchpadRpc.CustomMurder)]
     public static void CustomMurderPlayer(this GameData data, PlayerControl source, PlayerControl target, bool didSucceed)
     {
