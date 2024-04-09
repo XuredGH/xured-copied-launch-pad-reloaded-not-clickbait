@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using LaunchpadReloaded.Networking;
 using Reactor.Networking.Rpc;
+using Reactor.Utilities;
 
 namespace LaunchpadReloaded.API.GameOptions;
 
@@ -22,7 +24,7 @@ public static class CustomOptionsManager
         var numbers = CustomNumberOptions.Select(x => x.Value).ToArray();
         var strings = CustomStringOptions.Select(x => x.IndexValue).ToArray();
 
-        Rpc<SyncOptionsRpc>.Instance.Send(GameData.Instance, new SyncOptionsRpc.Data(toggles, numbers, strings));
+        Rpc<SyncOptionsRpc>.Instance.Send(new SyncOptionsRpc.Data(toggles, numbers, strings));
     } 
     
     public static void SyncOptions(int targetId)
@@ -36,9 +38,9 @@ public static class CustomOptionsManager
         var numbers = CustomNumberOptions.Select(x => x.Value).ToArray();
         var strings = CustomStringOptions.Select(x => x.IndexValue).ToArray();
 
-        Rpc<SyncOptionsRpc>.Instance.SendTo(GameData.Instance, targetId, new SyncOptionsRpc.Data(toggles, numbers, strings));
+        Rpc<SyncOptionsRpc>.Instance.SendTo(targetId, new SyncOptionsRpc.Data(toggles, numbers, strings));
     }
-
+    
     public static void UpdateToConfig()
     {
         foreach (var numberOpt in CustomNumberOptions)
@@ -88,6 +90,7 @@ public static class CustomOptionsManager
 
     public static void HandleOptionsSync(bool[] toggles, float[] numbers, int[] strings)
     {
+        Logger<LaunchpadReloadedPlugin>.Warning("syncing options!");
         for (var i = 0; i < toggles.Length; i++)
         {
             CustomToggleOptions[i].SetValue(toggles[i]);

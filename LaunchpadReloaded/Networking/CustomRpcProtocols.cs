@@ -1,5 +1,4 @@
-﻿using LaunchpadReloaded.Features.Managers;
-using Reactor.Networking.Attributes;
+﻿using Reactor.Networking.Attributes;
 
 namespace LaunchpadReloaded.Networking;
 
@@ -13,14 +12,5 @@ public static class CustomRpcProtocols
         var murderResultFlags2 = MurderResultFlags.DecisionByHost | murderResultFlags;
     
         source.MurderPlayer(target, murderResultFlags2);
-        
     }
-    
-    [MethodRpc((uint)LaunchpadRpc.CustomSetColor)]
-    public static void CustomSetColor(this GameData data, PlayerControl source, byte colorId, byte gradient)
-    {
-        source.SetColor(colorId);
-        source.SetGradient(gradient);
-    }
-    
 }

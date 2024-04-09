@@ -19,6 +19,7 @@ public enum LaunchpadRpc : uint
     CustomMurder,
     CustomCheckColor,
     CustomSetColor,
+    SyncAllColors,
     RemoveVote,
     PopulateResults
 }

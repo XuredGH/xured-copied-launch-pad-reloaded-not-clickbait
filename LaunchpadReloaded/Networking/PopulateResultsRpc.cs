@@ -11,7 +11,7 @@ namespace LaunchpadReloaded.Networking;
 public class PopulateResultsRpc(LaunchpadReloadedPlugin plugin, uint id)
     : PlayerCustomRpc<LaunchpadReloadedPlugin, PopulateResultsRpc.Data>(plugin, id)
 {
-    public override RpcLocalHandling LocalHandling => RpcLocalHandling.After;
+    public override RpcLocalHandling LocalHandling => RpcLocalHandling.Before;
 
     public readonly struct Data(CustomVote[] votes)
     {

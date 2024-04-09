@@ -43,7 +43,7 @@ public class CustomCheckColorRpc(LaunchpadReloadedPlugin plugin, uint id)
 
         if (!LaunchpadGameOptions.Instance.UniqueColors.Value)
         {
-            GameData.Instance.CustomSetColor(source, bodyColor, gradColor);
+            Rpc<CustomRpcSetColor>.Instance.Send(source, new CustomColorData(bodyColor, gradColor));
             return;
         }
         
@@ -63,8 +63,7 @@ public class CustomCheckColorRpc(LaunchpadReloadedPlugin plugin, uint id)
             bodyColor = (byte) ((bodyColor + 1) % Palette.PlayerColors.Length);
         }
         
-        
-        GameData.Instance.CustomSetColor(source, bodyColor, gradColor);
+        Rpc<CustomRpcSetColor>.Instance.Send(source, new CustomColorData(bodyColor, gradColor));
     }
 
     private static bool VerifyColor(byte requestedColor, byte requestedGradient)

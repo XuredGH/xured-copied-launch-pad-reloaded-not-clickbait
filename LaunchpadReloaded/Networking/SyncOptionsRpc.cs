@@ -1,14 +1,13 @@
 ﻿using Hazel;
-using LaunchpadReloaded.Networking;
+using LaunchpadReloaded.API.GameOptions;
 using Reactor.Networking.Attributes;
 using Reactor.Networking.Rpc;
 
-namespace LaunchpadReloaded.API.GameOptions;
+namespace LaunchpadReloaded.Networking;
 
 // METHOD RPC DOESNT WORK WITH THE ARRAYS AND STUFF SO THIS IS HOW WE WILL DO IT FOR NOW
 [RegisterCustomRpc((uint)LaunchpadRpc.SyncGameOptions)]
-public class SyncOptionsRpc(LaunchpadReloadedPlugin plugin, uint id)
-    : CustomRpc<LaunchpadReloadedPlugin, GameData, SyncOptionsRpc.Data>(plugin, id)
+public class SyncOptionsRpc(LaunchpadReloadedPlugin plugin, uint id) : PlayerCustomRpc<LaunchpadReloadedPlugin, SyncOptionsRpc.Data>(plugin, id)
 {
     public override RpcLocalHandling LocalHandling => RpcLocalHandling.None;
 
@@ -44,7 +43,7 @@ public class SyncOptionsRpc(LaunchpadReloadedPlugin plugin, uint id)
         foreach (var n in data.StringIDs)
         {
             writer.WritePacked(n);
-        }
+        } 
     }
 
     public override Data Read(MessageReader reader)
@@ -71,8 +70,13 @@ public class SyncOptionsRpc(LaunchpadReloadedPlugin plugin, uint id)
         return new Data(toggles, numbers, strings);
     }
 
-    public override void Handle(GameData gameData, Data data)
+    public override void Handle(PlayerControl playerControl, Data data)
     {
+        if (AmongUsClient.Instance.HostId != playerControl.OwnerId)
+        {
+            return;
+        }
+        
         CustomOptionsManager.HandleOptionsSync(data.Toggles, data.Numbers, data.StringIDs);
     }
 }

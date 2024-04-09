@@ -1,14 +1,13 @@
 ﻿using Hazel;
-using LaunchpadReloaded.Networking;
+using LaunchpadReloaded.API.Roles;
 using Reactor.Networking.Attributes;
 using Reactor.Networking.Rpc;
 using Reactor.Utilities;
 
-namespace LaunchpadReloaded.API.Roles;
+namespace LaunchpadReloaded.Networking;
 
 [RegisterCustomRpc((uint)LaunchpadRpc.SyncRoleOption)]
-public class SyncRoleOptionsRpc(LaunchpadReloadedPlugin plugin, uint id)
-    : CustomRpc<LaunchpadReloadedPlugin, GameData, SyncRoleOptionsRpc.Data>(plugin, id)
+public class SyncRoleOptionsRpc(LaunchpadReloadedPlugin plugin, uint id) : PlayerCustomRpc<LaunchpadReloadedPlugin, SyncRoleOptionsRpc.Data>(plugin, id)
 {
 
     public struct Data(ushort roleId, int number, int chance)
@@ -32,8 +31,13 @@ public class SyncRoleOptionsRpc(LaunchpadReloadedPlugin plugin, uint id)
         return new Data(reader.ReadUInt16(), reader.ReadPackedInt32(), reader.ReadPackedInt32());
     }
 
-    public override void Handle(GameData innerNetObject, Data data)
+    public override void Handle(PlayerControl playerControl, Data data)
     {
+        if (AmongUsClient.Instance.HostId != playerControl.OwnerId)
+        {
+            return;
+        }
+        
         if (!CustomRoleManager.CustomRoles.TryGetValue(data.RoleId, out var roleBehaviour) ||
             !CustomRoleManager.GetCustomRoleBehaviour(roleBehaviour.Role, out var role)) return;
         

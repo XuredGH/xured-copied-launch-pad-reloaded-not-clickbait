@@ -43,7 +43,7 @@ public static class PlayerControlPatches
             return false;
         }
         
-        Rpc<CustomCheckMurderRpc>.Instance.SendTo(__instance, AmongUsClient.Instance.HostId, target);
+        Rpc<CustomCheckMurderRpc>.Instance.SendTo(AmongUsClient.Instance.HostId, target);
         return false;
     }
 
@@ -54,8 +54,7 @@ public static class PlayerControlPatches
     [HarmonyPrefix, HarmonyPatch(nameof(PlayerControl.CmdCheckColor))]
     public static bool CheckColorPatch(PlayerControl __instance, [HarmonyArgument(0)] byte bodyColor)
     {
-        Rpc<CustomCheckColorRpc>.Instance.SendTo(__instance, AmongUsClient.Instance.HostId, 
-            new CustomCheckColorRpc.Data(bodyColor, (byte)GradientManager.LocalGradientId));
+        Rpc<CustomCheckColorRpc>.Instance.SendTo(AmongUsClient.Instance.HostId, new CustomCheckColorRpc.Data(bodyColor, (byte)GradientManager.LocalGradientId));
         return false;
     }
 
