@@ -11,7 +11,7 @@ public static class DragRpc
     [MethodRpc((uint)LaunchpadRpc.StartDrag)]
     public static void RpcStartDragging(this PlayerControl playerControl, byte bodyId)
     {
-        if (playerControl.Data.Role is not JanitorRole)
+        if (playerControl.Data.Role is not JanitorRole and MedicRole)
         {
             return;
         }
