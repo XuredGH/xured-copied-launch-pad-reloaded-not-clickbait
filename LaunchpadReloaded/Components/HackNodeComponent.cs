@@ -1,15 +1,15 @@
-﻿using System;
-using LaunchpadReloaded.Features;
+﻿using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Attributes;
+using System;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Components;
 
 [RegisterInIl2Cpp(typeof(IUsable))]
 public class HackNodeComponent(IntPtr ptr) : MonoBehaviour(ptr)
-{ 
+{
     public bool isActive;
     public int id;
     public SpriteRenderer image;

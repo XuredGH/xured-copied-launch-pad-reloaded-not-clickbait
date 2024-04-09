@@ -1,7 +1,7 @@
-﻿using System;
-using LaunchpadReloaded.Utilities;
+﻿using LaunchpadReloaded.Utilities;
 using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
+using System;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -30,15 +30,21 @@ public static class LaunchpadAssets
     public static readonly LoadableAsset<Sprite> TrackButton = new("Track.png");
     public static readonly LoadableAsset<Sprite> ShootButton = new("Shoot.png");
     public static readonly LoadableAsset<Sprite> JesterIcon = new("Jester.png");
+    public static readonly LoadableAsset<Sprite> InstinctButton = new("Instinct.png", false);
+    public static readonly LoadableAsset<Sprite> InvestigateButton = new("Investigate.png", false);
 
     // Object Sprites
     public static readonly LoadableAsset<Sprite> ScannerSprite = new("Scanner.png");
     public static readonly LoadableAsset<Sprite> NodeSprite = new("Node.png");
     public static readonly LoadableAsset<Sprite> KnifeHandSprite = new("KnifeHand.png");
+    public static readonly LoadableAsset<Sprite> Footstep = new("Footstep.png", false);
     // Sounds
     public static readonly LoadableAsset<AudioClip> BeepSound = new("Beep.wav");
     public static readonly LoadableAsset<AudioClip> PingSound = new("Ping.mp3");
     public static readonly LoadableAsset<AudioClip> HackingSound = new("HackAmbience.mp3");
+
+    // Other
+    public static readonly LoadableAsset<GameObject> DetectiveGame = new("JournalMinigame");
 }
 
 public class LoadableAsset<T>(string name, bool useBundle = true) where T : Object

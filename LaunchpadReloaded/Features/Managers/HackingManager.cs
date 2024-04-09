@@ -1,10 +1,9 @@
+using LaunchpadReloaded.Components;
+using LaunchpadReloaded.Utilities;
+using Reactor.Utilities.Attributes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using LaunchpadReloaded.Components;
-using LaunchpadReloaded.Utilities;
-using Reactor.Utilities;
-using Reactor.Utilities.Attributes;
 using UnityEngine;
 using Random = System.Random;
 
@@ -43,7 +42,14 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
             ],
 
         // Submerged compatibility soon
-        [(ShipStatus.MapType)6] = []
+        [(ShipStatus.MapType)6] = [
+            new Vector3(0.4613f, -30.5506f, -0.0306f),
+            new Vector3(-5.3441f, -33.8784f, -0.0339f),
+            new Vector3(12.0628f, -32.6322f, -0.0326f),
+            new Vector3(-11.0808f, 30.4168f, 0.0304f),
+            new Vector3(3.9255f, 7.6012f, 0.0076f),
+            new Vector3(2.3557f, 32.0301f, 0.032f)
+        ]
     };
 
     public readonly Vector3[] AirshipPositions = [
@@ -127,7 +133,7 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
         player.cosmetics.SetColor(15);
         player.cosmetics.gameObject.SetActive(false);
     }
-    
+
     public static void UnHackPlayer(PlayerControl player)
     {
         GradientManager.SetGradientEnabled(player, true);
