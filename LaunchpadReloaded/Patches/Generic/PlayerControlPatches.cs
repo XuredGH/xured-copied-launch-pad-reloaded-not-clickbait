@@ -5,8 +5,8 @@ using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
-using LaunchpadReloaded.Networking;
-using LaunchpadReloaded.Networking.Data;
+using LaunchpadReloaded.Networking.Color;
+using LaunchpadReloaded.Networking.Murder;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using Reactor.Networking.Rpc;
@@ -40,11 +40,11 @@ public static class PlayerControlPatches
         __instance.isKilling = true;
         if (AmongUsClient.Instance.AmHost)
         {
-            Rpc<CustomCheckMurderRpc>.Instance.Handle(__instance, target);
+            Rpc<CustomCmdCheckMurder>.Instance.Handle(__instance, target);
             return false;
         }
         
-        Rpc<CustomCheckMurderRpc>.Instance.SendTo(AmongUsClient.Instance.HostId, target);
+        Rpc<CustomCmdCheckMurder>.Instance.SendTo(AmongUsClient.Instance.HostId, target);
         return false;
     }
 
@@ -57,11 +57,11 @@ public static class PlayerControlPatches
     {
         if (AmongUsClient.Instance.AmHost)
         {
-            Rpc<CustomCheckColorRpc>.Instance.Handle(__instance, new CustomColorData(bodyColor, (byte)GradientManager.LocalGradientId));
+            Rpc<CustomCmdCheckColor>.Instance.Handle(__instance, new CustomColorData(bodyColor, (byte)GradientManager.LocalGradientId));
             return false;
         }
         
-        Rpc<CustomCheckColorRpc>.Instance.SendTo(AmongUsClient.Instance.HostId, new CustomColorData(bodyColor, (byte)GradientManager.LocalGradientId));
+        Rpc<CustomCmdCheckColor>.Instance.SendTo(AmongUsClient.Instance.HostId, new CustomColorData(bodyColor, (byte)GradientManager.LocalGradientId));
         return false;
     }
 

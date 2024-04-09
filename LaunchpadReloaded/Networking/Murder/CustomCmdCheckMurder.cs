@@ -4,10 +4,10 @@ using LaunchpadReloaded.API.Roles;
 using Reactor.Networking.Attributes;
 using Reactor.Networking.Rpc;
 
-namespace LaunchpadReloaded.Networking;
+namespace LaunchpadReloaded.Networking.Murder;
 
 [RegisterCustomRpc((uint)LaunchpadRpc.CustomCheckMurder)]
-public class CustomCheckMurderRpc(LaunchpadReloadedPlugin plugin, uint id) : PlayerCustomRpc<LaunchpadReloadedPlugin, PlayerControl>(plugin, id)
+public class CustomCmdCheckMurder(LaunchpadReloadedPlugin plugin, uint id) : PlayerCustomRpc<LaunchpadReloadedPlugin, PlayerControl>(plugin, id)
 {
     public override RpcLocalHandling LocalHandling => RpcLocalHandling.None;
     
@@ -51,14 +51,13 @@ public class CustomCheckMurderRpc(LaunchpadReloadedPlugin plugin, uint id) : Pla
         {
             return;
         }
+
+        var didSucceed = AmongUsClient.Instance.IsGameOver || MeetingHud.Instance || !VerifyTarget(target) || !VerifyKiller(source);
         
-        if (AmongUsClient.Instance.IsGameOver || MeetingHud.Instance || !VerifyTarget(target) || !VerifyKiller(source)) 
-        {
-            GameData.Instance.CustomMurderPlayer(source, target, false);
-            return;
-        }
+        var murderResultFlags = didSucceed ? MurderResultFlags.Succeeded : MurderResultFlags.FailedError;
+        var murderResultFlags2 = MurderResultFlags.DecisionByHost | murderResultFlags;
 
         source.isKilling = true;
-        GameData.Instance.CustomMurderPlayer(source, target, true);
+        Rpc<CustomRpcMurder>.Instance.Send(source, new CustomMurderData(target, murderResultFlags2), true);
     }
 }

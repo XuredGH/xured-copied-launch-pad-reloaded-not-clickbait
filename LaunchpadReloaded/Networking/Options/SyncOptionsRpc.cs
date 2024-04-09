@@ -3,7 +3,7 @@ using LaunchpadReloaded.API.GameOptions;
 using Reactor.Networking.Attributes;
 using Reactor.Networking.Rpc;
 
-namespace LaunchpadReloaded.Networking;
+namespace LaunchpadReloaded.Networking.Options;
 
 // METHOD RPC DOESNT WORK WITH THE ARRAYS AND STUFF SO THIS IS HOW WE WILL DO IT FOR NOW
 [RegisterCustomRpc((uint)LaunchpadRpc.SyncGameOptions)]

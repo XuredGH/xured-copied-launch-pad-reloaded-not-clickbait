@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using LaunchpadReloaded.Networking;
+using LaunchpadReloaded.Networking.Options;
 using Reactor.Networking.Rpc;
 using Reactor.Utilities;
 

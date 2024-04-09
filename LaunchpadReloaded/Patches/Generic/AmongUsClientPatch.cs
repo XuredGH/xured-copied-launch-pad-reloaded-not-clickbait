@@ -4,8 +4,7 @@ using InnerNet;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Features.Managers;
-using LaunchpadReloaded.Networking;
-using LaunchpadReloaded.Networking.Data;
+using LaunchpadReloaded.Networking.Color;
 using Reactor.Networking.Rpc;
 
 namespace LaunchpadReloaded.Patches.Generic;

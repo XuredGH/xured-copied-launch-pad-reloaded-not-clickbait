@@ -1,7 +1,6 @@
 using AmongUs.GameOptions;
 using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
@@ -32,17 +31,12 @@ public class BattleRoyale : CustomGameMode
         foreach (var player in GameData.Instance.AllPlayers) player.Object.cosmetics.TogglePet(false);
 
         PlayerControl.LocalPlayer.NetTransform.RpcSnapTo(random.position);
-        
-        if (!AmongUsClient.Instance.AmHost)
-        {
-            return;
-        }
-    
+
         foreach (var player in PlayerControl.AllPlayerControls)
         {
             if (LaunchpadGameOptions.Instance.SeekerCharacter.Value)
             {
-                GameData.Instance.RpcSetBodyType(player, 6);
+                player.SetBodyType(6);
             }
         }
     }

@@ -4,7 +4,7 @@ using Reactor.Networking.Attributes;
 using Reactor.Networking.Rpc;
 using Reactor.Utilities;
 
-namespace LaunchpadReloaded.Networking;
+namespace LaunchpadReloaded.Networking.Options;
 
 [RegisterCustomRpc((uint)LaunchpadRpc.SyncRoleOption)]
 public class SyncRoleOptionsRpc(LaunchpadReloadedPlugin plugin, uint id) : PlayerCustomRpc<LaunchpadReloadedPlugin, SyncRoleOptionsRpc.Data>(plugin, id)

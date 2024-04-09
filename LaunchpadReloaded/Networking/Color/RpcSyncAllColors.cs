@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using Hazel;
-using LaunchpadReloaded.Networking.Data;
 using Reactor.Networking.Attributes;
 using Reactor.Networking.Rpc;
 
-namespace LaunchpadReloaded.Networking;
+namespace LaunchpadReloaded.Networking.Color;
 
 [RegisterCustomRpc((uint)LaunchpadRpc.SyncAllColors)]
 public class RpcSyncAllColors(LaunchpadReloadedPlugin plugin, uint id)

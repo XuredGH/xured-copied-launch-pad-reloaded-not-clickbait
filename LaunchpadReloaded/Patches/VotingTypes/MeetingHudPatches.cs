@@ -1,12 +1,12 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
-using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using Reactor.Networking.Rpc;
 using Reactor.Utilities.Extensions;
 using System.Linq;
+using LaunchpadReloaded.Networking.Voting;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;

@@ -2,15 +2,14 @@
 using Hazel;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
-using LaunchpadReloaded.Networking.Data;
 using Reactor.Networking.Attributes;
 using Reactor.Networking.Rpc;
 using Reactor.Utilities;
 
-namespace LaunchpadReloaded.Networking;
+namespace LaunchpadReloaded.Networking.Color;
 
 [RegisterCustomRpc((uint)LaunchpadRpc.CustomCheckColor)]
-public class CustomCheckColorRpc(LaunchpadReloadedPlugin plugin, uint id) : PlayerCustomRpc<LaunchpadReloadedPlugin, CustomColorData>(plugin, id)
+public class CustomCmdCheckColor(LaunchpadReloadedPlugin plugin, uint id) : PlayerCustomRpc<LaunchpadReloadedPlugin, CustomColorData>(plugin, id)
 {
     public override RpcLocalHandling LocalHandling => RpcLocalHandling.None;
 
@@ -29,6 +28,12 @@ public class CustomCheckColorRpc(LaunchpadReloadedPlugin plugin, uint id) : Play
     {
         if (!AmongUsClient.Instance.AmHost)
         {
+            return;
+        }
+
+        if (AmongUsClient.Instance.HostId != source.OwnerId)
+        {
+            source.KickForCheating();
             return;
         }
         

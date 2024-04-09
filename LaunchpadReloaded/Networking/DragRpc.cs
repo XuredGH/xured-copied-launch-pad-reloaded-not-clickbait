@@ -13,6 +13,7 @@ public static class DragRpc
     {
         if (playerControl.Data.Role is not JanitorRole and MedicRole)
         {
+            playerControl.KickForCheating();
             return;
         }
         

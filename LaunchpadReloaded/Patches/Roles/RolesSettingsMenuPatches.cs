@@ -5,7 +5,7 @@ using Il2CppInterop.Runtime;
 using Il2CppSystem;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
-using LaunchpadReloaded.Networking;
+using LaunchpadReloaded.Networking.Options;
 using Reactor.Networking.Rpc;
 using Reactor.Utilities.Extensions;
 using UnityEngine;

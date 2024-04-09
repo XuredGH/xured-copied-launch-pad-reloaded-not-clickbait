@@ -71,7 +71,7 @@ public static class VentPatches
         var ventBody = __instance.GetComponent<VentBodyComponent>();
         if (ventBody && ventBody.deadBody)
         {
-            PlayerControl.LocalPlayer.RpcExposeBody(__instance.Id);
+            ventBody.ExposeBody();
         }
     }
 }

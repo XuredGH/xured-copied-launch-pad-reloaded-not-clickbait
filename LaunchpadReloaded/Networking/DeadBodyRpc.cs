@@ -14,6 +14,7 @@ public static class DeadBodyRpc
     {
         if (pc.Data.Role is not JanitorRole)
         {
+            pc.KickForCheating();
             return;
         }
         
@@ -25,8 +26,7 @@ public static class DeadBodyRpc
             return;
         }
 
-        var ventBody = vent.GetComponent<VentBodyComponent>();
-        if (!ventBody)
+        if (!vent.TryGetComponent<VentBodyComponent>(out var ventBody))
         {
             ventBody = vent.gameObject.AddComponent<VentBodyComponent>();
         }
@@ -37,29 +37,5 @@ public static class DeadBodyRpc
         var pos2 = vent.transform.position;
         transform.position = new Vector3(pos2.x, pos2.y, pos.z);
         ventBody.deadBody = body;
-    }
-    
-    [MethodRpc((uint)LaunchpadRpc.ExposeBody)]
-    public static void RpcExposeBody(this PlayerControl playerControl, int ventId)
-    {
-        if (!playerControl.Data.Role.CanVent)
-        {
-            return;
-        }
-        
-        var vent = ShipStatus.Instance.AllVents.First(v => v.Id == ventId);
-
-        if (!vent)
-        {
-            return;
-        }
-
-        var ventBody = vent.GetComponent<VentBodyComponent>();
-        if (!ventBody)
-        {
-            return;
-        }
-
-        ventBody.ExposeBody();
     }
 }

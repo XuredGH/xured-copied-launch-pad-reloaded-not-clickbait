@@ -1,11 +1,11 @@
-﻿using Hazel;
+﻿using System.Linq;
+using Hazel;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
 using Reactor.Networking.Attributes;
 using Reactor.Networking.Rpc;
-using System.Linq;
 
-namespace LaunchpadReloaded.Networking;
+namespace LaunchpadReloaded.Networking.Voting;
 
 [RegisterCustomRpc((uint)LaunchpadRpc.PopulateResults)]
 public class PopulateResultsRpc(LaunchpadReloadedPlugin plugin, uint id) : PlayerCustomRpc<LaunchpadReloadedPlugin, PopulateResultsRpc.Data>(plugin, id)

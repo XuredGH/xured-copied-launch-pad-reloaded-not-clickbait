@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using AmongUs.GameOptions;
 using Il2CppInterop.Runtime;
-using LaunchpadReloaded.Networking;
+using LaunchpadReloaded.Networking.Options;
 using Reactor.Localization.Utilities;
 using Reactor.Networking.Rpc;
 using Reactor.Utilities;

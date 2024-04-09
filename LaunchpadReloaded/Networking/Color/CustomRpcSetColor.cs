@@ -1,10 +1,9 @@
 ﻿using Hazel;
 using LaunchpadReloaded.Features.Managers;
-using LaunchpadReloaded.Networking.Data;
 using Reactor.Networking.Attributes;
 using Reactor.Networking.Rpc;
 
-namespace LaunchpadReloaded.Networking;
+namespace LaunchpadReloaded.Networking.Color;
 
 [RegisterCustomRpc((uint)LaunchpadRpc.CustomSetColor)]
 public class CustomRpcSetColor(LaunchpadReloadedPlugin plugin, uint id) : PlayerCustomRpc<LaunchpadReloadedPlugin, CustomColorData>(plugin, id)
