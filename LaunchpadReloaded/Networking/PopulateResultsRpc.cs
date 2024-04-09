@@ -8,8 +8,7 @@ using System.Linq;
 namespace LaunchpadReloaded.Networking;
 
 [RegisterCustomRpc((uint)LaunchpadRpc.PopulateResults)]
-public class PopulateResultsRpc(LaunchpadReloadedPlugin plugin, uint id)
-    : PlayerCustomRpc<LaunchpadReloadedPlugin, PopulateResultsRpc.Data>(plugin, id)
+public class PopulateResultsRpc(LaunchpadReloadedPlugin plugin, uint id) : PlayerCustomRpc<LaunchpadReloadedPlugin, PopulateResultsRpc.Data>(plugin, id)
 {
     public override RpcLocalHandling LocalHandling => RpcLocalHandling.Before;
 
@@ -42,6 +41,12 @@ public class PopulateResultsRpc(LaunchpadReloadedPlugin plugin, uint id)
 
     public override void Handle(PlayerControl player, Data data)
     {
+        if (AmongUsClient.Instance.HostId != player.OwnerId)
+        {
+            player.KickForCheating();
+            return;
+        }
+        
         VotingTypesManager.HandlePopulateResults(data.Votes.ToList());
     }
 }

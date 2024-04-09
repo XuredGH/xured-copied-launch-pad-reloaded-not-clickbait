@@ -15,6 +15,7 @@ public static class HackerRpc
     {
         if (source.Data.Role is not HackerRole)
         {
+            source.KickForCheating();
             return;
         }
         
