@@ -17,10 +17,10 @@ namespace LaunchpadReloaded.Patches.Roles;
 public static class RolesSettingsMenuPatches
 {
     /// <summary>
-    /// Create an advanced role settings menu for every custom Launchpad role
+    /// Create role buttons and advanced role settings menu for every custom Launchpad role
     /// </summary>
     [HarmonyPrefix, HarmonyPatch("OnEnable")]
-    public static void StartPrefix(RolesSettingsMenu __instance)
+    public static void OnEnablePrefix(RolesSettingsMenu __instance)
     {
         var tabPrefab = __instance.AllAdvancedSettingTabs.ToArray()[1].Tab;
         foreach (var (key, role) in CustomRoleManager.CustomRoles)
@@ -35,6 +35,12 @@ public static class RolesSettingsMenuPatches
                 continue;
             }
 
+            var numChanceOption = Object.Instantiate(__instance.SettingPrefab, __instance.ItemParent);
+            numChanceOption.name = role.NiceName;
+            numChanceOption.Role = role;
+            __instance.AllRoleSettings.Add(numChanceOption);
+
+            
             var newTab = Object.Instantiate(tabPrefab, __instance.AdvancedRolesSettings.transform);
             newTab.name = role.NiceName + " Settings";
             var toggleSet = Object.Instantiate(newTab.GetComponentInChildren<ToggleOption>(true));
@@ -104,31 +110,6 @@ public static class RolesSettingsMenuPatches
         scroll.ContentYBounds.max = 2*__instance.AllRoleSettings.Count / 10f;
 
         scroll.transform.FindChild("UI_Scrollbar").gameObject.SetActive(true);
-    }
-
-    /// <summary>
-    /// Add the role settings to the menu
-    /// </summary>
-    [HarmonyPrefix, HarmonyPatch("OnEnable")]
-    public static void OnEnablePrefix(RolesSettingsMenu __instance)
-    {
-        var parent = __instance.ItemParent;
-        foreach (var (key, role) in CustomRoleManager.CustomRoles)
-        {
-            if (__instance.AllRoleSettings.ToArray().Any(x => (ushort)x.Role.Role == key))
-            {
-                continue;
-            }
-
-            if (role is ICustomRole {HideSettings: true})
-            {
-                continue;
-            }
-
-            var newOption = Object.Instantiate(__instance.SettingPrefab, parent);
-            newOption.Role = role;
-            __instance.AllRoleSettings.Add(newOption);
-        }
     }
 
     /// <summary>
