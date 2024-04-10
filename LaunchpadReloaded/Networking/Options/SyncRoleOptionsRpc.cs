@@ -36,6 +36,7 @@ public class SyncRoleOptionsRpc(LaunchpadReloadedPlugin plugin, uint id) : Playe
     {
         if (AmongUsClient.Instance.HostId != playerControl.OwnerId)
         {
+            playerControl.KickForCheating();
             return;
         }
         

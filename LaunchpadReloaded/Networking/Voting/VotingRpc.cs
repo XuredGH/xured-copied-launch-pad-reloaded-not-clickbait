@@ -10,6 +10,7 @@ public static class VotingRpc
     {
         if (source.OwnerId != AmongUsClient.Instance.HostId)
         {
+            source.KickForCheating();
             return;
         }
 

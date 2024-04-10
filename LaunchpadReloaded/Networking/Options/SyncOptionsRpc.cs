@@ -74,6 +74,7 @@ public class SyncOptionsRpc(LaunchpadReloadedPlugin plugin, uint id) : PlayerCus
     {
         if (AmongUsClient.Instance.HostId != playerControl.OwnerId)
         {
+            playerControl.KickForCheating();
             return;
         }
         

@@ -17,11 +17,13 @@ public static class CustomMurderRpc
         
         var murderResultFlags = didSucceed ? MurderResultFlags.Succeeded : MurderResultFlags.FailedError;
         var murderResultFlags2 = MurderResultFlags.DecisionByHost | murderResultFlags;
-        
-        if (AmongUsClient.Instance.AmClient)
+
+        if (!AmongUsClient.Instance.AmClient)
         {
-            source.MurderPlayer(target, murderResultFlags2);
-            Logger<LaunchpadReloadedPlugin>.Warning(murderResultFlags2);
+            return;
         }
+        
+        source.MurderPlayer(target, murderResultFlags2);
+        Logger<LaunchpadReloadedPlugin>.Warning(murderResultFlags2);
     }
 }
