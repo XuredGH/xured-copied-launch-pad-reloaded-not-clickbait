@@ -25,7 +25,9 @@ public class RpcSyncAllColors(LaunchpadReloadedPlugin plugin, uint id) : PlayerC
     public override Dictionary<byte, CustomColorData> Read(MessageReader reader)
     {
         var data = new Dictionary<byte, CustomColorData>();
-        for (var i = 0; i < reader.ReadPackedInt32(); i++)
+        var length = reader.ReadPackedInt32();
+        
+        for (var i = 0; i < length; i++)
         {
             data.Add(reader.ReadByte(), new CustomColorData(reader.ReadByte(), reader.ReadByte()));
         }
