@@ -6,7 +6,6 @@ using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Networking.Color;
 using Reactor.Networking.Rpc;
-using Reactor.Utilities;
 
 namespace LaunchpadReloaded.Patches.Generic;
 
@@ -36,18 +35,5 @@ public static class AmongUsClientPatch
         }
         
         Rpc<RpcSyncAllColors>.Instance.SendTo(data.Id, colorData);
-    }
-
-    /// <summary>
-    /// So the host uses HIS options and not others, also calls the valuechanged event for gamemodes/voting types when the game is made
-    /// </summary>  
-    [HarmonyPostfix]
-    [HarmonyPatch(nameof(AmongUsClient.CreatePlayer))]
-    public static void CreatePlayerPatch(AmongUsClient __instance, ClientData clientData)
-    {
-        if (__instance.AmHost && clientData.Character.AmOwner)
-        {
-            CustomOptionsManager.UpdateToConfig();
-        }
     }
 }
