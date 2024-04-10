@@ -30,12 +30,6 @@ public class CustomCmdCheckColor(LaunchpadReloadedPlugin plugin, uint id) : Play
         {
             return;
         }
-
-        if (AmongUsClient.Instance.HostId != source.OwnerId)
-        {
-            source.KickForCheating();
-            return;
-        }
         
         var bodyColor = data.ColorId;
         var gradColor = data.GradientId;
