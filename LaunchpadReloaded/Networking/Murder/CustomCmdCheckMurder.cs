@@ -47,17 +47,15 @@ public class CustomCmdCheckMurder(LaunchpadReloadedPlugin plugin, uint id) : Pla
     
     public override void Handle(PlayerControl source, PlayerControl target)
     {
+        source.isKilling = false;
         if (!AmongUsClient.Instance.AmHost)
         {
             return;
         }
 
-        var didSucceed = AmongUsClient.Instance.IsGameOver || MeetingHud.Instance || !VerifyTarget(target) || !VerifyKiller(source);
-        
-        var murderResultFlags = didSucceed ? MurderResultFlags.Succeeded : MurderResultFlags.FailedError;
-        var murderResultFlags2 = MurderResultFlags.DecisionByHost | murderResultFlags;
-
+        var failed = AmongUsClient.Instance.IsGameOver || MeetingHud.Instance || !VerifyTarget(target) || !VerifyKiller(source);
         source.isKilling = true;
-        Rpc<CustomRpcMurder>.Instance.Send(source, new CustomMurderData(target, murderResultFlags2), true);
+        
+        source.RpcCustomMurder(target, !failed);
     }
 }
