@@ -36,6 +36,7 @@ public static class RolesSettingsMenuPatches
             }
 
             var numChanceOption = Object.Instantiate(__instance.SettingPrefab, __instance.ItemParent);
+            numChanceOption.transform.localPosition = new Vector3(0.044f, 0, 0);
             numChanceOption.name = role.NiceName;
             numChanceOption.Role = role;
             __instance.AllRoleSettings.Add(numChanceOption);
