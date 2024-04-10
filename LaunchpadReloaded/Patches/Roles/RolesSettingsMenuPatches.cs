@@ -19,7 +19,7 @@ public static class RolesSettingsMenuPatches
     /// <summary>
     /// Create an advanced role settings menu for every custom Launchpad role
     /// </summary>
-    [HarmonyPrefix, HarmonyPatch("Start")]
+    [HarmonyPrefix, HarmonyPatch("OnEnable")]
     public static void StartPrefix(RolesSettingsMenu __instance)
     {
         var tabPrefab = __instance.AllAdvancedSettingTabs.ToArray()[1].Tab;
@@ -144,28 +144,24 @@ public static class RolesSettingsMenuPatches
 
         var roleSetting = obj.Cast<RoleOptionSetting>();
 
-        if (roleSetting.Role is ICustomRole role)
+        if (roleSetting.Role is not ICustomRole role || role.HideSettings)
         {
-            if (role.HideSettings)
-            {
-                return false;
-            }
-
-            LaunchpadReloadedPlugin.Instance.Config.TryGetEntry<int>(role.NumConfigDefinition, out var numEntry);
-            numEntry.Value = roleSetting.RoleMaxCount;
-
-            LaunchpadReloadedPlugin.Instance.Config.TryGetEntry<int>(role.ChanceConfigDefinition, out var chanceEntry);
-            chanceEntry.Value = roleSetting.RoleChance;
-
-            roleSetting.UpdateValuesAndText(GameOptionsManager.Instance.CurrentGameOptions.RoleOptions);
-
-            if (AmongUsClient.Instance.AmHost)
-            {
-                Rpc<SyncRoleOptionsRpc>.Instance.Send(new SyncRoleOptionsRpc.Data(role.RoleId, numEntry.Value, chanceEntry.Value));
-            }
-            GameOptionsManager.Instance.GameHostOptions = GameOptionsManager.Instance.CurrentGameOptions;
-            return false;
+            return true;
         }
-        return true;
+        
+        LaunchpadReloadedPlugin.Instance.Config.TryGetEntry<int>(role.NumConfigDefinition, out var numEntry);
+        numEntry.Value = roleSetting.RoleMaxCount;
+
+        LaunchpadReloadedPlugin.Instance.Config.TryGetEntry<int>(role.ChanceConfigDefinition, out var chanceEntry);
+        chanceEntry.Value = roleSetting.RoleChance;
+
+        roleSetting.UpdateValuesAndText(GameOptionsManager.Instance.CurrentGameOptions.RoleOptions);
+
+        if (AmongUsClient.Instance.AmHost)
+        {
+            Rpc<SyncRoleOptionsRpc>.Instance.Send(new SyncRoleOptionsRpc.Data(role.RoleId, numEntry.Value, chanceEntry.Value));
+        }
+        GameOptionsManager.Instance.GameHostOptions = GameOptionsManager.Instance.CurrentGameOptions;
+        return false;
     }
 }
