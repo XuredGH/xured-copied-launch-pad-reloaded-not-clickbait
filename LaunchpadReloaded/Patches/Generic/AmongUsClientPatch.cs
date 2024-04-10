@@ -6,6 +6,7 @@ using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Networking.Color;
 using Reactor.Networking.Rpc;
+using Reactor.Utilities;
 
 namespace LaunchpadReloaded.Patches.Generic;
 
@@ -26,11 +27,11 @@ public static class AmongUsClientPatch
 
         var colorData = new Dictionary<byte, CustomColorData>();
         
-        foreach (var player in PlayerControl.AllPlayerControls)
+        foreach (var player in GameData.Instance.AllPlayers)
         {
             if (GradientManager.TryGetColor(player.PlayerId, out var color))
             {
-                colorData.Add(player.PlayerId, new CustomColorData((byte)player.Data.DefaultOutfit.ColorId, color));
+                colorData.Add(player.PlayerId, new CustomColorData((byte)player.DefaultOutfit.ColorId, color));
             }
         }
         

@@ -6,15 +6,14 @@ using Reactor.Networking.Rpc;
 namespace LaunchpadReloaded.Networking.Color;
 
 [RegisterCustomRpc((uint)LaunchpadRpc.SyncAllColors)]
-public class RpcSyncAllColors(LaunchpadReloadedPlugin plugin, uint id)
-    : PlayerCustomRpc<LaunchpadReloadedPlugin, Dictionary<byte, CustomColorData>>(plugin, id)
+public class RpcSyncAllColors(LaunchpadReloadedPlugin plugin, uint id) : PlayerCustomRpc<LaunchpadReloadedPlugin, Dictionary<byte, CustomColorData>>(plugin, id)
 {
-
     public override RpcLocalHandling LocalHandling => RpcLocalHandling.None;
     
     public override void Write(MessageWriter writer, Dictionary<byte, CustomColorData> data)
     {
-        writer.Write((byte)data.Count);
+        writer.WritePacked(data.Count);
+        
         foreach (var var in data)
         {
             writer.Write(var.Key);
@@ -26,8 +25,7 @@ public class RpcSyncAllColors(LaunchpadReloadedPlugin plugin, uint id)
     public override Dictionary<byte, CustomColorData> Read(MessageReader reader)
     {
         var data = new Dictionary<byte, CustomColorData>();
-        
-        for (var i = 0; i < reader.ReadByte(); i++)
+        for (var i = 0; i < reader.ReadPackedInt32(); i++)
         {
             data.Add(reader.ReadByte(), new CustomColorData(reader.ReadByte(), reader.ReadByte()));
         }
