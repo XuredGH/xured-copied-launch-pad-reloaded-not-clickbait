@@ -210,7 +210,7 @@ public static class MeetingHudPatches
 
         var votes = VotingTypesManager.CalculateVotes();
         
-        Rpc<PopulateResultsRpc>.Instance.Send(new PopulateResultsRpc.Data(votes.ToArray()));
+        Rpc<PopulateResultsRpc>.Instance.Send(votes.ToArray());
         return false;
     }
 

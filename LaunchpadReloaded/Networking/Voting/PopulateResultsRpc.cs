@@ -8,26 +8,21 @@ using Reactor.Networking.Rpc;
 namespace LaunchpadReloaded.Networking.Voting;
 
 [RegisterCustomRpc((uint)LaunchpadRpc.PopulateResults)]
-public class PopulateResultsRpc(LaunchpadReloadedPlugin plugin, uint id) : PlayerCustomRpc<LaunchpadReloadedPlugin, PopulateResultsRpc.Data>(plugin, id)
+public class PopulateResultsRpc(LaunchpadReloadedPlugin plugin, uint id) : PlayerCustomRpc<LaunchpadReloadedPlugin, CustomVote[]>(plugin, id)
 {
     public override RpcLocalHandling LocalHandling => RpcLocalHandling.Before;
 
-    public readonly struct Data(CustomVote[] votes)
+    public override void Write(MessageWriter writer, CustomVote[] Votes)
     {
-        public readonly CustomVote[] Votes = votes;
-    }
-
-    public override void Write(MessageWriter writer, Data data)
-    {
-        writer.WritePacked((uint)data.Votes.Length);
-        foreach (var t in data.Votes)
+        writer.WritePacked((uint)Votes.Length);
+        foreach (var t in Votes)
         {
             writer.Write(t.Voter);
             writer.Write(t.Suspect);
         }
     }
 
-    public override Data Read(MessageReader reader)
+    public override CustomVote[] Read(MessageReader reader)
     {
         var votes = new CustomVote[reader.ReadPackedUInt32()];
         
@@ -36,10 +31,10 @@ public class PopulateResultsRpc(LaunchpadReloadedPlugin plugin, uint id) : Playe
             votes[i] = new CustomVote(reader.ReadByte(), reader.ReadByte());
         }
 
-        return new Data(votes);
+        return votes;
     }
 
-    public override void Handle(PlayerControl player, Data data)
+    public override void Handle(PlayerControl player, CustomVote[] votes)
     {
         if (AmongUsClient.Instance.HostId != player.OwnerId)
         {
@@ -47,6 +42,6 @@ public class PopulateResultsRpc(LaunchpadReloadedPlugin plugin, uint id) : Playe
             return;
         }
         
-        VotingTypesManager.HandlePopulateResults(data.Votes.ToList());
+        VotingTypesManager.HandlePopulateResults(votes.ToList());
     }
 }
