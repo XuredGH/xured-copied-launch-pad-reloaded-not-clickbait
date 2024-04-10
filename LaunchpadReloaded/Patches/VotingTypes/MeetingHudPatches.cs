@@ -179,13 +179,15 @@ public static class MeetingHudPatches
         {
             var pva = __instance.playerStates.First(pv => pv.TargetPlayerId == player.player.PlayerId);
 
-            if (!pva.AmDead && player.VoteData.VotedPlayers.Contains(pc.PlayerId))
+            if (pva.AmDead || !player.VoteData.VotedPlayers.Contains(pc.PlayerId))
             {
-                player.VoteData.VotedPlayers.Remove(pc.PlayerId);
-                player.VoteData.VotesRemaining += 1;
-
-                VotingRpc.RpcRemoveVote(PlayerControl.LocalPlayer, player.player.PlayerId, pc.PlayerId);
+                continue;
             }
+            
+            player.VoteData.VotedPlayers.Remove(pc.PlayerId);
+            player.VoteData.VotesRemaining += 1;
+
+            VotingRpc.RpcRemoveVote(PlayerControl.LocalPlayer, player.player.PlayerId, pc.PlayerId);
         }
 
         __instance.SetDirtyBit(1U);
