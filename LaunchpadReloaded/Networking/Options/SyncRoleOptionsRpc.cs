@@ -1,4 +1,5 @@
-﻿using Hazel;
+﻿using System;
+using Hazel;
 using LaunchpadReloaded.API.Roles;
 using Reactor.Networking.Attributes;
 using Reactor.Networking.Rpc;
@@ -44,7 +45,14 @@ public class SyncRoleOptionsRpc(LaunchpadReloadedPlugin plugin, uint id) : Playe
         PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config.TryGetEntry<int>(role.NumConfigDefinition, out var numEntry);
         PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config.TryGetEntry<int>(role.ChanceConfigDefinition, out var chanceEntry);
 
-        numEntry.Value = data.Number;
-        chanceEntry.Value = data.Chance;
+        try
+        {
+            numEntry.Value = data.Number;
+            chanceEntry.Value = data.Chance;
+        }
+        catch (Exception e)
+        {
+            Logger<LaunchpadReloadedPlugin>.Warning(e.ToString());
+        }
     }
 }
