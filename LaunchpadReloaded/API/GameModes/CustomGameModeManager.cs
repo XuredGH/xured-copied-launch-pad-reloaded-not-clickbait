@@ -76,9 +76,12 @@ public static class CustomGameModeManager
             return;
         }
 
-        if (gameMode != null)
+        if (gameMode == null)
         {
-            GameModes.Add(gameMode.Id, gameMode);
+            Logger<LaunchpadReloadedPlugin>.Error($"GAMEMODE WITH TYPE {gameModeType.Name} IS NULL");
+            return;
         }
+        
+        GameModes.Add(gameMode.Id, gameMode);
     }
 }

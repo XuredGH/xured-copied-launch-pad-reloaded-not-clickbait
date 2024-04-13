@@ -15,7 +15,7 @@ public class RegisterGameModeAttribute : Attribute
 
         foreach (var type in assembly.GetTypes())
         {
-            var attribute = type.GetCustomAttribute<RegisterButtonAttribute>();
+            var attribute = type.GetCustomAttribute<RegisterGameModeAttribute>();
             if (attribute != null)
             {
                 CustomGameModeManager.RegisterGameMode(type);
