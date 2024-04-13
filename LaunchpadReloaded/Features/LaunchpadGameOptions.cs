@@ -1,3 +1,4 @@
+using System;
 using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
@@ -45,7 +46,7 @@ public class LaunchpadGameOptions
     {
         GameModes = new CustomStringOption("Gamemode", 0, ["Default", "Battle Royale"])
         {
-            ChangedEvent = CustomGameModeManager.SetGameMode
+            ChangedEvent = (index, value) => CustomGameModeManager.SetGameMode(index)
         };
 
         VotingType = new CustomStringOption("Voting Type", 0, ["Classic", "Multiple", "Chance", "Combined"]);
@@ -120,11 +121,16 @@ public class LaunchpadGameOptions
 
         Character = new CustomStringOption("Character", 0, ["Default", "Horse", "Long"])
         {
-            ChangedEvent = i =>
+            ChangedEvent = (index, value) =>
             {
+                if (!Enum.TryParse(value, out PlayerBodyTypes x))
+                {
+                    return;
+                }
+                
                 foreach (var plr in PlayerControl.AllPlayerControls)
                 {
-                    plr.SetBodyType(i);
+                    plr.SetBodyType((int)x);
                 }
             }
         };
