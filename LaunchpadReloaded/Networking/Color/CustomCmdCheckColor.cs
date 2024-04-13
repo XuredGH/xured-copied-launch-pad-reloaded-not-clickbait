@@ -44,14 +44,14 @@ public class CustomCmdCheckColor(LaunchpadReloadedPlugin plugin, uint id) : Play
         
         var num = 0;
         while (num++ < 127 && (gradColor >= Palette.PlayerColors.Length || allPlayers.Any(p =>
-                   !p.Disconnected && p.PlayerId != source.PlayerId && !VerifyColor(bodyColor, gradColor))))
+                   !p.Disconnected && p.PlayerId != source.PlayerId && !VerifyColor(bodyColor, gradColor, p.PlayerId))))
         {
             gradColor = (byte) ((gradColor + 1) % Palette.PlayerColors.Length);
         }
         
         num = 0;
         while (num++ < 127 && (bodyColor >= Palette.PlayerColors.Length || allPlayers.Any(p =>
-                   !p.Disconnected && p.PlayerId != source.PlayerId && !VerifyColor(bodyColor, gradColor))))
+                   !p.Disconnected && p.PlayerId != source.PlayerId && !VerifyColor(bodyColor, gradColor, p.PlayerId))))
         {
             bodyColor = (byte) ((bodyColor + 1) % Palette.PlayerColors.Length);
         }
@@ -59,31 +59,29 @@ public class CustomCmdCheckColor(LaunchpadReloadedPlugin plugin, uint id) : Play
         Rpc<CustomRpcSetColor>.Instance.Send(source, new CustomColorData(bodyColor, gradColor));
     }
 
-    private static bool VerifyColor(byte requestedColor, byte requestedGradient)
+    private static bool VerifyColor(byte requestedColor, byte requestedGradient, byte playerId)
     {
-        var allPlayers = GameData.Instance.AllPlayers;
-        
-        foreach (var data in allPlayers)
+        var data = GameData.Instance.GetPlayerById(playerId);
+    
+        if (!GradientManager.TryGetColor(playerId, out var gradColor))
         {
-            if (!GradientManager.TryGetColor(data.PlayerId, out var gradColor))
-            {
-                Logger<LaunchpadReloadedPlugin>.Error($"Error getting gradient for player {data.PlayerName}");
-                if (requestedColor == data.DefaultOutfit.ColorId)
-                {
-                    return false;
-                }
-            }
-
-            if (requestedColor == data.DefaultOutfit.ColorId && requestedGradient == gradColor)
-            {
-                return false;
-            }
-            
-            if (requestedColor == gradColor && requestedGradient == data.DefaultOutfit.ColorId)
+            Logger<LaunchpadReloadedPlugin>.Error($"Error getting gradient for player {data.PlayerName}");
+            if (requestedColor == data.DefaultOutfit.ColorId)
             {
                 return false;
             }
         }
+
+        if (requestedColor == data.DefaultOutfit.ColorId && requestedGradient == gradColor)
+        {
+            return false;
+        }
+        
+        if (requestedColor == gradColor && requestedGradient == data.DefaultOutfit.ColorId)
+        {
+            return false;
+        }
+    
 
         return true;
     }
