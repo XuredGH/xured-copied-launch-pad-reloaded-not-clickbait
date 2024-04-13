@@ -12,6 +12,8 @@ using TMPro;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Gamemodes;
+
+[RegisterGameMode]
 public class BattleRoyale : CustomGameMode
 {
     public override string Name => "Battle Royale";

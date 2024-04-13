@@ -40,17 +40,6 @@ public static class CustomGameModeManager
         private set => LaunchpadGameOptions.Instance.GameModes.SetValue(value.Id);
     }
 
-    // TODO: MAKE AN ATTRIBUTE
-    public static void RegisterAllGameModes()
-    {
-        foreach (var type in Assembly.GetCallingAssembly().GetTypes())
-        {
-            if (type.IsAssignableTo(typeof(CustomGameMode)) && !type.IsAbstract)
-            {
-                RegisterGameMode(type);
-            }
-        }
-    }
 
     /// <summary>
     /// Set current gamemode

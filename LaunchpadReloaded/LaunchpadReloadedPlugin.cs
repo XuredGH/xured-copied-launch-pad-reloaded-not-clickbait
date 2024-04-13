@@ -35,8 +35,7 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
 
         RegisterColors();
 
-        CustomGameModeManager.RegisterAllGameModes();
-        
+        RegisterGameModeAttribute.Register(Assembly.GetExecutingAssembly());       
         RegisterCustomRoleAttribute.Register(Assembly.GetExecutingAssembly());
         RegisterButtonAttribute.Register(Assembly.GetExecutingAssembly());
 

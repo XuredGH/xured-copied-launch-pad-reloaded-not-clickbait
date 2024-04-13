@@ -1,6 +1,8 @@
 ﻿using LaunchpadReloaded.Features;
 
 namespace LaunchpadReloaded.API.GameModes;
+
+[RegisterGameMode]
 public class DefaultMode : CustomGameMode
 {
     public override string Name => "Default";
