@@ -15,7 +15,7 @@ public static class VentPatches
     /// </summary>
     [HarmonyPrefix]
     [HarmonyPatch("CanUse")]
-    public static bool CanUsePatch(Vent __instance, ref float __result, [HarmonyArgument(0)] GameData.PlayerInfo pc, [HarmonyArgument(1)] ref bool canUse, [HarmonyArgument(2)] ref bool couldUse)
+    public static bool CanUseVentPatch(Vent __instance, ref float __result, [HarmonyArgument(0)] GameData.PlayerInfo pc, [HarmonyArgument(1)] ref bool canUse, [HarmonyArgument(2)] ref bool couldUse)
     {
         if (CustomGameModeManager.ActiveMode.CanVent(__instance, pc) == false)
         {
