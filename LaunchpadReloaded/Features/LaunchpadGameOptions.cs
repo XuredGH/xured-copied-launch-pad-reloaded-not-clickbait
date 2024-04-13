@@ -3,6 +3,7 @@ using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Features.Managers;
+using LaunchpadReloaded.Features.Voting;
 using LaunchpadReloaded.Networking.Color;
 using LaunchpadReloaded.Utilities;
 using Reactor.Networking.Rpc;

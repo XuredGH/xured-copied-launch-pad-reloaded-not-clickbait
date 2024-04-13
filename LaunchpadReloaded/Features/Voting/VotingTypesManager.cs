@@ -1,14 +1,13 @@
-﻿using Reactor.Utilities.Extensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using LaunchpadReloaded.Features.Voting;
+using Reactor.Utilities.Extensions;
 using TMPro;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using Random = System.Random;
 
-namespace LaunchpadReloaded.Features.Managers;
+namespace LaunchpadReloaded.Features.Voting;
 public static class VotingTypesManager
 {
     public static VotingTypes SelectedType

@@ -114,7 +114,7 @@ public static class MeetingHudPatches
                         var num2 = __instance.discussionTimer - logicOptionsNormal.GetDiscussionTime();
                         if (AmongUsClient.Instance.AmHost && num2 >= votingTime)
                         {
-                            foreach (var player in LaunchpadPlayer.GetAllAlivePlayers())
+                            foreach (var player in LaunchpadPlayer.GetAllAlivePlayers().Where(x=>x.VoteData.VotesRemaining>0))
                             {
                                 __instance.CmdCastVote(player.player.PlayerId, (byte)SpecialVotes.ForceSkip);
                             }
@@ -260,22 +260,26 @@ public static class MeetingHudPatches
         if (plr.VoteData.VotesRemaining == 0 ||
             (plr.VoteData.VotedPlayers.Contains(suspectIdx) &&
              !LaunchpadGameOptions.Instance.AllowVotingForSamePerson.Value))
+        {
             return false;
+        }
 
         HandleVote(plr, suspectIdx);
 
         __instance.SetDirtyBit(1U);
         __instance.CheckForEndVoting();
 
-        if (plr.VoteData.VotesRemaining == 0)
+        if (plr.VoteData.VotesRemaining != 0)
         {
-            __instance.playerStates[playerId].SetVote(suspectIdx);
+            return false;
         }
-
+        
+        __instance.playerStates.First(x=>x.TargetPlayerId==playerId).SetVote(suspectIdx);
         if (suspectIdx != (byte)SpecialVotes.ForceSkip)
         {
             PlayerControl.LocalPlayer.RpcSendChatNote(playerId, ChatNoteTypes.DidVote);
         }
+
         return false;
     }
 
@@ -288,13 +292,18 @@ public static class MeetingHudPatches
 
         if (!AmongUsClient.Instance.AmHost)
         {
-            if (plr.VoteData.VotesRemaining == 0 || (plr.VoteData.VotedPlayers.Contains(suspectIdx) && !LaunchpadGameOptions.Instance.AllowVotingForSamePerson.Value)) return;
+            if (plr.VoteData.VotesRemaining == 0 ||
+                (plr.VoteData.VotedPlayers.Contains(suspectIdx) && 
+                 !LaunchpadGameOptions.Instance.AllowVotingForSamePerson.Value))
+            {
+                return;
+            }
             
             HandleVote(plr, suspectIdx);
 
             if (plr.VoteData.VotesRemaining == 0)
             {
-                __instance.playerStates[playerId].SetVote(suspectIdx);
+                __instance.playerStates.First(x=>x.TargetPlayerId==playerId).SetVote(suspectIdx);
             }
         }
 
