@@ -87,6 +87,25 @@ public static class MeetingHudPatches
         var tmp = _typeText.GetComponent<TextMeshPro>();
         tmp.text = VotingTypesManager.SelectedType != VotingTypes.Classic ? $"<size=160%>{LaunchpadPlayer.LocalPlayer.VoteData.VotesRemaining} votes left</size>\nVoting Type: {VotingTypesManager.SelectedType}" : $"<size=160%>{LaunchpadPlayer.LocalPlayer.VoteData.VotesRemaining} votes left</size>";
 
+        var logicOptionsNormal = GameManager.Instance.LogicOptions.TryCast<LogicOptionsNormal>();
+                
+        if (logicOptionsNormal is not null)
+        {
+            var votingTime = logicOptionsNormal.GetVotingTime();
+            if (votingTime > 0)
+            {
+                var num2 = __instance.discussionTimer - logicOptionsNormal.GetDiscussionTime();
+                if (AmongUsClient.Instance.AmHost && num2 >= votingTime)
+                {
+                    foreach (var player in LaunchpadPlayer.GetAllAlivePlayers().Where(x=>x.VoteData.VotesRemaining>0))
+                    {
+                        __instance.CastVote(player.player.PlayerId, (byte)SpecialVotes.Confirm);
+                    }
+                }
+            }
+            
+        }
+        
         if (PlayerControl.LocalPlayer.Data.IsDead)
         {
             if (_confirmVotes) _confirmVotes.SetDisabled();
@@ -95,8 +114,11 @@ public static class MeetingHudPatches
             {
                 return;
             }
-            
-            foreach (var voteArea in __instance.playerStates.Where(state => !state.resultsShowing)) voteArea.ClearForResults();
+
+            foreach (var voteArea in __instance.playerStates.Where(state => !state.resultsShowing))
+            {
+                voteArea.ClearForResults();
+            }
 
             return;
         }
@@ -115,24 +137,6 @@ public static class MeetingHudPatches
                     _typeText.gameObject.SetActive(true);
                     if (_confirmVotes) _confirmVotes.SetEnabled();
                 } 
-                var logicOptionsNormal = GameManager.Instance.LogicOptions.TryCast<LogicOptionsNormal>();
-                
-                if (logicOptionsNormal is not null)
-                {
-                    var votingTime = logicOptionsNormal.GetVotingTime();
-                    if (votingTime > 0)
-                    {
-                        var num2 = __instance.discussionTimer - logicOptionsNormal.GetDiscussionTime();
-                        if (AmongUsClient.Instance.AmHost && num2 >= votingTime)
-                        {
-                            foreach (var player in LaunchpadPlayer.GetAllAlivePlayers().Where(x=>x.VoteData.VotesRemaining>0))
-                            {
-                                __instance.CmdCastVote(player.player.PlayerId, (byte)SpecialVotes.ForceSkip);
-                            }
-                        }
-                    }
-            
-                }
                 break;
 
             case MeetingHud.VoteStates.Results:
@@ -152,7 +156,7 @@ public static class MeetingHudPatches
     [HarmonyPatch(nameof(MeetingHud.CheckForEndVoting))]
     public static bool EndCheck(MeetingHud __instance)
     {
-        if (LaunchpadPlayer.GetAllAlivePlayers().Any(plr => plr.VoteData.VotesRemaining > 0 && !plr.player.Data.IsDead))
+        if (LaunchpadPlayer.GetAllAlivePlayers().Any(plr => plr.VoteData.VotesRemaining > 0))
         {
             return false;
         }
@@ -252,9 +256,9 @@ public static class MeetingHudPatches
             case (byte)SpecialVotes.Confirm:
                 plr.VoteData.VotesRemaining = 0;
                 break;
-            case (byte)SpecialVotes.ForceSkip:
+            case (byte)SpecialVotes.Skip:
                 plr.VoteData.VotesRemaining = 0;
-                plr.VoteData.VotedPlayers.Clear();
+                plr.VoteData.VotedPlayers.Add(suspectIdx);
                 break;
             default:
                 plr.VoteData.VotesRemaining--;
@@ -286,10 +290,7 @@ public static class MeetingHudPatches
         }
         
         __instance.playerStates.First(x=>x.TargetPlayerId==playerId).SetVote(suspectIdx);
-        if (suspectIdx != (byte)SpecialVotes.ForceSkip)
-        {
-            PlayerControl.LocalPlayer.RpcSendChatNote(playerId, ChatNoteTypes.DidVote);
-        }
+        PlayerControl.LocalPlayer.RpcSendChatNote(playerId, ChatNoteTypes.DidVote);
 
         return false;
     }

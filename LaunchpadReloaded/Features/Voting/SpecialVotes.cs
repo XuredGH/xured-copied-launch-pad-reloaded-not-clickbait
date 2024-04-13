@@ -3,6 +3,5 @@
 public enum SpecialVotes : byte
 {
     Confirm = 250,
-    Skip = 253,
-    ForceSkip = 255
+    Skip = 253
 }
