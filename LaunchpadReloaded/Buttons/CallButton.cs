@@ -2,10 +2,12 @@
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Roles;
+using Reactor.Utilities;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
 
+[RegisterButton]
 public class CallButton : CustomActionButton
 {
     public override string Name => "CALL";
@@ -23,6 +25,18 @@ public class CallButton : CustomActionButton
 
     protected override void OnClick()
     {
-        PlayerControl.LocalPlayer.CmdReportDeadBody(null);
+        var bt = ShipStatus.Instance.EmergencyButton;
+        
+        PlayerControl.LocalPlayer.NetTransform.Halt();
+        var minigame = Object.Instantiate(bt.MinigamePrefab, Camera.main.transform, false);
+        
+        var taskAdderGame = minigame as TaskAdderGame;
+        if (taskAdderGame != null)
+        {
+            taskAdderGame.SafePositionWorld = bt.SafePositionLocal + (Vector2)bt.transform.position;
+        }
+
+        minigame.transform.localPosition = new Vector3(0f, 0f, -50f);
+        minigame.Begin(null);
     }
 }

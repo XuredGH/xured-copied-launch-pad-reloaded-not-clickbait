@@ -4,7 +4,7 @@ using LaunchpadReloaded.API.Roles;
 namespace LaunchpadReloaded.Patches.Roles;
 
 [HarmonyPatch(typeof(RoleOptionSetting))]
-public static class RoleOptionSettingsPatch
+public static class RoleOptionSettingPatch
 {
     /// <summary>
     /// Update the role details screen in role settings for Launchpad roles

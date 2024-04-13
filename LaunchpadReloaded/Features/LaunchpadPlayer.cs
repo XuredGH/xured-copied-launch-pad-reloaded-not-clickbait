@@ -18,7 +18,7 @@ public class LaunchpadPlayer(IntPtr ptr) : MonoBehaviour(ptr)
 
     public CustomVoteData VoteData;
     public DeadPlayerData DeadData;
-    public bool ShowFootsteps = false;
+    public bool ShowFootsteps;
     public static LaunchpadPlayer LocalPlayer { get; private set; }
     public static LaunchpadPlayer GetById(byte id) => GameData.Instance.GetPlayerById(id).Object.GetLpPlayer();
     public static IEnumerable<LaunchpadPlayer> GetAllPlayers() => PlayerControl.AllPlayerControls.ToArray().Select(player => player.GetLpPlayer());

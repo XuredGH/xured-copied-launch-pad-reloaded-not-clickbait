@@ -1,4 +1,5 @@
 using AmongUs.GameOptions;
+using Il2CppInterop.Runtime.Attributes;
 using Il2CppSystem.Text;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
@@ -9,6 +10,7 @@ using UnityEngine;
 namespace LaunchpadReloaded.Roles;
 
 [RegisterInIl2Cpp]
+[RegisterCustomRole]
 public class JesterRole(System.IntPtr ptr) : RoleBehaviour(ptr), ICustomRole
 {
     public string RoleName => "Jester";
@@ -22,6 +24,8 @@ public class JesterRole(System.IntPtr ptr) : RoleBehaviour(ptr), ICustomRole
     public bool CanUseVent => CanUseVents?.Value ?? true;
     public RoleTypes GhostRole => (RoleTypes)LaunchpadRoles.OutcastGhost;
     public override bool IsDead => false;
+    
+    [HideFromIl2Cpp]
     public LoadableAsset<Sprite> Icon => LaunchpadAssets.JesterIcon;
 
     public override void AppendTaskHint(StringBuilder taskStringBuilder) { }
@@ -41,14 +45,14 @@ public class JesterRole(System.IntPtr ptr) : RoleBehaviour(ptr), ICustomRole
             return false;
         }
 
-        Console console = usable.TryCast<Console>();
+        var console = usable.TryCast<Console>();
         return !(console != null) || console.AllowImpostor;
     }
 
     public override void SpawnTaskHeader(PlayerControl playerControl)
     {
         if (playerControl != PlayerControl.LocalPlayer) return;
-        ImportantTextTask orCreateTask = PlayerTask.GetOrCreateTask<ImportantTextTask>(playerControl, 0);
+        var orCreateTask = PlayerTask.GetOrCreateTask<ImportantTextTask>(playerControl, 0);
         orCreateTask.Text = string.Concat(new string[]
             {
                 LaunchpadPalette.JesterColor.ToTextColor(),

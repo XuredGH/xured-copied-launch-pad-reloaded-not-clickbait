@@ -25,8 +25,8 @@ public class InvestigateButton : CustomActionButton
 
     protected override void OnClick()
     {
-        GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(LaunchpadAssets.DetectiveGame.LoadAsset(), HudManager.Instance.transform);
-        JournalMinigame minigame = gameObject.GetComponent<JournalMinigame>();
+        var gameObject = UnityEngine.Object.Instantiate<GameObject>(LaunchpadAssets.DetectiveGame.LoadAsset(), HudManager.Instance.transform);
+        var minigame = gameObject.GetComponent<JournalMinigame>();
         minigame.Open(LaunchpadPlayer.GetById(DeadBodyTarget.ParentId));
     }
 }

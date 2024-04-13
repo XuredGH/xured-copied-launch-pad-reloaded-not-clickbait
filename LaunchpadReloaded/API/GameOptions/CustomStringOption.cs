@@ -15,7 +15,7 @@ public class CustomStringOption : AbstractGameOption
     public int Default { get; }
     public string[] Options { get; private set; }
     public ConfigEntry<int> Config { get; }
-    public Action<int> ChangedEvent { get; init; }
+    public Action<int, string> ChangedEvent { get; init; }
     public CustomStringOption(string title, int defaultValue, string[] options, Type role = null, bool save = true) : base(title, role, save)
     {
         IndexValue = defaultValue;
@@ -40,7 +40,7 @@ public class CustomStringOption : AbstractGameOption
 
     public void SetValue(int newValue)
     {
-        if (Save)
+        if (Save && (!AmongUsClient.Instance || AmongUsClient.Instance.AmHost))
         {
             try
             {
@@ -64,7 +64,7 @@ public class CustomStringOption : AbstractGameOption
 
         if (oldValue != newValue)
         {
-            ChangedEvent?.Invoke(newValue);
+            ChangedEvent?.Invoke(newValue, Value);
         }
     }
 

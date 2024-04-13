@@ -32,7 +32,7 @@ public class CustomToggleOption : AbstractGameOption
 
     public void SetValue(bool newValue)
     {
-        if (Save)
+        if (Save && (!AmongUsClient.Instance || AmongUsClient.Instance.AmHost))
         {
             try
             {

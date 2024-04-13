@@ -28,8 +28,8 @@ public static class GameOptionsMenuPatch
     }
 
     private static GameSettingMenu menu;
-
-
+    
+    
     /// <summary>
     /// Set the position and offset of all custom game options
     /// </summary>
@@ -40,7 +40,7 @@ public static class GameOptionsMenuPatch
         {
             menu = Object.FindObjectsOfType<GameSettingMenu>().First();
         }
-
+        
         if (menu.RegularGameSettings.active || menu.RolesSettings.gameObject.active || menu.HideNSeekSettings.active)
         {
             return;

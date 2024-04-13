@@ -1,4 +1,5 @@
 ﻿using System;
+using Il2CppInterop.Runtime.Attributes;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Features;
@@ -8,6 +9,7 @@ using UnityEngine;
 namespace LaunchpadReloaded.Roles;
 
 [RegisterInIl2Cpp]
+[RegisterCustomRole]
 public class MedicRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
 {
     public string RoleName => "Medic";
@@ -18,6 +20,8 @@ public class MedicRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
     public RoleTeamTypes Team => RoleTeamTypes.Crewmate;
     public override bool IsDead => false;
     public bool TargetsBodies => true;
+    
+    [HideFromIl2Cpp]
     public LoadableAsset<Sprite> Icon => LaunchpadAssets.ReviveButton;
     public static CustomToggleOption OnlyAllowInMedbay;
     public static CustomToggleOption DragBodies;

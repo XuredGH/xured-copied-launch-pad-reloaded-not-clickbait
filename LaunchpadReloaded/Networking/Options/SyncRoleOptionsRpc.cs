@@ -1,14 +1,14 @@
-﻿using Hazel;
-using LaunchpadReloaded.Networking;
+﻿using System;
+using Hazel;
+using LaunchpadReloaded.API.Roles;
 using Reactor.Networking.Attributes;
 using Reactor.Networking.Rpc;
 using Reactor.Utilities;
 
-namespace LaunchpadReloaded.API.Roles;
+namespace LaunchpadReloaded.Networking.Options;
 
 [RegisterCustomRpc((uint)LaunchpadRpc.SyncRoleOption)]
-public class SyncRoleOptionsRpc(LaunchpadReloadedPlugin plugin, uint id)
-    : CustomRpc<LaunchpadReloadedPlugin, GameData, SyncRoleOptionsRpc.Data>(plugin, id)
+public class SyncRoleOptionsRpc(LaunchpadReloadedPlugin plugin, uint id) : PlayerCustomRpc<LaunchpadReloadedPlugin, SyncRoleOptionsRpc.Data>(plugin, id)
 {
 
     public struct Data(ushort roleId, int number, int chance)
@@ -32,15 +32,28 @@ public class SyncRoleOptionsRpc(LaunchpadReloadedPlugin plugin, uint id)
         return new Data(reader.ReadUInt16(), reader.ReadPackedInt32(), reader.ReadPackedInt32());
     }
 
-    public override void Handle(GameData innerNetObject, Data data)
+    public override void Handle(PlayerControl playerControl, Data data)
     {
+        if (AmongUsClient.Instance.HostId != playerControl.OwnerId)
+        {
+            playerControl.KickForCheating();
+            return;
+        }
+        
         if (!CustomRoleManager.CustomRoles.TryGetValue(data.RoleId, out var roleBehaviour) ||
             !CustomRoleManager.GetCustomRoleBehaviour(roleBehaviour.Role, out var role)) return;
         
         PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config.TryGetEntry<int>(role.NumConfigDefinition, out var numEntry);
         PluginSingleton<LaunchpadReloadedPlugin>.Instance.Config.TryGetEntry<int>(role.ChanceConfigDefinition, out var chanceEntry);
 
-        numEntry.Value = data.Number;
-        chanceEntry.Value = data.Chance;
+        try
+        {
+            numEntry.Value = data.Number;
+            chanceEntry.Value = data.Chance;
+        }
+        catch (Exception e)
+        {
+            Logger<LaunchpadReloadedPlugin>.Warning(e.ToString());
+        }
     }
 }

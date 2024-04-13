@@ -7,6 +7,7 @@ using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
+using PowerTools;
 using Reactor.Utilities.Extensions;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -17,6 +18,48 @@ public static class Extensions
 {
     private static readonly ContactFilter2D Filter = ContactFilter2D.CreateLegacyFilter(Constants.NotShipMask, float.MinValue, float.MaxValue);
 
+    
+    public static void SetBodyType(this PlayerControl player, int bodyType)
+    {
+        if (bodyType == 6)
+        {
+            player.MyPhysics.SetBodyType(PlayerBodyTypes.Seeker);
+            if (!LaunchpadGameOptions.Instance.ShowKnife.Value)
+            {
+                return;
+            }
+
+            var seekerHand = player.transform.FindChild("BodyForms/Seeker/SeekerHand").gameObject;
+            var hand = Object.Instantiate(seekerHand).gameObject;
+            hand.transform.SetParent(seekerHand.transform.parent);
+            hand.transform.localScale = new Vector3(2, 2, 2);
+            hand.name = "KnifeHand";
+            hand.layer = LayerMask.NameToLayer("Players");
+
+            var transform = player.transform;
+
+            hand.transform.localPosition = transform.localPosition;
+            hand.transform.position = transform.position;
+
+            var nodeSync = hand.GetComponent<SpriteAnimNodeSync>();
+            nodeSync.flipOffset = new Vector3(-1.5f, 0.5f, 0);
+            nodeSync.normalOffset = new Vector3(1.5f, 0.5f, 0);
+
+            var rend = hand.GetComponent<SpriteRenderer>();
+            rend.sprite = LaunchpadAssets.KnifeHandSprite.LoadAsset();
+
+            hand.SetActive(true);
+            return;
+        }
+
+        player.MyPhysics.SetBodyType((PlayerBodyTypes)bodyType);
+        
+        if (bodyType == (int)PlayerBodyTypes.Normal)
+        {
+            player.cosmetics.currentBodySprite.BodySprite.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
+        }
+    }
+    
     public static void SetGradientData(this GameObject gameObject, byte playerId)
     {
         var data = gameObject.GetComponent<PlayerGradientData>();

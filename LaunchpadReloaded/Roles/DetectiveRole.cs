@@ -1,8 +1,9 @@
+using System;
+using Il2CppInterop.Runtime.Attributes;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Features;
 using Reactor.Utilities.Attributes;
-using System;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
@@ -18,6 +19,8 @@ public class DetectiveRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
     public RoleTeamTypes Team => RoleTeamTypes.Crewmate;
     public override bool IsDead => false;
     public bool TargetsBodies => true;
+    
+    [HideFromIl2Cpp]
     public LoadableAsset<Sprite> Icon => LaunchpadAssets.ZoomButton;
 
     public static CustomToggleOption HideSuspects;

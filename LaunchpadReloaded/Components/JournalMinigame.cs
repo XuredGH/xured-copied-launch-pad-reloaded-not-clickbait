@@ -42,7 +42,7 @@ public class JournalMinigame(nint ptr) : Minigame(ptr)
     public void Open(LaunchpadPlayer deadPlayer)
     {
         // init body
-        TimeSpan timeSinceDeath = DateTime.Now.Subtract(deadPlayer.DeadData.DeathTime);
+        var timeSinceDeath = DateTime.Now.Subtract(deadPlayer.DeadData.DeathTime);
         DeadPlayerInfo.text = timeSinceDeath.Minutes < 1 ? $"{deadPlayer.player.Data.PlayerName}\n<size=70%>Died {timeSinceDeath.Seconds} seconds ago</size>" :
             $"{deadPlayer.player.Data.PlayerName}\n<size=70%>Died {timeSinceDeath.Minutes} minutes ago</size>";
 
@@ -57,18 +57,18 @@ public class JournalMinigame(nint ptr) : Minigame(ptr)
             return;
         }
 
-        Random rand = new Random();
-        SpriteRenderer chosenRend = Suspects[rand.Next(Suspects.Count)];
+        var rand = new Random();
+        var chosenRend = Suspects[rand.Next(Suspects.Count)];
         deadPlayer.DeadData.Killer.SetPlayerMaterialColors(chosenRend);
 
-        List<SpriteRenderer> availableSprites = Suspects;
+        var availableSprites = Suspects;
         availableSprites.Remove(chosenRend);
 
-        List<PlayerControl> sus = deadPlayer.DeadData.Suspects.Clone();
+        var sus = deadPlayer.DeadData.Suspects.Clone();
 
-        foreach (SpriteRenderer rend in availableSprites)
+        foreach (var rend in availableSprites)
         {
-            PlayerControl randPlayer = sus[rand.Next(sus.Count)];
+            var randPlayer = sus[rand.Next(sus.Count)];
             randPlayer.SetPlayerMaterialColors(rend);
             sus.Remove(randPlayer);
         }

@@ -2,7 +2,7 @@
 using HarmonyLib;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
-using LaunchpadReloaded.Networking;
+using LaunchpadReloaded.Networking.Color;
 using LaunchpadReloaded.Utilities;
 using Reactor.Networking.Rpc;
 using Reactor.Utilities.Extensions;
@@ -79,8 +79,8 @@ public static class PlayerTabPatches
             __instance.PlayerPreview.UpdateFromDataManager(PlayerMaterial.MaskType.None);
             if (__instance.HasLocalPlayer())
             {
-                Rpc<CustomCheckColorRpc>.Instance.SendTo(AmongUsClient.Instance.HostId,
-                    new CustomCheckColorRpc.Data(
+                Rpc<CustomCmdCheckColor>.Instance.SendTo(AmongUsClient.Instance.HostId,
+                    new CustomColorData(
                         (byte)PlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId, 
                         (byte)__instance.currentColor));
             }

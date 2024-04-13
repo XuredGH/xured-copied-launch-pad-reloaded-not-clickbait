@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Networking;
-using Reactor.Networking.Attributes;
 using Reactor.Utilities;
 
 namespace LaunchpadReloaded.API.GameModes;
@@ -42,28 +40,6 @@ public static class CustomGameModeManager
         private set => LaunchpadGameOptions.Instance.GameModes.SetValue(value.Id);
     }
 
-    // TODO: MAKE AN ATTRIBUTE
-    public static void RegisterAllGameModes()
-    {
-        foreach (var type in Assembly.GetCallingAssembly().GetTypes())
-        {
-            if (type.IsAssignableTo(typeof(CustomGameMode)) && !type.IsAbstract)
-            {
-                RegisterGameMode(type);
-            }
-        }
-    }
-
-    /// <summary>
-    /// Sync gamemodes via RPC
-    /// </summary>
-    /// <param name="lobby">game data</param>
-    /// <param name="id">Gamemode ID</param>
-    [MethodRpc((uint)LaunchpadRpc.SetGameMode)]
-    public static void RpcSetGameMode(GameData lobby, int id)
-    {
-        SetGameMode(id);
-    }
 
     /// <summary>
     /// Set current gamemode
@@ -100,9 +76,12 @@ public static class CustomGameModeManager
             return;
         }
 
-        if (gameMode != null)
+        if (gameMode == null)
         {
-            GameModes.Add(gameMode.Id, gameMode);
+            Logger<LaunchpadReloadedPlugin>.Error($"GAMEMODE WITH TYPE {gameModeType.Name} IS NULL");
+            return;
         }
+        
+        GameModes.Add(gameMode.Id, gameMode);
     }
 }

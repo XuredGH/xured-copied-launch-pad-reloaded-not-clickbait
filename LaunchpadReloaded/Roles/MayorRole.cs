@@ -6,7 +6,9 @@ using System;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
+
 [RegisterInIl2Cpp]
+[RegisterCustomRole]
 public class MayorRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
 {
     public string RoleName => "Mayor";

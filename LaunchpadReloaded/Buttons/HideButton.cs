@@ -8,6 +8,7 @@ using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
 
+[RegisterButton]
 public class HideButton : CustomActionButton
 {
     public override string Name => "HIDE";

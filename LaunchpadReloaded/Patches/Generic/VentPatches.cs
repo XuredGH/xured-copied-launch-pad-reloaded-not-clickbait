@@ -2,7 +2,6 @@
 using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Components;
-using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Utilities;
 using UnityEngine;
 
@@ -71,7 +70,7 @@ public static class VentPatches
         var ventBody = __instance.GetComponent<VentBodyComponent>();
         if (ventBody && ventBody.deadBody)
         {
-            PlayerControl.LocalPlayer.RpcExposeBody(__instance.Id);
+            ventBody.ExposeBody();
         }
     }
 }

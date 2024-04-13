@@ -1,6 +1,6 @@
+using System;
 using BepInEx.Configuration;
 using Reactor.Utilities;
-using System;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -50,7 +50,7 @@ public class CustomNumberOption : AbstractGameOption
     {
         newValue = Mathf.Clamp(newValue, Min, Max);
 
-        if (Save)
+        if (Save && (!AmongUsClient.Instance || AmongUsClient.Instance.AmHost))
         {
             try
             {

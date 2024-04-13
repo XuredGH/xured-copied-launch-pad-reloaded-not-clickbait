@@ -12,6 +12,7 @@ public static class ScannerRpc
     {
         if (playerControl.Data.Role is not TrackerRole)
         {
+            playerControl.KickForCheating();
             return;
         }
         

@@ -2,7 +2,7 @@
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Utilities;
 
-namespace LaunchpadReloaded.Patches.VotingTypes;
+namespace LaunchpadReloaded.Patches.Voting;
 [HarmonyPatch(typeof(DummyBehaviour))]
 public static class DummyBehaviourPatches
 {

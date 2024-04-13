@@ -39,7 +39,7 @@ public abstract class CustomActionButton
         }
 
         UsesLeft = MaxUses;
-        Timer = 0;
+        Timer = Cooldown;
         EffectActive = false;
 
         Button = Object.Instantiate(HudManager.Instance.AbilityButton, parent);
@@ -59,6 +59,17 @@ public abstract class CustomActionButton
         pb.OnClick.AddListener((UnityAction)ClickHandler);
     }
 
+    public void ResetCooldown()
+    {
+        Timer = Cooldown;
+        if (EffectActive)
+        {
+            OnEffectEnd();
+        }
+        
+        EffectActive = false;
+    }
+    
     public void OverrideSprite(Sprite sprite)
     {
         Button.graphic.sprite = sprite;

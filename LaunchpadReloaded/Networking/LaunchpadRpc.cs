@@ -8,9 +8,6 @@ public enum LaunchpadRpc : uint
     StopDrag,
     RemoveBody,
     HideBodyInVent,
-    ExposeBody,
-    SetGameMode,
-    SetBodyType,
     CreateScanner,
     Revive,
     SyncGameOptions,
@@ -19,6 +16,7 @@ public enum LaunchpadRpc : uint
     CustomMurder,
     CustomCheckColor,
     CustomSetColor,
+    SyncAllColors,
     RemoveVote,
     PopulateResults
 }

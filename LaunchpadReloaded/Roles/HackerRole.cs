@@ -1,4 +1,5 @@
 using System;
+using Il2CppInterop.Runtime.Attributes;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Features;
@@ -8,6 +9,7 @@ using UnityEngine;
 namespace LaunchpadReloaded.Roles;
 
 [RegisterInIl2Cpp]
+[RegisterCustomRole]
 public class HackerRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
 {
     public string RoleName => "Hacker";
@@ -17,6 +19,8 @@ public class HackerRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
     public Color RoleColor => LaunchpadPalette.HackerColor;
     public RoleTeamTypes Team => RoleTeamTypes.Impostor;
     public override bool IsDead => false;
+    
+    [HideFromIl2Cpp]
     public LoadableAsset<Sprite> Icon => LaunchpadAssets.HackButton;
 
     public static CustomNumberOption HackCooldown;

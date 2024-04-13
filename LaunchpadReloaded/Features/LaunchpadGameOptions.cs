@@ -1,8 +1,11 @@
+using System;
 using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.API.GameOptions;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Features.Managers;
-using LaunchpadReloaded.Networking;
+using LaunchpadReloaded.Features.Voting;
+using LaunchpadReloaded.Networking.Color;
+using LaunchpadReloaded.Utilities;
 using Reactor.Networking.Rpc;
 
 namespace LaunchpadReloaded.Features;
@@ -44,14 +47,7 @@ public class LaunchpadGameOptions
     {
         GameModes = new CustomStringOption("Gamemode", 0, ["Default", "Battle Royale"])
         {
-            ChangedEvent = i =>
-            {
-                if (!AmongUsClient.Instance || !AmongUsClient.Instance.AmHost)
-                {
-                    return;
-                }
-                CustomGameModeManager.RpcSetGameMode(GameData.Instance, i);
-            }
+            ChangedEvent = (index, value) => CustomGameModeManager.SetGameMode(index)
         };
 
         VotingType = new CustomStringOption("Voting Type", 0, ["Classic", "Multiple", "Chance", "Combined"]);
@@ -61,14 +57,14 @@ public class LaunchpadGameOptions
             Hidden = () => !VotingTypesManager.CanVoteMultiple()
         };
 
-        HideVotingIcons = new CustomToggleOption("Hide Voting Icons", false)
-        {
-            Hidden = () => !VotingTypesManager.UseChance() && !ShowPercentages.Value
-        };
-
         ShowPercentages = new CustomToggleOption("Show Percentages", false)
         {
             Hidden = VotingTypesManager.UseChance
+        };
+
+        HideVotingIcons = new CustomToggleOption("Hide Voting Icons", false)
+        {
+            Hidden = () => !VotingTypesManager.UseChance() && !ShowPercentages.Value
         };
 
         AllowConfirmingVotes = new CustomToggleOption("Allow Confirming Votes", false)
@@ -116,9 +112,9 @@ public class LaunchpadGameOptions
 
                 foreach (var player in PlayerControl.AllPlayerControls)
                 {
-                    if (GradientManager.TryGetColor(player.PlayerId, out var grad))// && !player.AmOwner)
+                    if (GradientManager.TryGetColor(player.PlayerId, out var grad) && !player.AmOwner)
                     {
-                        Rpc<CustomCheckColorRpc>.Instance.Handle(player, new CustomCheckColorRpc.Data((byte)player.Data.DefaultOutfit.ColorId, grad));
+                        Rpc<CustomCmdCheckColor>.Instance.Handle(player, new CustomColorData((byte)player.Data.DefaultOutfit.ColorId, grad));
                     }
                 }
             }
@@ -126,30 +122,16 @@ public class LaunchpadGameOptions
 
         Character = new CustomStringOption("Character", 0, ["Default", "Horse", "Long"])
         {
-            ChangedEvent = i =>
+            ChangedEvent = (index, value) =>
             {
-                PlayerBodyTypes bodyType;
-                switch (Character?.Options[i])
+                if (!Enum.TryParse(value, out PlayerBodyTypes x))
                 {
-                    default:
-                    case "Default":
-                        bodyType = PlayerBodyTypes.Normal;
-                        break;
-                    case "Horse":
-                        bodyType = PlayerBodyTypes.Horse;
-                        break;
-                    case "Long":
-                        bodyType = PlayerBodyTypes.Long;
-                        break;
+                    return;
                 }
-
+                
                 foreach (var plr in PlayerControl.AllPlayerControls)
                 {
-                    plr.MyPhysics.SetBodyType(bodyType);
-                    if (bodyType == PlayerBodyTypes.Normal)
-                    {
-                        plr.cosmetics.currentBodySprite.BodySprite.transform.localScale = new(0.5f, 0.5f, 1f);
-                    }
+                    plr.SetBodyType((int)x);
                 }
             }
         };

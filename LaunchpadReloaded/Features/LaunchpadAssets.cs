@@ -1,7 +1,7 @@
-﻿using LaunchpadReloaded.Utilities;
+﻿using System;
+using LaunchpadReloaded.Utilities;
 using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
-using System;
 using UnityEngine;
 using Object = UnityEngine.Object;
 

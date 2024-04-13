@@ -12,12 +12,6 @@
         <GamePlatform Condition="'$(GamePlatform)' == ''">Steam</GamePlatform>
         <GameVersion Condition="'$(GamePlatform)' == 'Steam'">2024.3.5</GameVersion>
     </PropertyGroup>
-
-    <ItemGroup>
-      <None Remove="Resources\assets-win-x86.bundle" />
-      <None Remove="Resources\Footstep.png" />
-      <None Remove="Resources\Instinct.png" />
-    </ItemGroup>
     
     <ItemGroup>
         <PackageReference Include="Reactor" Version="2.2.0" />
@@ -34,17 +28,8 @@
     <ItemGroup>
       <EmbeddedResource Include="Resources\assets-win-x86.bundle" />
       <EmbeddedResource Include="Resources\Footstep.png" />
-      <EmbeddedResource Include="Resources\Hack.png" />
       <EmbeddedResource Include="Resources\Instinct.png" />
-      <EmbeddedResource Include="Resources\Jester.png" />
-      <EmbeddedResource Include="Resources\KnifeHand.png" />
       <EmbeddedResource Include="Resources\Investigate.png" />
-      <EmbeddedResource Include="Resources\Map.png" />
-      <EmbeddedResource Include="Resources\Node.png" />
-      <EmbeddedResource Include="Resources\Place_Scanner.png" />
-      <EmbeddedResource Include="Resources\Scanner.png" />
-      <EmbeddedResource Include="Resources\Shoot.png" />
-      <EmbeddedResource Include="Resources\Track.png" />
     </ItemGroup>
     
 

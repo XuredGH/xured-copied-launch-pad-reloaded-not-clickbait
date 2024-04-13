@@ -3,10 +3,13 @@ using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Features;
 using Reactor.Utilities.Attributes;
 using System;
+using Il2CppInterop.Runtime.Attributes;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
+
 [RegisterInIl2Cpp]
+[RegisterCustomRole]
 public class SheriffRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
 {
     public string RoleName => "Sheriff";
@@ -21,6 +24,8 @@ public class SheriffRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
 
     public RoleTeamTypes Team => RoleTeamTypes.Crewmate;
     public bool CanKill => true;
+    
+    [HideFromIl2Cpp]
     public LoadableAsset<Sprite> Icon => LaunchpadAssets.ShootButton;
 
     public static CustomNumberOption ShootCooldown;
