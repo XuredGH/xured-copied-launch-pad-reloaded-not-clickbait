@@ -6,6 +6,8 @@ using LaunchpadReloaded.Roles;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
+
+[RegisterButton]
 public class HackButton : CustomActionButton
 {
     public override string Name => "HACK";

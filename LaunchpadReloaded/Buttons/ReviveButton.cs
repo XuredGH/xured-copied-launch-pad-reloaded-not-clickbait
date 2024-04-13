@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
 
+[RegisterButton]
 public class ReviveButton : CustomActionButton
 {
     public override string Name => "REVIVE";

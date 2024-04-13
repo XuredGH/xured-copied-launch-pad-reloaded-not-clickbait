@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using HarmonyLib;
+using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Features.Voting;
@@ -20,6 +21,16 @@ public static class MeetingHudPatches
     private static GameObject _typeText;
     private static PlayerVoteArea _confirmVotes;
 
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(MeetingHud.VotingComplete))]
+    public static void VotingCompletePostfix()
+    {
+        foreach (var customActionButton in CustomButtonManager.CustomButtons)
+        {
+            customActionButton.ResetCooldown();
+        }
+    }
+    
     [HarmonyPostfix]
     [HarmonyPatch(nameof(MeetingHud.Start))]
     public static void AwakePostfix(MeetingHud __instance)

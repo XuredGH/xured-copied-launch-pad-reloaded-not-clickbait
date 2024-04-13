@@ -6,6 +6,8 @@ using LaunchpadReloaded.Utilities;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
+
+[RegisterButton]
 public class TrackButton : CustomActionButton
 {
     public override string Name => "Place Tracker";

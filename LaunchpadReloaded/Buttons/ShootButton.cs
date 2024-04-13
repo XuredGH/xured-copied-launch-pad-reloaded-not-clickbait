@@ -5,6 +5,8 @@ using LaunchpadReloaded.Utilities;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
+
+[RegisterButton]
 public class ShootButton : CustomActionButton
 {
     public override string Name => "Shoot";

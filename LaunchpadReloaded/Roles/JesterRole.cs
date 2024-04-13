@@ -10,6 +10,7 @@ using UnityEngine;
 namespace LaunchpadReloaded.Roles;
 
 [RegisterInIl2Cpp]
+[RegisterCustomRole]
 public class JesterRole(System.IntPtr ptr) : RoleBehaviour(ptr), ICustomRole
 {
     public string RoleName => "Jester";

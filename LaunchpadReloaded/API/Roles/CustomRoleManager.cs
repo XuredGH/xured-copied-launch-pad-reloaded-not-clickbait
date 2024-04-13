@@ -24,18 +24,7 @@ public static class CustomRoleManager
         RoleManager.Instance.AllRoles = RoleManager.Instance.AllRoles.Concat(CustomRoles.Values).ToArray();
     }
 
-    public static void RegisterAllRoles()
-    {
-        foreach (var type in Assembly.GetCallingAssembly().GetTypes())
-        {
-            if (type.IsAssignableTo(typeof(ICustomRole)))
-            {
-                RegisterRole(type);
-            }
-        }
-    }
-
-    public static void RegisterRole(Type roleType)
+    internal static void RegisterRole(Type roleType)
     {
         if (!(typeof(RoleBehaviour).IsAssignableFrom(roleType) && typeof(ICustomRole).IsAssignableFrom(roleType)))
         {

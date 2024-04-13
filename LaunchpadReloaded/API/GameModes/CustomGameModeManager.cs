@@ -40,17 +40,6 @@ public static class CustomGameModeManager
         private set => LaunchpadGameOptions.Instance.GameModes.SetValue(value.Id);
     }
 
-    // TODO: MAKE AN ATTRIBUTE
-    public static void RegisterAllGameModes()
-    {
-        foreach (var type in Assembly.GetCallingAssembly().GetTypes())
-        {
-            if (type.IsAssignableTo(typeof(CustomGameMode)) && !type.IsAbstract)
-            {
-                RegisterGameMode(type);
-            }
-        }
-    }
 
     /// <summary>
     /// Set current gamemode
@@ -87,9 +76,12 @@ public static class CustomGameModeManager
             return;
         }
 
-        if (gameMode != null)
+        if (gameMode == null)
         {
-            GameModes.Add(gameMode.Id, gameMode);
+            Logger<LaunchpadReloadedPlugin>.Error($"GAMEMODE WITH TYPE {gameModeType.Name} IS NULL");
+            return;
         }
+        
+        GameModes.Add(gameMode.Id, gameMode);
     }
 }
