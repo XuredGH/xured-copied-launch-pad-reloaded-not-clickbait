@@ -90,7 +90,7 @@ public static class PlayerControlPatches
                     continue;
                 }
 
-                button.UpdateHandler(__instance);
+                button.FixedUpdateHandler(__instance);
             }
         }
 

@@ -4,6 +4,7 @@ using LaunchpadReloaded.Features;
 using Reactor.Utilities.Attributes;
 using System;
 using Il2CppInterop.Runtime.Attributes;
+using LaunchpadReloaded.Features.Managers;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
@@ -28,6 +29,17 @@ public class JanitorRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
     public static CustomNumberOption HideUses;
     public static CustomToggleOption CleanInsteadOfHide;
     public static CustomOptionGroup Group;
+
+
+    public override bool CanUse(IUsable usable)
+    {
+        if (!GameManager.Instance.LogicUsables.CanUse(usable, Player))
+        {
+            return false;
+        }
+        var console = usable.TryCast<Console>();
+        return !(console != null) || console.AllowImpostor && !DragManager.Instance.DraggingPlayers.ContainsKey(PlayerControl.LocalPlayer.PlayerId);
+    }
 
     public void CreateOptions()
     {

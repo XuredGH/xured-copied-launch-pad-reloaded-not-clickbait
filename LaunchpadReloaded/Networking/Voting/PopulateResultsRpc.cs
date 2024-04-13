@@ -12,10 +12,10 @@ public class PopulateResultsRpc(LaunchpadReloadedPlugin plugin, uint id) : Playe
 {
     public override RpcLocalHandling LocalHandling => RpcLocalHandling.Before;
 
-    public override void Write(MessageWriter writer, CustomVote[] Votes)
+    public override void Write(MessageWriter writer, CustomVote[] votes)
     {
-        writer.WritePacked((uint)Votes.Length);
-        foreach (var t in Votes)
+        writer.WritePacked(votes.Length);
+        foreach (var t in votes)
         {
             writer.Write(t.Voter);
             writer.Write(t.Suspect);
@@ -24,7 +24,7 @@ public class PopulateResultsRpc(LaunchpadReloadedPlugin plugin, uint id) : Playe
 
     public override CustomVote[] Read(MessageReader reader)
     {
-        var votes = new CustomVote[reader.ReadPackedUInt32()];
+        var votes = new CustomVote[reader.ReadPackedInt32()];
         
         for (var i = 0; i < votes.Length; i++)
         {

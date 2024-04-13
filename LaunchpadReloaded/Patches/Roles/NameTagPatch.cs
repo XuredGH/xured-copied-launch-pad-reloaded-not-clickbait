@@ -26,7 +26,7 @@ public static class NameTagPatch
             return true;
         }
 
-        if (LaunchpadGameOptions.Instance.OnlyShowRoleColor.Value || CustomGameModeManager.ActiveMode is BattleRoyale || GameManager.Instance.IsHideAndSeek())
+        if (CustomGameModeManager.ActiveMode is BattleRoyale || GameManager.Instance.IsHideAndSeek())
         {
             return true;
         }

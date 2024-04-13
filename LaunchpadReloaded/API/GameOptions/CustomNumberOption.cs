@@ -35,6 +35,7 @@ public class CustomNumberOption : AbstractGameOption
             try
             {
                 Config = LaunchpadReloadedPlugin.Instance.Config.Bind("Number Options", title, defaultValue);
+                SetValue(Save ? Config.Value : defaultValue);
             }
             catch (Exception e)
             {
@@ -43,7 +44,6 @@ public class CustomNumberOption : AbstractGameOption
         }
 
         CustomOptionsManager.CustomNumberOptions.Add(this);
-        SetValue(Save ? Config.Value : defaultValue);
     }
 
     public void SetValue(float newValue)

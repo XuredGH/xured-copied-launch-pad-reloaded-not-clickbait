@@ -105,12 +105,12 @@ public static class VotingTypesManager
 
                 var playerVoteArea = MeetingHud.Instance.playerStates[vote.Suspect];
 
-                if (!delays.TryAdd(vote.Voter, 0))
+                if (!delays.TryAdd(vote.Suspect, 0))
                 {
-                    delays[vote.Voter]++;
+                    delays[vote.Suspect]++;
                 }
                 
-                MeetingHud.Instance.BloopAVoteIcon(GameData.Instance.GetPlayerById(vote.Voter), delays[vote.Voter], playerVoteArea.transform);
+                MeetingHud.Instance.BloopAVoteIcon(GameData.Instance.GetPlayerById(vote.Voter), delays[vote.Suspect], playerVoteArea.transform);
             }
         }
 

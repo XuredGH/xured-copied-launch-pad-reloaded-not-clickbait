@@ -10,16 +10,27 @@ namespace LaunchpadReloaded.Features.Managers;
 
 public static class GradientManager
 {
-    private static readonly ConfigEntry<int> GradientConfig =
-        LaunchpadReloadedPlugin.Instance.Config.Bind("Gradient", "Secondary", 0, "Gradient ID");
+    private static readonly ConfigEntry<int> GradientConfig;
+
+    static GradientManager()
+    {
+        try
+        {
+            GradientConfig = LaunchpadReloadedPlugin.Instance.Config.Bind("Gradient", "Secondary", 0, "Gradient ID");
+        }
+        catch (Exception e)
+        {
+            Logger<LaunchpadReloadedPlugin>.Warning(e.ToString());
+        }
+    }
 
     public static int LocalGradientId
     {
-        get => GradientConfig.Value;
+        get => GradientConfig?.Value ?? 0;
         set
         {
             try
-            {
+            { 
                 GradientConfig.Value = value;
             }
             catch (Exception e)

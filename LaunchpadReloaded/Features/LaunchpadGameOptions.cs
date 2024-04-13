@@ -27,7 +27,6 @@ public class LaunchpadGameOptions
     public readonly CustomOptionGroup VotingGroup;
 
     // General Options
-    public readonly CustomToggleOption OnlyShowRoleColor;
     public readonly CustomToggleOption DisableMeetingTeleport;
     public readonly CustomToggleOption GhostsSeeRoles;
     public readonly CustomOptionGroup GeneralGroup;
@@ -89,12 +88,10 @@ public class LaunchpadGameOptions
         };
 
         DisableMeetingTeleport = new CustomToggleOption("Disable Meeting Teleport", false);
-
-        OnlyShowRoleColor = new CustomToggleOption("Reveal Crewmate Roles", false);
-
+        
         GhostsSeeRoles = new CustomToggleOption("Ghosts See Roles", true);
         GeneralGroup = new CustomOptionGroup("General Options",
-            toggleOpt: [BanCheaters, OnlyShowRoleColor, DisableMeetingTeleport, GhostsSeeRoles],
+            toggleOpt: [BanCheaters, DisableMeetingTeleport, GhostsSeeRoles],
             stringOpt: [],
             numberOpt: []);
 
@@ -120,7 +117,7 @@ public class LaunchpadGameOptions
             }
         };
 
-        Character = new CustomStringOption("Character", 0, ["Default", "Horse", "Long"])
+        Character = new CustomStringOption("Character", 0, ["Normal", "Horse", "Long"])
         {
             ChangedEvent = (index, value) =>
             {

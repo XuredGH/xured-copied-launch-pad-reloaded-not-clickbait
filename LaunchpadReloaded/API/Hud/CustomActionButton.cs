@@ -86,7 +86,7 @@ public abstract class CustomActionButton
 
     public abstract bool Enabled(RoleBehaviour role);
 
-    protected virtual void OnEffectEnd() { }
+    public virtual void OnEffectEnd() { }
 
     private bool CanUseHandler()
     {
@@ -129,7 +129,7 @@ public abstract class CustomActionButton
         }
     }
 
-    public void UpdateHandler(PlayerControl playerControl)
+    public void FixedUpdateHandler(PlayerControl playerControl)
     {
         if (Timer >= 0)
         {
@@ -156,7 +156,7 @@ public abstract class CustomActionButton
         playerControl.UpdateBodies(playerControl.Data.Role.TeamColor, ref DeadBodyTarget);
         FixedUpdate(playerControl);
     }
-
+    
     private void EffectEndHandler()
     {
         EffectActive = false;

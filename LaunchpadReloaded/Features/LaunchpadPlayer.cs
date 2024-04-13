@@ -41,7 +41,7 @@ public class LaunchpadPlayer(IntPtr ptr) : MonoBehaviour(ptr)
 
     private void Update()
     {
-        if (LocalPlayer.ShowFootsteps && PlayerControl.LocalPlayer.Data.Role is DetectiveRole)
+        if (LocalPlayer.ShowFootsteps && PlayerControl.LocalPlayer.Data is not null && PlayerControl.LocalPlayer.Data.Role is DetectiveRole)
         {
             if (Vector3.Distance(lastPos, transform.position) > 1)
             {
@@ -116,7 +116,6 @@ public class LaunchpadPlayer(IntPtr ptr) : MonoBehaviour(ptr)
     {
         public readonly List<byte> VotedPlayers = [];
         public int VotesRemaining = (int)LaunchpadGameOptions.Instance.MaxVotes.Value;
-        public bool DidSkip = false;
     }
 
     public struct DeadPlayerData()
