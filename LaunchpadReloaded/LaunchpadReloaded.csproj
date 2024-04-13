@@ -14,6 +14,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Remove="Resources\Arrow.png" />
       <None Remove="Resources\assets-win-x86.bundle" />
       <None Remove="Resources\Footstep.png" />
       <None Remove="Resources\Instinct.png" />
@@ -32,6 +33,7 @@
     </ItemGroup>
     
     <ItemGroup>
+      <EmbeddedResource Include="Resources\Arrow.png" />
       <EmbeddedResource Include="Resources\assets-win-x86.bundle" />
       <EmbeddedResource Include="Resources\Footstep.png" />
       <EmbeddedResource Include="Resources\Hack.png" />

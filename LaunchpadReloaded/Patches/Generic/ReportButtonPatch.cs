@@ -14,6 +14,6 @@ public static class ReportButtonPatch
             return true;
         }
 
-        return !HackingManager.Instance.AnyPlayerHacked();
+        return !HackingManager.Instance.AnyNodesActive();
     }
 }

@@ -1,8 +1,6 @@
 namespace LaunchpadReloaded.Networking;
 public enum LaunchpadRpc : uint
 {
-    HackPlayer,
-    UnHackPlayer,
     CreateNodes,
     StartDrag,
     StopDrag,
@@ -20,5 +18,7 @@ public enum LaunchpadRpc : uint
     CustomCheckColor,
     CustomSetColor,
     RemoveVote,
-    PopulateResults
+    PopulateResults,
+    ToggleNode,
+    UnhackPlayer
 }

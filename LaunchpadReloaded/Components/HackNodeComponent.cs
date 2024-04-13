@@ -1,5 +1,4 @@
 ﻿using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Attributes;
 using System;
@@ -26,15 +25,16 @@ public class HackNodeComponent(IntPtr ptr) : MonoBehaviour(ptr)
 
     public void Use()
     {
-        SoundManager.Instance.PlaySound(LaunchpadAssets.BeepSound.LoadAsset(), false, 0.5f);
-        PlayerControl.LocalPlayer.RpcUnHackPlayer();
+        GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(LaunchpadAssets.NodeGame.LoadAsset(), HudManager.Instance.transform);
+        NodeMinigame miniGame = gameObject.AddComponent<NodeMinigame>();
+        miniGame.Open(this);
     }
 
     public float CanUse(GameData.PlayerInfo pc, out bool canUse, out bool couldUse)
     {
         var num = float.MaxValue;
         var @object = pc.Object;
-        couldUse = !pc.IsDead && @object.CanMove && isActive && pc.IsHacked();
+        couldUse = !pc.IsDead && @object.CanMove && isActive && !(!TutorialManager.InstanceExists && PlayerControl.LocalPlayer.Data.Role.IsImpostor);
         canUse = couldUse;
         if (canUse)
         {

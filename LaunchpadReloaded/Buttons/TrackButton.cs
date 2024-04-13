@@ -50,7 +50,7 @@ public class TrackButton : CustomActionButton
         _currentTarget.cosmetics.currentBodySprite.BodySprite.material.SetColor(ShaderID.OutlineColor, Palette.CrewmateBlue);
     }
 
-    public override bool CanUse() => _currentTarget && !HackingManager.Instance.AnyPlayerHacked();
+    public override bool CanUse() => _currentTarget && !HackingManager.Instance.AnyNodesActive();
 
     protected override void OnClick()
     {

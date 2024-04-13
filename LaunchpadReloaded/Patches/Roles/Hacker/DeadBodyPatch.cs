@@ -15,7 +15,7 @@ public static class DeadBodyPatch
     {
         if (CustomGameModeManager.ActiveMode.CanReport(__instance))
         {
-            return !HackingManager.Instance.AnyPlayerHacked();
+            return !HackingManager.Instance.AnyNodesActive();
         }
         return false;
     }

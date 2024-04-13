@@ -1,3 +1,4 @@
+using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
@@ -41,6 +42,8 @@ public class LaunchpadPlayer(IntPtr ptr) : MonoBehaviour(ptr)
 
     private void Update()
     {
+        if (LocalPlayer == null || PlayerControl.LocalPlayer.Data == null || PlayerControl.LocalPlayer.Data.Role == null) return;
+
         if (LocalPlayer.ShowFootsteps && PlayerControl.LocalPlayer.Data.Role is DetectiveRole)
         {
             if (Vector3.Distance(lastPos, transform.position) > 1)
@@ -73,7 +76,7 @@ public class LaunchpadPlayer(IntPtr ptr) : MonoBehaviour(ptr)
 
     public void OnDeath(PlayerControl killer)
     {
-        if (player.Data.IsHacked() && player.AmOwner)
+        if (HackingManager.Instance.AnyNodesActive() && player.AmOwner)
         {
             player.RpcUnHackPlayer();
         }
@@ -93,14 +96,6 @@ public class LaunchpadPlayer(IntPtr ptr) : MonoBehaviour(ptr)
         if (player.IsRevived())
         {
             player.cosmetics.SetOutline(true, new Il2CppSystem.Nullable<Color>(LaunchpadPalette.MedicColor));
-        }
-
-        if (player.Data.IsHacked())
-        {
-            var randomString = Helpers.RandomString(Helpers.Random.Next(4, 6), "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#!?$(???#@)$@@@@0000");
-            player.cosmetics.SetName(randomString);
-            player.cosmetics.SetNameMask(true);
-            player.cosmetics.gameObject.SetActive(false);
         }
 
         if (knife is null)

@@ -1,69 +1,39 @@
-﻿using System.Linq;
+﻿using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Roles;
 using Reactor.Networking.Attributes;
-using Reactor.Utilities;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Networking;
 
 public static class HackerRpc
 {
-    
-    [MethodRpc((uint)LaunchpadRpc.HackPlayer)]
-    public static void RpcHackPlayer(this PlayerControl source, PlayerControl target)
-    {
-        if (source.Data.Role is not HackerRole)
-        {
-            return;
-        }
-        
-        HackingManager.Instance.hackedPlayers.Add(target.PlayerId);
-        HackingManager.HackPlayer(target);
-        
-        foreach (var data in GameData.Instance.AllPlayers.ToArray().Where(x => x.Role.IsImpostor))
-        {
-            HackingManager.HackPlayer(data.Object);
-        }
-        
-        if (!target.AmOwner)
-        {
-            return;
-        }
-        
-        Coroutines.Start(HackingManager.HackEffect());   
-        foreach (var node in HackingManager.Instance.nodes)
-        {
-            HackingManager.ToggleNode(node.id, true);
-        }
-    }
-
-    [MethodRpc((uint)LaunchpadRpc.UnHackPlayer)]
+    [MethodRpc((uint)LaunchpadRpc.UnhackPlayer)]
     public static void RpcUnHackPlayer(this PlayerControl player)
-    { 
-        HackingManager.Instance.hackedPlayers.Remove(player.PlayerId);
+    {
         HackingManager.UnHackPlayer(player);
+    }
 
-        if (!HackingManager.Instance.AnyPlayerHacked())
+    [MethodRpc((uint)LaunchpadRpc.ToggleNode)]
+    public static void RpcToggleNode(this PlayerControl sender, int nodeId, bool value)
+    {
+        if (value == true && sender.Data.Role is not HackerRole)
         {
-            foreach (var data in GameData.Instance.AllPlayers.ToArray().Where(x => x.Role.IsImpostor))
-            {
-                HackingManager.UnHackPlayer(data.Object);
-            }
-        }
-        
-        if (!player.AmOwner)
-        {
+            sender.KickForCheating();
             return;
         }
-        
-        Coroutines.Stop(HackingManager.HackEffect());
-        foreach (var node in HackingManager.Instance.nodes)
+
+        HackNodeComponent node = HackingManager.Instance.nodes[nodeId];
+        if (node == null || node.isActive == value) return;
+
+        HackingManager.ToggleNode(nodeId, value);
+
+        if (value)
         {
-            HackingManager.ToggleNode(node.id, false);
+            foreach (PlayerControl plr in PlayerControl.AllPlayerControls) HackingManager.HackPlayer(plr);
         }
     }
-    
+
     [MethodRpc((uint)LaunchpadRpc.CreateNodes)]
     public static void RpcCreateNodes(this ShipStatus shipStatus)
     {

@@ -42,7 +42,7 @@ public class ScannerComponent(IntPtr ptr) : MonoBehaviour(ptr)
 
     public void OnTriggerEnter2D(Collider2D collider)
     {
-        if (HackingManager.Instance && HackingManager.Instance.AnyPlayerHacked())
+        if (HackingManager.Instance && HackingManager.Instance.AnyNodesActive())
         {
             return;
         }

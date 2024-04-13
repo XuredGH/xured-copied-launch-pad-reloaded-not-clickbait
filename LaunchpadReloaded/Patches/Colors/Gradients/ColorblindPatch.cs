@@ -43,7 +43,7 @@ public static class ColorblindPatch
             !__instance.GetComponentInParent<ShapeshifterPanel>())
         {
             __result = $"{gradientColor}\n{defaultColor}";
-            
+
         }
         else
         {

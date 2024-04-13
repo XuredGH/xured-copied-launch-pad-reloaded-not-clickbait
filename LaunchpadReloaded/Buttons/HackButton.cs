@@ -14,18 +14,13 @@ public class HackButton : CustomActionButton
     public override int MaxUses => (int)HackerRole.HackUses.Value;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.HackButton;
     public override bool Enabled(RoleBehaviour role) => role is HackerRole;
-    public override bool CanUse() => !HackingManager.Instance.AnyPlayerHacked();
+    public override bool CanUse() => !HackingManager.Instance.AnyNodesActive();
 
     protected override void OnClick()
     {
-        foreach (var player in PlayerControl.AllPlayerControls)
+        foreach (var node in HackingManager.Instance.nodes)
         {
-            if (player.Data.Role.IsImpostor || player.Data.IsDead || player.Data.Disconnected)
-            {
-                continue;
-            }
-
-            PlayerControl.LocalPlayer.RpcHackPlayer(player);
+            PlayerControl.LocalPlayer.RpcToggleNode(node.id, true);
         }
 
         PlayerControl.LocalPlayer.RawSetColor(15);

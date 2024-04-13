@@ -1,9 +1,11 @@
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Utilities;
+using Reactor.Utilities;
 using Reactor.Utilities.Attributes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Random = System.Random;
 
@@ -13,8 +15,6 @@ namespace LaunchpadReloaded.Features.Managers;
 public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
 {
     public static HackingManager Instance { get; private set; }
-
-    public List<byte> hackedPlayers = [];
     public List<HackNodeComponent> nodes = [];
 
     public readonly Dictionary<ShipStatus.MapType, Vector3[]> MapNodePositions = new()
@@ -66,18 +66,16 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
     {
         Instance = this;
         nodes = [];
-        hackedPlayers = [];
     }
 
     private void OnDestroy()
     {
         nodes.Clear();
-        hackedPlayers.Clear();
     }
 
-    public bool AnyPlayerHacked()
+    public bool AnyNodesActive()
     {
-        return hackedPlayers.Count > 0;
+        return GetActiveNodes().Count > 0;
     }
 
     public static IEnumerator HackEffect()
@@ -87,33 +85,15 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
         var originalPos = HudManager.Instance.ReportButton.transform.localPosition;
         var originalPos2 = HudManager.Instance.UseButton.transform.localPosition;
         var taskBar = HudManager.Instance.gameObject.GetComponentInChildren<ProgressTracker>();
+        var taskBarVal = taskBar.curValue;
+
+        HudManager.Instance.FullScreen.color = new Color32(0, 255, 0, 100);
 
         while (PlayerControl.LocalPlayer.Data.IsHacked())
         {
-            HudManager.Instance.FullScreen.color = new Color32(0, 255, 0, 100);
             HudManager.Instance.FullScreen.gameObject.SetActive(!HudManager.Instance.FullScreen.gameObject.active);
             SoundManager.Instance.PlaySound(LaunchpadAssets.HackingSound.LoadAsset(), false, 0.6f);
             taskBar.curValue = random.NextSingle();
-            if (random.Next(0, 2) == 1)
-            {
-                HudManager.Instance.TaskPanel.open = true;
-                yield return new WaitForSeconds(0.1f);
-                HudManager.Instance.TaskPanel.open = false;
-            }
-
-            if (random.Next(0, 2) == 1)
-            {
-                HudManager.Instance.ReportButton.transform.localPosition += new Vector3(-random.NextSingle() + 1, random.NextSingle() + 1);
-                yield return new WaitForSeconds(0.2f);
-                HudManager.Instance.ReportButton.transform.localPosition = originalPos;
-            }
-
-            if (random.Next(0, 2) == 1)
-            {
-                HudManager.Instance.UseButton.transform.localPosition += new Vector3(-random.NextSingle() + 1, random.NextSingle() + 1);
-                yield return new WaitForSeconds(0.2f);
-                HudManager.Instance.UseButton.transform.localPosition = originalPos2;
-            }
 
             yield return new WaitForSeconds(0.6f);
         }
@@ -124,14 +104,26 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
             HudManager.Instance.FullScreen.gameObject.SetActive(false);
             HudManager.Instance.UseButton.transform.localPosition = originalPos2;
             HudManager.Instance.ReportButton.transform.localPosition = originalPos;
+            taskBar.curValue = taskBarVal;
         }
     }
 
     public static void HackPlayer(PlayerControl player)
     {
+        if (!player.cosmetics.nameText.transform.parent.gameObject.active) return;
+
         GradientManager.SetGradientEnabled(player, false);
         player.cosmetics.SetColor(15);
+        player.cosmetics.CurrentPet.gameObject.SetActive(false);
         player.cosmetics.gameObject.SetActive(false);
+        player.cosmetics.nameText.transform.parent.gameObject.SetActive(false);
+
+        if (!player.AmOwner || (!TutorialManager.InstanceExists && player.Data.Role.IsImpostor))
+        {
+            return;
+        }
+
+        Coroutines.Start(HackEffect());
     }
 
     public static void UnHackPlayer(PlayerControl player)
@@ -139,13 +131,27 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
         GradientManager.SetGradientEnabled(player, true);
         player.cosmetics.SetColor((byte)player.Data.DefaultOutfit.ColorId);
         player.cosmetics.gameObject.SetActive(true);
+        player.cosmetics.CurrentPet.gameObject.SetActive(true);
         player.SetName(player.Data.PlayerName);
+
+        player.cosmetics.nameText.transform.parent.gameObject.SetActive(true);
     }
 
     public static void ToggleNode(int nodeId, bool value)
     {
         var node = Instance.nodes.Find(node => node.id == nodeId);
         node.isActive = value;
+        node.transform.GetChild(0).gameObject.SetActive(value); // arrow
+
+        if (GetActiveNodes().Count == 0)
+        {
+            foreach (PlayerControl plr in PlayerControl.AllPlayerControls) UnHackPlayer(plr);
+        }
+    }
+
+    public static List<HackNodeComponent> GetActiveNodes()
+    {
+        return Instance.nodes.Where(node => node.isActive).ToList();
     }
 
     public HackNodeComponent CreateNode(ShipStatus shipStatus, int id, Transform parent, Vector3 position)
@@ -168,6 +174,23 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
         var nodeComponent = node.AddComponent<HackNodeComponent>();
         nodeComponent.image = sprite;
         nodeComponent.id = id;
+
+        var newArrow = new GameObject("Arrow")
+        {
+            transform =
+            {
+                parent = node.transform
+            },
+            layer = LayerMask.NameToLayer("UI"),
+            active = false
+        };
+
+        SpriteRenderer rend = newArrow.AddComponent<SpriteRenderer>();
+        rend.sprite = LaunchpadAssets.Arrow.LoadAsset();
+        rend.color = LaunchpadPalette.HackerColor;
+
+        ArrowBehaviour arrow = newArrow.AddComponent<ArrowBehaviour>();
+        arrow.target = node.transform.position;
 
         node.SetActive(true);
         nodes.Add(nodeComponent);

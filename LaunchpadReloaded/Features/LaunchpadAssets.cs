@@ -38,6 +38,8 @@ public static class LaunchpadAssets
     public static readonly LoadableAsset<Sprite> NodeSprite = new("Node.png");
     public static readonly LoadableAsset<Sprite> KnifeHandSprite = new("KnifeHand.png");
     public static readonly LoadableAsset<Sprite> Footstep = new("Footstep.png", false);
+    public static readonly LoadableAsset<Sprite> Arrow = new("Arrow.png", false);
+
     // Sounds
     public static readonly LoadableAsset<AudioClip> BeepSound = new("Beep.wav");
     public static readonly LoadableAsset<AudioClip> PingSound = new("Ping.mp3");
@@ -45,6 +47,7 @@ public static class LaunchpadAssets
 
     // Other
     public static readonly LoadableAsset<GameObject> DetectiveGame = new("JournalMinigame");
+    public static readonly LoadableAsset<GameObject> NodeGame = new("NodeMinigame");
 }
 
 public class LoadableAsset<T>(string name, bool useBundle = true) where T : Object

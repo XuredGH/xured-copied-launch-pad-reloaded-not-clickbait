@@ -17,7 +17,7 @@ public static class HudManagerPatches
 {
     /// Custom buttons parent
     private static GameObject _bottomLeft;
-    
+
     /// Custom role tab
     private static TaskPanelBehaviour _roleTab;
 
@@ -75,8 +75,8 @@ public static class HudManagerPatches
         __instance.tasksString.Append(Color.green.ToTextColor());
         __instance.tasksString.Append("You have been hacked!\n");
         __instance.tasksString.Append("You are unable to complete tasks or call meetings.\n");
-        __instance.tasksString.Append("Find an active node to reverse the hack!.\n");
-        __instance.tasksString.Append($"{HackingManager.Instance.hackedPlayers.Count} players are still hacked.");
+        __instance.tasksString.Append("Enable all nodes to reverse the hack!\n");
+        __instance.tasksString.Append($"{HackingManager.GetActiveNodes().Count} nodes left to enable.");
         __instance.tasksString.Append("</color>");
         __instance.TaskPanel.SetTaskText(__instance.tasksString.ToString());
 
@@ -116,19 +116,18 @@ public static class HudManagerPatches
             {
                 AddHackedTaskString(__instance);
             }
-            else if (HackingManager.Instance.AnyPlayerHacked())
+            else if (local.Data.IsHacked() && local.Data.Role.IsImpostor)
             {
                 var newB = new StringBuilder();
                 newB.Append(Color.green.ToTextColor());
-                newB.Append(local.Data.Role.IsImpostor ?
-                    "\n\n The crewmates are hacked! They will not be able to\ncomplete tasks or call meetings until they reverse the hack."
-                    : "\n\nYou will still not be able to report bodies or \ncall meetings until all crewmates reverse the hack.");
-                newB.Append($"\n{HackingManager.Instance.hackedPlayers.Count} players are still hacked.");
+                newB.Append("\n\nThe crewmates are hacked! They will not be able to\ncomplete tasks or call meetings until they reverse the hack.");
+                newB.Append($"\n{HackingManager.GetActiveNodes().Count} nodes left to enable.");
                 newB.Append("</color>");
+                if (TutorialManager.InstanceExists) newB.Append($"\n\nSince you are in freeplay, you will be able to enable nodes.\nIn a real game, Impostors cannot help towards reversing a hack.");
                 __instance.TaskPanel.SetTaskText(__instance.tasksString.ToString() + newB);
             }
 
-            if (HackingManager.Instance.AnyPlayerHacked())
+            if (HackingManager.Instance.AnyNodesActive())
             {
                 __instance.ReportButton.SetActive(false);
             }

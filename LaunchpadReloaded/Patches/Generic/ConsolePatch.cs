@@ -51,7 +51,7 @@ public static class ConsolePatch
         {
             if (CustomGameModeManager.ActiveMode.CanUseSystemConsole(__instance))
             {
-                return canUse = couldUse = !HackingManager.Instance.AnyPlayerHacked();
+                return canUse = couldUse = !HackingManager.Instance.AnyNodesActive();
             }
 
             canUse = couldUse = false;

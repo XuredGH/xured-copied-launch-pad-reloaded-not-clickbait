@@ -20,7 +20,7 @@ public class ScannerButton : CustomActionButton
 
     public override bool Enabled(RoleBehaviour role) => role is TrackerRole;
     
-    public override bool CanUse() => !HackingManager.Instance.AnyPlayerHacked();
+    public override bool CanUse() => !HackingManager.Instance.AnyNodesActive();
 
     protected override void OnClick()
     {

@@ -1,13 +1,13 @@
-using System;
-using System.Linq;
-using System.Reflection;
 using AmongUs.GameOptions;
-using System.Collections.Generic;
 using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
 using Reactor.Utilities.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -82,7 +82,7 @@ public static class Extensions
             return false;
         }
 
-        return HackingManager.Instance.hackedPlayers.Contains(playerInfo.PlayerId) || (playerInfo.Role.IsImpostor && HackingManager.Instance.AnyPlayerHacked());
+        return HackingManager.Instance.AnyNodesActive() && !playerInfo.IsDead;
     }
 
     public static bool IsRevived(this PlayerControl player)
@@ -112,7 +112,7 @@ public static class Extensions
         body.gameObject.Destroy();
         RevivalManager.Instance.revivedPlayers.Add(player.PlayerId);
     }
-    
+
     public static void HideBody(this DeadBody body)
     {
         body.Reported = true;
@@ -156,7 +156,7 @@ public static class Extensions
         {
             return;
         }
-        
+
         foreach (var renderer in target.bodyRenderers)
         {
             renderer.SetOutline(outlineColor);
