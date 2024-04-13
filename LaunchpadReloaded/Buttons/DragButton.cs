@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
 
+[RegisterButton]
 public class DragButton : CustomActionButton
 {
     public override string Name => "DRAG";

@@ -6,7 +6,7 @@ using System.Text;
 using UnityEngine;
 
 namespace LaunchpadReloaded.API.Roles;
-
+    
 public interface ICustomRole
 {
     string RoleName { get; }

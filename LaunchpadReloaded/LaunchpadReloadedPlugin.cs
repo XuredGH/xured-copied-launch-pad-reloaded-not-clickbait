@@ -12,6 +12,7 @@ using Reactor.Networking.Attributes;
 using Reactor.Patches;
 using System;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using TMPro;
 
@@ -35,8 +36,9 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
         RegisterColors();
 
         CustomGameModeManager.RegisterAllGameModes();
-        CustomRoleManager.RegisterAllRoles();
-        CustomButtonManager.RegisterAllButtons();
+        
+        RegisterCustomRoleAttribute.Register(Assembly.GetExecutingAssembly());
+        RegisterButtonAttribute.Register(Assembly.GetExecutingAssembly());
 
         LaunchpadGameOptions.Initialize();
         LaunchpadSettings.Initialize();

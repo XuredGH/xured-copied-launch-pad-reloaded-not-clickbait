@@ -10,7 +10,9 @@ using Il2CppInterop.Runtime.Attributes;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
+
 [RegisterInIl2Cpp]
+[RegisterCustomRole]
 public class TrackerRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
 {
     public string RoleName => "Tracker";

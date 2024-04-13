@@ -8,16 +8,6 @@ public static class CustomButtonManager
 {
     public static readonly List<CustomActionButton> CustomButtons = [];
 
-    public static void RegisterAllButtons()
-    {
-        foreach (var type in Assembly.GetCallingAssembly().GetTypes())
-        {
-            if (type.IsAssignableTo(typeof(CustomActionButton)) && !type.IsAbstract)
-            {
-                RegisterButton(type);
-            }
-        }
-    }
     
     public static void RegisterButton(Type buttonType)
     {

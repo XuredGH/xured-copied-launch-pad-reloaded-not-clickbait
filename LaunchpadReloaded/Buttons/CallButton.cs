@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
 
+[RegisterButton]
 public class CallButton : CustomActionButton
 {
     public override string Name => "CALL";
