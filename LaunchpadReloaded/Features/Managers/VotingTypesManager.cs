@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using LaunchpadReloaded.Features.Voting;
 using TMPro;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -60,7 +61,7 @@ public static class VotingTypesManager
 
     public static byte GetVotedPlayerByChance(List<CustomVote> votes)
     {
-        if (!votes.Any()) return 253;
+        if (!votes.Any()) return (byte)SpecialVotes.Skip;
 
         var rand = new Random();
         List<byte> plrs = [.. votes.Select(vote => vote.Suspect)];
@@ -96,7 +97,7 @@ public static class VotingTypesManager
             
             foreach (var vote in votes)
             {
-                if (vote.Suspect == 253)
+                if (vote.Suspect == (byte)SpecialVotes.Skip)
                 {
                     MeetingHud.Instance.BloopAVoteIcon(GameData.Instance.GetPlayerById(vote.Voter), num2, MeetingHud.Instance.SkippedVoting.transform);
                     num2++;
@@ -124,7 +125,7 @@ public static class VotingTypesManager
         var skipText = MeetingHud.Instance.SkippedVoting;
         skipText.GetComponentInChildren<TextTranslatorTMP>().Destroy();
 
-        chances.TryGetValue(253, out var skips);
+        chances.TryGetValue((byte)SpecialVotes.Skip, out var skips);
         skipText.GetComponentInChildren<TextMeshPro>().text += "\n<size=110%>" + Math.Round(skips, 0) + "%</size>";
 
         foreach (var voteArea in MeetingHud.Instance.playerStates)

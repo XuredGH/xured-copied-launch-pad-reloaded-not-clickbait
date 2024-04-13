@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Hazel;
-using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
+using LaunchpadReloaded.Features.Voting;
 using Reactor.Networking.Attributes;
 using Reactor.Networking.Rpc;
 
