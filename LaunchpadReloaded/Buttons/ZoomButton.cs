@@ -35,7 +35,7 @@ public class ZoomButton : CustomActionButton
         Coroutines.Start(ZoomOutCoroutine());
     }
 
-    protected override void OnEffectEnd()
+    public override void OnEffectEnd()
     {
         Coroutines.Start(ZoomInCoroutine());
     }

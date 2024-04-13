@@ -8,6 +8,7 @@ using LaunchpadReloaded.Patches.Options;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Extensions;
 using System.Text;
+using LaunchpadReloaded.Buttons;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Patches.Generic;
@@ -95,6 +96,11 @@ public static class HudManagerPatches
         var local = PlayerControl.LocalPlayer;
         if (!local || MeetingHud.Instance)
         {
+            if (ZoomButton.IsZoom)
+            {
+                CustomButtonSingleton<ZoomButton>.Instance.OnEffectEnd();
+            }
+            
             return;
         }
 

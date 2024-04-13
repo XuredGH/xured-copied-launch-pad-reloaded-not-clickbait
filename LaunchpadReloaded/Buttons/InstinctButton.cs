@@ -18,7 +18,7 @@ public class InstinctButton : CustomActionButton
         return role is DetectiveRole;
     }
 
-    protected override void OnEffectEnd()
+    public override void OnEffectEnd()
     {
         LaunchpadPlayer.LocalPlayer.ShowFootsteps = false;
     }
