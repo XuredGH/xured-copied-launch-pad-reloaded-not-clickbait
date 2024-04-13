@@ -28,6 +28,7 @@ public class CustomStringOption : AbstractGameOption
             try
             {
                 Config = LaunchpadReloadedPlugin.Instance.Config.Bind("String Options", title, defaultValue);
+                SetValue(Save ? Config.Value : defaultValue);
             }
             catch (Exception e)
             {
@@ -35,7 +36,6 @@ public class CustomStringOption : AbstractGameOption
             }
         }
 
-        SetValue(Save ? Config.Value : defaultValue);
     }
 
     public void SetValue(int newValue)
