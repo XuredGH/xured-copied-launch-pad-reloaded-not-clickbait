@@ -44,14 +44,14 @@ public class JesterRole(System.IntPtr ptr) : RoleBehaviour(ptr), ICustomRole
             return false;
         }
 
-        Console console = usable.TryCast<Console>();
+        var console = usable.TryCast<Console>();
         return !(console != null) || console.AllowImpostor;
     }
 
     public override void SpawnTaskHeader(PlayerControl playerControl)
     {
         if (playerControl != PlayerControl.LocalPlayer) return;
-        ImportantTextTask orCreateTask = PlayerTask.GetOrCreateTask<ImportantTextTask>(playerControl, 0);
+        var orCreateTask = PlayerTask.GetOrCreateTask<ImportantTextTask>(playerControl, 0);
         orCreateTask.Text = string.Concat(new string[]
             {
                 LaunchpadPalette.JesterColor.ToTextColor(),

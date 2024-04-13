@@ -33,6 +33,7 @@ public static class ShipStatusPatch
     [HarmonyPrefix, HarmonyPatch("SpawnPlayer")]
     public static bool SpawnPlayerPatch([HarmonyArgument(2)] bool initialSpawn)
     {
+        if (TutorialManager.InstanceExists) return true;
         return initialSpawn || !LaunchpadGameOptions.Instance.DisableMeetingTeleport.Value;
     }
 }

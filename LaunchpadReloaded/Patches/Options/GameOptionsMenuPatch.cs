@@ -51,6 +51,8 @@ public static class GameOptionsMenuPatch
 
         foreach (var option in CustomOptionsManager.CustomOptions.Where(option => option.Group == null))
         {
+            if (!option.OptionBehaviour) continue;
+
             option.OptionBehaviour.enabled = !option.Hidden();
             option.OptionBehaviour.gameObject.SetActive(!option.Hidden());
 

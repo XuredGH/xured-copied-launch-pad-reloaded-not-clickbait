@@ -15,10 +15,11 @@ public class CustomNumberOption : AbstractGameOption
     public NumberSuffixes SuffixType { get; }
     public string NumberFormat { get; }
     public float Default { get; }
+    public bool ZeroInfinity { get; }
     public ConfigEntry<float> Config { get; }
     public Action<float> ChangedEvent { get; set; }
 
-    public CustomNumberOption(string title, float defaultValue, float min, float max, float increment, NumberSuffixes suffixType, string numberFormat = "0", Type role = null, bool save = true) : base(title, role, save)
+    public CustomNumberOption(string title, float defaultValue, float min, float max, float increment, NumberSuffixes suffixType, bool zeroInfinity = false, string numberFormat = "0", Type role = null, bool save = true) : base(title, role, save)
     {
         Value = defaultValue;
         Default = defaultValue;
@@ -27,6 +28,8 @@ public class CustomNumberOption : AbstractGameOption
         Increment = increment;
         SuffixType = suffixType;
         NumberFormat = numberFormat;
+        ZeroInfinity = zeroInfinity;
+
         if (Save)
         {
             try
@@ -74,7 +77,7 @@ public class CustomNumberOption : AbstractGameOption
     public NumberOption CreateNumberOption(NumberOption original, Transform container)
     {
         var numberOption = Object.Instantiate(original, container);
-        
+
         numberOption.name = Title;
         numberOption.Title = StringName;
         numberOption.Value = Value;
@@ -82,10 +85,10 @@ public class CustomNumberOption : AbstractGameOption
         numberOption.SuffixType = SuffixType;
         numberOption.FormatString = NumberFormat;
         numberOption.ValidRange = new FloatRange(Min, Max);
-        numberOption.ZeroIsInfinity = false;
+        numberOption.ZeroIsInfinity = ZeroInfinity;
         numberOption.OnValueChanged = (Il2CppSystem.Action<OptionBehaviour>)ValueChanged;
         numberOption.OnEnable();
-        
+
         OptionBehaviour = numberOption;
 
         return numberOption;

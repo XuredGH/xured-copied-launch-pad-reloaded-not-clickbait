@@ -9,7 +9,7 @@ namespace LaunchpadReloaded.Components;
 
 [RegisterInIl2Cpp(typeof(IUsable))]
 public class HackNodeComponent(IntPtr ptr) : MonoBehaviour(ptr)
-{ 
+{
     public bool isActive;
     public int id;
     public SpriteRenderer image;
