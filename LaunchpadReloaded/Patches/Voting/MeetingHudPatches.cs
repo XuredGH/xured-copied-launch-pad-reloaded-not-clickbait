@@ -256,10 +256,6 @@ public static class MeetingHudPatches
             case (byte)SpecialVotes.Confirm:
                 plr.VoteData.VotesRemaining = 0;
                 break;
-            case (byte)SpecialVotes.Skip:
-                plr.VoteData.VotesRemaining = 0;
-                plr.VoteData.VotedPlayers.Add(suspectIdx);
-                break;
             default:
                 plr.VoteData.VotesRemaining--;
                 plr.VoteData.VotedPlayers.Add(suspectIdx);
