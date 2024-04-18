@@ -43,10 +43,10 @@ public class JournalMinigame(nint ptr) : Minigame(ptr)
     {
         // init body
         var timeSinceDeath = DateTime.Now.Subtract(deadPlayer.DeadData.DeathTime);
-        DeadPlayerInfo.text = timeSinceDeath.Minutes < 1 ? $"{deadPlayer.player.Data.PlayerName}\n<size=70%>Died {timeSinceDeath.Seconds} seconds ago</size>" :
-            $"{deadPlayer.player.Data.PlayerName}\n<size=70%>Died {timeSinceDeath.Minutes} minutes ago</size>";
+        DeadPlayerInfo.text = timeSinceDeath.Minutes < 1 ? $"{deadPlayer.playerObject.Data.PlayerName}\n<size=70%>Died {timeSinceDeath.Seconds} seconds ago</size>" :
+            $"{deadPlayer.playerObject.Data.PlayerName}\n<size=70%>Died {timeSinceDeath.Minutes} minutes ago</size>";
 
-        deadPlayer.player.SetPlayerMaterialColors(DeadBodyIcon);
+        deadPlayer.playerObject.SetPlayerMaterialColors(DeadBodyIcon);
 
         if (LaunchpadPlayer.GetAllAlivePlayers().Count() < 4 || DetectiveRole.HideSuspects.Value)
         {

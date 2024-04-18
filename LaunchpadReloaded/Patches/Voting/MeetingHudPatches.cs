@@ -40,7 +40,7 @@ public static class MeetingHudPatches
             plr.VoteData.VotesRemaining = VotingTypesManager.GetVotes();
             plr.VoteData.VotedPlayers.Clear();
 
-            if (plr.player.Data.Role is MayorRole)
+            if (plr.playerObject.Data.Role is MayorRole)
             {
                 plr.VoteData.VotesRemaining += (int)MayorRole.ExtraVotes.Value;
             }
@@ -99,7 +99,7 @@ public static class MeetingHudPatches
                 {
                     foreach (var player in LaunchpadPlayer.GetAllAlivePlayers().Where(x=>x.VoteData.VotesRemaining>0))
                     {
-                        __instance.CastVote(player.player.PlayerId, (byte)SpecialVotes.Confirm);
+                        __instance.CastVote(player.playerObject.PlayerId, (byte)SpecialVotes.Confirm);
                     }
                 }
             }
@@ -209,7 +209,7 @@ public static class MeetingHudPatches
 
         foreach (var player in LaunchpadPlayer.GetAllAlivePlayers())
         {
-            var pva = __instance.playerStates.First(pv => pv.TargetPlayerId == player.player.PlayerId);
+            var pva = __instance.playerStates.First(pv => pv.TargetPlayerId == player.playerObject.PlayerId);
 
             if (pva.AmDead || !player.VoteData.VotedPlayers.Contains(pc.PlayerId))
             {
@@ -219,7 +219,7 @@ public static class MeetingHudPatches
             player.VoteData.VotedPlayers.Remove(pc.PlayerId);
             player.VoteData.VotesRemaining += 1;
 
-            VotingRpc.RpcRemoveVote(PlayerControl.LocalPlayer, player.player.PlayerId, pc.PlayerId);
+            VotingRpc.RpcRemoveVote(PlayerControl.LocalPlayer, player.playerObject.PlayerId, pc.PlayerId);
         }
 
         __instance.SetDirtyBit(1U);

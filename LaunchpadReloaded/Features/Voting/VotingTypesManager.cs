@@ -43,7 +43,7 @@ public static class VotingTypesManager
     {
         return (from player in LaunchpadPlayer.GetAllAlivePlayers()
                 from vote in player.VoteData.VotedPlayers
-                select new CustomVote(player.player.PlayerId, vote)).ToList();
+                select new CustomVote(player.playerObject.PlayerId, vote)).ToList();
     }
 
     public static Dictionary<byte, float> GetChancePercents(List<CustomVote> votes)

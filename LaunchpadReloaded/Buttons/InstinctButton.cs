@@ -20,10 +20,10 @@ public class InstinctButton : CustomActionButton
 
     public override void OnEffectEnd()
     {
-        LaunchpadPlayer.LocalPlayer.ShowFootsteps = false;
+        LaunchpadPlayer.LocalPlayer.showFootsteps = false;
     }
     protected override void OnClick()
     {
-        LaunchpadPlayer.LocalPlayer.ShowFootsteps = true;
+        LaunchpadPlayer.LocalPlayer.showFootsteps = true;
     }
 }

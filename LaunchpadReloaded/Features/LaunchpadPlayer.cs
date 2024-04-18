@@ -5,6 +5,7 @@ using Reactor.Utilities.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using LaunchpadReloaded.Components;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Features;
@@ -14,38 +15,57 @@ public class LaunchpadPlayer(IntPtr ptr) : MonoBehaviour(ptr)
 {
     public Transform knife;
 
-    public PlayerControl player;
-
+    public PlayerControl playerObject;
+    
     public CustomVoteData VoteData;
-    public DeadPlayerData DeadData;
-    public bool ShowFootsteps;
+    
+    public DeathData DeadData;
+    
+    public bool showFootsteps;
+
+    private CustomGameData.CustomPlayerInfo _cachedData;
+    
+    public CustomGameData.CustomPlayerInfo Data
+    {
+        get
+        {
+            return _cachedData ??= CustomGameData.Instance.GetPlayerById(playerObject.PlayerId);
+        }
+    }
+
     public static LaunchpadPlayer LocalPlayer { get; private set; }
+    
     public static LaunchpadPlayer GetById(byte id) => GameData.Instance.GetPlayerById(id).Object.GetLpPlayer();
+    
     public static IEnumerable<LaunchpadPlayer> GetAllPlayers() => PlayerControl.AllPlayerControls.ToArray().Select(player => player.GetLpPlayer());
-    public static IEnumerable<LaunchpadPlayer> GetAllAlivePlayers() => GetAllPlayers().Where(plr => !plr.player.Data.IsDead && !plr.player.Data.Disconnected);
+    
+    public static IEnumerable<LaunchpadPlayer> GetAllAlivePlayers() => GetAllPlayers().Where(plr => !plr.playerObject.Data.IsDead && !plr.playerObject.Data.Disconnected);
+    
     private Vector3 lastPos;
 
     private void Awake()
     {
-        player = gameObject.GetComponent<PlayerControl>();
+        playerObject = gameObject.GetComponent<PlayerControl>();
         VoteData = new CustomVoteData();
-        DeadData = new DeadPlayerData();
+        DeadData = new DeathData();
 
-        if (player.AmOwner)
+        if (playerObject.AmOwner)
         {
             LocalPlayer = this;
         }
+        
+        CustomGameData.Instance.AddPlayer(this);
 
         lastPos = transform.position;
     }
 
     private void Update()
     {
-        if (LocalPlayer.ShowFootsteps && PlayerControl.LocalPlayer.Data is not null && PlayerControl.LocalPlayer.Data.Role is DetectiveRole)
+        if (LocalPlayer.showFootsteps && PlayerControl.LocalPlayer.Data is not null && PlayerControl.LocalPlayer.Data.Role is DetectiveRole)
         {
             if (Vector3.Distance(lastPos, transform.position) > 1)
             {
-                var angle = Mathf.Atan2(player.MyPhysics.Velocity.y, player.MyPhysics.Velocity.x) * Mathf.Rad2Deg;
+                var angle = Mathf.Atan2(playerObject.MyPhysics.Velocity.y, playerObject.MyPhysics.Velocity.x) * Mathf.Rad2Deg;
 
                 var footstep = new GameObject("Footstep")
                 {
@@ -63,7 +83,7 @@ public class LaunchpadPlayer(IntPtr ptr) : MonoBehaviour(ptr)
                 footstep.layer = LayerMask.NameToLayer("Players");
 
                 sprite.transform.localScale = new Vector3(0.06f, 0.06f, 0.06f);
-                player.SetPlayerMaterialColors(sprite);
+                playerObject.SetPlayerMaterialColors(sprite);
 
                 lastPos = transform.position;
                 Destroy(footstep, DetectiveRole.FootstepsDuration.Value);
@@ -73,9 +93,9 @@ public class LaunchpadPlayer(IntPtr ptr) : MonoBehaviour(ptr)
 
     public void OnDeath(PlayerControl killer)
     {
-        if (player.Data.IsHacked() && player.AmOwner)
+        if (playerObject.Data.IsHacked() && playerObject.AmOwner)
         {
-            player.RpcUnHackPlayer();
+            playerObject.RpcUnHackPlayer();
         }
 
         DeadData.DeathTime = DateTime.Now;
@@ -90,26 +110,26 @@ public class LaunchpadPlayer(IntPtr ptr) : MonoBehaviour(ptr)
             return;
         }
 
-        if (player.IsRevived())
+        if (playerObject.IsRevived())
         {
-            player.cosmetics.SetOutline(true, new Il2CppSystem.Nullable<Color>(LaunchpadPalette.MedicColor));
+            playerObject.cosmetics.SetOutline(true, new Il2CppSystem.Nullable<Color>(LaunchpadPalette.MedicColor));
         }
 
-        if (player.Data.IsHacked())
+        if (playerObject.Data.IsHacked())
         {
             var randomString = Helpers.RandomString(Helpers.Random.Next(4, 6), "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#!?$(???#@)$@@@@0000");
-            player.cosmetics.SetName(randomString);
-            player.cosmetics.SetNameMask(true);
-            player.cosmetics.gameObject.SetActive(false);
+            playerObject.cosmetics.SetName(randomString);
+            playerObject.cosmetics.SetNameMask(true);
+            playerObject.cosmetics.gameObject.SetActive(false);
         }
 
         if (knife is null)
         {
-            knife = player.gameObject.transform.FindChild("BodyForms/Seeker/KnifeHand");
+            knife = playerObject.gameObject.transform.FindChild("BodyForms/Seeker/KnifeHand");
             return;
         }
 
-        knife.gameObject.SetActive(!player.Data.IsDead && player.CanMove);
+        knife.gameObject.SetActive(!playerObject.Data.IsDead && playerObject.CanMove);
     }
 
     public struct CustomVoteData()
@@ -118,7 +138,7 @@ public class LaunchpadPlayer(IntPtr ptr) : MonoBehaviour(ptr)
         public int VotesRemaining = (int)LaunchpadGameOptions.Instance.MaxVotes.Value;
     }
 
-    public struct DeadPlayerData()
+    public struct DeathData()
     {
         public DateTime DeathTime;
         public PlayerControl Killer;

@@ -26,9 +26,10 @@ public class PlayerGradientData(IntPtr ptr) : MonoBehaviour(ptr)
                 return _gradientEnabled;
             }
 
-            if (GradientManager.TryGetEnabled(playerId, out var gradEnabled))
+            var data = CustomGameData.Instance.GetPlayerById(playerId);
+            if (data is not null)
             {
-                return gradEnabled;
+                return data.GradientEnabled;
             }
 
             if (GameData.Instance)
@@ -49,9 +50,10 @@ public class PlayerGradientData(IntPtr ptr) : MonoBehaviour(ptr)
                 return _gradientColor;
             }
 
-            if (GradientManager.TryGetColor(playerId, out var color))
+            var data = CustomGameData.Instance.GetPlayerById(playerId);
+            if (data is not null)
             {
-                return color;
+                return data.GradientColor;
             }
 
             if (GameData.Instance)

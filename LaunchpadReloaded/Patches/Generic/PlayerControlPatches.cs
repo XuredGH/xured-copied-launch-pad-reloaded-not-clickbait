@@ -111,8 +111,8 @@ public static class PlayerControlPatches
     [HarmonyPrefix, HarmonyPatch("Start")]
     public static void StartPrefix(PlayerControl __instance)
     {
-        __instance.gameObject.AddComponent<LaunchpadPlayer>();
         __instance.gameObject.AddComponent<PlayerGradientData>();
+        __instance.gameObject.AddComponent<LaunchpadPlayer>();
     }
 
     /// <summary>
