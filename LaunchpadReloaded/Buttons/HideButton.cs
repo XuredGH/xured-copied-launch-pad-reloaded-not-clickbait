@@ -21,7 +21,7 @@ public class HideButton : CustomActionButton
 
     public override bool CanUse()
     {
-        return DeadBodyTarget &&
+        return LaunchpadPlayer.LocalPlayer.deadBodyTarget &&
                DragManager.Instance.IsDragging(PlayerControl.LocalPlayer.PlayerId) &&
                VentTarget && !VentTarget.gameObject.GetComponent<VentBodyComponent>();
     }
@@ -29,7 +29,7 @@ public class HideButton : CustomActionButton
     protected override void OnClick()
     {
         PlayerControl.LocalPlayer.RpcStopDragging();
-        PlayerControl.LocalPlayer.RpcHideBodyInVent(DeadBodyTarget.ParentId, VentTarget.Id);
+        PlayerControl.LocalPlayer.RpcHideBodyInVent(LaunchpadPlayer.LocalPlayer.deadBodyTarget.ParentId, VentTarget.Id);
     }
 
     public override bool Enabled(RoleBehaviour role)

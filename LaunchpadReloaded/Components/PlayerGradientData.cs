@@ -26,16 +26,19 @@ public class PlayerGradientData(IntPtr ptr) : MonoBehaviour(ptr)
                 return _gradientEnabled;
             }
 
+
+            if (!GameData.Instance)
+            {
+                return _gradientEnabled;
+            }
+            
             var data = CustomGameData.Instance.GetPlayerById(playerId);
             if (data is not null)
             {
                 return data.GradientEnabled;
             }
 
-            if (GameData.Instance)
-            {
-                Logger<LaunchpadReloadedPlugin>.Warning($"No gradient data found for id {playerId}, player: {(bool)player}!");
-            }
+            Logger<LaunchpadReloadedPlugin>.Warning($"No gradient data found for id {playerId}, player: {(bool)player}!");
             return _gradientEnabled;
         }
         set => _gradientEnabled = value;
@@ -50,17 +53,19 @@ public class PlayerGradientData(IntPtr ptr) : MonoBehaviour(ptr)
                 return _gradientColor;
             }
 
+            if (!GameData.Instance)
+            {
+                return _gradientColor;
+            }
+            
             var data = CustomGameData.Instance.GetPlayerById(playerId);
             if (data is not null)
             {
                 return data.GradientColor;
             }
 
-            if (GameData.Instance)
-            {
-                Logger<LaunchpadReloadedPlugin>.Error($"No gradient color found for id {playerId}, player: {(bool)player}!");
-            }
-            
+            Logger<LaunchpadReloadedPlugin>.Error($"No gradient color found for id {playerId}, player: {(bool)player}!");
+
             return _gradientColor;
         }
         set => _gradientColor = value;

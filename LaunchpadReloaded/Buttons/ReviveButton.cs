@@ -24,8 +24,8 @@ public class ReviveButton : CustomActionButton
 
     public override bool CanUse()
     {
-        return RevivalManager.Instance && DeadBodyTarget && CanRevive() && !PlayerControl.LocalPlayer.Data.IsDead && PlayerControl.LocalPlayer.CanMove &&
-            !DragManager.Instance.DraggingPlayers.ContainsValue(DeadBodyTarget.ParentId);
+        return LaunchpadPlayer.LocalPlayer.deadBodyTarget && CanRevive() && !PlayerControl.LocalPlayer.Data.IsDead && PlayerControl.LocalPlayer.CanMove &&
+            !DragManager.Instance.DraggingPlayers.ContainsValue(LaunchpadPlayer.LocalPlayer.deadBodyTarget.ParentId);
     }
 
     public bool CanRevive()
@@ -57,7 +57,6 @@ public class ReviveButton : CustomActionButton
     
     protected override void OnClick()
     {
-        PlayerControl.LocalPlayer.RpcRevive(DeadBodyTarget.ParentId);
-        DeadBodyTarget = null;
+        PlayerControl.LocalPlayer.RpcRevive(LaunchpadPlayer.LocalPlayer.deadBodyTarget.ParentId);
     }
 }

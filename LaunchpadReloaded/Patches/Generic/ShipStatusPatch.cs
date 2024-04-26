@@ -21,8 +21,12 @@ public static class ShipStatusPatch
         managers.AddComponent<HackingManager>();
         managers.AddComponent<TrackingManager>();
         managers.AddComponent<ScannerManager>();
-        managers.AddComponent<RevivalManager>();
         managers.AddComponent<DragManager>();
+
+        foreach (var player in LaunchpadPlayer.GetAllPlayers())
+        {
+            player.ResetPlayer();
+        }
 
         __instance.RpcCreateNodes();
     }

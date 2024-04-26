@@ -29,8 +29,6 @@ public abstract class CustomActionButton
 
     protected ActionButton Button;
 
-    protected DeadBody DeadBodyTarget;
-
     public void CreateButton(Transform parent)
     {
         if (Button)
@@ -153,7 +151,6 @@ public abstract class CustomActionButton
         }
         Button.SetCoolDown(Timer, EffectActive ? EffectDuration : Cooldown);
 
-        playerControl.UpdateBodies(playerControl.Data.Role.TeamColor, ref DeadBodyTarget);
         FixedUpdate(playerControl);
     }
     

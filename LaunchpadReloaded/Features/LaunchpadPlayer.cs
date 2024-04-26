@@ -5,7 +5,9 @@ using Reactor.Utilities.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Components;
+using Reactor.Utilities.Extensions;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Features;
@@ -20,8 +22,12 @@ public class LaunchpadPlayer(IntPtr ptr) : MonoBehaviour(ptr)
     public CustomVoteData VoteData;
     
     public DeathData DeadData;
+
+    public DeadBody deadBodyTarget;
     
     public bool showFootsteps;
+
+    public bool wasRevived;
 
     private CustomGameData.CustomPlayerInfo _cachedData;
     
@@ -41,7 +47,7 @@ public class LaunchpadPlayer(IntPtr ptr) : MonoBehaviour(ptr)
     
     public static IEnumerable<LaunchpadPlayer> GetAllAlivePlayers() => GetAllPlayers().Where(plr => !plr.playerObject.Data.IsDead && !plr.playerObject.Data.Disconnected);
     
-    private Vector3 lastPos;
+    private Vector3 _lastPos;
 
     private void Awake()
     {
@@ -56,14 +62,14 @@ public class LaunchpadPlayer(IntPtr ptr) : MonoBehaviour(ptr)
         
         CustomGameData.Instance.AddPlayer(this);
 
-        lastPos = transform.position;
+        _lastPos = transform.position;
     }
 
     private void Update()
     {
         if (LocalPlayer.showFootsteps && PlayerControl.LocalPlayer.Data is not null && PlayerControl.LocalPlayer.Data.Role is DetectiveRole)
         {
-            if (Vector3.Distance(lastPos, transform.position) > 1)
+            if (Vector3.Distance(_lastPos, transform.position) > 1)
             {
                 var angle = Mathf.Atan2(playerObject.MyPhysics.Velocity.y, playerObject.MyPhysics.Velocity.x) * Mathf.Rad2Deg;
 
@@ -85,10 +91,15 @@ public class LaunchpadPlayer(IntPtr ptr) : MonoBehaviour(ptr)
                 sprite.transform.localScale = new Vector3(0.06f, 0.06f, 0.06f);
                 playerObject.SetPlayerMaterialColors(sprite);
 
-                lastPos = transform.position;
+                _lastPos = transform.position;
                 Destroy(footstep, DetectiveRole.FootstepsDuration.Value);
             }
         }
+    }
+
+    public void ResetPlayer()
+    {
+        wasRevived = false;
     }
 
     public void OnDeath(PlayerControl killer)
@@ -110,11 +121,6 @@ public class LaunchpadPlayer(IntPtr ptr) : MonoBehaviour(ptr)
             return;
         }
 
-        if (playerObject.IsRevived())
-        {
-            playerObject.cosmetics.SetOutline(true, new Il2CppSystem.Nullable<Color>(LaunchpadPalette.MedicColor));
-        }
-
         if (playerObject.Data.IsHacked())
         {
             var randomString = Helpers.RandomString(Helpers.Random.Next(4, 6), "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#!?$(???#@)$@@@@0000");
@@ -122,16 +128,75 @@ public class LaunchpadPlayer(IntPtr ptr) : MonoBehaviour(ptr)
             playerObject.cosmetics.SetNameMask(true);
             playerObject.cosmetics.gameObject.SetActive(false);
         }
-
-        if (knife is null)
+        else if (wasRevived)
         {
-            knife = playerObject.gameObject.transform.FindChild("BodyForms/Seeker/KnifeHand");
+            playerObject.cosmetics.SetOutline(true, new Il2CppSystem.Nullable<Color>(LaunchpadPalette.MedicColor));
+        }
+
+        knife = playerObject.gameObject.transform.FindChild("BodyForms/Seeker/KnifeHand");
+        if (knife)
+        {
+            knife.gameObject.SetActive(!playerObject.Data.IsDead && playerObject.CanMove);
+        }
+
+        if (playerObject.AmOwner)
+        {
+            UpdateBodyOutline(playerObject.Data.Role.TeamColor);
+        }
+    }
+    
+    public void UpdateBodyOutline(Color outlineColor)
+    {
+        if (playerObject.Data.Role is not ICustomRole { TargetsBodies: true })
+        {
             return;
         }
 
-        knife.gameObject.SetActive(!playerObject.Data.IsDead && playerObject.CanMove);
+        var newTarget = NearestDeadBody();
+        
+        if (deadBodyTarget && newTarget != deadBodyTarget)
+        {
+            foreach (var renderer in deadBodyTarget.bodyRenderers)
+            {
+                renderer.SetOutline(null);
+            }
+        }
+
+        deadBodyTarget = newTarget;
+        if (deadBodyTarget)
+        {
+            foreach (var renderer in deadBodyTarget.bodyRenderers)
+            {
+                renderer.SetOutline(outlineColor);
+            }
+        }
     }
 
+    public DeadBody NearestDeadBody(bool ignoreColliders = false)
+    {
+        var abilityDistance = playerObject.MaxReportDistance / 4f;
+        var myPos = playerObject.GetTruePosition();
+        
+        DeadBody target = null;
+        var nearestDist = float.MaxValue;
+
+        foreach (var body in DeadBodyComponent.AllBodies)
+        {
+            var vector = (Vector2)body.transform.position - myPos;
+            var magnitude = vector.magnitude;
+            if (magnitude <= abilityDistance &&
+                magnitude < nearestDist &&
+                (ignoreColliders || !PhysicsHelpers.AnyNonTriggersBetween(myPos, vector.normalized, magnitude,
+                    Constants.ShipAndObjectsMask)))
+            {
+                target = body;
+                nearestDist = magnitude;
+            }
+        }
+
+        return target;
+    }
+    
     public struct CustomVoteData()
     {
         public readonly List<byte> VotedPlayers = [];

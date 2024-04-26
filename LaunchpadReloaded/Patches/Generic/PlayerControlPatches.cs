@@ -76,7 +76,7 @@ public static class PlayerControlPatches
             return;
         }
 
-        if (__instance.IsRevived())
+        if (__instance.GetLpPlayer().wasRevived)
         {
             __instance.cosmetics.SetOutline(true, new Nullable<Color>(LaunchpadPalette.MedicColor));
         }

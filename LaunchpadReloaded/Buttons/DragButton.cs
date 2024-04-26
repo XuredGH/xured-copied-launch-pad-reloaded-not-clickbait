@@ -23,7 +23,7 @@ public class DragButton : CustomActionButton
 
     public override bool CanUse()
     {
-        return DeadBodyTarget && DragManager.Instance && PlayerControl.LocalPlayer.CanMove && !PlayerControl.LocalPlayer.inVent;
+        return LaunchpadPlayer.LocalPlayer.deadBodyTarget && DragManager.Instance && PlayerControl.LocalPlayer.CanMove && !PlayerControl.LocalPlayer.inVent;
     }
 
     protected override void FixedUpdate(PlayerControl playerControl)
@@ -57,12 +57,12 @@ public class DragButton : CustomActionButton
 
     public bool CanDrop()
     {
-        if (DeadBodyTarget || DragManager.Instance is null)
+        if (LaunchpadPlayer.LocalPlayer.deadBodyTarget || DragManager.Instance is null)
         {
             return false;
         }
 
-        return !PhysicsHelpers.AnythingBetween(PlayerControl.LocalPlayer.Collider, PlayerControl.LocalPlayer.Collider.bounds.center, DeadBodyTarget.TruePosition, Constants.ShipAndAllObjectsMask, false);
+        return !PhysicsHelpers.AnythingBetween(PlayerControl.LocalPlayer.Collider, PlayerControl.LocalPlayer.Collider.bounds.center, LaunchpadPlayer.LocalPlayer.deadBodyTarget.TruePosition, Constants.ShipAndAllObjectsMask, false);
     }
 
     protected override void OnClick()
@@ -73,7 +73,7 @@ public class DragButton : CustomActionButton
         }
         else
         {
-            PlayerControl.LocalPlayer.RpcStartDragging(DeadBodyTarget.ParentId);
+            PlayerControl.LocalPlayer.RpcStartDragging(LaunchpadPlayer.LocalPlayer.deadBodyTarget.ParentId);
         }
     }
 

@@ -20,13 +20,13 @@ public class InvestigateButton : CustomActionButton
 
     public override bool CanUse()
     {
-        return DeadBodyTarget;
+        return LaunchpadPlayer.LocalPlayer.deadBodyTarget;
     }
 
     protected override void OnClick()
     {
-        var gameObject = UnityEngine.Object.Instantiate<GameObject>(LaunchpadAssets.DetectiveGame.LoadAsset(), HudManager.Instance.transform);
+        var gameObject = Object.Instantiate(LaunchpadAssets.DetectiveGame.LoadAsset(), HudManager.Instance.transform);
         var minigame = gameObject.GetComponent<JournalMinigame>();
-        minigame.Open(LaunchpadPlayer.GetById(DeadBodyTarget.ParentId));
+        minigame.Open(LaunchpadPlayer.GetById(LaunchpadPlayer.LocalPlayer.deadBodyTarget.ParentId));
     }
 }

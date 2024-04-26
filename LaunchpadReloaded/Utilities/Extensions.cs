@@ -8,6 +8,7 @@ using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
 using PowerTools;
+using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -128,11 +129,6 @@ public static class Extensions
         return HackingManager.Instance.hackedPlayers.Contains(playerInfo.PlayerId) || (playerInfo.Role.IsImpostor && HackingManager.Instance.AnyPlayerHacked());
     }
 
-    public static bool IsRevived(this PlayerControl player)
-    {
-        return RevivalManager.Instance is not null && RevivalManager.Instance.revivedPlayers.Contains(player.PlayerId);
-    }
-
     public static void Revive(this DeadBody body)
     {
         var player = PlayerControl.AllPlayerControls.ToArray().ToList().Find(player => player.PlayerId == body.ParentId);
@@ -153,7 +149,7 @@ public static class Extensions
         }
 
         body.gameObject.Destroy();
-        RevivalManager.Instance.revivedPlayers.Add(player.PlayerId);
+        player.GetLpPlayer().wasRevived = true;
     }
     
     public static void HideBody(this DeadBody body)
@@ -175,46 +171,10 @@ public static class Extensions
             spriteRenderer.enabled = true;
         }
     }
+    
     public static bool IsOverride(this MethodInfo methodInfo)
     {
         return methodInfo.GetBaseDefinition() != methodInfo;
-    }
-    public static void UpdateBodies(this PlayerControl playerControl, Color outlineColor, ref DeadBody target)
-    {
-        foreach (var body in Object.FindObjectsOfType<DeadBody>())
-        {
-            foreach (var bodyRenderer in body.bodyRenderers)
-            {
-                bodyRenderer.SetOutline(null);
-            }
-        }
-
-        if (playerControl.Data.Role is not ICustomRole { TargetsBodies: true })
-        {
-            return;
-        }
-
-        target = playerControl.NearestDeadBody();
-        if (!target)
-        {
-            return;
-        }
-        
-        foreach (var renderer in target.bodyRenderers)
-        {
-            renderer.SetOutline(outlineColor);
-        }
-
-    }
-
-    public static DeadBody NearestDeadBody(this PlayerControl playerControl)
-    {
-        var results = new Il2CppSystem.Collections.Generic.List<Collider2D>();
-        Physics2D.OverlapCircle(playerControl.GetTruePosition(), playerControl.MaxReportDistance / 4f, Filter, results);
-        return results.ToArray()
-            .Where(collider2D => collider2D.CompareTag("DeadBody"))
-            .Select(collider2D => collider2D.GetComponent<DeadBody>())
-            .FirstOrDefault(component => component && !component.Reported);
     }
 
     public static PlayerControl GetClosestPlayer(this PlayerControl playerControl, bool includeImpostors, float distance)
