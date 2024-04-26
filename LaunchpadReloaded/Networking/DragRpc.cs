@@ -2,6 +2,7 @@
 using LaunchpadReloaded.Buttons;
 using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Roles;
+using LaunchpadReloaded.Utilities;
 using Reactor.Networking.Attributes;
 
 namespace LaunchpadReloaded.Networking;
@@ -17,8 +18,8 @@ public static class DragRpc
             playerControl.KickForCheating();
             return;
         }
-        
-        DragManager.Instance.DraggingPlayers.Add(playerControl.PlayerId, bodyId);
+
+        playerControl.GetLpPlayer().dragId = bodyId;
         playerControl.MyPhysics.Speed = 1.5f;
         if (playerControl.AmOwner)
         {
@@ -29,7 +30,7 @@ public static class DragRpc
     [MethodRpc((uint)LaunchpadRpc.StopDrag)]
     public static void RpcStopDragging(this PlayerControl playerControl)
     {
-        DragManager.Instance.DraggingPlayers.Remove(playerControl.PlayerId);
+        playerControl.GetLpPlayer().dragId = 255;
         playerControl.MyPhysics.Speed = 2.5f;
         if (playerControl.AmOwner)
         {

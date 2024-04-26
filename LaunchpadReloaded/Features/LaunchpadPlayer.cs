@@ -29,6 +29,10 @@ public class LaunchpadPlayer(IntPtr ptr) : MonoBehaviour(ptr)
 
     public bool wasRevived;
 
+    public byte dragId = 255;
+    
+    public bool Dragging => dragId != 255;
+
     private CustomGameData.CustomPlayerInfo _cachedData;
     
     public CustomGameData.CustomPlayerInfo Data
@@ -100,6 +104,7 @@ public class LaunchpadPlayer(IntPtr ptr) : MonoBehaviour(ptr)
     public void ResetPlayer()
     {
         wasRevived = false;
+        dragId = 255;
     }
 
     public void OnDeath(PlayerControl killer)
@@ -180,7 +185,7 @@ public class LaunchpadPlayer(IntPtr ptr) : MonoBehaviour(ptr)
         DeadBody target = null;
         var nearestDist = float.MaxValue;
 
-        foreach (var body in DeadBodyComponent.AllBodies)
+        foreach (var body in DeadBodyComponent.AllBodies.Where(x=>!x.hidden))
         {
             var vector = (Vector2)body.transform.position - myPos;
             var magnitude = vector.magnitude;
@@ -189,7 +194,7 @@ public class LaunchpadPlayer(IntPtr ptr) : MonoBehaviour(ptr)
                 (ignoreColliders || !PhysicsHelpers.AnyNonTriggersBetween(myPos, vector.normalized, magnitude,
                     Constants.ShipAndObjectsMask)))
             {
-                target = body;
+                target = body.body;
                 nearestDist = magnitude;
             }
         }

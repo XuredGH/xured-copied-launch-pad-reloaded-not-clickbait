@@ -3,6 +3,7 @@ using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Roles;
+using LaunchpadReloaded.Utilities;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
@@ -23,12 +24,13 @@ public class DragButton : CustomActionButton
 
     public override bool CanUse()
     {
-        return LaunchpadPlayer.LocalPlayer.deadBodyTarget && DragManager.Instance && PlayerControl.LocalPlayer.CanMove && !PlayerControl.LocalPlayer.inVent;
+        return LaunchpadPlayer.LocalPlayer.deadBodyTarget && PlayerControl.LocalPlayer.CanMove && !PlayerControl.LocalPlayer.inVent &&
+               (!LaunchpadPlayer.LocalPlayer.Dragging || CanDrop());
     }
 
     protected override void FixedUpdate(PlayerControl playerControl)
     {
-        if (!DragManager.Instance || !DragManager.Instance.IsDragging(playerControl.PlayerId))
+        if (!playerControl.GetLpPlayer().Dragging)
         {
             return;
         }
@@ -57,7 +59,7 @@ public class DragButton : CustomActionButton
 
     public bool CanDrop()
     {
-        if (LaunchpadPlayer.LocalPlayer.deadBodyTarget || DragManager.Instance is null)
+        if (!LaunchpadPlayer.LocalPlayer.deadBodyTarget)
         {
             return false;
         }
@@ -67,7 +69,7 @@ public class DragButton : CustomActionButton
 
     protected override void OnClick()
     {
-        if (DragManager.Instance.IsDragging(PlayerControl.LocalPlayer.PlayerId))
+        if (LaunchpadPlayer.LocalPlayer.Dragging)
         {
             PlayerControl.LocalPlayer.RpcStopDragging();
         }

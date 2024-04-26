@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using System.Linq;
+using HarmonyLib;
 using InnerNet;
 using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.API.Hud;
@@ -9,6 +10,7 @@ using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Extensions;
 using System.Text;
 using LaunchpadReloaded.Buttons;
+using LaunchpadReloaded.Features;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Patches.Generic;
@@ -174,16 +176,11 @@ public static class HudManagerPatches
         {
             _roleTab.gameObject.Destroy();
         }
-
-        if (DragManager.Instance is null)
+        
+        foreach (var player in LaunchpadPlayer.GetAllPlayers().Where(x=>x.Dragging))
         {
-            return;
-        }
-
-        foreach (var (player, bodyId) in DragManager.Instance.DraggingPlayers)
-        {
-            var bodyById = Helpers.GetBodyById(bodyId);
-            bodyById.transform.position = Vector3.Lerp(bodyById.transform.position, GameData.Instance.GetPlayerById(player).Object.transform.position, 5f * Time.deltaTime);
+            var bodyById = Helpers.GetBodyById(player.dragId);
+            bodyById.transform.position = Vector3.Lerp(bodyById.transform.position, player.transform.position, 5f * Time.deltaTime);
         }
     }
 

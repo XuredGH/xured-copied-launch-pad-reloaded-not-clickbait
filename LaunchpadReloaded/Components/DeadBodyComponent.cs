@@ -12,9 +12,11 @@ namespace LaunchpadReloaded.Components;
 [RegisterInIl2Cpp]
 public class DeadBodyComponent(IntPtr ptr) : MonoBehaviour(ptr)
 {
-    public static readonly List<DeadBody> AllBodies = [];
+    public static readonly List<DeadBodyComponent> AllBodies = [];
 
     public DeadBody body;
+
+    public bool hidden;
 
     private void Awake()
     {
@@ -26,11 +28,11 @@ public class DeadBodyComponent(IntPtr ptr) : MonoBehaviour(ptr)
         }
         Debug.LogError(body.ParentId);
         
-        AllBodies.Add(body);
+        AllBodies.Add(this);
     }
 
     private void OnDestroy()
     {
-        AllBodies.Remove(body);
+        AllBodies.Remove(this);
     }
 }

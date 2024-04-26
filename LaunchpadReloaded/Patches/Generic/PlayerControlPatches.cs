@@ -26,7 +26,7 @@ public static class PlayerControlPatches
         switch (__instance.Data.Role)
         {
             case JanitorRole:
-                __result = __result && !DragManager.Instance.IsDragging(__instance.PlayerId);
+                __result = __result && !__instance.GetLpPlayer().Dragging;
                 break;
         }
     }

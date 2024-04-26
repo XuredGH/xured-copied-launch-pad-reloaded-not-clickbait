@@ -160,6 +160,7 @@ public static class Extensions
         {
             spriteRenderer.enabled = false;
         }
+        body.GetComponent<DeadBodyComponent>().hidden = true;
     }
 
     public static void ShowBody(this DeadBody body, bool reported)
@@ -170,6 +171,7 @@ public static class Extensions
         {
             spriteRenderer.enabled = true;
         }
+        body.GetComponent<DeadBodyComponent>().hidden = false;
     }
     
     public static bool IsOverride(this MethodInfo methodInfo)

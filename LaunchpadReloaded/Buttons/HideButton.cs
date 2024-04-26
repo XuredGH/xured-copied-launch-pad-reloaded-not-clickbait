@@ -22,7 +22,7 @@ public class HideButton : CustomActionButton
     public override bool CanUse()
     {
         return LaunchpadPlayer.LocalPlayer.deadBodyTarget &&
-               DragManager.Instance.IsDragging(PlayerControl.LocalPlayer.PlayerId) &&
+               LaunchpadPlayer.LocalPlayer.Dragging &&
                VentTarget && !VentTarget.gameObject.GetComponent<VentBodyComponent>();
     }
 

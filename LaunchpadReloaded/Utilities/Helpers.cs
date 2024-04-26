@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text;
 using LaunchpadReloaded.API.Roles;
+using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
 using TMPro;
 using UnityEngine;
@@ -16,7 +17,7 @@ public static class Helpers
     
     public static bool ShouldCancelClick()
     {
-        return DragManager.Instance is not null && DragManager.Instance.IsDragging(PlayerControl.LocalPlayer.PlayerId);
+        return LaunchpadPlayer.LocalPlayer.Dragging;
     }
     
     public static string FirstLetterToUpper(string str)

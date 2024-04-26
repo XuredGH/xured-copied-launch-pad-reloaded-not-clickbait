@@ -38,7 +38,7 @@ public class JanitorRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
             return false;
         }
         var console = usable.TryCast<Console>();
-        return !(console != null) || console.AllowImpostor && !DragManager.Instance.DraggingPlayers.ContainsKey(PlayerControl.LocalPlayer.PlayerId);
+        return !(console != null) || console.AllowImpostor && !LaunchpadPlayer.LocalPlayer.Dragging;
     }
 
     public void CreateOptions()

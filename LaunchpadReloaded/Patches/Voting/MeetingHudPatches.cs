@@ -46,7 +46,10 @@ public static class MeetingHudPatches
             }
         }
 
-        DragManager.Instance.DraggingPlayers.Clear();
+        foreach (var launchpadPlayer in LaunchpadPlayer.GetAllPlayers())
+        {
+            launchpadPlayer.dragId = 255;
+        }
 
         if (_typeText == null)
         {
