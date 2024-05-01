@@ -1,6 +1,5 @@
 ﻿using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
@@ -24,7 +23,7 @@ public class DragButton : CustomActionButton
 
     public override bool CanUse()
     {
-        return LaunchpadPlayer.LocalPlayer.deadBodyTarget && PlayerControl.LocalPlayer.CanMove && !PlayerControl.LocalPlayer.inVent &&
+        return base.CanUse() && LaunchpadPlayer.LocalPlayer.deadBodyTarget && PlayerControl.LocalPlayer.CanMove && !PlayerControl.LocalPlayer.inVent &&
                (!LaunchpadPlayer.LocalPlayer.Dragging || CanDrop());
     }
 

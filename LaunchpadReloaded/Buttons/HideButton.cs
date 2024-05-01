@@ -1,7 +1,6 @@
 ﻿using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Roles;
 using UnityEngine;
@@ -21,7 +20,8 @@ public class HideButton : CustomActionButton
 
     public override bool CanUse()
     {
-        return LaunchpadPlayer.LocalPlayer.deadBodyTarget &&
+        return base.CanUse() &&
+               LaunchpadPlayer.LocalPlayer.deadBodyTarget &&
                LaunchpadPlayer.LocalPlayer.Dragging &&
                VentTarget && !VentTarget.gameObject.GetComponent<VentBodyComponent>();
     }

@@ -46,7 +46,7 @@ public class ShootButton : CustomActionButton
         _currentTarget.cosmetics.currentBodySprite.BodySprite.material.SetColor(ShaderID.OutlineColor, LaunchpadPalette.SheriffColor);
     }
 
-    public override bool CanUse() => _currentTarget;
+    public override bool CanUse() => base.CanUse() && _currentTarget;
 
     protected override void OnClick()
     {

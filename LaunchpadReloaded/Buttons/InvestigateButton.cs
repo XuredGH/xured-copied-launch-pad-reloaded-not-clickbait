@@ -20,7 +20,7 @@ public class InvestigateButton : CustomActionButton
 
     public override bool CanUse()
     {
-        return LaunchpadPlayer.LocalPlayer.deadBodyTarget;
+        return base.CanUse() && LaunchpadPlayer.LocalPlayer.deadBodyTarget;
     }
 
     protected override void OnClick()

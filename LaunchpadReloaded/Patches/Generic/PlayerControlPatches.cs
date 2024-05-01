@@ -94,12 +94,7 @@ public static class PlayerControlPatches
             }
         }
 
-        if (__instance.Data is null || __instance.Data.Role is null)
-        {
-            return;
-        }
-
-        if (__instance.Data.Role is ICustomRole customRole)
+        if (__instance.Data?.Role is ICustomRole customRole)
         {
             customRole.PlayerControlFixedUpdate(__instance);
         }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using AmongUs.GameOptions;
 using Il2CppInterop.Runtime;
 using LaunchpadReloaded.Networking.Options;

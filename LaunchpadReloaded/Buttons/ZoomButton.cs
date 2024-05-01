@@ -28,7 +28,7 @@ public class ZoomButton : CustomActionButton
         return role is CaptainRole;
     }
 
-    public override bool CanUse() => !PlayerControl.LocalPlayer.Data.IsHacked();
+    public override bool CanUse() => base.CanUse() && !PlayerControl.LocalPlayer.Data.IsHacked();
 
     protected override void OnClick()
     {

@@ -1,6 +1,5 @@
 ﻿using LaunchpadReloaded.API.Hud;
 using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Roles;
 using UnityEngine;
@@ -24,8 +23,8 @@ public class ReviveButton : CustomActionButton
 
     public override bool CanUse()
     {
-        return LaunchpadPlayer.LocalPlayer.deadBodyTarget && CanRevive() && !PlayerControl.LocalPlayer.Data.IsDead && 
-               PlayerControl.LocalPlayer.CanMove && !LaunchpadPlayer.LocalPlayer.Dragging;
+        return base.CanUse() && CanRevive() && LaunchpadPlayer.LocalPlayer.deadBodyTarget && 
+               !PlayerControl.LocalPlayer.Data.IsDead && PlayerControl.LocalPlayer.CanMove && !LaunchpadPlayer.LocalPlayer.Dragging;
     }
 
     public bool CanRevive()

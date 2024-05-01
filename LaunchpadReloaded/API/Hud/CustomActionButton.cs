@@ -1,5 +1,4 @@
 ﻿using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Utilities;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -86,14 +85,9 @@ public abstract class CustomActionButton
 
     public virtual void OnEffectEnd() { }
 
-    private bool CanUseHandler()
-    {
-        return Timer <= 0 && !EffectActive && (!LimitedUses || UsesLeft > 0) && CanUse();
-    }
-
     public virtual bool CanUse()
     {
-        return true;
+        return Timer <= 0 && !EffectActive && (!LimitedUses || UsesLeft > 0);
     }
 
     public virtual void SetActive(bool visible, RoleBehaviour role)
@@ -101,9 +95,9 @@ public abstract class CustomActionButton
         Button.ToggleVisible(visible && Enabled(role));
     }
 
-    private void ClickHandler()
+    public virtual void ClickHandler()
     {
-        if (!CanUseHandler())
+        if (!CanUse())
         {
             return;
         }
@@ -141,7 +135,7 @@ public abstract class CustomActionButton
             }
         }
 
-        if (CanUseHandler())
+        if (CanUse())
         {
             Button.SetEnabled();
         }
