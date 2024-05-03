@@ -57,7 +57,7 @@ public class LoadableAsset<T>(string name, bool useBundle = true) where T : Obje
 
     public T LoadAsset()
     {
-        if (_loadedAsset != null)
+        if (_loadedAsset)
         {
             return _loadedAsset;
         }
