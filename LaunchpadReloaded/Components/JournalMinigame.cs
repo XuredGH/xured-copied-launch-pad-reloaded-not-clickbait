@@ -26,15 +26,9 @@ public class JournalMinigame(nint ptr) : Minigame(ptr)
         DeadPlayerInfo = transform.FindChild("BodyInfo/DeadPlayerInfo").GetComponent<TextMeshPro>();
         DeadBodyIcon = transform.FindChild("BodyInfo/Icon").GetComponent<SpriteRenderer>();
 
-        CloseButton.OnClick.AddListener((UnityAction)(() =>
-        {
-            Close();
-        }));
-
-        OutsideButton.OnClick.AddListener((UnityAction)(() =>
-        {
-            Close();
-        }));
+        CloseButton.OnClick.AddListener((UnityAction)(()=>Close()));
+        
+        OutsideButton.OnClick.AddListener((UnityAction)(()=>Close()));
 
         Suspects = gameObject.transform.FindChild("Suspects").GetComponentsInChildren<SpriteRenderer>().ToList();
     }
