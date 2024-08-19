@@ -10,6 +10,8 @@
     </PropertyGroup>
     
     <ItemGroup>
+        <Reference Include="S:\RiderProjects\MiraAPI\MiraAPI\bin\Debug\net6.0\MiraAPI.dll" />
+        
         <PackageReference Include="Reactor" Version="2.2.0" />
         <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.688" Private="false" ExcludeAssets="runtime;native" />
         <PackageReference Include="Iced" Version="1.20.0" />
@@ -22,10 +24,10 @@
     </ItemGroup>
     
     <ItemGroup>
-      <EmbeddedResource Include="Resources\assets-win-x86.bundle" />
-      <EmbeddedResource Include="Resources\Footstep.png" />
-      <EmbeddedResource Include="Resources\Instinct.png" />
-      <EmbeddedResource Include="Resources\Investigate.png" />
+      <EmbeddedResource Include="Resources/assets-win-x86.bundle" />
+      <EmbeddedResource Include="Resources/Footstep.png" />
+      <EmbeddedResource Include="Resources/Instinct.png" />
+      <EmbeddedResource Include="Resources/Investigate.png" />
     </ItemGroup>
     
 
