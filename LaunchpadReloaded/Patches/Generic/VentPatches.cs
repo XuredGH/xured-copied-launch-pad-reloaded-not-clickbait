@@ -17,7 +17,7 @@ public static class VentPatches
     [HarmonyPatch("CanUse")]
     public static bool CanUseVentPatch(Vent __instance, ref float __result, [HarmonyArgument(0)] NetworkedPlayerInfo pc, [HarmonyArgument(1)] ref bool canUse, [HarmonyArgument(2)] ref bool couldUse)
     {
-        if (CustomGameModeManager.ActiveMode.CanVent(__instance, pc) == false)
+        if (CustomGameModeManager.ActiveMode?.CanVent(__instance, pc) == false)
         {
             return couldUse = canUse = false;
         }

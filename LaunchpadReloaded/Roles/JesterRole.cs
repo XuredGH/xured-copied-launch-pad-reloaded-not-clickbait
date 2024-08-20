@@ -20,7 +20,6 @@ public class JesterRole(System.IntPtr ptr) : RoleBehaviour(ptr), ICustomRole
     public string RoleLongDescription => "Convince the crew to vote you out by being suspicious.\nIf you get voted out, you win the game.";
     public Color RoleColor => LaunchpadPalette.JesterColor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Neutral;
-    public LoadableAsset<Sprite> OptionsScreenshot => MiraAssets.Empty;
     public bool TasksCount => false;
     public bool CanUseVent => ModdedGroupSingleton<JesterOptions>.Instance.CanUseVents;
     public RoleTypes GhostRole => (RoleTypes)LaunchpadRoles.OutcastGhost;

@@ -15,7 +15,7 @@ public static class ConsolePatch
     {
         if (AmongUsClient.Instance.GameState == InnerNetClient.GameStates.Started && ShipStatus.Instance)
         {
-            if (CustomGameModeManager.ActiveMode.CanUseConsole(__instance))
+            if (CustomGameModeManager.ActiveMode != null && CustomGameModeManager.ActiveMode.CanUseConsole(__instance))
             {
                 var task = __instance.FindTask(pc.Object);
 
@@ -49,7 +49,7 @@ public static class ConsolePatch
     {
         if (AmongUsClient.Instance.GameState == InnerNetClient.GameStates.Started && ShipStatus.Instance)
         {
-            if (CustomGameModeManager.ActiveMode.CanUseSystemConsole(__instance))
+            if (CustomGameModeManager.ActiveMode != null && CustomGameModeManager.ActiveMode.CanUseSystemConsole(__instance))
             {
                 return canUse = couldUse = !HackingManager.Instance.AnyPlayerHacked();
             }
@@ -68,7 +68,7 @@ public static class ConsolePatch
     {
         if (AmongUsClient.Instance.GameState == InnerNetClient.GameStates.Started && ShipStatus.Instance)
         {
-            if (CustomGameModeManager.ActiveMode.CanUseMapConsole(__instance))
+            if (CustomGameModeManager.ActiveMode != null && CustomGameModeManager.ActiveMode.CanUseMapConsole(__instance))
             {
                 return canUse = couldUse = !pc.IsHacked();
             }

@@ -13,7 +13,7 @@ public static class DeadBodyPatch
     [HarmonyPrefix, HarmonyPatch("OnClick")]
     public static bool OnClickPatch(DeadBody __instance)
     {
-        if (CustomGameModeManager.ActiveMode.CanReport(__instance))
+        if (CustomGameModeManager.ActiveMode != null && CustomGameModeManager.ActiveMode.CanReport(__instance))
         {
             return !HackingManager.Instance.AnyPlayerHacked();
         }

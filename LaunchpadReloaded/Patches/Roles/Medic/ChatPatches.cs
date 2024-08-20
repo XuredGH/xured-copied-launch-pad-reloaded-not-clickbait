@@ -13,7 +13,7 @@ public static class ChatPatches
     [HarmonyPostfix, HarmonyPatch("Update")]
     public static void UpdatePatch(ChatController __instance)
     {
-        if (!LaunchpadPlayer.LocalPlayer.wasRevived)
+        if (LaunchpadPlayer.LocalPlayer is null || !LaunchpadPlayer.LocalPlayer.wasRevived)
         {
             return;
         }

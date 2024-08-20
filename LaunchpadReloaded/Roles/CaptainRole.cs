@@ -21,9 +21,7 @@ public class CaptainRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
     public Color RoleColor => LaunchpadPalette.CaptainColor;
     
     public ModdedRoleTeams Team => ModdedRoleTeams.Crewmate;
-
-    public LoadableAsset<Sprite> OptionsScreenshot => MiraAssets.Empty;
-
+    
     public override bool IsDead => false;
     
     [HideFromIl2Cpp]

@@ -16,8 +16,7 @@ public class DetectiveRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
     public string RoleDescription => "Investigate and find clues on murders.";
     public string RoleLongDescription => "Investigate bodies to get clues and use your instinct ability\nto see recent footsteps around you!";
     public Color RoleColor => LaunchpadPalette.DetectiveColor;
-    public ModdedRoleTeams Team => ModdedRoleTeams.Crewmate;
-    public LoadableAsset<Sprite> OptionsScreenshot => MiraAssets.Empty;
+    public ModdedRoleTeams Team => ModdedRoleTeams.Crewmate; 
     public override bool IsDead => false;
     public bool TargetsBodies => true;
     

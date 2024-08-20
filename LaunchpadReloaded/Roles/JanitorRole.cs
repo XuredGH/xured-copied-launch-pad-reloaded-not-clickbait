@@ -17,7 +17,6 @@ public class JanitorRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
     public string RoleLongDescription => "You can drag bodies and hide them in vents\nWhich will cause them to disappear unless the vent is used.";
     public Color RoleColor => LaunchpadPalette.JanitorColor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Impostor;
-    public LoadableAsset<Sprite> OptionsScreenshot => MiraAssets.Empty;
     public override bool IsDead => false;
     public bool TargetsBodies => true;
     

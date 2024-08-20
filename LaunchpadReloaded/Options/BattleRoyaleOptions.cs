@@ -11,7 +11,7 @@ public class BattleRoyaleOptions : IModdedOptionGroup
 {
     public string GroupName => "Battle Royale Options";
 
-    public Func<bool> GroupVisible => () => CustomGameModeManager.ActiveMode.GetType() == typeof(BattleRoyale);
+    public Func<bool> GroupVisible => () => CustomGameModeManager.ActiveMode?.GetType() == typeof(BattleRoyale);
 
     [ModdedToggleOption("Use Seeker Character")] public bool SeekerCharacter { get; set; } = true;
     

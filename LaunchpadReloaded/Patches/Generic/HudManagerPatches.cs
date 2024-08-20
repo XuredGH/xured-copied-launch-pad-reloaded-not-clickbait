@@ -53,7 +53,7 @@ public static class HudManagerPatches
             return;
         }
 
-        CustomGameModeManager.ActiveMode.HudUpdate(__instance);
+        CustomGameModeManager.ActiveMode?.HudUpdate(__instance);
 
         if (HackingManager.Instance)
         {

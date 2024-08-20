@@ -17,7 +17,6 @@ public class MedicRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
     public string RoleLongDescription => "Use your revive ability to bring dead bodies\nback to life!";
     public Color RoleColor => LaunchpadPalette.MedicColor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Crewmate;
-    public LoadableAsset<Sprite> OptionsScreenshot => MiraAssets.Empty;
     public override bool IsDead => false;
     public bool TargetsBodies => true;
     

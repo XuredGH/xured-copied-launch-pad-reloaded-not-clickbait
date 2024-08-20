@@ -147,7 +147,7 @@ public class LaunchpadPlayer(IntPtr ptr) : MonoBehaviour(ptr)
             knife.gameObject.SetActive(!playerObject.Data.IsDead && playerObject.CanMove);
         }
 
-        if (playerObject.AmOwner)
+        if (playerObject.AmOwner && playerObject.Data && playerObject.Data.Role)
         {
             UpdateBodyOutline(playerObject.Data.Role.TeamColor);
         }
