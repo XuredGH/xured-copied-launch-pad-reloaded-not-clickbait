@@ -1,9 +1,9 @@
-﻿using HarmonyLib;
-using LaunchpadReloaded.API.Roles;
+﻿using System.Linq;
+using HarmonyLib;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
-using LaunchpadReloaded.Utilities;
-using System.Linq;
+using MiraAPI.Roles;
+using MiraAPI.Utilities;
 
 namespace LaunchpadReloaded.Patches.Roles.Jester;
 [HarmonyPatch]
@@ -12,12 +12,13 @@ public static class JesterPatches
     /// <summary>
     /// Custom end screen with jester color and text
     /// </summary>
-    [HarmonyPostfix, HarmonyPatch(typeof(EndGameManager), nameof(EndGameManager.SetEverythingUp))]
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(EndGameManager), nameof(EndGameManager.SetEverythingUp))]
     public static void SetUp(EndGameManager __instance)
     {
-        var didWin = TempData.winners.ToArray().Any(h => h.IsYou);
+        var didWin = EndGameResult.CachedWinners.ToArray().Any(h => h.IsYou);
 
-        if (TempData.EndReason != (GameOverReason)GameOverReasons.JesterWins)
+        if (EndGameResult.CachedGameOverReason != (GameOverReason)GameOverReasons.JesterWins)
         {
             return;
         }
@@ -30,7 +31,8 @@ public static class JesterPatches
     /// <summary>
     /// Custom ejection text for roles
     /// </summary>
-    [HarmonyPostfix, HarmonyPatch(typeof(ExileController), nameof(ExileController.Begin))]
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(ExileController), nameof(ExileController.Begin))]
     public static void Begin(ExileController __instance)
     {
         if (__instance.exiled?.Role is ShapeshifterRole)

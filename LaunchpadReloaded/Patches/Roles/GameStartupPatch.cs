@@ -1,5 +1,5 @@
 ﻿using HarmonyLib;
-using LaunchpadReloaded.API.Roles;
+using MiraAPI.Roles;
 
 namespace LaunchpadReloaded.Patches.Roles;
 
@@ -11,7 +11,8 @@ public static class GameStartupPatch
     /// <summary>
     /// This is used for registering roles when the game opens, might be a janky solution but it works
     /// </summary>
-    [HarmonyPostfix, HarmonyPatch("Start")]
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(MainMenuManager.Start))]
     public static void StartPostfix()
     {
         if (_runOnce)

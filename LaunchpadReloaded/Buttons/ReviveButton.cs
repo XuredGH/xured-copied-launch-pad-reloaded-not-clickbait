@@ -1,7 +1,10 @@
-﻿using LaunchpadReloaded.API.Hud;
-using LaunchpadReloaded.Features;
+﻿using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Roles;
+using LaunchpadReloaded.Roles.Options;
+using MiraAPI.GameOptions;
+using MiraAPI.Hud;
+using MiraAPI.Utilities.Assets;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
@@ -11,11 +14,11 @@ public class ReviveButton : CustomActionButton
 {
     public override string Name => "REVIVE";
     
-    public override float Cooldown => MedicRole.ReviveCooldown.Value;
+    public override float Cooldown => ModdedGroupSingleton<MedicOptions>.Instance.ReviveCooldown;
     
     public override float EffectDuration => 0;
     
-    public override int MaxUses => (int)MedicRole.MaxRevives.Value;
+    public override int MaxUses => (int)ModdedGroupSingleton<MedicOptions>.Instance.MaxRevives;
     
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.ReviveButton;
     
@@ -29,7 +32,7 @@ public class ReviveButton : CustomActionButton
 
     public bool CanRevive()
     {
-        if (!MedicRole.OnlyAllowInMedbay.Value)
+        if (!ModdedGroupSingleton<MedicOptions>.Instance.OnlyAllowInMedbay)
         {
             return true;
         }

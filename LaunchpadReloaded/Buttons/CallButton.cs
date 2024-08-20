@@ -1,7 +1,10 @@
-﻿using LaunchpadReloaded.API.Hud;
-using LaunchpadReloaded.Features;
+﻿using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Roles;
+using LaunchpadReloaded.Roles.Options;
+using MiraAPI.GameOptions;
+using MiraAPI.Hud;
+using MiraAPI.Utilities.Assets;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
@@ -10,9 +13,9 @@ namespace LaunchpadReloaded.Buttons;
 public class CallButton : CustomActionButton
 {
     public override string Name => "CALL";
-    public override float Cooldown => CaptainRole.CaptainMeetingCooldown.Value;
+    public override float Cooldown => ModdedGroupSingleton<CaptainOptions>.Instance.CaptainMeetingCooldown;
     public override float EffectDuration => 0;
-    public override int MaxUses => (int)CaptainRole.CaptainMeetingCount.Value;
+    public override int MaxUses => ModdedGroupSingleton<CaptainOptions>.Instance.CaptainMeetingCount;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.CallButton;
 
     public override bool Enabled(RoleBehaviour role)

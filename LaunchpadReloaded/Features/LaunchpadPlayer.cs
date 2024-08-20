@@ -5,8 +5,11 @@ using Reactor.Utilities.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Components;
+using LaunchpadReloaded.Options;
+using LaunchpadReloaded.Roles.Options;
+using MiraAPI.GameOptions;
+using MiraAPI.Roles;
 using Reactor.Utilities.Extensions;
 using UnityEngine;
 
@@ -96,7 +99,7 @@ public class LaunchpadPlayer(IntPtr ptr) : MonoBehaviour(ptr)
                 playerObject.SetPlayerMaterialColors(sprite);
 
                 _lastPos = transform.position;
-                Destroy(footstep, DetectiveRole.FootstepsDuration.Value);
+                Destroy(footstep, ModdedGroupSingleton<DetectiveOptions>.Instance.FootstepsDuration);
             }
         }
     }
@@ -205,10 +208,10 @@ public class LaunchpadPlayer(IntPtr ptr) : MonoBehaviour(ptr)
     public struct CustomVoteData()
     {
         public readonly List<byte> VotedPlayers = [];
-        public int VotesRemaining = (int)LaunchpadGameOptions.Instance.MaxVotes.Value;
+        public int VotesRemaining = (int)ModdedGroupSingleton<VotingOptions>.Instance.MaxVotes.Value;
     }
 
-    public struct DeathData()
+    public struct DeathData
     {
         public DateTime DeathTime;
         public PlayerControl Killer;

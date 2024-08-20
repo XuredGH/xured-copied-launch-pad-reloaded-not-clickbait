@@ -2,5 +2,5 @@
 
 public enum GameOverReasons
 {
-    JesterWins = 9,
+    JesterWins = 19,
 }

@@ -1,7 +1,8 @@
 ﻿using System.Linq;
 using Hazel;
-using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
+using LaunchpadReloaded.Options;
+using MiraAPI.GameOptions;
 using Reactor.Networking.Attributes;
 using Reactor.Networking.Rpc;
 using Reactor.Utilities;
@@ -34,7 +35,7 @@ public class CustomCmdCheckColor(LaunchpadReloadedPlugin plugin, uint id) : Play
         var bodyColor = data.ColorId;
         var gradColor = data.GradientId;
 
-        if (!LaunchpadGameOptions.Instance.UniqueColors.Value)
+        if (!ModdedGroupSingleton<FunOptions>.Instance.UniqueColors.Value)
         {
             Rpc<CustomRpcSetColor>.Instance.Send(source, new CustomColorData(bodyColor, gradColor));
             return;

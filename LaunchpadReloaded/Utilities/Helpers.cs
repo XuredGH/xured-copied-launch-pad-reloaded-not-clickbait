@@ -1,7 +1,5 @@
 ﻿using System.Globalization;
 using System.Linq;
-using System.Text;
-using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Features;
 using TMPro;
 using UnityEngine;
@@ -60,39 +58,5 @@ public static class Helpers
     {
         return new string(Enumerable.Repeat(chars, length)
             .Select(s => s[UnityEngine.Random.RandomRangeInt(0,s.Length)]).ToArray());
-    }
-
-    public static string GetSuffix(NumberSuffixes suffix)
-    {
-        return suffix switch
-        {
-            NumberSuffixes.None => string.Empty,
-            NumberSuffixes.Multiplier => "x",
-            NumberSuffixes.Seconds => "s",
-            _ => string.Empty
-        };
-    }
-
-    public static void SendNotification(string text, Color textColor, float duration = 2f, float fontSize = 3f)
-    {
-        var notifs = HudManager.Instance.Notifier.transform.parent.FindChild("LaunchpadNotifications").GetComponent<NotificationPopper>();
-        notifs.TextArea.text = text;
-        notifs.TextArea.fontSize = fontSize;
-        notifs.textColor = textColor;
-        notifs.alphaTimer = duration;
-    }
-
-    public static PlainShipRoom GetRoom(Vector3 pos)
-    {
-        return ShipStatus.Instance.AllRooms.ToList().Find(room => room.roomArea.OverlapPoint(pos));
-    }
-
-    public static StringBuilder CreateForRole(ICustomRole role)
-    {
-        var taskStringBuilder = new StringBuilder();
-        taskStringBuilder.AppendLine($"{role.RoleColor.ToTextColor()}You are a <b>{role.RoleName}.</b></color>");
-        taskStringBuilder.Append("<size=70%>");
-        taskStringBuilder.AppendLine($"{role.RoleLongDescription}");
-        return taskStringBuilder;
     }
 }

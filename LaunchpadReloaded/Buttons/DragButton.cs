@@ -1,8 +1,11 @@
-﻿using LaunchpadReloaded.API.Hud;
-using LaunchpadReloaded.Features;
+﻿using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Roles;
+using LaunchpadReloaded.Roles.Options;
 using LaunchpadReloaded.Utilities;
+using MiraAPI.GameOptions;
+using MiraAPI.Hud;
+using MiraAPI.Utilities.Assets;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
@@ -18,7 +21,7 @@ public class DragButton : CustomActionButton
     
     public override bool Enabled(RoleBehaviour role)
     {
-        return role is JanitorRole || (MedicRole.DragBodies.Value && role is MedicRole);
+        return role is JanitorRole || (ModdedGroupSingleton<MedicOptions>.Instance.DragBodies && role is MedicRole);
     }
 
     public override bool CanUse()

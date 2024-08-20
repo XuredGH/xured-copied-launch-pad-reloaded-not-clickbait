@@ -1,77 +1,44 @@
-﻿using System;
-using LaunchpadReloaded.Utilities;
+﻿using MiraAPI.Utilities.Assets;
 using Reactor.Utilities;
-using Reactor.Utilities.Extensions;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace LaunchpadReloaded.Features;
 
 public static class LaunchpadAssets
 {
     public static readonly AssetBundle Bundle = AssetBundleManager.Load("assets");
-    public static readonly LoadableAsset<Sprite> NoImage = new("", false);
 
     // Materials
-    public static readonly LoadableAsset<Material> GradientMaterial = new("GradientPlayerMaterial");
-    public static readonly LoadableAsset<Material> MaskedGradientMaterial = new("MaskedGradientMaterial");
+    public static readonly LoadableAsset<Material> GradientMaterial = new LoadableBundleAsset<Material>("GradientPlayerMaterial", Bundle);
+    public static readonly LoadableAsset<Material> MaskedGradientMaterial = new LoadableBundleAsset<Material>("MaskedGradientMaterial", Bundle);
 
     // Sprites
-    public static readonly LoadableAsset<Sprite> BlankButton = new("BlankButton");
-    public static readonly LoadableAsset<Sprite> CallButton = new("CallMeeting.png");
-    public static readonly LoadableAsset<Sprite> DragButton = new("Drag.png");
-    public static readonly LoadableAsset<Sprite> DropButton = new("Drop.png");
-    public static readonly LoadableAsset<Sprite> ZoomButton = new("Zoom.png");
-    public static readonly LoadableAsset<Sprite> ReviveButton = new("Revive.png");
-    public static readonly LoadableAsset<Sprite> HideButton = new("Clean.png");
-    public static readonly LoadableAsset<Sprite> HackButton = new("Hack.png");
-    public static readonly LoadableAsset<Sprite> MapButton = new("Map.png");
-    public static readonly LoadableAsset<Sprite> ScannerButton = new("Place_Scanner.png");
-    public static readonly LoadableAsset<Sprite> TrackButton = new("Track.png");
-    public static readonly LoadableAsset<Sprite> ShootButton = new("Shoot.png");
-    public static readonly LoadableAsset<Sprite> JesterIcon = new("Jester.png");
-    public static readonly LoadableAsset<Sprite> InstinctButton = new("Instinct.png", false);
-    public static readonly LoadableAsset<Sprite> InvestigateButton = new("Investigate.png", false);
+    public static readonly LoadableAsset<Sprite> BlankButton = new LoadableBundleAsset<Sprite>("BlankButton", Bundle);
+    public static readonly LoadableAsset<Sprite> CallButton = new LoadableBundleAsset<Sprite>("CallMeeting.png", Bundle);
+    public static readonly LoadableAsset<Sprite> DragButton = new LoadableBundleAsset<Sprite>("Drag.png", Bundle);
+    public static readonly LoadableAsset<Sprite> DropButton = new LoadableBundleAsset<Sprite>("Drop.png", Bundle);
+    public static readonly LoadableAsset<Sprite> ZoomButton = new LoadableBundleAsset<Sprite>("Zoom.png", Bundle);
+    public static readonly LoadableAsset<Sprite> ReviveButton = new LoadableBundleAsset<Sprite>("Revive.png", Bundle);
+    public static readonly LoadableAsset<Sprite> HideButton = new LoadableBundleAsset<Sprite>("Clean.png", Bundle);
+    public static readonly LoadableAsset<Sprite> HackButton = new LoadableBundleAsset<Sprite>("Hack.png", Bundle);
+    public static readonly LoadableAsset<Sprite> MapButton = new LoadableBundleAsset<Sprite>("Map.png", Bundle);
+    public static readonly LoadableAsset<Sprite> ScannerButton = new LoadableBundleAsset<Sprite>("Place_Scanner.png", Bundle);
+    public static readonly LoadableAsset<Sprite> TrackButton = new LoadableBundleAsset<Sprite>("Track.png", Bundle);
+    public static readonly LoadableAsset<Sprite> ShootButton = new LoadableBundleAsset<Sprite>("Shoot.png", Bundle);
+    public static readonly LoadableAsset<Sprite> JesterIcon = new LoadableBundleAsset<Sprite>("Jester.png", Bundle);
+    public static readonly LoadableAsset<Sprite> InstinctButton = new LoadableResourceAsset("LaunchpadReloaded.Resources.Instinct.png");
+    public static readonly LoadableAsset<Sprite> InvestigateButton = new LoadableResourceAsset("LaunchpadReloaded.Resources.Investigate.png");
 
     // Object Sprites
-    public static readonly LoadableAsset<Sprite> ScannerSprite = new("Scanner.png");
-    public static readonly LoadableAsset<Sprite> NodeSprite = new("Node.png");
-    public static readonly LoadableAsset<Sprite> KnifeHandSprite = new("KnifeHand.png");
-    public static readonly LoadableAsset<Sprite> Footstep = new("Footstep.png", false);
+    public static readonly LoadableAsset<Sprite> ScannerSprite = new LoadableBundleAsset<Sprite>("Scanner.png", Bundle);
+    public static readonly LoadableAsset<Sprite> NodeSprite = new LoadableBundleAsset<Sprite>("Node.png", Bundle);
+    public static readonly LoadableAsset<Sprite> KnifeHandSprite = new LoadableBundleAsset<Sprite>("KnifeHand.png", Bundle);
+    public static readonly LoadableAsset<Sprite> Footstep = new LoadableResourceAsset("LaunchpadReloaded.Resources.Footstep.png");
     // Sounds
-    public static readonly LoadableAsset<AudioClip> BeepSound = new("Beep.wav");
-    public static readonly LoadableAsset<AudioClip> PingSound = new("Ping.mp3");
-    public static readonly LoadableAsset<AudioClip> HackingSound = new("HackAmbience.mp3");
+    public static readonly LoadableAsset<AudioClip> BeepSound = new LoadableBundleAsset<AudioClip>("Beep.wav", Bundle);
+    public static readonly LoadableAsset<AudioClip> PingSound = new LoadableBundleAsset<AudioClip>("Ping.mp3", Bundle);
+    public static readonly LoadableAsset<AudioClip> HackingSound = new LoadableBundleAsset<AudioClip>("HackAmbience.mp3", Bundle);
 
     // Other
-    public static readonly LoadableAsset<GameObject> DetectiveGame = new("JournalMinigame");
-}
-
-public class LoadableAsset<T>(string name, bool useBundle = true) where T : Object
-{
-    private const string ResourcesFolder = "LaunchpadReloaded.Resources.";
-    public string Name { get; } = name;
-    public bool UseBundle { get; } = useBundle;
-
-    private T _loadedAsset;
-
-    public T LoadAsset()
-    {
-        if (_loadedAsset)
-        {
-            return _loadedAsset;
-        }
-
-        if (UseBundle)
-        {
-            return _loadedAsset = LaunchpadAssets.Bundle.LoadAsset<T>(Name);
-        }
-
-        if (typeof(T) == typeof(Sprite))
-        {
-            return _loadedAsset = SpriteTools.LoadSpriteFromPath(ResourcesFolder + Name) as T;
-        }
-
-        throw new Exception($"INVALID ASSET: {Name}");
-    }
+    public static readonly LoadableAsset<GameObject> DetectiveGame = new LoadableBundleAsset<GameObject>("JournalMinigame", Bundle);
 }

@@ -1,5 +1,5 @@
 ﻿using System;
-using LaunchpadReloaded.Utilities;
+using MiraAPI.Utilities;
 using Reactor.Utilities.Attributes;
 using UnityEngine;
 
@@ -38,8 +38,8 @@ public class GradientColorComponent(IntPtr ptr) : MonoBehaviour(ptr)
 
         PlayerMaterial.SetColors(primaryColor, mat);
 
-        mat.SetColor(ShaderID.SecondaryBodyColor, Palette.PlayerColors[secondaryColor]);
-        mat.SetColor(ShaderID.SecondaryShadowColor, Palette.ShadowColors[secondaryColor]);
+        mat.SetColor(ShaderID.Get("_SecondaryBodyColor"), Palette.PlayerColors[secondaryColor]);
+        mat.SetColor(ShaderID.Get("_SecondaryShadowColor"), Palette.ShadowColors[secondaryColor]);
     }
 
     public void SetColor(int gradientColor)
@@ -59,8 +59,8 @@ public class GradientColorComponent(IntPtr ptr) : MonoBehaviour(ptr)
 
         mat = renderer.material;
 
-        mat.SetColor(ShaderID.SecondaryBodyColor, Palette.PlayerColors[secondaryColor]);
-        mat.SetColor(ShaderID.SecondaryShadowColor, Palette.ShadowColors[secondaryColor]);
+        mat.SetColor(ShaderID.Get("_SecondaryBodyColor"), Palette.PlayerColors[secondaryColor]);
+        mat.SetColor(ShaderID.Get("_SecondaryShadowColor"), Palette.ShadowColors[secondaryColor]);
     }
 
     public void SetColor(Color baseColor, Color gradientColor)
@@ -75,8 +75,8 @@ public class GradientColorComponent(IntPtr ptr) : MonoBehaviour(ptr)
 
         PlayerMaterial.SetColors(baseColor, mat);
 
-        mat.SetColor(ShaderID.SecondaryBodyColor, gradientColor);
-        mat.SetColor(ShaderID.SecondaryShadowColor, gradientColor);
+        mat.SetColor(ShaderID.Get("_SecondaryBodyColor"), gradientColor);
+        mat.SetColor(ShaderID.Get("_SecondaryShadowColor"), gradientColor);
     }
 
     public void Update()
@@ -86,6 +86,6 @@ public class GradientColorComponent(IntPtr ptr) : MonoBehaviour(ptr)
             return;
         }
 
-        mat.SetFloat(ShaderID.Flip, renderer.flipX ? 1 : 0);
+        mat.SetFloat(ShaderID.Get("_Flip"), renderer.flipX ? 1 : 0);
     }
 }

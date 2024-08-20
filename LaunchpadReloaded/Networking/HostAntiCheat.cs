@@ -1,4 +1,5 @@
-﻿using LaunchpadReloaded.Features;
+﻿using LaunchpadReloaded.Options;
+using MiraAPI.GameOptions;
 
 namespace LaunchpadReloaded.Networking;
 
@@ -12,6 +13,6 @@ public static class HostAntiCheat
         }
         
         var id = AmongUsClient.Instance.GetClientIdFromCharacter(hacker);
-        AmongUsClient.Instance.KickPlayer(id, LaunchpadGameOptions.Instance.BanCheaters.Value);
+        AmongUsClient.Instance.KickPlayer(id, ModdedGroupSingleton<GeneralOptions>.Instance.BanCheaters);
     }
 }

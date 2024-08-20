@@ -8,7 +8,6 @@ public enum LaunchpadRpc : uint
     StopDrag,
     RemoveBody,
     HideBodyInVent,
-    CreateScanner,
     Revive,
     SyncGameOptions,
     SyncRoleOption,

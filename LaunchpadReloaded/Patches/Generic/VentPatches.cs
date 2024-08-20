@@ -1,8 +1,8 @@
 ﻿using HarmonyLib;
-using LaunchpadReloaded.API.GameModes;
-using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Components;
-using LaunchpadReloaded.Utilities;
+using MiraAPI.GameModes;
+using MiraAPI.Roles;
+using MiraAPI.Utilities;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Patches.Generic;
@@ -15,7 +15,7 @@ public static class VentPatches
     /// </summary>
     [HarmonyPrefix]
     [HarmonyPatch("CanUse")]
-    public static bool CanUseVentPatch(Vent __instance, ref float __result, [HarmonyArgument(0)] GameData.PlayerInfo pc, [HarmonyArgument(1)] ref bool canUse, [HarmonyArgument(2)] ref bool couldUse)
+    public static bool CanUseVentPatch(Vent __instance, ref float __result, [HarmonyArgument(0)] NetworkedPlayerInfo pc, [HarmonyArgument(1)] ref bool canUse, [HarmonyArgument(2)] ref bool couldUse)
     {
         if (CustomGameModeManager.ActiveMode.CanVent(__instance, pc) == false)
         {

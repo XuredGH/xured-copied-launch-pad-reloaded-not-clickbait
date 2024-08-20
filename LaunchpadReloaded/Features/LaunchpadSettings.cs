@@ -34,7 +34,7 @@ public class LaunchpadSettings
                     }
 
                     dummy.myPlayer.SetName(val ? AccountManager.Instance.GetRandomName() :
-                        DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.Dummy, Array.Empty<Object>()) + " " + i.ToString(), true);
+                        DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.Dummy, Array.Empty<Object>()) + " " + i);
                 }
             }
         };

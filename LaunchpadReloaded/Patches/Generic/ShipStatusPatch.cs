@@ -2,6 +2,8 @@
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Networking;
+using LaunchpadReloaded.Options;
+using MiraAPI.GameOptions;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Patches.Generic;
@@ -19,8 +21,6 @@ public static class ShipStatusPatch
         var managers = new GameObject("LaunchpadManagers");
         managers.transform.SetParent(__instance.transform);
         managers.AddComponent<HackingManager>();
-        managers.AddComponent<TrackingManager>();
-        managers.AddComponent<ScannerManager>();
 
         foreach (var player in LaunchpadPlayer.GetAllPlayers())
         {
@@ -37,6 +37,6 @@ public static class ShipStatusPatch
     public static bool SpawnPlayerPatch([HarmonyArgument(2)] bool initialSpawn)
     {
         if (TutorialManager.InstanceExists) return true;
-        return initialSpawn || !LaunchpadGameOptions.Instance.DisableMeetingTeleport.Value;
+        return initialSpawn || !ModdedGroupSingleton<GeneralOptions>.Instance.DisableMeetingTeleport;
     }
 }

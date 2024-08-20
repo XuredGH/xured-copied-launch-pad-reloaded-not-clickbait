@@ -42,7 +42,7 @@ public class CustomGameData(IntPtr ptr) : MonoBehaviour(ptr)
 
     public class CustomPlayerInfo
     {
-        public GameData.PlayerInfo Data { get; private set; }
+        public NetworkedPlayerInfo Data { get; private set; }
         public LaunchpadPlayer Player { get; private set; }
 
         public int GradientColor;

@@ -3,7 +3,9 @@ using HarmonyLib;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Networking.Color;
-using LaunchpadReloaded.Utilities;
+using LaunchpadReloaded.Options;
+using MiraAPI.GameOptions;
+using MiraAPI.Utilities;
 using Reactor.Networking.Rpc;
 using Reactor.Utilities.Extensions;
 using TMPro;
@@ -137,8 +139,8 @@ public static class PlayerTabPatches
         
         var mat = __instance.PlayerPreview.cosmetics.currentBodySprite.BodySprite.material;
     
-        mat.SetFloat(ShaderID.GradientBlend, 2);
-        mat.SetFloat(ShaderID.GradientOffset, .4f);
+        mat.SetFloat(ShaderID.Get("_GradientBlend"), 2);
+        mat.SetFloat(ShaderID.Get("_GradientOffset"), .4f);
     
 
 
@@ -152,7 +154,7 @@ public static class PlayerTabPatches
         {
             __instance.AvailableColors.Add(i);
         }
-        if (!LaunchpadGameOptions.Instance.UniqueColors.Value)
+        if (!ModdedGroupSingleton<FunOptions>.Instance.UniqueColors.Value)
         {
             return false;
         }

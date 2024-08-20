@@ -1,6 +1,6 @@
 ﻿using HarmonyLib;
-using LaunchpadReloaded.API.GameModes;
-using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Options;
+using MiraAPI.GameOptions;
 
 namespace LaunchpadReloaded.Patches.Gamemodes;
 
@@ -10,13 +10,13 @@ namespace LaunchpadReloaded.Patches.Gamemodes;
 [HarmonyPatch(typeof(ImpostorRole), "IsValidTarget")]
 public static class ImpostorValidTargetPatch
 {
-    public static bool Prefix(ImpostorRole __instance, [HarmonyArgument(0)] GameData.PlayerInfo target, ref bool __result)
+    public static bool Prefix(ImpostorRole __instance, [HarmonyArgument(0)] NetworkedPlayerInfo target, ref bool __result)
     {
-        CustomGameModeManager.ActiveMode.CanKill(out var runOriginal, out var result, target.Object);
-        if (!LaunchpadGameOptions.Instance.FriendlyFire.Value && (runOriginal || !result))
+        if (!ModdedGroupSingleton<FunOptions>.Instance.FriendlyFire)
         {
             return true;
         }
+        
         __result = target is { Disconnected: false, IsDead: false } &&
                    target.PlayerId != __instance.Player.PlayerId && !(target.Role == null) &&
                    !(target.Object == null) && !target.Object.inVent && !target.Object.inMovingPlat;

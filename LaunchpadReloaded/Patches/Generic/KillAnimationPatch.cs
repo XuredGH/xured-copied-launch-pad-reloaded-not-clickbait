@@ -1,6 +1,6 @@
 ﻿using HarmonyLib;
-using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.Utilities;
+using MiraAPI.GameModes;
 
 namespace LaunchpadReloaded.Patches.Generic;
 

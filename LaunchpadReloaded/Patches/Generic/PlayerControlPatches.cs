@@ -1,7 +1,5 @@
 using HarmonyLib;
 using Il2CppSystem;
-using LaunchpadReloaded.API.Hud;
-using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
@@ -9,6 +7,8 @@ using LaunchpadReloaded.Networking.Color;
 using LaunchpadReloaded.Networking.Murder;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
+using MiraAPI.Hud;
+using MiraAPI.Roles;
 using Reactor.Networking.Rpc;
 using UnityEngine;
 

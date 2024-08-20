@@ -1,5 +1,4 @@
 using AmongUs.GameOptions;
-using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities;
@@ -8,6 +7,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using InnerNet;
+using LaunchpadReloaded.Options;
+using MiraAPI.GameModes;
+using MiraAPI.GameOptions;
 using TMPro;
 using UnityEngine;
 
@@ -19,8 +21,11 @@ public class BattleRoyale : CustomGameMode
     public override string Name => "Battle Royale";
     public override string Description => "Everyone can kill.\n<b><i>Last one standing wins.</b></i>";
     public override int Id => (int)LaunchpadGamemodes.BattleRoyale;
+    
     public TextMeshPro PlayerCount;
+    
     public TextMeshPro DeathNotif;
+    
     public override void Initialize()
     {
         if (PlayerControl.LocalPlayer && PlayerControl.LocalPlayer.myTasks is not null)
@@ -36,7 +41,7 @@ public class BattleRoyale : CustomGameMode
 
         foreach (var player in PlayerControl.AllPlayerControls)
         {
-            if (LaunchpadGameOptions.Instance.SeekerCharacter.Value)
+            if (ModdedGroupSingleton<BattleRoyaleOptions>.Instance.SeekerCharacter)
             {
                 player.SetBodyType(6);
             }
@@ -94,7 +99,7 @@ public class BattleRoyale : CustomGameMode
         instance.ImpostorVentButton.gameObject.SetActive(false);
     }
 
-    public override List<GameData.PlayerInfo> CalculateWinners()
+    public override List<NetworkedPlayerInfo> CalculateWinners()
     {
         var alivePlayers = GameData.Instance.AllPlayers.ToArray().Where(player => !player.Disconnected && !player.IsDead).ToList();
         return alivePlayers;
@@ -109,7 +114,7 @@ public class BattleRoyale : CustomGameMode
     }
 
     public override bool CanReport(DeadBody body) => false;
-    public override bool CanVent(Vent vent, GameData.PlayerInfo playerInfo) => false;
+    public override bool CanVent(Vent vent, NetworkedPlayerInfo playerInfo) => false;
     public override bool ShouldShowSabotageMap(MapBehaviour map) => false;
     public override bool CanUseConsole(Console console) => false;
     public override bool CanUseMapConsole(MapConsole console) => false;

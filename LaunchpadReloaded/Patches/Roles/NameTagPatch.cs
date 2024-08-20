@@ -1,7 +1,8 @@
 ﻿using HarmonyLib;
-using LaunchpadReloaded.API.GameModes;
-using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Gamemodes;
+using LaunchpadReloaded.Options;
+using MiraAPI.GameModes;
+using MiraAPI.GameOptions;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Patches.Roles;
@@ -12,28 +13,18 @@ namespace LaunchpadReloaded.Patches.Roles;
 [HarmonyPatch(typeof(PlayerNameColor))]
 public static class NameTagPatch
 {
-    [HarmonyPrefix, HarmonyPatch("Get", typeof(RoleBehaviour))]
+    [HarmonyPrefix, HarmonyPatch(nameof(PlayerNameColor.Get), typeof(RoleBehaviour))]
     public static bool GetPatch([HarmonyArgument(0)] RoleBehaviour otherPlayerRole, ref Color __result)
     {
-        if (PlayerControl.LocalPlayer.Data.IsDead && LaunchpadGameOptions.Instance.GhostsSeeRoles.Value)
+        if (PlayerControl.LocalPlayer.Data.IsDead && ModdedGroupSingleton<GeneralOptions>.Instance.GhostsSeeRoles)
         {
             __result = otherPlayerRole.NameColor;
             return false;
         }
-
-        if (PlayerControl.LocalPlayer.Data.Role.IsImpostor && otherPlayerRole.IsImpostor)
+        
+        if (CustomGameModeManager.ActiveMode is BattleRoyale)
         {
             return true;
-        }
-
-        if (CustomGameModeManager.ActiveMode is BattleRoyale || GameManager.Instance.IsHideAndSeek())
-        {
-            return true;
-        }
-
-        if (PlayerControl.LocalPlayer == null || PlayerControl.LocalPlayer.Data == null || PlayerControl.LocalPlayer.Data.Role == null || otherPlayerRole == null)
-        {
-            __result = Color.white;
         }
 
         __result = PlayerControl.LocalPlayer.Data?.Role == otherPlayerRole ? otherPlayerRole.NameColor : Color.white;

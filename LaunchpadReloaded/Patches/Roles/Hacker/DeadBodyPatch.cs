@@ -1,6 +1,6 @@
 ﻿using HarmonyLib;
-using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.Features.Managers;
+using MiraAPI.GameModes;
 
 namespace LaunchpadReloaded.Patches.Roles.Hacker;
 

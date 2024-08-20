@@ -1,14 +1,17 @@
-﻿using Cpp2IL.Core.Extensions;
-using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Roles;
-using Reactor.Utilities.Attributes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cpp2IL.Core.Extensions;
+using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Roles.Options;
+using MiraAPI.GameOptions;
+using Reactor.Utilities.Attributes;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using Random = System.Random;
+
+namespace LaunchpadReloaded.Components;
 
 [RegisterInIl2Cpp]
 public class JournalMinigame(nint ptr) : Minigame(ptr)
@@ -42,7 +45,7 @@ public class JournalMinigame(nint ptr) : Minigame(ptr)
 
         deadPlayer.playerObject.SetPlayerMaterialColors(DeadBodyIcon);
 
-        if (LaunchpadPlayer.GetAllAlivePlayers().Count() < 4 || DetectiveRole.HideSuspects.Value)
+        if (LaunchpadPlayer.GetAllAlivePlayers().Count() < 4 || ModdedGroupSingleton<DetectiveOptions>.Instance.HideSuspects)
         {
             gameObject.transform.FindChild("Suspects").gameObject.SetActive(false);
             gameObject.transform.FindChild("SuspectsText").gameObject.SetActive(false);

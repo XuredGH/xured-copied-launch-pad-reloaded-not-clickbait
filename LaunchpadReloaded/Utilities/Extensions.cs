@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
+using LaunchpadReloaded.Options;
+using MiraAPI.GameOptions;
 using PowerTools;
 using Reactor.Utilities.Extensions;
 using UnityEngine;
@@ -23,7 +25,7 @@ public static class Extensions
         if (bodyType == 6)
         {
             player.MyPhysics.SetBodyType(PlayerBodyTypes.Seeker);
-            if (!LaunchpadGameOptions.Instance.ShowKnife.Value)
+            if (!ModdedGroupSingleton<BattleRoyaleOptions>.Instance.ShowKnife.Value)
             {
                 return;
             }
@@ -117,7 +119,7 @@ public static class Extensions
         return (playerControl.moveable || playerControl.petting) && !playerControl.inVent && !playerControl.shapeshifting && (!DestroyableSingleton<HudManager>.InstanceExists || !DestroyableSingleton<HudManager>.Instance.IsIntroDisplayed) && !MeetingHud.Instance && !PlayerCustomizationMenu.Instance && !ExileController.Instance && !IntroCutscene.Instance;
     }
 
-    public static bool IsHacked(this GameData.PlayerInfo playerInfo)
+    public static bool IsHacked(this NetworkedPlayerInfo playerInfo)
     {
         if (!HackingManager.Instance)
         {

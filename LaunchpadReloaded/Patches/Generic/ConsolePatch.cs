@@ -1,8 +1,8 @@
 ﻿using HarmonyLib;
 using InnerNet;
-using LaunchpadReloaded.API.GameModes;
 using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Utilities;
+using MiraAPI.GameModes;
 
 namespace LaunchpadReloaded.Patches.Generic;
 
@@ -11,7 +11,7 @@ public static class ConsolePatch
 {
     [HarmonyPrefix]
     [HarmonyPatch(typeof(Console), nameof(Console.CanUse))]
-    public static bool CanUsePatch(Console __instance, [HarmonyArgument(0)] GameData.PlayerInfo pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse)
+    public static bool CanUsePatch(Console __instance, [HarmonyArgument(0)] NetworkedPlayerInfo pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse)
     {
         if (AmongUsClient.Instance.GameState == InnerNetClient.GameStates.Started && ShipStatus.Instance)
         {
@@ -45,7 +45,7 @@ public static class ConsolePatch
 
     [HarmonyPrefix]
     [HarmonyPatch(typeof(SystemConsole), nameof(SystemConsole.CanUse))]
-    public static bool SystemCanUsePatch(SystemConsole __instance, [HarmonyArgument(0)] GameData.PlayerInfo pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse)
+    public static bool SystemCanUsePatch(SystemConsole __instance, [HarmonyArgument(0)] NetworkedPlayerInfo pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse)
     {
         if (AmongUsClient.Instance.GameState == InnerNetClient.GameStates.Started && ShipStatus.Instance)
         {
@@ -64,7 +64,7 @@ public static class ConsolePatch
 
     [HarmonyPrefix]
     [HarmonyPatch(typeof(MapConsole), nameof(MapConsole.CanUse))]
-    public static bool MapCanUsePatch(MapConsole __instance, [HarmonyArgument(0)] GameData.PlayerInfo pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse)
+    public static bool MapCanUsePatch(MapConsole __instance, [HarmonyArgument(0)] NetworkedPlayerInfo pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse)
     {
         if (AmongUsClient.Instance.GameState == InnerNetClient.GameStates.Started && ShipStatus.Instance)
         {

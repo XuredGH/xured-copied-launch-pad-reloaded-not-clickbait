@@ -1,7 +1,10 @@
-﻿using LaunchpadReloaded.API.Hud;
-using LaunchpadReloaded.Features;
+﻿using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
-using LaunchpadReloaded.Utilities;
+using LaunchpadReloaded.Roles.Options;
+using MiraAPI.GameOptions;
+using MiraAPI.Hud;
+using MiraAPI.Utilities;
+using MiraAPI.Utilities.Assets;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
@@ -10,9 +13,9 @@ namespace LaunchpadReloaded.Buttons;
 public class ShootButton : CustomActionButton
 {
     public override string Name => "Shoot";
-    public override float Cooldown => SheriffRole.ShootCooldown.Value;
+    public override float Cooldown => ModdedGroupSingleton<SheriffOptions>.Instance.ShotCooldown;
     public override float EffectDuration => 0;
-    public override int MaxUses => (int)SheriffRole.Shots.Value;
+    public override int MaxUses => (int)ModdedGroupSingleton<SheriffOptions>.Instance.ShotsPerGame;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.ShootButton;
     
     private PlayerControl _currentTarget;
@@ -35,7 +38,7 @@ public class ShootButton : CustomActionButton
             return;
         }
         
-        _currentTarget = playerControl.GetClosestPlayer(true, GameManager.Instance.LogicOptions.GetKillDistance());
+        _currentTarget = Utilities.Extensions.GetClosestPlayer(playerControl, true, GameManager.Instance.LogicOptions.GetKillDistance());
 
         if (!_currentTarget)
         {
@@ -50,7 +53,7 @@ public class ShootButton : CustomActionButton
 
     protected override void OnClick()
     {
-        if (_currentTarget.Data.Role.TeamType == RoleTeamTypes.Impostor || (SheriffRole.ShouldCrewmateDie.Value && _currentTarget.Data.Role.TeamType == RoleTeamTypes.Crewmate))
+        if (_currentTarget.Data.Role.TeamType == RoleTeamTypes.Impostor || (ModdedGroupSingleton<SheriffOptions>.Instance.ShouldCrewmateDie && _currentTarget.Data.Role.TeamType == RoleTeamTypes.Crewmate))
         {
             PlayerControl.LocalPlayer.CmdCheckMurder(_currentTarget);
         }

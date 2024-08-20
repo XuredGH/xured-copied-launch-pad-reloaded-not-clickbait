@@ -1,9 +1,6 @@
 ﻿using BepInEx;
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
-using LaunchpadReloaded.API.GameModes;
-using LaunchpadReloaded.API.Hud;
-using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Colors;
 using Reactor;
@@ -14,6 +11,9 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using BepInEx.Configuration;
+using MiraAPI.GameModes;
+using MiraAPI.PluginLoading;
 using TMPro;
 
 namespace LaunchpadReloaded;
@@ -22,10 +22,15 @@ namespace LaunchpadReloaded;
 [BepInProcess("Among Us.exe")]
 [BepInDependency(ReactorPlugin.Id)]
 [ReactorModFlags(ModFlags.RequireOnAllClients)]
-public partial class LaunchpadReloadedPlugin : BasePlugin
+public partial class LaunchpadReloadedPlugin : BasePlugin, IMiraPlugin
 {
     public Harmony Harmony { get; } = new(Id);
     public static LaunchpadReloadedPlugin Instance { get; private set; }
+
+    public ConfigFile GetConfigFile()
+    {
+        return Config;
+    }
 
     public override void Load()
     {
@@ -35,11 +40,8 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
 
         RegisterColors();
 
-        RegisterGameModeAttribute.Register(Assembly.GetExecutingAssembly());       
-        RegisterCustomRoleAttribute.Register(Assembly.GetExecutingAssembly());
-        RegisterButtonAttribute.Register(Assembly.GetExecutingAssembly());
+        RegisterGameModeAttribute.Register(Assembly.GetExecutingAssembly());
 
-        LaunchpadGameOptions.Initialize();
         LaunchpadSettings.Initialize();
         
         ReactorVersionShower.TextUpdated += VersionShower;
