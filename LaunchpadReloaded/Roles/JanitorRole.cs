@@ -9,11 +9,10 @@ using UnityEngine;
 namespace LaunchpadReloaded.Roles;
 
 [RegisterInIl2Cpp]
-[RegisterCustomRole]
+[RegisterCustomRole((ushort)LaunchpadRoles.Janitor)]
 public class JanitorRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
 {
     public string RoleName => "Janitor";
-    public ushort RoleId => (ushort)LaunchpadRoles.Janitor;
     public string RoleDescription => "Drag bodies and hide them in vents";
     public string RoleLongDescription => "You can drag bodies and hide them in vents\nWhich will cause them to disappear unless the vent is used.";
     public Color RoleColor => LaunchpadPalette.JanitorColor;

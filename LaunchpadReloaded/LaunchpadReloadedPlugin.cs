@@ -12,6 +12,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using BepInEx.Configuration;
+using MiraAPI;
 using MiraAPI.GameModes;
 using MiraAPI.PluginLoading;
 using TMPro;
@@ -21,6 +22,7 @@ namespace LaunchpadReloaded;
 [BepInAutoPlugin("dev.xtracube.launchpad", "LaunchpadReloaded")]
 [BepInProcess("Among Us.exe")]
 [BepInDependency(ReactorPlugin.Id)]
+[BepInDependency(MiraApiPlugin.Id)]
 [ReactorModFlags(ModFlags.RequireOnAllClients)]
 public partial class LaunchpadReloadedPlugin : BasePlugin, IMiraPlugin
 {

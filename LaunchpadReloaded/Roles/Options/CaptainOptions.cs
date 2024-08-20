@@ -14,7 +14,7 @@ public class CaptainOptions : IModdedOptionGroup
     public float CaptainMeetingCooldown { get; set; } = 45;
 
     [ModdedNumberOption("Meeting Uses", 1, 5)]
-    public int CaptainMeetingCount { get; set; } = 3;
+    public float CaptainMeetingCount { get; set; } = 3;
 
     [ModdedNumberOption("Zoom Cooldown", 5, 60, 2.5f, NumberSuffixes.Seconds)]
     public float ZoomCooldown { get; set; } = 30;

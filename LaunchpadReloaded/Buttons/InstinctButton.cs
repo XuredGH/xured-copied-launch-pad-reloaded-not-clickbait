@@ -13,7 +13,7 @@ public class InstinctButton : CustomActionButton
     public override string Name => "INSTINCT";
     public override float Cooldown =>  ModdedGroupSingleton<DetectiveOptions>.Instance.InstinctCooldown;
     public override float EffectDuration => ModdedGroupSingleton<DetectiveOptions>.Instance.InstinctDuration;
-    public override int MaxUses => ModdedGroupSingleton<DetectiveOptions>.Instance.InstinctUses;
+    public override int MaxUses => (int)ModdedGroupSingleton<DetectiveOptions>.Instance.InstinctUses;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.InstinctButton;
 
     public override bool Enabled(RoleBehaviour role)

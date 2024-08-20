@@ -20,7 +20,7 @@ public class DetectiveOptions : IModdedOptionGroup
     public float InstinctDuration { get; set; } = 10;
     
     [ModdedNumberOption("Instinct Uses", 1, 10)]
-    public int InstinctUses { get; set; } = 3;
+    public float InstinctUses { get; set; } = 3;
     
     [ModdedNumberOption("Instinct Cooldown", 0, 45, 1, NumberSuffixes.Seconds)]
     public float InstinctCooldown { get; set; } = 15;
