@@ -6,7 +6,6 @@ using LaunchpadReloaded.Utilities;
 using System.Text;
 using LaunchpadReloaded.Buttons;
 using LaunchpadReloaded.Features;
-using MiraAPI.GameModes;
 using MiraAPI.Hud;
 using UnityEngine;
 
@@ -52,9 +51,7 @@ public static class HudManagerPatches
         {
             return;
         }
-
-        CustomGameModeManager.ActiveMode?.HudUpdate(__instance);
-
+        
         if (HackingManager.Instance)
         {
             if (local.Data.IsHacked() && !local.Data.Role.IsImpostor)

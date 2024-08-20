@@ -2,7 +2,6 @@
 using InnerNet;
 using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Utilities;
-using MiraAPI.GameModes;
 
 namespace LaunchpadReloaded.Patches.Generic;
 
@@ -15,28 +14,22 @@ public static class ConsolePatch
     {
         if (AmongUsClient.Instance.GameState == InnerNetClient.GameStates.Started && ShipStatus.Instance)
         {
-            if (CustomGameModeManager.ActiveMode != null && CustomGameModeManager.ActiveMode.CanUseConsole(__instance))
+            var task = __instance.FindTask(pc.Object);
+
+            if (task && task.GetComponent<SabotageTask>())
             {
-                var task = __instance.FindTask(pc.Object);
-
-                if (task && task.GetComponent<SabotageTask>())
-                {
-                    canUse = couldUse = true;
-                    return true;
-                }
-
-                if (pc.IsHacked())
-                {
-                    return canUse = couldUse = false;
-                }
-
-                canUse = false;
-                couldUse = false;
+                canUse = couldUse = true;
                 return true;
             }
 
-            canUse = couldUse = false;
-            return false;
+            if (pc.IsHacked())
+            {
+                return canUse = couldUse = false;
+            }
+
+            canUse = false;
+            couldUse = false;
+            return true;
         }
 
         canUse = couldUse = true;
@@ -49,13 +42,7 @@ public static class ConsolePatch
     {
         if (AmongUsClient.Instance.GameState == InnerNetClient.GameStates.Started && ShipStatus.Instance)
         {
-            if (CustomGameModeManager.ActiveMode != null && CustomGameModeManager.ActiveMode.CanUseSystemConsole(__instance))
-            {
-                return canUse = couldUse = !HackingManager.Instance.AnyPlayerHacked();
-            }
-
-            canUse = couldUse = false;
-            return false;
+            return canUse = couldUse = !HackingManager.Instance.AnyPlayerHacked();
         }
 
         canUse = couldUse = true;
@@ -67,14 +54,8 @@ public static class ConsolePatch
     public static bool MapCanUsePatch(MapConsole __instance, [HarmonyArgument(0)] NetworkedPlayerInfo pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse)
     {
         if (AmongUsClient.Instance.GameState == InnerNetClient.GameStates.Started && ShipStatus.Instance)
-        {
-            if (CustomGameModeManager.ActiveMode != null && CustomGameModeManager.ActiveMode.CanUseMapConsole(__instance))
-            {
-                return canUse = couldUse = !pc.IsHacked();
-            }
-
-            canUse = couldUse = false;
-            return false;
+        {                
+            return canUse = couldUse = !pc.IsHacked();
         }
 
         canUse = couldUse = true;

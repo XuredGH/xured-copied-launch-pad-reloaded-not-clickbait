@@ -41,9 +41,7 @@ public partial class LaunchpadReloadedPlugin : BasePlugin, IMiraPlugin
         
 
         RegisterColors();
-
-        RegisterGameModeAttribute.Register(Assembly.GetExecutingAssembly());
-
+        
         LaunchpadSettings.Initialize();
         
         ReactorVersionShower.TextUpdated += VersionShower;

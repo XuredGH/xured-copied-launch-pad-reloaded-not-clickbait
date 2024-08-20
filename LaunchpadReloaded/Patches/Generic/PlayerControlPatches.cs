@@ -8,7 +8,6 @@ using LaunchpadReloaded.Networking.Murder;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using MiraAPI.Hud;
-using MiraAPI.Roles;
 using Reactor.Networking.Rpc;
 using UnityEngine;
 
@@ -92,11 +91,6 @@ public static class PlayerControlPatches
 
                 button.FixedUpdateHandler(__instance);
             }
-        }
-
-        if (__instance.Data?.Role is ICustomRole customRole)
-        {
-            customRole.PlayerControlFixedUpdate(__instance);
         }
     }
 

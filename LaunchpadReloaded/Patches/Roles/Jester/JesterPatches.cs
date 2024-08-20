@@ -35,22 +35,10 @@ public static class JesterPatches
     [HarmonyPatch(typeof(ExileController), nameof(ExileController.Begin))]
     public static void Begin(ExileController __instance)
     {
-        if (__instance.exiled?.Role is ShapeshifterRole)
+        if (__instance.exiled && __instance.exiled.Role is not CrewmateRole or ImpostorRole or ICustomRole)
         {
-            __instance.completeString = $"{__instance.exiled.PlayerName} was The Shapeshifter";
-            return;
+            __instance.completeString = $"{__instance.exiled.PlayerName} was The {__instance.exiled.Role.NiceName}";
         }
-
-        if (!__instance.exiled?.Role || __instance.exiled.Role is not ICustomRole role)
-        {
-            return;
-        }
-
-        if (role.GetCustomEjectionMessage(__instance.exiled) == null)
-        {
-            return;
-        }
-        __instance.completeString = role.GetCustomEjectionMessage(__instance.exiled);
     }
 
     /// <summary>
@@ -64,7 +52,7 @@ public static class JesterPatches
             return true;
         }
 
-        if (__instance.exiled is not null && __instance.exiled.Role is not null && __instance.exiled.Role is JesterRole)
+        if (__instance.exiled?.Role != null && __instance.exiled.Role is JesterRole)
         {
             GameManager.Instance.RpcEndGame((GameOverReason)GameOverReasons.JesterWins, false);
             return false;
