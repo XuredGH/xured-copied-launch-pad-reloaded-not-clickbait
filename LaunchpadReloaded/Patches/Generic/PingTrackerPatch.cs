@@ -9,18 +9,10 @@ namespace LaunchpadReloaded.Patches.Generic;
 [HarmonyPatch(typeof(PingTracker))]
 public static class PingTrackerPatch
 {
-    [HarmonyPrefix, HarmonyPatch("Update")]
-    public static bool Prefix(PingTracker __instance)
+    [HarmonyPostfix, HarmonyPatch("Update")]
+    public static void PingUpdatePostfix(PingTracker __instance)
     {
-        var aspectPos = __instance.GetComponent<AspectPosition>();
-
         __instance.gameObject.SetActive(true);
-        __instance.text.richText = true;
-        __instance.text.text = $"<align=\"center\"><color=#FF4050FF>All Of Us:</color> Launchpad \n<color=#7785CC>dsc.gg/allofus</color>\n<size=80%>Ping: {AmongUsClient.Instance.Ping} ms</size>";
-
-        var x = HudManager.Instance.gameObject.GetComponentInChildren<FriendsListButton>() != null ? 4 : 2.3f;
-        aspectPos.DistanceFromEdge = new Vector3(x, 0.1f, 0);
-
-        return false;
+        __instance.text.text = "<align=\"center\">" + __instance.text.text + $"\n<size=50%>Launchpad <color=#FF4050FF>v{LaunchpadReloadedPlugin.GetShortHashVersion()}</color>";
     }
 }
