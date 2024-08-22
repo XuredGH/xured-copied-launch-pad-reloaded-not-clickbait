@@ -38,8 +38,8 @@ public class GradientColorComponent(IntPtr ptr) : MonoBehaviour(ptr)
 
         PlayerMaterial.SetColors(primaryColor, mat);
 
-        mat.SetColor(ShaderID.Get("_SecondaryBodyColor"), Palette.PlayerColors[secondaryColor]);
-        mat.SetColor(ShaderID.Get("_SecondaryShadowColor"), Palette.ShadowColors[secondaryColor]);
+        mat.SetColor(ShaderID.Get("_BodyColor2"), Palette.PlayerColors[secondaryColor]);
+        mat.SetColor(ShaderID.Get("_BackColor2"), Palette.ShadowColors[secondaryColor]);
     }
 
     public void SetColor(int gradientColor)
@@ -59,8 +59,8 @@ public class GradientColorComponent(IntPtr ptr) : MonoBehaviour(ptr)
 
         mat = renderer.material;
 
-        mat.SetColor(ShaderID.Get("_SecondaryBodyColor"), Palette.PlayerColors[secondaryColor]);
-        mat.SetColor(ShaderID.Get("_SecondaryShadowColor"), Palette.ShadowColors[secondaryColor]);
+        mat.SetColor(ShaderID.Get("_BodyColor2"), Palette.PlayerColors[secondaryColor]);
+        mat.SetColor(ShaderID.Get("_BackColor2"), Palette.ShadowColors[secondaryColor]);
     }
 
     public void SetColor(Color baseColor, Color gradientColor)
@@ -75,8 +75,8 @@ public class GradientColorComponent(IntPtr ptr) : MonoBehaviour(ptr)
 
         PlayerMaterial.SetColors(baseColor, mat);
 
-        mat.SetColor(ShaderID.Get("_SecondaryBodyColor"), gradientColor);
-        mat.SetColor(ShaderID.Get("_SecondaryShadowColor"), gradientColor);
+        mat.SetColor(ShaderID.Get("_BodyColor2"), gradientColor);
+        mat.SetColor(ShaderID.Get("_BackColor2"), gradientColor);
     }
 
     public void Update()
