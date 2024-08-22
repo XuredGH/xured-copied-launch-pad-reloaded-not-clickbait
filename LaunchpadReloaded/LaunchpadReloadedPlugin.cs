@@ -9,11 +9,9 @@ using Reactor.Networking.Attributes;
 using Reactor.Patches;
 using System;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using BepInEx.Configuration;
 using MiraAPI;
-using MiraAPI.GameModes;
 using MiraAPI.PluginLoading;
 using TMPro;
 
@@ -52,17 +50,17 @@ public partial class LaunchpadReloadedPlugin : BasePlugin, IMiraPlugin
     private static void VersionShower(TextMeshPro textMeshPro)
     {
         textMeshPro.text = new StringBuilder("<color=#FF4050FF>Launchpad</color> ")
-            .Append(GetShortHashVersion(Version))
+            .Append(GetShortHashVersion())
             .Append("\nPowered by <color=#FFB793>CrowdedMod</color>\n& <color=#348feb>Mini.RegionInstall</color>\n")
             .Append(textMeshPro.text)
             .ToString();
     }
 
-    private static string GetShortHashVersion(string version)
+    public static string GetShortHashVersion()
     {
-        var index = version.IndexOf("+", StringComparison.Ordinal);
+        var index = Version.IndexOf("+", StringComparison.Ordinal);
 
-        return index < 0 ? version : version[..(index + 8)];
+        return index < 0 ? Version : Version[..(index + 8)];
     }
 
     private static void RegisterColors()
