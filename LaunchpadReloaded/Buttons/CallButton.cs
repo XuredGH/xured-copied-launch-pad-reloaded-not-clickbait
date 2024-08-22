@@ -41,7 +41,7 @@ public class CallButton : CustomActionButton
         var bt = ShipStatus.Instance.EmergencyButton;
         
         PlayerControl.LocalPlayer.NetTransform.Halt();
-        var minigame = Object.Instantiate(bt.MinigamePrefab, Camera.main.transform, false);
+        var minigame = Object.Instantiate(bt.MinigamePrefab, Camera.main!.transform, false);
         
         var taskAdderGame = minigame as TaskAdderGame;
         if (taskAdderGame != null)
