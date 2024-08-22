@@ -1,8 +1,8 @@
 ﻿using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Networking;
+using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Roles;
-using LaunchpadReloaded.Roles.Options;
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Utilities.Assets;

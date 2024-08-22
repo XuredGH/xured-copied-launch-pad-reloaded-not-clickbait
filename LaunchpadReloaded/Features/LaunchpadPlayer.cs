@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Options;
-using LaunchpadReloaded.Roles.Options;
+using LaunchpadReloaded.Options.Roles;
 using MiraAPI.GameOptions;
 using MiraAPI.Roles;
 using Reactor.Utilities.Extensions;

@@ -3,7 +3,7 @@ using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities;
 using System.Collections;
-using LaunchpadReloaded.Roles.Options;
+using LaunchpadReloaded.Options.Roles;
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Utilities.Assets;

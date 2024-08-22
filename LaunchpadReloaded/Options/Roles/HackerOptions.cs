@@ -1,8 +1,9 @@
 ﻿using System;
+using LaunchpadReloaded.Roles;
 using MiraAPI.GameOptions;
 using MiraAPI.GameOptions.Attributes;
 
-namespace LaunchpadReloaded.Roles.Options;
+namespace LaunchpadReloaded.Options.Roles;
 
 public class HackerOptions : IModdedOptionGroup
 {
@@ -13,7 +14,7 @@ public class HackerOptions : IModdedOptionGroup
     [ModdedNumberOption("Hack Cooldown", 10, 300, 10, NumberSuffixes.Seconds)]
     public float HackCooldown { get; set; } = 60;
     
-    [ModdedNumberOption("Hacks Per Game", 1, 8, 1, NumberSuffixes.None)]
+    [ModdedNumberOption("Hacks Per Game", 1, 8)]
     public float HackUses { get; set; } = 2;
     
     [ModdedNumberOption("Map Cooldown", 0, 40, 3, NumberSuffixes.Seconds)]

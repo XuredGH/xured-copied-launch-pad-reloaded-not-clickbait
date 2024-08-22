@@ -2,7 +2,7 @@ using AmongUs.GameOptions;
 using Il2CppInterop.Runtime.Attributes;
 using Il2CppSystem.Text;
 using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Roles.Options;
+using LaunchpadReloaded.Options.Roles;
 using MiraAPI.GameOptions;
 using MiraAPI.Roles;
 using MiraAPI.Utilities.Assets;
@@ -52,7 +52,7 @@ public class JesterRole(System.IntPtr ptr) : RoleBehaviour(ptr), ICustomRole
     public override void SpawnTaskHeader(PlayerControl playerControl)
     {
         if (playerControl != PlayerControl.LocalPlayer) return;
-        var orCreateTask = PlayerTask.GetOrCreateTask<ImportantTextTask>(playerControl, 0);
+        var orCreateTask = PlayerTask.GetOrCreateTask<ImportantTextTask>(playerControl);
         orCreateTask.Text = string.Concat(new string[]
             {
                 LaunchpadPalette.JesterColor.ToTextColor(),

@@ -1,8 +1,9 @@
 ﻿using System;
+using LaunchpadReloaded.Roles;
 using MiraAPI.GameOptions;
 using MiraAPI.GameOptions.Attributes;
 
-namespace LaunchpadReloaded.Roles.Options;
+namespace LaunchpadReloaded.Options.Roles;
 
 public class DetectiveOptions : IModdedOptionGroup
 {
