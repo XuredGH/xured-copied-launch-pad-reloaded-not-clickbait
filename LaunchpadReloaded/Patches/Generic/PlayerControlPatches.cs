@@ -79,19 +79,6 @@ public static class PlayerControlPatches
         {
             __instance.cosmetics.SetOutline(true, new Nullable<Color>(LaunchpadPalette.MedicColor));
         }
-
-        if (__instance.AmOwner)
-        {
-            foreach (var button in CustomButtonManager.CustomButtons)
-            {
-                if (!button.Enabled(__instance.Data.Role))
-                {
-                    continue;
-                }
-
-                button.FixedUpdateHandler(__instance);
-            }
-        }
     }
 
     /// <summary>
