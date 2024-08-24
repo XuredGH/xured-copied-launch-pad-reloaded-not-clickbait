@@ -2,7 +2,6 @@
 using HarmonyLib;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
-using MiraAPI.Roles;
 using MiraAPI.Utilities;
 
 namespace LaunchpadReloaded.Patches.Roles.Jester;
@@ -28,18 +27,6 @@ public static class JesterPatches
         __instance.WinText.color = LaunchpadPalette.JesterColor;
         SoundManager.Instance.PlaySound(__instance.DisconnectStinger, false);
     }
-    /// <summary>
-    /// Custom ejection text for roles
-    /// </summary>
-    [HarmonyPostfix]
-    [HarmonyPatch(typeof(ExileController), nameof(ExileController.Begin))]
-    public static void Begin(ExileController __instance)
-    {
-        if (__instance.exiled && __instance.exiled.Role is not CrewmateRole or ImpostorRole or ICustomRole)
-        {
-            __instance.completeString = $"{__instance.exiled.PlayerName} was The {__instance.exiled.Role.NiceName}";
-        }
-    }
 
     /// <summary>
     /// If Jester gets voted out, end game
@@ -52,11 +39,12 @@ public static class JesterPatches
             return true;
         }
 
-        if (__instance.exiled?.Role != null && __instance.exiled.Role is JesterRole)
+        if (__instance.initData.networkedPlayer?.Role && __instance.initData.networkedPlayer.Role is JesterRole)
         {
             GameManager.Instance.RpcEndGame((GameOverReason)GameOverReasons.JesterWins, false);
             return false;
         }
+        
         return true;
     }
 }
