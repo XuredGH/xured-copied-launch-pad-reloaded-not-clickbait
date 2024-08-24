@@ -21,7 +21,7 @@ public class JesterRole(System.IntPtr ptr) : RoleBehaviour(ptr), ICustomRole
     public Color RoleColor => LaunchpadPalette.JesterColor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Neutral;
     public bool TasksCount => false;
-    public bool CanUseVent => ModdedGroupSingleton<JesterOptions>.Instance.CanUseVents;
+    public bool CanUseVent => OptionGroupSingleton<JesterOptions>.Instance.CanUseVents;
     public RoleTypes GhostRole => (RoleTypes)LaunchpadRoles.OutcastGhost;
     public override bool IsDead => false;
     

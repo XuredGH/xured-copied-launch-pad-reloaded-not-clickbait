@@ -5,11 +5,11 @@ using MiraAPI.GameOptions.Attributes;
 
 namespace LaunchpadReloaded.Options.Roles;
 
-public class HackerOptions : IModdedOptionGroup
+public class HackerOptions : AbstractOptionGroup
 {
-    public string GroupName => "Hacker";
+    public override string GroupName => "Hacker";
 
-    public Type AdvancedRole => typeof(HackerRole);
+    public override Type AdvancedRole => typeof(HackerRole);
     
     [ModdedNumberOption("Hack Cooldown", 10, 300, 10, NumberSuffixes.Seconds)]
     public float HackCooldown { get; set; } = 60;

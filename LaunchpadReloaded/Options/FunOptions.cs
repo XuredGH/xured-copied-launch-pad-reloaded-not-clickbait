@@ -9,9 +9,9 @@ using Reactor.Networking.Rpc;
 
 namespace LaunchpadReloaded.Options;
 
-public class FunOptions : IModdedOptionGroup
+public class FunOptions : AbstractOptionGroup
 {
-    public string GroupName => "Fun Options";
+    public override string GroupName => "Fun Options";
 
     [ModdedToggleOption("Friendly Fire")] public bool FriendlyFire { get; set; } = false;
     

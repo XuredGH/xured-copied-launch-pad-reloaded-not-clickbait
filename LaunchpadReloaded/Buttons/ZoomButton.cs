@@ -16,9 +16,9 @@ public class ZoomButton : CustomActionButton
 {
     public override string Name => "ZOOM";
     
-    public override float Cooldown => ModdedGroupSingleton<CaptainOptions>.Instance.ZoomCooldown;
+    public override float Cooldown => OptionGroupSingleton<CaptainOptions>.Instance.ZoomCooldown;
     
-    public override float EffectDuration => ModdedGroupSingleton<CaptainOptions>.Instance.ZoomDuration;
+    public override float EffectDuration => OptionGroupSingleton<CaptainOptions>.Instance.ZoomDuration;
     
     public override int MaxUses => 0;
     
@@ -47,7 +47,7 @@ public class ZoomButton : CustomActionButton
     {
         HudManager.Instance.ShadowQuad.gameObject.SetActive(false);
         IsZoom = true;
-        var zoomDistance = ModdedGroupSingleton<CaptainOptions>.Instance.ZoomDistance;
+        var zoomDistance = OptionGroupSingleton<CaptainOptions>.Instance.ZoomDistance;
         for (var ft = Camera.main!.orthographicSize; ft < zoomDistance; ft += 0.3f)
         {
             Camera.main.orthographicSize = MeetingHud.Instance ? 3f : ft;

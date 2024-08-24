@@ -44,7 +44,7 @@ public static class MeetingHudPatches
 
             if (plr.playerObject.Data.Role is MayorRole)
             {
-                plr.VoteData.VotesRemaining += (int)ModdedGroupSingleton<MayorOptions>.Instance.ExtraVotes;
+                plr.VoteData.VotesRemaining += (int)OptionGroupSingleton<MayorOptions>.Instance.ExtraVotes;
             }
         }
 
@@ -63,7 +63,7 @@ public static class MeetingHudPatches
             _typeText.gameObject.SetActive(false);
         }
 
-        if (_confirmVotes == null && (VotingTypesManager.CanVoteMultiple() || ModdedGroupSingleton<VotingOptions>.Instance.AllowConfirmingVotes.Value))
+        if (_confirmVotes == null && (VotingTypesManager.CanVoteMultiple() || OptionGroupSingleton<VotingOptions>.Instance.AllowConfirmingVotes.Value))
         {
             _confirmVotes = Object.Instantiate(__instance.SkipVoteButton, __instance.SkipVoteButton.transform.parent);
             _confirmVotes.gameObject.name = "ConfirmVotesBtn";
@@ -80,7 +80,7 @@ public static class MeetingHudPatches
                 plr.gameObject.GetComponentInChildren<PassiveButton>().OnClick.AddListener((UnityAction)delegate { _confirmVotes.ClearButtons(); });
             }
         }
-        else if (_confirmVotes != null && !VotingTypesManager.CanVoteMultiple() && !ModdedGroupSingleton<VotingOptions>.Instance.AllowConfirmingVotes.Value) _confirmVotes.gameObject.Destroy();
+        else if (_confirmVotes != null && !VotingTypesManager.CanVoteMultiple() && !OptionGroupSingleton<VotingOptions>.Instance.AllowConfirmingVotes.Value) _confirmVotes.gameObject.Destroy();
     }
     
     [HarmonyPostfix]
@@ -194,7 +194,7 @@ public static class MeetingHudPatches
     [HarmonyPatch(nameof(MeetingHud.Select))]
     public static bool SelectPatch(MeetingHud __instance, [HarmonyArgument(0)] byte suspect)
     {
-        if (ModdedGroupSingleton<VotingOptions>.Instance.AllowVotingForSamePerson.Value)
+        if (OptionGroupSingleton<VotingOptions>.Instance.AllowVotingForSamePerson.Value)
         {
             return LaunchpadPlayer.LocalPlayer.VoteData.VotesRemaining > 0;
         }
@@ -275,7 +275,7 @@ public static class MeetingHudPatches
         var plr = LaunchpadPlayer.GetById(playerId);
         if (plr.VoteData.VotesRemaining == 0 ||
             (plr.VoteData.VotedPlayers.Contains(suspectIdx) &&
-             !ModdedGroupSingleton<VotingOptions>.Instance.AllowVotingForSamePerson.Value))
+             !OptionGroupSingleton<VotingOptions>.Instance.AllowVotingForSamePerson.Value))
         {
             return false;
         }
@@ -307,7 +307,7 @@ public static class MeetingHudPatches
         {
             if (plr.VoteData.VotesRemaining == 0 ||
                 (plr.VoteData.VotedPlayers.Contains(suspectIdx) && 
-                 !ModdedGroupSingleton<VotingOptions>.Instance.AllowVotingForSamePerson.Value))
+                 !OptionGroupSingleton<VotingOptions>.Instance.AllowVotingForSamePerson.Value))
             {
                 return;
             }

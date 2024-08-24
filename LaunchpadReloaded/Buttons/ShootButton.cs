@@ -13,9 +13,9 @@ namespace LaunchpadReloaded.Buttons;
 public class ShootButton : CustomActionButton
 {
     public override string Name => "Shoot";
-    public override float Cooldown => ModdedGroupSingleton<SheriffOptions>.Instance.ShotCooldown;
+    public override float Cooldown => OptionGroupSingleton<SheriffOptions>.Instance.ShotCooldown;
     public override float EffectDuration => 0;
-    public override int MaxUses => (int)ModdedGroupSingleton<SheriffOptions>.Instance.ShotsPerGame;
+    public override int MaxUses => (int)OptionGroupSingleton<SheriffOptions>.Instance.ShotsPerGame;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.ShootButton;
     
     private PlayerControl _currentTarget;
@@ -53,7 +53,7 @@ public class ShootButton : CustomActionButton
 
     protected override void OnClick()
     {
-        if (_currentTarget.Data.Role.TeamType == RoleTeamTypes.Impostor || (ModdedGroupSingleton<SheriffOptions>.Instance.ShouldCrewmateDie && _currentTarget.Data.Role.TeamType == RoleTeamTypes.Crewmate))
+        if (_currentTarget.Data.Role.TeamType == RoleTeamTypes.Impostor || (OptionGroupSingleton<SheriffOptions>.Instance.ShouldCrewmateDie && _currentTarget.Data.Role.TeamType == RoleTeamTypes.Crewmate))
         {
             PlayerControl.LocalPlayer.CmdCheckMurder(_currentTarget);
         }

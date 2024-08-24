@@ -25,7 +25,7 @@ public static class Extensions
         if (bodyType == 6)
         {
             player.MyPhysics.SetBodyType(PlayerBodyTypes.Seeker);
-            if (!ModdedGroupSingleton<BattleRoyaleOptions>.Instance.ShowKnife.Value)
+            if (!OptionGroupSingleton<BattleRoyaleOptions>.Instance.ShowKnife.Value)
             {
                 return;
             }

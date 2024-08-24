@@ -5,11 +5,11 @@ using MiraAPI.GameOptions.Attributes;
 
 namespace LaunchpadReloaded.Options.Roles;
 
-public class CaptainOptions : IModdedOptionGroup
+public class CaptainOptions : AbstractOptionGroup
 {
-    public string GroupName => "Captain";
+    public override string GroupName => "Captain";
 
-    public Type AdvancedRole => typeof(CaptainRole);
+    public override Type AdvancedRole => typeof(CaptainRole);
 
     [ModdedNumberOption("Meeting Cooldown", 0, 120, 5, NumberSuffixes.Seconds)]
     public float CaptainMeetingCooldown { get; set; } = 45;

@@ -45,7 +45,7 @@ public class JournalMinigame(nint ptr) : Minigame(ptr)
 
         deadPlayer.playerObject.SetPlayerMaterialColors(deadBodyIcon);
 
-        if (LaunchpadPlayer.GetAllAlivePlayers().Count() < 4 || ModdedGroupSingleton<DetectiveOptions>.Instance.HideSuspects)
+        if (LaunchpadPlayer.GetAllAlivePlayers().Count() < 4 || OptionGroupSingleton<DetectiveOptions>.Instance.HideSuspects)
         {
             gameObject.transform.FindChild("Suspects").gameObject.SetActive(false);
             gameObject.transform.FindChild("SuspectsText").gameObject.SetActive(false);

@@ -35,7 +35,7 @@ public class CustomCmdCheckColor(LaunchpadReloadedPlugin plugin, uint id) : Play
         var bodyColor = data.ColorId;
         var gradColor = data.GradientId;
 
-        if (!ModdedGroupSingleton<FunOptions>.Instance.UniqueColors.Value)
+        if (!OptionGroupSingleton<FunOptions>.Instance.UniqueColors.Value)
         {
             Rpc<CustomRpcSetColor>.Instance.Send(source, new CustomColorData(bodyColor, gradColor));
             return;

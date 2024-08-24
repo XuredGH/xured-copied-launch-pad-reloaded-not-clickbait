@@ -16,7 +16,7 @@ public static class NameTagPatch
     [HarmonyPrefix, HarmonyPatch(nameof(PlayerNameColor.Get), typeof(RoleBehaviour))]
     public static bool GetPatch([HarmonyArgument(0)] RoleBehaviour otherPlayerRole, ref Color __result)
     {
-        if (PlayerControl.LocalPlayer.Data.IsDead && ModdedGroupSingleton<GeneralOptions>.Instance.GhostsSeeRoles)
+        if (PlayerControl.LocalPlayer.Data.IsDead && OptionGroupSingleton<GeneralOptions>.Instance.GhostsSeeRoles)
         {
             __result = otherPlayerRole.NameColor;
             return false;

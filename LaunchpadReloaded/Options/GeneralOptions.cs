@@ -5,11 +5,11 @@ using MiraAPI.GameOptions.Attributes;
 
 namespace LaunchpadReloaded.Options;
 
-public class GeneralOptions : IModdedOptionGroup
+public class GeneralOptions : AbstractOptionGroup
 {
-    public string GroupName => "General";
+    public override string GroupName => "General";
     
-    public Func<bool> GroupVisible => CustomGameModeManager.IsDefault;
+    public override Func<bool> GroupVisible => CustomGameModeManager.IsDefault;
 
     [ModdedToggleOption("Ban Cheaters")] public bool BanCheaters { get; set; } = true;
     

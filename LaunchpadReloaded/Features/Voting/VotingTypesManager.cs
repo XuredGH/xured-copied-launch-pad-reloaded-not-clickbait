@@ -12,7 +12,7 @@ using Random = System.Random;
 namespace LaunchpadReloaded.Features.Voting;
 public static class VotingTypesManager
 {
-    public static VotingTypes SelectedType => ModdedGroupSingleton<VotingOptions>.Instance.VotingType;
+    public static VotingTypes SelectedType => OptionGroupSingleton<VotingOptions>.Instance.VotingType;
 
     public static readonly byte[] RecommendedVotes =
     [
@@ -28,7 +28,7 @@ public static class VotingTypesManager
                         0, 
                         15),
                     RecommendedVotes.Length)], 
-            ModdedGroupSingleton<VotingOptions>.Instance.MaxVotes.Value);
+            OptionGroupSingleton<VotingOptions>.Instance.MaxVotes.Value);
 
     public static int GetVotes()
     {
@@ -96,7 +96,7 @@ public static class VotingTypesManager
     {
         MeetingHud.Instance.TitleText.text = DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.MeetingVotingResults, Il2CppSystem.Array.Empty<Il2CppSystem.Object>());
 
-        if (!ModdedGroupSingleton<VotingOptions>.Instance.HideVotingIcons.Value)
+        if (!OptionGroupSingleton<VotingOptions>.Instance.HideVotingIcons.Value)
         {
             var delays = new Dictionary<byte, int>();
             var num2 = 0;
@@ -121,7 +121,7 @@ public static class VotingTypesManager
             }
         }
 
-        if (!UseChance() && !ModdedGroupSingleton<VotingOptions>.Instance.ShowPercentages.Value)
+        if (!UseChance() && !OptionGroupSingleton<VotingOptions>.Instance.ShowPercentages.Value)
         {
             return;
         }

@@ -14,11 +14,11 @@ public class ReviveButton : CustomActionButton
 {
     public override string Name => "REVIVE";
     
-    public override float Cooldown => ModdedGroupSingleton<MedicOptions>.Instance.ReviveCooldown;
+    public override float Cooldown => OptionGroupSingleton<MedicOptions>.Instance.ReviveCooldown;
     
     public override float EffectDuration => 0;
     
-    public override int MaxUses => (int)ModdedGroupSingleton<MedicOptions>.Instance.MaxRevives;
+    public override int MaxUses => (int)OptionGroupSingleton<MedicOptions>.Instance.MaxRevives;
     
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.ReviveButton;
     
@@ -32,7 +32,7 @@ public class ReviveButton : CustomActionButton
 
     public bool CanRevive()
     {
-        if (!ModdedGroupSingleton<MedicOptions>.Instance.OnlyAllowInMedbay)
+        if (!OptionGroupSingleton<MedicOptions>.Instance.OnlyAllowInMedbay)
         {
             return true;
         }

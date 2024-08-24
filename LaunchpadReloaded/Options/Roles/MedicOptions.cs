@@ -5,11 +5,11 @@ using MiraAPI.GameOptions.Attributes;
 
 namespace LaunchpadReloaded.Options.Roles;
 
-public class MedicOptions : IModdedOptionGroup
+public class MedicOptions : AbstractOptionGroup
 {
-    public string GroupName => "Medic";
+    public override string GroupName => "Medic";
 
-    public Type AdvancedRole => typeof(MedicRole);
+    public override Type AdvancedRole => typeof(MedicRole);
 
     [ModdedToggleOption("Only Allow Reviving in MedBay/Laboratory")]
     public bool OnlyAllowInMedbay { get; set; } = false;

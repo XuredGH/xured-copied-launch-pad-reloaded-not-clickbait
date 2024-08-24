@@ -5,11 +5,11 @@ using MiraAPI.GameOptions.Attributes;
 
 namespace LaunchpadReloaded.Options.Roles;
 
-public class SheriffOptions : IModdedOptionGroup
+public class SheriffOptions : AbstractOptionGroup
 {
-    public string GroupName => "Sheriff";
+    public override string GroupName => "Sheriff";
 
-    public Type AdvancedRole => typeof(SheriffRole);
+    public override Type AdvancedRole => typeof(SheriffRole);
 
     [ModdedNumberOption("Shot Cooldown", 0, 120, 5, NumberSuffixes.Seconds)]
     public float ShotCooldown { get; set; } = 45;

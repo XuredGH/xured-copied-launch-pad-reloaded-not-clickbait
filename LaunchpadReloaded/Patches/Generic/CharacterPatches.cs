@@ -21,7 +21,7 @@ public static class CharacterPatches
     [HarmonyPatch(typeof(NormalGameManager), "GetBodyType")]
     public static void GetBodyTypePatches(ref PlayerBodyTypes __result)
     {
-        __result = FunOptions.IntToBodyTypes[ModdedGroupSingleton<FunOptions>.Instance.Character.Value];
+        __result = FunOptions.IntToBodyTypes[OptionGroupSingleton<FunOptions>.Instance.Character.Value];
     }
 
     [HarmonyPrefix]

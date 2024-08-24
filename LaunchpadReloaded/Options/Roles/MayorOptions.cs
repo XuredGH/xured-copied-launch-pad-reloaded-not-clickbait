@@ -5,11 +5,11 @@ using MiraAPI.GameOptions.Attributes;
 
 namespace LaunchpadReloaded.Options.Roles;
 
-public class MayorOptions : IModdedOptionGroup
+public class MayorOptions : AbstractOptionGroup
 {
-    public string GroupName => "Mayor";
+    public override string GroupName => "Mayor";
 
-    public Type AdvancedRole => typeof(MayorRole);
+    public override Type AdvancedRole => typeof(MayorRole);
     
     [ModdedNumberOption("Extra Votes", 1, 3)]
     public float ExtraVotes { get; set; } = 1;

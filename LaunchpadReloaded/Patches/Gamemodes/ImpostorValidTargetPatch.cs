@@ -12,7 +12,7 @@ public static class ImpostorValidTargetPatch
 {
     public static bool Prefix(ImpostorRole __instance, [HarmonyArgument(0)] NetworkedPlayerInfo target, ref bool __result)
     {
-        if (!ModdedGroupSingleton<FunOptions>.Instance.FriendlyFire)
+        if (!OptionGroupSingleton<FunOptions>.Instance.FriendlyFire)
         {
             return true;
         }

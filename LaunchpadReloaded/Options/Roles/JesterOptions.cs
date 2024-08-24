@@ -5,11 +5,11 @@ using MiraAPI.GameOptions.Attributes;
 
 namespace LaunchpadReloaded.Options.Roles;
 
-public class JesterOptions : IModdedOptionGroup
+public class JesterOptions : AbstractOptionGroup
 {
-    public string GroupName => "Jester";
+    public override string GroupName => "Jester";
     
-    public Type AdvancedRole => typeof(JesterRole);
+    public override Type AdvancedRole => typeof(JesterRole);
     
     [ModdedToggleOption("Can Use Vents")]
     public bool CanUseVents { get; set; } = true;

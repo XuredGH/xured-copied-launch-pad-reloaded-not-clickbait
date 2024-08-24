@@ -99,7 +99,7 @@ public class LaunchpadPlayer(IntPtr ptr) : MonoBehaviour(ptr)
                 playerObject.SetPlayerMaterialColors(sprite);
 
                 _lastPos = transform.position;
-                Destroy(footstep, ModdedGroupSingleton<DetectiveOptions>.Instance.FootstepsDuration);
+                Destroy(footstep, OptionGroupSingleton<DetectiveOptions>.Instance.FootstepsDuration);
             }
         }
     }
@@ -208,7 +208,7 @@ public class LaunchpadPlayer(IntPtr ptr) : MonoBehaviour(ptr)
     public struct CustomVoteData()
     {
         public readonly List<byte> VotedPlayers = [];
-        public int VotesRemaining = (int)ModdedGroupSingleton<VotingOptions>.Instance.MaxVotes.Value;
+        public int VotesRemaining = (int)OptionGroupSingleton<VotingOptions>.Instance.MaxVotes.Value;
     }
 
     public struct DeathData

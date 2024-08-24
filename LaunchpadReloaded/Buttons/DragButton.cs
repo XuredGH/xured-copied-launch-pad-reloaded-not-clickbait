@@ -21,7 +21,7 @@ public class DragButton : CustomActionButton
     
     public override bool Enabled(RoleBehaviour role)
     {
-        return role is JanitorRole || (ModdedGroupSingleton<MedicOptions>.Instance.DragBodies && role is MedicRole);
+        return role is JanitorRole || (OptionGroupSingleton<MedicOptions>.Instance.DragBodies && role is MedicRole);
     }
 
     public override bool CanUse()

@@ -154,7 +154,7 @@ public static class PlayerTabPatches
         {
             __instance.AvailableColors.Add(i);
         }
-        if (!ModdedGroupSingleton<FunOptions>.Instance.UniqueColors.Value)
+        if (!OptionGroupSingleton<FunOptions>.Instance.UniqueColors.Value)
         {
             return false;
         }

@@ -37,6 +37,6 @@ public static class ShipStatusPatch
     public static bool SpawnPlayerPatch([HarmonyArgument(2)] bool initialSpawn)
     {
         if (TutorialManager.InstanceExists) return true;
-        return initialSpawn || !ModdedGroupSingleton<GeneralOptions>.Instance.DisableMeetingTeleport;
+        return initialSpawn || !OptionGroupSingleton<GeneralOptions>.Instance.DisableMeetingTeleport;
     }
 }

@@ -41,7 +41,7 @@ public class BattleRoyale : CustomGameMode
 
         foreach (var player in PlayerControl.AllPlayerControls)
         {
-            if (ModdedGroupSingleton<BattleRoyaleOptions>.Instance.SeekerCharacter)
+            if (OptionGroupSingleton<BattleRoyaleOptions>.Instance.SeekerCharacter)
             {
                 player.SetBodyType(6);
             }

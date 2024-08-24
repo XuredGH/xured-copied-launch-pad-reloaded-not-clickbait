@@ -5,11 +5,11 @@ using MiraAPI.GameOptions.Attributes;
 
 namespace LaunchpadReloaded.Options.Roles;
 
-public class DetectiveOptions : IModdedOptionGroup
+public class DetectiveOptions : AbstractOptionGroup
 {
-    public string GroupName => "Detective";
+    public override string GroupName => "Detective";
     
-    public Type AdvancedRole => typeof(DetectiveRole);
+    public override Type AdvancedRole => typeof(DetectiveRole);
     
     [ModdedToggleOption("Hide Suspects")]
     public bool HideSuspects { get; set; } = false;

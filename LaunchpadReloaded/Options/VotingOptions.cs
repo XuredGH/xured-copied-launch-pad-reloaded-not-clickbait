@@ -7,11 +7,11 @@ using MiraAPI.GameOptions.OptionTypes;
 
 namespace LaunchpadReloaded.Options;
 
-public class VotingOptions : IModdedOptionGroup
+public class VotingOptions : AbstractOptionGroup
 {
-    public string GroupName => "Voting Type";
+    public override string GroupName => "Voting Type";
 
-    public Func<bool> GroupVisible => CustomGameModeManager.IsDefault;
+    public override Func<bool> GroupVisible => CustomGameModeManager.IsDefault;
 
     [ModdedEnumOption("Voting Type", typeof(VotingTypes))]
     public VotingTypes VotingType { get; set; } = VotingTypes.Classic;
@@ -33,7 +33,7 @@ public class VotingOptions : IModdedOptionGroup
     
     public ModdedToggleOption HideVotingIcons { get; } = new("Hide Voting Icons", false)
     {
-        Visible = () => VotingTypesManager.UseChance() || ModdedGroupSingleton<VotingOptions>.Instance.ShowPercentages.Value
+        Visible = () => VotingTypesManager.UseChance() || OptionGroupSingleton<VotingOptions>.Instance.ShowPercentages.Value
     };
     
     public ModdedToggleOption ShowPercentages { get; } = new("Show Percentages", false)

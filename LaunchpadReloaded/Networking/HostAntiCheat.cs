@@ -13,6 +13,6 @@ public static class HostAntiCheat
         }
         
         var id = AmongUsClient.Instance.GetClientIdFromCharacter(hacker);
-        AmongUsClient.Instance.KickPlayer(id, ModdedGroupSingleton<GeneralOptions>.Instance.BanCheaters);
+        AmongUsClient.Instance.KickPlayer(id, OptionGroupSingleton<GeneralOptions>.Instance.BanCheaters);
     }
 }
