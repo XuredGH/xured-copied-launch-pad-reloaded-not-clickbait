@@ -1,8 +1,10 @@
-﻿using LaunchpadReloaded.API.Hud;
-using LaunchpadReloaded.Features;
+﻿using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
+using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Roles;
-using Reactor.Utilities;
+using MiraAPI.GameOptions;
+using MiraAPI.Hud;
+using MiraAPI.Utilities.Assets;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
@@ -11,9 +13,9 @@ namespace LaunchpadReloaded.Buttons;
 public class CallButton : CustomActionButton
 {
     public override string Name => "CALL";
-    public override float Cooldown => CaptainRole.CaptainMeetingCooldown.Value;
+    public override float Cooldown => OptionGroupSingleton<CaptainOptions>.Instance.CaptainMeetingCooldown;
     public override float EffectDuration => 0;
-    public override int MaxUses => (int)CaptainRole.CaptainMeetingCount.Value;
+    public override int MaxUses => (int)OptionGroupSingleton<CaptainOptions>.Instance.CaptainMeetingCount;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.CallButton;
 
     public override bool Enabled(RoleBehaviour role)
@@ -21,14 +23,25 @@ public class CallButton : CustomActionButton
         return role is CaptainRole;
     }
 
-    public override bool CanUse() => !ZoomButton.IsZoom && !HackingManager.Instance.AnyPlayerHacked();
+    public override bool CanUse() => base.CanUse() && !ZoomButton.IsZoom && !HackingManager.Instance.AnyPlayerHacked();
+
+    public override void ClickHandler()
+    {
+        if (!CanUse())
+        {
+            return;
+        }
+
+        OnClick();
+        Button.SetDisabled();
+    }
 
     protected override void OnClick()
     {
         var bt = ShipStatus.Instance.EmergencyButton;
         
         PlayerControl.LocalPlayer.NetTransform.Halt();
-        var minigame = Object.Instantiate(bt.MinigamePrefab, Camera.main.transform, false);
+        var minigame = Object.Instantiate(bt.MinigamePrefab, Camera.main!.transform, false);
         
         var taskAdderGame = minigame as TaskAdderGame;
         if (taskAdderGame != null)

@@ -1,7 +1,8 @@
 ﻿using HarmonyLib;
 using InnerNet;
-using LaunchpadReloaded.Features;
 using System;
+using LaunchpadReloaded.Options;
+using MiraAPI.GameOptions;
 using Reactor.Utilities;
 using static CosmeticsLayer;
 
@@ -16,25 +17,15 @@ namespace LaunchpadReloaded.Patches.Generic;
 [HarmonyPatch]
 public static class CharacterPatches
 {
-    [HarmonyPostfix, HarmonyPatch(typeof(NormalGameManager), "GetBodyType")]
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(NormalGameManager), "GetBodyType")]
     public static void GetBodyTypePatches(ref PlayerBodyTypes __result)
     {
-        switch (LaunchpadGameOptions.Instance.Character.Value)
-        {
-            case "Long":
-                __result = PlayerBodyTypes.Long;
-                break;
-            case "Horse":
-                __result = PlayerBodyTypes.Horse;
-                break;
-            default:
-            case "Default":
-                __result = PlayerBodyTypes.Normal;
-                break;
-        }
+        __result = FunOptions.IntToBodyTypes[OptionGroupSingleton<FunOptions>.Instance.Character.Value];
     }
 
-    [HarmonyPrefix, HarmonyPatch(typeof(LongBoiPlayerBody), nameof(LongBoiPlayerBody.Awake))]
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(LongBoiPlayerBody), nameof(LongBoiPlayerBody.Awake))]
     public static bool LongBodyAwakePatch(LongBoiPlayerBody __instance)
     {
         __instance.cosmeticLayer.OnSetBodyAsGhost += (Action)__instance.SetPoolableGhost;
@@ -45,7 +36,8 @@ public static class CharacterPatches
         return false;
     }
 
-    [HarmonyPrefix, HarmonyPatch(typeof(LongBoiPlayerBody), nameof(LongBoiPlayerBody.SetHeightFromColor))]
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(LongBoiPlayerBody), nameof(LongBoiPlayerBody.SetHeightFromColor))]
     public static bool SetHeightColorPatch(LongBoiPlayerBody __instance)
     {
         if (!__instance.isPoolablePlayer)
@@ -65,7 +57,8 @@ public static class CharacterPatches
         return false;
     }
 
-    [HarmonyPrefix, HarmonyPatch(typeof(LongBoiPlayerBody), nameof(LongBoiPlayerBody.SetHeighFromDistanceHnS))]
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(LongBoiPlayerBody), nameof(LongBoiPlayerBody.SetHeighFromDistanceHnS))]
     public static bool NeckSizePatch(LongBoiPlayerBody __instance, ref float distance)
     {
         __instance.targetHeight = distance / 10f + 0.5f;
@@ -73,7 +66,8 @@ public static class CharacterPatches
         return false;
     }
 
-    [HarmonyPrefix, HarmonyPatch(typeof(LongBoiPlayerBody), nameof(LongBoiPlayerBody.Start))]
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(LongBoiPlayerBody), nameof(LongBoiPlayerBody.Start))]
     public static bool LongBodyStartPatch(LongBoiPlayerBody __instance)
     {
         Logger<LaunchpadReloadedPlugin>.Info("hello there should longer");

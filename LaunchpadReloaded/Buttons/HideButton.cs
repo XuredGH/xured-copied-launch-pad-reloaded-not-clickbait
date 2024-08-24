@@ -1,9 +1,9 @@
-﻿using LaunchpadReloaded.API.Hud;
-using LaunchpadReloaded.Components;
+﻿using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Roles;
+using MiraAPI.Hud;
+using MiraAPI.Utilities.Assets;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
@@ -21,15 +21,16 @@ public class HideButton : CustomActionButton
 
     public override bool CanUse()
     {
-        return DeadBodyTarget &&
-               DragManager.Instance.IsDragging(PlayerControl.LocalPlayer.PlayerId) &&
+        return base.CanUse() &&
+               LaunchpadPlayer.LocalPlayer.deadBodyTarget &&
+               LaunchpadPlayer.LocalPlayer.Dragging &&
                VentTarget && !VentTarget.gameObject.GetComponent<VentBodyComponent>();
     }
 
     protected override void OnClick()
     {
         PlayerControl.LocalPlayer.RpcStopDragging();
-        PlayerControl.LocalPlayer.RpcHideBodyInVent(DeadBodyTarget.ParentId, VentTarget.Id);
+        PlayerControl.LocalPlayer.RpcHideBodyInVent(LaunchpadPlayer.LocalPlayer.deadBodyTarget.ParentId, VentTarget.Id);
     }
 
     public override bool Enabled(RoleBehaviour role)

@@ -1,9 +1,12 @@
-﻿using LaunchpadReloaded.API.Hud;
-using LaunchpadReloaded.Features;
+﻿using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities;
 using System.Collections;
+using LaunchpadReloaded.Options.Roles;
+using MiraAPI.GameOptions;
+using MiraAPI.Hud;
+using MiraAPI.Utilities.Assets;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
@@ -13,9 +16,9 @@ public class ZoomButton : CustomActionButton
 {
     public override string Name => "ZOOM";
     
-    public override float Cooldown => CaptainRole.ZoomCooldown.Value;
+    public override float Cooldown => OptionGroupSingleton<CaptainOptions>.Instance.ZoomCooldown;
     
-    public override float EffectDuration => CaptainRole.ZoomDuration.Value;
+    public override float EffectDuration => OptionGroupSingleton<CaptainOptions>.Instance.ZoomDuration;
     
     public override int MaxUses => 0;
     
@@ -28,7 +31,7 @@ public class ZoomButton : CustomActionButton
         return role is CaptainRole;
     }
 
-    public override bool CanUse() => !PlayerControl.LocalPlayer.Data.IsHacked();
+    public override bool CanUse() => base.CanUse() && !PlayerControl.LocalPlayer.Data.IsHacked();
 
     protected override void OnClick()
     {
@@ -44,7 +47,8 @@ public class ZoomButton : CustomActionButton
     {
         HudManager.Instance.ShadowQuad.gameObject.SetActive(false);
         IsZoom = true;
-        for (var ft = Camera.main!.orthographicSize; ft < CaptainRole.ZoomDistance.Value; ft += 0.3f)
+        var zoomDistance = OptionGroupSingleton<CaptainOptions>.Instance.ZoomDistance;
+        for (var ft = Camera.main!.orthographicSize; ft < zoomDistance; ft += 0.3f)
         {
             Camera.main.orthographicSize = MeetingHud.Instance ? 3f : ft;
             ResolutionManager.ResolutionChanged.Invoke((float)Screen.width / Screen.height, Screen.width, Screen.height, Screen.fullScreen);
@@ -52,7 +56,7 @@ public class ZoomButton : CustomActionButton
             yield return null;
         }
 
-        foreach (var cam in Camera.allCameras) cam.orthographicSize = CaptainRole.ZoomDistance.Value;
+        foreach (var cam in Camera.allCameras) cam.orthographicSize = zoomDistance;
         ResolutionManager.ResolutionChanged.Invoke((float)Screen.width / Screen.height, Screen.width, Screen.height, Screen.fullScreen);
     }
 

@@ -1,5 +1,5 @@
 ﻿using HarmonyLib;
-using LaunchpadReloaded.Utilities;
+using MiraAPI.Utilities;
 
 namespace LaunchpadReloaded.Patches.Colors.Gradients;
 
@@ -8,9 +8,9 @@ public static class LongBoiPatch
 {
     public static void Postfix(LongBoiPlayerBody __instance)
     {
-        __instance.neckSprite.material.SetFloat(ShaderID.GradientOffset, -1);
-        __instance.cosmeticLayer.currentBodySprite.BodySprite.material.SetFloat(ShaderID.GradientOffset, -1);
-        __instance.headSprite.material.SetFloat(ShaderID.GradientOffset, 2);
+        __instance.neckSprite.material.SetFloat(ShaderID.Get("_GradientOffset"), -1);
+        __instance.cosmeticLayer.currentBodySprite.BodySprite.material.SetFloat(ShaderID.Get("_GradientOffset"), -1);
+        __instance.headSprite.material.SetFloat(ShaderID.Get("_GradientOffset"), 2);
     }
 }
 
@@ -21,6 +21,6 @@ public static class HorsePatch
     {
         if (bt is not PlayerBodyTypes.Horse) return;
         
-        __instance.currentBodySprite.BodySprite.material.SetFloat(ShaderID.GradientOffset, 1.5f);
+        __instance.currentBodySprite.BodySprite.material.SetFloat(ShaderID.Get("_GradientOffset"), 1.5f);
     }
 }

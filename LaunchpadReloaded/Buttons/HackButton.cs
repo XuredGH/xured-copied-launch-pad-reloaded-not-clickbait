@@ -1,8 +1,11 @@
-﻿using LaunchpadReloaded.API.Hud;
-using LaunchpadReloaded.Features;
+﻿using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Networking;
+using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Roles;
+using MiraAPI.GameOptions;
+using MiraAPI.Hud;
+using MiraAPI.Utilities.Assets;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
@@ -11,12 +14,12 @@ namespace LaunchpadReloaded.Buttons;
 public class HackButton : CustomActionButton
 {
     public override string Name => "HACK";
-    public override float Cooldown => (int)HackerRole.HackCooldown.Value;
+    public override float Cooldown => (int)OptionGroupSingleton<HackerOptions>.Instance.HackCooldown;
     public override float EffectDuration => 0;
-    public override int MaxUses => (int)HackerRole.HackUses.Value;
+    public override int MaxUses => (int)OptionGroupSingleton<HackerOptions>.Instance.HackUses;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.HackButton;
     public override bool Enabled(RoleBehaviour role) => role is HackerRole;
-    public override bool CanUse() => !HackingManager.Instance.AnyPlayerHacked();
+    public override bool CanUse() => base.CanUse() && !HackingManager.Instance.AnyPlayerHacked();
 
     protected override void OnClick()
     {

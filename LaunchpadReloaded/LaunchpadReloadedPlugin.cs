@@ -1,9 +1,6 @@
 ﻿using BepInEx;
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
-using LaunchpadReloaded.API.GameModes;
-using LaunchpadReloaded.API.Hud;
-using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Colors;
 using Reactor;
@@ -12,8 +9,10 @@ using Reactor.Networking.Attributes;
 using Reactor.Patches;
 using System;
 using System.Linq;
-using System.Reflection;
 using System.Text;
+using BepInEx.Configuration;
+using MiraAPI;
+using MiraAPI.PluginLoading;
 using TMPro;
 
 namespace LaunchpadReloaded;
@@ -21,11 +20,17 @@ namespace LaunchpadReloaded;
 [BepInAutoPlugin("dev.xtracube.launchpad", "LaunchpadReloaded")]
 [BepInProcess("Among Us.exe")]
 [BepInDependency(ReactorPlugin.Id)]
+[BepInDependency(MiraApiPlugin.Id)]
 [ReactorModFlags(ModFlags.RequireOnAllClients)]
-public partial class LaunchpadReloadedPlugin : BasePlugin
+public partial class LaunchpadReloadedPlugin : BasePlugin, IMiraPlugin
 {
     public Harmony Harmony { get; } = new(Id);
     public static LaunchpadReloadedPlugin Instance { get; private set; }
+
+    public ConfigFile GetConfigFile()
+    {
+        return Config;
+    }
 
     public override void Load()
     {
@@ -34,12 +39,7 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
         
 
         RegisterColors();
-
-        RegisterGameModeAttribute.Register(Assembly.GetExecutingAssembly());       
-        RegisterCustomRoleAttribute.Register(Assembly.GetExecutingAssembly());
-        RegisterButtonAttribute.Register(Assembly.GetExecutingAssembly());
-
-        LaunchpadGameOptions.Initialize();
+        
         LaunchpadSettings.Initialize();
         
         ReactorVersionShower.TextUpdated += VersionShower;
@@ -50,17 +50,17 @@ public partial class LaunchpadReloadedPlugin : BasePlugin
     private static void VersionShower(TextMeshPro textMeshPro)
     {
         textMeshPro.text = new StringBuilder("<color=#FF4050FF>Launchpad</color> ")
-            .Append(GetShortHashVersion(Version))
+            .Append(GetShortHashVersion())
             .Append("\nPowered by <color=#FFB793>CrowdedMod</color>\n& <color=#348feb>Mini.RegionInstall</color>\n")
             .Append(textMeshPro.text)
             .ToString();
     }
 
-    private static string GetShortHashVersion(string version)
+    public static string GetShortHashVersion()
     {
-        var index = version.IndexOf("+", StringComparison.Ordinal);
+        var index = Version.IndexOf("+", StringComparison.Ordinal);
 
-        return index < 0 ? version : version[..(index + 8)];
+        return index < 0 ? Version : Version[..(index + 8)];
     }
 
     private static void RegisterColors()

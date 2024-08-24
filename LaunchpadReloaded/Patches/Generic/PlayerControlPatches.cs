@@ -1,7 +1,5 @@
 using HarmonyLib;
 using Il2CppSystem;
-using LaunchpadReloaded.API.Hud;
-using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
@@ -26,7 +24,7 @@ public static class PlayerControlPatches
         switch (__instance.Data.Role)
         {
             case JanitorRole:
-                __result = __result && !DragManager.Instance.IsDragging(__instance.PlayerId);
+                __result = __result && !__instance.GetLpPlayer().Dragging;
                 break;
         }
     }
@@ -76,32 +74,9 @@ public static class PlayerControlPatches
             return;
         }
 
-        if (__instance.IsRevived())
+        if (__instance.GetLpPlayer().wasRevived)
         {
             __instance.cosmetics.SetOutline(true, new Nullable<Color>(LaunchpadPalette.MedicColor));
-        }
-
-        if (__instance.AmOwner)
-        {
-            foreach (var button in CustomButtonManager.CustomButtons)
-            {
-                if (!button.Enabled(__instance.Data.Role))
-                {
-                    continue;
-                }
-
-                button.FixedUpdateHandler(__instance);
-            }
-        }
-
-        if (__instance.Data is null || __instance.Data.Role is null)
-        {
-            return;
-        }
-
-        if (__instance.Data.Role is ICustomRole customRole)
-        {
-            customRole.PlayerControlFixedUpdate(__instance);
         }
     }
 
@@ -111,8 +86,8 @@ public static class PlayerControlPatches
     [HarmonyPrefix, HarmonyPatch("Start")]
     public static void StartPrefix(PlayerControl __instance)
     {
-        __instance.gameObject.AddComponent<LaunchpadPlayer>();
         __instance.gameObject.AddComponent<PlayerGradientData>();
+        __instance.gameObject.AddComponent<LaunchpadPlayer>();
     }
 
     /// <summary>

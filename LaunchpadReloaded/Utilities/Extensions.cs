@@ -3,10 +3,11 @@ using System.Linq;
 using System.Reflection;
 using AmongUs.GameOptions;
 using System.Collections.Generic;
-using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
+using LaunchpadReloaded.Options;
+using MiraAPI.GameOptions;
 using PowerTools;
 using Reactor.Utilities.Extensions;
 using UnityEngine;
@@ -24,7 +25,7 @@ public static class Extensions
         if (bodyType == 6)
         {
             player.MyPhysics.SetBodyType(PlayerBodyTypes.Seeker);
-            if (!LaunchpadGameOptions.Instance.ShowKnife.Value)
+            if (!OptionGroupSingleton<BattleRoyaleOptions>.Instance.ShowKnife.Value)
             {
                 return;
             }
@@ -118,7 +119,7 @@ public static class Extensions
         return (playerControl.moveable || playerControl.petting) && !playerControl.inVent && !playerControl.shapeshifting && (!DestroyableSingleton<HudManager>.InstanceExists || !DestroyableSingleton<HudManager>.Instance.IsIntroDisplayed) && !MeetingHud.Instance && !PlayerCustomizationMenu.Instance && !ExileController.Instance && !IntroCutscene.Instance;
     }
 
-    public static bool IsHacked(this GameData.PlayerInfo playerInfo)
+    public static bool IsHacked(this NetworkedPlayerInfo playerInfo)
     {
         if (!HackingManager.Instance)
         {
@@ -126,11 +127,6 @@ public static class Extensions
         }
 
         return HackingManager.Instance.hackedPlayers.Contains(playerInfo.PlayerId) || (playerInfo.Role.IsImpostor && HackingManager.Instance.AnyPlayerHacked());
-    }
-
-    public static bool IsRevived(this PlayerControl player)
-    {
-        return RevivalManager.Instance is not null && RevivalManager.Instance.revivedPlayers.Contains(player.PlayerId);
     }
 
     public static void Revive(this DeadBody body)
@@ -153,7 +149,7 @@ public static class Extensions
         }
 
         body.gameObject.Destroy();
-        RevivalManager.Instance.revivedPlayers.Add(player.PlayerId);
+        player.GetLpPlayer().wasRevived = true;
     }
     
     public static void HideBody(this DeadBody body)
@@ -164,6 +160,7 @@ public static class Extensions
         {
             spriteRenderer.enabled = false;
         }
+        body.GetComponent<DeadBodyComponent>().hidden = true;
     }
 
     public static void ShowBody(this DeadBody body, bool reported)
@@ -174,47 +171,12 @@ public static class Extensions
         {
             spriteRenderer.enabled = true;
         }
+        body.GetComponent<DeadBodyComponent>().hidden = false;
     }
+    
     public static bool IsOverride(this MethodInfo methodInfo)
     {
         return methodInfo.GetBaseDefinition() != methodInfo;
-    }
-    public static void UpdateBodies(this PlayerControl playerControl, Color outlineColor, ref DeadBody target)
-    {
-        foreach (var body in Object.FindObjectsOfType<DeadBody>())
-        {
-            foreach (var bodyRenderer in body.bodyRenderers)
-            {
-                bodyRenderer.SetOutline(null);
-            }
-        }
-
-        if (playerControl.Data.Role is not ICustomRole { TargetsBodies: true })
-        {
-            return;
-        }
-
-        target = playerControl.NearestDeadBody();
-        if (!target)
-        {
-            return;
-        }
-        
-        foreach (var renderer in target.bodyRenderers)
-        {
-            renderer.SetOutline(outlineColor);
-        }
-
-    }
-
-    public static DeadBody NearestDeadBody(this PlayerControl playerControl)
-    {
-        var results = new Il2CppSystem.Collections.Generic.List<Collider2D>();
-        Physics2D.OverlapCircle(playerControl.GetTruePosition(), playerControl.MaxReportDistance / 4f, Filter, results);
-        return results.ToArray()
-            .Where(collider2D => collider2D.CompareTag("DeadBody"))
-            .Select(collider2D => collider2D.GetComponent<DeadBody>())
-            .FirstOrDefault(component => component && !component.Reported);
     }
 
     public static PlayerControl GetClosestPlayer(this PlayerControl playerControl, bool includeImpostors, float distance)

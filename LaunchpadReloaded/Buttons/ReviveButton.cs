@@ -1,8 +1,10 @@
-﻿using LaunchpadReloaded.API.Hud;
-using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Features.Managers;
+﻿using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Networking;
+using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Roles;
+using MiraAPI.GameOptions;
+using MiraAPI.Hud;
+using MiraAPI.Utilities.Assets;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
@@ -12,11 +14,11 @@ public class ReviveButton : CustomActionButton
 {
     public override string Name => "REVIVE";
     
-    public override float Cooldown => MedicRole.ReviveCooldown.Value;
+    public override float Cooldown => OptionGroupSingleton<MedicOptions>.Instance.ReviveCooldown;
     
     public override float EffectDuration => 0;
     
-    public override int MaxUses => (int)MedicRole.MaxRevives.Value;
+    public override int MaxUses => (int)OptionGroupSingleton<MedicOptions>.Instance.MaxRevives;
     
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.ReviveButton;
     
@@ -24,13 +26,13 @@ public class ReviveButton : CustomActionButton
 
     public override bool CanUse()
     {
-        return RevivalManager.Instance && DeadBodyTarget && CanRevive() && !PlayerControl.LocalPlayer.Data.IsDead && PlayerControl.LocalPlayer.CanMove &&
-            !DragManager.Instance.DraggingPlayers.ContainsValue(DeadBodyTarget.ParentId);
+        return base.CanUse() && CanRevive() && LaunchpadPlayer.LocalPlayer.deadBodyTarget && 
+               !PlayerControl.LocalPlayer.Data.IsDead && PlayerControl.LocalPlayer.CanMove && !LaunchpadPlayer.LocalPlayer.Dragging;
     }
 
     public bool CanRevive()
     {
-        if (!MedicRole.OnlyAllowInMedbay.Value)
+        if (!OptionGroupSingleton<MedicOptions>.Instance.OnlyAllowInMedbay)
         {
             return true;
         }
@@ -57,7 +59,6 @@ public class ReviveButton : CustomActionButton
     
     protected override void OnClick()
     {
-        PlayerControl.LocalPlayer.RpcRevive(DeadBodyTarget.ParentId);
-        DeadBodyTarget = null;
+        PlayerControl.LocalPlayer.RpcRevive(LaunchpadPlayer.LocalPlayer.deadBodyTarget.ParentId);
     }
 }

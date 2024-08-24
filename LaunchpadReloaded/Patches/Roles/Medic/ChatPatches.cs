@@ -13,7 +13,7 @@ public static class ChatPatches
     [HarmonyPostfix, HarmonyPatch("Update")]
     public static void UpdatePatch(ChatController __instance)
     {
-        if (!PlayerControl.LocalPlayer.IsRevived())
+        if (LaunchpadPlayer.LocalPlayer is null || !LaunchpadPlayer.LocalPlayer.wasRevived)
         {
             return;
         }
@@ -34,12 +34,12 @@ public static class ChatPatches
     [HarmonyPrefix, HarmonyPatch(nameof(ChatController.SendChat))]
     public static bool SendChatPatch()
     {
-        return !PlayerControl.LocalPlayer.IsRevived();
+        return !LaunchpadPlayer.LocalPlayer.wasRevived;
     }
     
     [HarmonyPrefix, HarmonyPatch(nameof(ChatController.AddChat))]
     public static bool AddChatPatch([HarmonyArgument(0)] PlayerControl player)
     {
-        return !player.IsRevived();
+        return !player.GetLpPlayer().wasRevived;
     }
 }

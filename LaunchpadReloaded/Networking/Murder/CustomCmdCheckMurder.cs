@@ -1,6 +1,6 @@
 ﻿using Hazel;
 using InnerNet;
-using LaunchpadReloaded.API.Roles;
+using MiraAPI.Roles;
 using Reactor.Networking.Attributes;
 using Reactor.Networking.Rpc;
 

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LaunchpadReloaded.Options;
+using MiraAPI.GameOptions;
 using Reactor.Utilities.Extensions;
 using TMPro;
 using UnityEngine;
@@ -10,18 +12,23 @@ using Random = System.Random;
 namespace LaunchpadReloaded.Features.Voting;
 public static class VotingTypesManager
 {
-    public static VotingTypes SelectedType
-    {
-        get => (VotingTypes)LaunchpadGameOptions.Instance.VotingType.IndexValue;
-        private set => LaunchpadGameOptions.Instance.VotingType.SetValue((int)value);
-    }
+    public static VotingTypes SelectedType => OptionGroupSingleton<VotingOptions>.Instance.VotingType;
 
     public static readonly byte[] RecommendedVotes =
     [
         1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5
     ];
 
-    public static int GetDynamicVotes() => (int)Math.Min(RecommendedVotes[Math.Min(Math.Clamp(LaunchpadPlayer.GetAllAlivePlayers().Count(), 0, 15), RecommendedVotes.Length)], LaunchpadGameOptions.Instance.MaxVotes.Value);
+    public static int GetDynamicVotes() => 
+        (int)Math.Min(
+            RecommendedVotes[
+                Math.Min(
+                    Math.Clamp(
+                        LaunchpadPlayer.GetAllAlivePlayers().Count(), 
+                        0, 
+                        15),
+                    RecommendedVotes.Length)], 
+            OptionGroupSingleton<VotingOptions>.Instance.MaxVotes.Value);
 
     public static int GetVotes()
     {
@@ -43,7 +50,7 @@ public static class VotingTypesManager
     {
         return (from player in LaunchpadPlayer.GetAllAlivePlayers()
                 from vote in player.VoteData.VotedPlayers
-                select new CustomVote(player.player.PlayerId, vote)).ToList();
+                select new CustomVote(player.playerObject.PlayerId, vote)).ToList();
     }
 
     public static Dictionary<byte, float> GetChancePercents(List<CustomVote> votes)
@@ -89,7 +96,7 @@ public static class VotingTypesManager
     {
         MeetingHud.Instance.TitleText.text = DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.MeetingVotingResults, Il2CppSystem.Array.Empty<Il2CppSystem.Object>());
 
-        if (!LaunchpadGameOptions.Instance.HideVotingIcons.Value)
+        if (!OptionGroupSingleton<VotingOptions>.Instance.HideVotingIcons.Value)
         {
             var delays = new Dictionary<byte, int>();
             var num2 = 0;
@@ -114,7 +121,7 @@ public static class VotingTypesManager
             }
         }
 
-        if (!UseChance() && !LaunchpadGameOptions.Instance.ShowPercentages.Value)
+        if (!UseChance() && !OptionGroupSingleton<VotingOptions>.Instance.ShowPercentages.Value)
         {
             return;
         }

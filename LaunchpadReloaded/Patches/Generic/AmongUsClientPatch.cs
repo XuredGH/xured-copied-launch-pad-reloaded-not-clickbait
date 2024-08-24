@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using HarmonyLib;
 using InnerNet;
-using LaunchpadReloaded.API.GameOptions;
-using LaunchpadReloaded.API.Roles;
 using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Networking.Color;
 using Reactor.Networking.Rpc;
@@ -20,9 +18,6 @@ public static class AmongUsClientPatch
         {
             return;
         }
-
-        CustomOptionsManager.SyncOptions(data.Id);
-        CustomRoleManager.SyncRoleSettings(data.Id);
 
         var colorData = new Dictionary<byte, CustomColorData>();
         

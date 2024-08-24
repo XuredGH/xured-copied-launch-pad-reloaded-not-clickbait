@@ -2,6 +2,7 @@
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Utilities;
+using MiraAPI.Utilities;
 using Reactor.Utilities.Attributes;
 using UnityEngine;
 
@@ -30,7 +31,7 @@ public class HackNodeComponent(IntPtr ptr) : MonoBehaviour(ptr)
         PlayerControl.LocalPlayer.RpcUnHackPlayer();
     }
 
-    public float CanUse(GameData.PlayerInfo pc, out bool canUse, out bool couldUse)
+    public float CanUse(NetworkedPlayerInfo pc, out bool canUse, out bool couldUse)
     {
         var num = float.MaxValue;
         var @object = pc.Object;

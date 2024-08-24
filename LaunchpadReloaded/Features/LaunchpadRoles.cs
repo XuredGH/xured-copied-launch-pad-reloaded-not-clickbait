@@ -2,14 +2,13 @@
 
 public enum LaunchpadRoles : ushort
 {
-    Captain = 10,
-    Hacker = 11,
-    Janitor = 12,
-    Tracker = 13,
-    Medic = 14,
-    Jester = 15,
-    Sheriff = 16,
-    OutcastGhost = 17,
-    Mayor = 18,
-    Detective = 19
+    Captain = 15,
+    Hacker = 16,
+    Janitor = 17,
+    Medic = 18,
+    Jester = 19,
+    Sheriff = 20,
+    OutcastGhost = 21,
+    Mayor = 22,
+    Detective = 23
 }
