@@ -146,63 +146,6 @@ public class LaunchpadPlayer(IntPtr ptr) : MonoBehaviour(ptr)
         {
             knife.gameObject.SetActive(!playerObject.Data.IsDead && playerObject.CanMove);
         }
-
-        if (playerObject.AmOwner && playerObject.Data && playerObject.Data.Role)
-        {
-            UpdateBodyOutline(playerObject.Data.Role.TeamColor);
-        }
-    }
-    
-    public void UpdateBodyOutline(Color outlineColor)
-    {
-        if (playerObject.Data.Role is not ICustomRole { TargetsBodies: true })
-        {
-            return;
-        }
-
-        var newTarget = NearestDeadBody();
-        
-        if (deadBodyTarget && newTarget != deadBodyTarget)
-        {
-            foreach (var renderer in deadBodyTarget.bodyRenderers)
-            {
-                renderer.SetOutline(null);
-            }
-        }
-
-        deadBodyTarget = newTarget;
-        if (deadBodyTarget)
-        {
-            foreach (var renderer in deadBodyTarget.bodyRenderers)
-            {
-                renderer.SetOutline(outlineColor);
-            }
-        }
-    }
-
-    public DeadBody NearestDeadBody(bool ignoreColliders = false)
-    {
-        var abilityDistance = playerObject.MaxReportDistance / 4f;
-        var myPos = playerObject.GetTruePosition();
-        
-        DeadBody target = null;
-        var nearestDist = float.MaxValue;
-
-        foreach (var body in DeadBodyComponent.AllBodies.Where(x=>!x.hidden))
-        {
-            var vector = (Vector2)body.transform.position - myPos;
-            var magnitude = vector.magnitude;
-            if (magnitude <= abilityDistance &&
-                magnitude < nearestDist &&
-                (ignoreColliders || !PhysicsHelpers.AnyNonTriggersBetween(myPos, vector.normalized, magnitude,
-                    Constants.ShipAndObjectsMask)))
-            {
-                target = body.body;
-                nearestDist = magnitude;
-            }
-        }
-
-        return target;
     }
     
     public struct CustomVoteData()

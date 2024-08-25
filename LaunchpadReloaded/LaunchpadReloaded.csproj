@@ -11,9 +11,8 @@
     <ItemGroup>
         <Reference Include="S:\RiderProjects\MiraAPI\MiraAPI\bin\Debug\net6.0\MiraAPI.dll" />
 
-        <PackageReference Include="Reactor" Version="2.3.0" />
+        <PackageReference Include="Reactor" Version="2.3.1" />
         <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.697" Private="false" ExcludeAssets="runtime;native" />
-        <PackageReference Include="Iced" Version="1.21.0" />
         <PackageReference Include="AmongUs.GameLibs.Steam" Version="2024.8.13" PrivateAssets="all" />
 
         <PackageReference Include="BepInEx.AutoPlugin" Version="1.1.0" PrivateAssets="all" />
@@ -27,10 +26,6 @@
       <EmbeddedResource Include="Resources/Footstep.png" />
       <EmbeddedResource Include="Resources/Instinct.png" />
       <EmbeddedResource Include="Resources/Investigate.png" />
-    </ItemGroup>
-    
-    <ItemGroup>
-      <Folder Include="Patches\Roles\Tracker\" />
     </ItemGroup>
     
 
