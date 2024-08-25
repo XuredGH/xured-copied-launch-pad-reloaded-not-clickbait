@@ -6,14 +6,11 @@ using LaunchpadReloaded.Features.Colors;
 using Reactor;
 using Reactor.Networking;
 using Reactor.Networking.Attributes;
-using Reactor.Patches;
-using System;
 using System.Linq;
-using System.Text;
 using BepInEx.Configuration;
 using MiraAPI;
 using MiraAPI.PluginLoading;
-using TMPro;
+using Reactor.Utilities;
 
 namespace LaunchpadReloaded;
 
@@ -37,30 +34,13 @@ public partial class LaunchpadReloadedPlugin : BasePlugin, IMiraPlugin
         Instance = this;
         Harmony.PatchAll();
         
+        ReactorCredits.Register("Launchpad", Version[..11], true, ReactorCredits.AlwaysShow);
 
         RegisterColors();
         
         LaunchpadSettings.Initialize();
-        
-        ReactorVersionShower.TextUpdated += VersionShower;
 
         Config.Save();
-    }
-
-    private static void VersionShower(TextMeshPro textMeshPro)
-    {
-        textMeshPro.text = new StringBuilder("<color=#FF4050FF>Launchpad</color> ")
-            .Append(GetShortHashVersion())
-            .Append("\nPowered by <color=#FFB793>CrowdedMod</color>\n& <color=#348feb>Mini.RegionInstall</color>\n")
-            .Append(textMeshPro.text)
-            .ToString();
-    }
-
-    public static string GetShortHashVersion()
-    {
-        var index = Version.IndexOf("+", StringComparison.Ordinal);
-
-        return index < 0 ? Version : Version[..(index + 8)];
     }
 
     private static void RegisterColors()

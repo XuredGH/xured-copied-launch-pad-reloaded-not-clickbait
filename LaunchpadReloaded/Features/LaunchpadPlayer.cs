@@ -9,8 +9,6 @@ using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Options;
 using LaunchpadReloaded.Options.Roles;
 using MiraAPI.GameOptions;
-using MiraAPI.Roles;
-using Reactor.Utilities.Extensions;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Features;
