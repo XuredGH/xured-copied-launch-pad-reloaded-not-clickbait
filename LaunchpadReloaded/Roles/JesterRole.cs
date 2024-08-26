@@ -1,3 +1,4 @@
+using System.Linq;
 using AmongUs.GameOptions;
 using Il2CppInterop.Runtime.Attributes;
 using Il2CppSystem.Text;
@@ -12,7 +13,7 @@ using UnityEngine;
 namespace LaunchpadReloaded.Roles;
 
 [RegisterInIl2Cpp]
-[RegisterCustomRole((ushort)LaunchpadRoles.Jester)]
+[RegisterCustomRole]
 public class JesterRole(System.IntPtr ptr) : RoleBehaviour(ptr), ICustomRole
 {
     public string RoleName => "Jester";
@@ -22,7 +23,9 @@ public class JesterRole(System.IntPtr ptr) : RoleBehaviour(ptr), ICustomRole
     public ModdedRoleTeams Team => ModdedRoleTeams.Neutral;
     public bool TasksCount => false;
     public bool CanUseVent => OptionGroupSingleton<JesterOptions>.Instance.CanUseVents;
-    public RoleTypes GhostRole => (RoleTypes)LaunchpadRoles.OutcastGhost;
+    
+    // TODO: USE RoleID<T> from Mira sequential role branch
+    public RoleTypes GhostRole => CustomRoleManager.CustomRoles.Values.OfType<OutcastGhostRole>().Single().Role;
     public override bool IsDead => false;
     
     [HideFromIl2Cpp]

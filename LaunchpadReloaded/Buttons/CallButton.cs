@@ -25,7 +25,7 @@ public class CallButton : CustomActionButton
 
     public override bool CanUse() => base.CanUse() && !ZoomButton.IsZoom && !HackingManager.Instance.AnyPlayerHacked();
 
-    public override void ClickHandler()
+    protected override void ClickHandler()
     {
         if (!CanUse())
         {
@@ -33,7 +33,7 @@ public class CallButton : CustomActionButton
         }
 
         OnClick();
-        Button.SetDisabled();
+        Button?.SetDisabled();
     }
 
     protected override void OnClick()

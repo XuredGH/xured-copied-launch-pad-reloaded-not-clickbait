@@ -9,7 +9,7 @@ using UnityEngine;
 namespace LaunchpadReloaded.Roles;
 
 [RegisterInIl2Cpp]
-[RegisterCustomRole((ushort)LaunchpadRoles.Captain)]
+[RegisterCustomRole]
 public class CaptainRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
 {
     public string RoleName => "Captain";

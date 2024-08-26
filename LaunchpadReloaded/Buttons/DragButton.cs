@@ -6,27 +6,42 @@ using LaunchpadReloaded.Utilities;
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Utilities.Assets;
+using Reactor.Utilities.Extensions;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
 
 [RegisterButton]
-public class DragButton : CustomActionButton
+public class DragButton : CustomActionButton<DeadBody>
 {
     public override string Name => "DRAG";
     public override float Cooldown => 0;
     public override float EffectDuration => 0;
     public override int MaxUses => 0;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.DragButton;
-    
+    public override float Distance => PlayerControl.LocalPlayer.MaxReportDistance / 4f;
+
     public override bool Enabled(RoleBehaviour role)
     {
         return role is JanitorRole || (OptionGroupSingleton<MedicOptions>.Instance.DragBodies && role is MedicRole);
     }
 
+    public override void SetOutline(bool active)
+    {
+        if (!Target)
+        {
+            return;
+        }
+        
+        foreach (var renderer in Target.bodyRenderers)
+        {
+            renderer.SetOutline(active ? PlayerControl.LocalPlayer.Data.Role.NameColor : null);
+        }
+    }
+
     public override bool CanUse()
     {
-        return base.CanUse() && LaunchpadPlayer.LocalPlayer.deadBodyTarget && PlayerControl.LocalPlayer.CanMove && !PlayerControl.LocalPlayer.inVent &&
+        return base.CanUse() && Target && PlayerControl.LocalPlayer.CanMove && !PlayerControl.LocalPlayer.inVent &&
                (!LaunchpadPlayer.LocalPlayer.Dragging || CanDrop());
     }
 
@@ -59,25 +74,30 @@ public class DragButton : CustomActionButton
         OverrideSprite(LaunchpadAssets.DropButton.LoadAsset());
     }
 
-    public bool CanDrop()
+    private bool CanDrop()
     {
-        if (!LaunchpadPlayer.LocalPlayer.deadBodyTarget)
+        if (!Target)
         {
             return false;
         }
 
-        return !PhysicsHelpers.AnythingBetween(PlayerControl.LocalPlayer.Collider, PlayerControl.LocalPlayer.Collider.bounds.center, LaunchpadPlayer.LocalPlayer.deadBodyTarget.TruePosition, Constants.ShipAndAllObjectsMask, false);
+        return !PhysicsHelpers.AnythingBetween(PlayerControl.LocalPlayer.Collider, PlayerControl.LocalPlayer.Collider.bounds.center, Target.TruePosition, Constants.ShipAndAllObjectsMask, false);
     }
 
     protected override void OnClick()
     {
+        if (!Target)
+        {
+            return;
+        }
+        
         if (LaunchpadPlayer.LocalPlayer.Dragging)
         {
             PlayerControl.LocalPlayer.RpcStopDragging();
         }
         else
         {
-            PlayerControl.LocalPlayer.RpcStartDragging(LaunchpadPlayer.LocalPlayer.deadBodyTarget.ParentId);
+            PlayerControl.LocalPlayer.RpcStartDragging(Target.ParentId);
         }
     }
 

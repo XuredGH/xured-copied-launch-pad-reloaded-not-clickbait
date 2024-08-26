@@ -9,7 +9,7 @@ using UnityEngine;
 namespace LaunchpadReloaded.Roles;
 
 [RegisterInIl2Cpp]
-[RegisterCustomRole((ushort)LaunchpadRoles.Janitor)]
+[RegisterCustomRole]
 public class JanitorRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
 {
     public string RoleName => "Janitor";

@@ -23,8 +23,6 @@ public class LaunchpadPlayer(IntPtr ptr) : MonoBehaviour(ptr)
     public CustomVoteData VoteData;
     
     public DeathData DeadData;
-
-    public DeadBody deadBodyTarget;
     
     public bool showFootsteps;
 

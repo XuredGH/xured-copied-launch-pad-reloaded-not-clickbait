@@ -2,14 +2,13 @@
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Features.Colors;
 using Reactor;
 using Reactor.Networking;
 using Reactor.Networking.Attributes;
-using System.Linq;
 using BepInEx.Configuration;
 using MiraAPI;
 using MiraAPI.PluginLoading;
+using MiraAPI.Utilities;
 using Reactor.Utilities;
 
 namespace LaunchpadReloaded;
@@ -34,25 +33,10 @@ public partial class LaunchpadReloadedPlugin : BasePlugin, IMiraPlugin
         Instance = this;
         Harmony.PatchAll();
         
-        ReactorCredits.Register("Launchpad", Version[..11], true, ReactorCredits.AlwaysShow);
-
-        RegisterColors();
+        ReactorCredits.Register("Launchpad", Version.Truncate(11, "") ?? Version, true, ReactorCredits.AlwaysShow);
         
         LaunchpadSettings.Initialize();
 
         Config.Save();
-    }
-
-    private static void RegisterColors()
-    {
-        var colors =
-            typeof(LaunchpadColors)
-            .GetProperties()
-            .Select(s => (CustomColor)s.GetValue(null))
-            .ToArray();
-
-        Palette.PlayerColors = Palette.PlayerColors.ToArray().AddRangeToArray(colors.Select(x => x.MainColor).ToArray());
-        Palette.ShadowColors = Palette.ShadowColors.ToArray().AddRangeToArray(colors.Select(x => x.ShadowColor).ToArray());
-        Palette.ColorNames = Palette.ColorNames.ToArray().AddRangeToArray(colors.Select(x => x.Name).ToArray());
     }
 }
