@@ -22,16 +22,6 @@ public static class MeetingHudPatches
 {
     private static GameObject _typeText;
     private static PlayerVoteArea _confirmVotes;
-
-    [HarmonyPostfix]
-    [HarmonyPatch(nameof(MeetingHud.VotingComplete))]
-    public static void VotingCompletePostfix()
-    {
-        foreach (var customActionButton in CustomButtonManager.CustomButtons)
-        {
-            customActionButton.ResetCooldown();
-        }
-    }
     
     [HarmonyPostfix]
     [HarmonyPatch(nameof(MeetingHud.Start))]
