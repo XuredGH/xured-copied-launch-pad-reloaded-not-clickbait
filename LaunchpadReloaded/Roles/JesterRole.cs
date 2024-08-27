@@ -23,9 +23,7 @@ public class JesterRole(System.IntPtr ptr) : RoleBehaviour(ptr), ICustomRole
     public ModdedRoleTeams Team => ModdedRoleTeams.Neutral;
     public bool TasksCount => false;
     public bool CanUseVent => OptionGroupSingleton<JesterOptions>.Instance.CanUseVents;
-    
-    // TODO: USE RoleID<T> from Mira sequential role branch
-    public RoleTypes GhostRole => CustomRoleManager.CustomRoles.Values.OfType<OutcastGhostRole>().Single().Role;
+    public RoleTypes GhostRole => (RoleTypes)RoleId.Get<OutcastGhostRole>();
     public override bool IsDead => false;
     
     [HideFromIl2Cpp]

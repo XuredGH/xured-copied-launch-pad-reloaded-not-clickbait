@@ -28,6 +28,8 @@ public partial class LaunchpadReloadedPlugin : BasePlugin, IMiraPlugin
         return Config;
     }
 
+    public string OptionsTitleText => "Launchpad";
+
     public override void Load()
     {
         Instance = this;
