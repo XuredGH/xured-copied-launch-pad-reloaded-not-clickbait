@@ -4,6 +4,7 @@ using MiraAPI.GameModes;
 using MiraAPI.GameOptions;
 using MiraAPI.GameOptions.Attributes;
 using MiraAPI.GameOptions.OptionTypes;
+using MiraAPI.Utilities;
 
 namespace LaunchpadReloaded.Options;
 
@@ -16,7 +17,7 @@ public class VotingOptions : AbstractOptionGroup
     [ModdedEnumOption("Voting Type", typeof(VotingTypes))]
     public VotingTypes VotingType { get; set; } = VotingTypes.Classic;
     
-    public ModdedNumberOption MaxVotes { get; } = new("Max Votes", 3, 2, 5, 1, NumberSuffixes.None)
+    public ModdedNumberOption MaxVotes { get; } = new("Max Votes", 3, 2, 5, 1, MiraNumberSuffixes.None)
     {
         Visible = VotingTypesManager.CanVoteMultiple
     };

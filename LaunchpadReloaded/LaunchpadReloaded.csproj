@@ -9,8 +9,7 @@
     </PropertyGroup>
     
     <ItemGroup>
-        <Reference Include="$(AmongUs)/BepInEx/plugins/MiraAPI.dll" />
-
+        <PackageReference Include="AllOfUs.MiraAPI" Version="0.1.2" />
         <PackageReference Include="Reactor" Version="2.3.1" />
         <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.697" Private="false" ExcludeAssets="runtime;native" />
         <PackageReference Include="AmongUs.GameLibs.Steam" Version="2024.8.13" PrivateAssets="all" />

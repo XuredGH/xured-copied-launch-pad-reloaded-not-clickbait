@@ -3,6 +3,7 @@ using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Roles;
 using MiraAPI.Hud;
+using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
 using Reactor.Utilities.Extensions;
 using UnityEngine;
@@ -20,6 +21,16 @@ public class HideButton : CustomActionButton<DeadBody>
     public override float Distance => PlayerControl.LocalPlayer.MaxReportDistance / 4f;
 
     private static Vent VentTarget => HudManager.Instance.ImpostorVentButton.currentTarget;
+
+    public override DeadBody GetTarget()
+    {
+        return PlayerControl.LocalPlayer.GetNearestObjectOfType<DeadBody>(Distance, "DeadBody");
+    }
+
+    public override bool IsTargetValid(DeadBody target)
+    {
+        return target && !target.Reported;
+    }
 
     public override void SetOutline(bool active)
     {

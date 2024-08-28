@@ -5,6 +5,7 @@ using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
+using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
 using Reactor.Utilities.Extensions;
 using UnityEngine;
@@ -26,6 +27,16 @@ public class DragButton : CustomActionButton<DeadBody>
         return role is JanitorRole || (OptionGroupSingleton<MedicOptions>.Instance.DragBodies && role is MedicRole);
     }
 
+    public override DeadBody GetTarget()
+    {
+        return PlayerControl.LocalPlayer.GetNearestObjectOfType<DeadBody>(Distance, "DeadBody");
+    }
+
+    public override bool IsTargetValid(DeadBody target)
+    {
+        return target && !target.Reported;
+    }
+    
     public override void SetOutline(bool active)
     {
         if (!Target)

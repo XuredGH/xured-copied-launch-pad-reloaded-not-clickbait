@@ -2,6 +2,7 @@
 using LaunchpadReloaded.Roles;
 using MiraAPI.GameOptions;
 using MiraAPI.GameOptions.Attributes;
+using MiraAPI.Utilities;
 
 namespace LaunchpadReloaded.Options.Roles;
 
@@ -11,7 +12,7 @@ public class SheriffOptions : AbstractOptionGroup
 
     public override Type AdvancedRole => typeof(SheriffRole);
 
-    [ModdedNumberOption("Shot Cooldown", 0, 120, 5, NumberSuffixes.Seconds)]
+    [ModdedNumberOption("Shot Cooldown", 0, 120, 5, MiraNumberSuffixes.Seconds)]
     public float ShotCooldown { get; set; } = 45;
 
     [ModdedNumberOption("Shots Per Game", 1, 10)]

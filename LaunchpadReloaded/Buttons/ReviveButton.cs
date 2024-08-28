@@ -4,6 +4,7 @@ using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Roles;
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
+using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
 using Reactor.Utilities.Extensions;
 using UnityEngine;
@@ -39,7 +40,17 @@ public class ReviveButton : CustomActionButton<DeadBody>
             renderer.SetOutline(active ? LaunchpadPalette.MedicColor : null);
         }
     }
+    
+    public override DeadBody GetTarget()
+    {
+        return PlayerControl.LocalPlayer.GetNearestObjectOfType<DeadBody>(Distance, "DeadBody");
+    }
 
+    public override bool IsTargetValid(DeadBody target)
+    {
+        return target && !target.Reported;
+    }
+    
     public override bool CanUse()
     {
         return base.CanUse() && CanRevive() && Target && 

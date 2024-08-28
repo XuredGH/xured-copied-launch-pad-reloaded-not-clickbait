@@ -2,6 +2,7 @@
 using LaunchpadReloaded.Roles;
 using MiraAPI.GameOptions;
 using MiraAPI.GameOptions.Attributes;
+using MiraAPI.Utilities;
 
 namespace LaunchpadReloaded.Options.Roles;
 
@@ -20,6 +21,6 @@ public class MedicOptions : AbstractOptionGroup
     [ModdedNumberOption("Max Revives", 1, 9)]
     public float MaxRevives { get; set; } = 2;
 
-    [ModdedNumberOption("Revive Cooldown", 1, 50, 2, NumberSuffixes.Seconds)]
+    [ModdedNumberOption("Revive Cooldown", 1, 50, 2, MiraNumberSuffixes.Seconds)]
     public float ReviveCooldown { get; set; } = 20;
 }
