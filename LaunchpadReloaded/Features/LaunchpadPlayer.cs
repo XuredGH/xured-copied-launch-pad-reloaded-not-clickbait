@@ -27,11 +27,7 @@ public class LaunchpadPlayer(IntPtr ptr) : MonoBehaviour(ptr)
     public bool showFootsteps;
 
     public bool wasRevived;
-
-    public byte dragId = 255;
     
-    public bool Dragging => dragId != 255;
-
     private CustomGameData.CustomPlayerInfo _cachedData;
     
     public CustomGameData.CustomPlayerInfo Data
@@ -103,7 +99,6 @@ public class LaunchpadPlayer(IntPtr ptr) : MonoBehaviour(ptr)
     public void ResetPlayer()
     {
         wasRevived = false;
-        dragId = 255;
     }
 
     public void OnDeath(PlayerControl killer)

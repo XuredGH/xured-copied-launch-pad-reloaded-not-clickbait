@@ -1,3 +1,4 @@
+/*
 using AmongUs.GameOptions;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Utilities;
@@ -21,18 +22,18 @@ public class BattleRoyale : CustomGameMode
     public override string Name => "Battle Royale";
     public override string Description => "Everyone can kill.\n<b><i>Last one standing wins.</b></i>";
     public override int Id => (int)LaunchpadGamemodes.BattleRoyale;
-    
+
     public TextMeshPro PlayerCount;
-    
+
     public TextMeshPro DeathNotif;
-    
+
     public override void Initialize()
     {
         if (PlayerControl.LocalPlayer && PlayerControl.LocalPlayer.myTasks is not null)
         {
             PlayerControl.LocalPlayer.myTasks.Clear();
         }
-        
+
         var random = ShipStatus.Instance.DummyLocations.Random();
 
         foreach (var player in GameData.Instance.AllPlayers) player.Object.cosmetics.TogglePet(false);
@@ -104,7 +105,7 @@ public class BattleRoyale : CustomGameMode
         var alivePlayers = GameData.Instance.AllPlayers.ToArray().Where(player => !player.Disconnected && !player.IsDead).ToList();
         return alivePlayers;
     }
-    
+
     public override bool ShowCustomRoleScreen() => true;
 
     public override void CanKill(out bool runOriginal, out bool result, PlayerControl target)
@@ -133,19 +134,19 @@ public class BattleRoyale : CustomGameMode
     public override void AssignRoles(out bool runOriginal, LogicRoleSelectionNormal instance)
     {
         runOriginal = false;
-        
+
         var list1 = new Il2CppSystem.Collections.Generic.List<ClientData>();
         AmongUsClient.Instance.GetAllClients(list1);
 
         var list2 = list1.ToArray();
-        
+
         var list3 = (from c in list2
             where c.Character != null
             where c.Character.Data != null
             where !c.Character.Data.Disconnected && !c.Character.Data.IsDead
             orderby c.Id
             select c.Character.Data).ToList();
-        
+
         foreach (var playerInfo in GameData.Instance.AllPlayers)
         {
             if (playerInfo.Object != null && playerInfo.Object.isDummy)
@@ -153,10 +154,17 @@ public class BattleRoyale : CustomGameMode
                 list3.Add(playerInfo);
             }
         }
-        
+
         foreach (var player in list3)
         {
             player.Object.RpcSetRole(RoleTypes.Impostor);
         }
     }
+}*/
+
+namespace LaunchpadReloaded.Gamemodes;
+
+public class BattleRoyale
+{
+    
 }

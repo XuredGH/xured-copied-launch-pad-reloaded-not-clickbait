@@ -1,4 +1,5 @@
 ﻿using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Roles;
@@ -53,12 +54,12 @@ public class DragButton : CustomActionButton<DeadBody>
     public override bool CanUse()
     {
         return base.CanUse() && Target && PlayerControl.LocalPlayer.CanMove && !PlayerControl.LocalPlayer.inVent &&
-               (!LaunchpadPlayer.LocalPlayer.Dragging || CanDrop());
+               (!PlayerControl.LocalPlayer.HasModifier<DragBodyModifier>()|| CanDrop());
     }
 
     protected override void FixedUpdate(PlayerControl playerControl)
     {
-        if (!playerControl.GetLpPlayer().Dragging)
+        if (!playerControl.HasModifier<DragBodyModifier>())
         {
             return;
         }
@@ -87,7 +88,7 @@ public class DragButton : CustomActionButton<DeadBody>
 
     private bool CanDrop()
     {
-        if (!Target)
+        if (Target == null)
         {
             return false;
         }
@@ -97,12 +98,12 @@ public class DragButton : CustomActionButton<DeadBody>
 
     protected override void OnClick()
     {
-        if (!Target)
+        if (Target == null)
         {
             return;
         }
         
-        if (LaunchpadPlayer.LocalPlayer.Dragging)
+        if (PlayerControl.LocalPlayer.HasModifier<DragBodyModifier>())
         {
             PlayerControl.LocalPlayer.RpcStopDragging();
         }

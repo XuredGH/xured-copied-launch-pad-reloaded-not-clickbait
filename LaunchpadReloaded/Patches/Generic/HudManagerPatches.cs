@@ -75,11 +75,5 @@ public static class HudManagerPatches
                 __instance.ReportButton.SetActive(false);
             }
         }
-        
-        foreach (var player in LaunchpadPlayer.GetAllPlayers().Where(x=>x.Dragging))
-        {
-            var bodyById = Helpers.GetBodyById(player.dragId);
-            bodyById.transform.position = Vector3.Lerp(bodyById.transform.position, player.transform.position, 5f * Time.deltaTime);
-        }
     }
 }

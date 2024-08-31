@@ -1,4 +1,5 @@
 ﻿using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Roles;
@@ -26,11 +27,11 @@ public class ReviveButton : CustomActionButton<DeadBody>
     
     public override float Distance => PlayerControl.LocalPlayer.MaxReportDistance / 4f;
     
-    public override bool Enabled(RoleBehaviour role) => role is MedicRole;
+    public override bool Enabled(RoleBehaviour? role) => role is MedicRole;
 
     public override void SetOutline(bool active)
     {
-        if (!Target)
+        if (Target == null)
         {
             return;
         }
@@ -41,14 +42,14 @@ public class ReviveButton : CustomActionButton<DeadBody>
         }
     }
     
-    public override DeadBody GetTarget()
+    public override DeadBody? GetTarget()
     {
         return PlayerControl.LocalPlayer.GetNearestObjectOfType<DeadBody>(Distance, "DeadBody");
     }
 
-    public override bool IsTargetValid(DeadBody target)
+    public override bool IsTargetValid(DeadBody? target)
     {
-        return target && !target.Reported;
+        return target != null && !target.Reported;
     }
     
     public override bool CanUse()
@@ -56,7 +57,7 @@ public class ReviveButton : CustomActionButton<DeadBody>
         return base.CanUse() && CanRevive() && Target && 
                !PlayerControl.LocalPlayer.Data.IsDead &&
                PlayerControl.LocalPlayer.CanMove &&
-               !LaunchpadPlayer.LocalPlayer.Dragging;
+               !PlayerControl.LocalPlayer.HasModifier<DragBodyModifier>();
     }
 
     private static bool CanRevive()
@@ -88,7 +89,7 @@ public class ReviveButton : CustomActionButton<DeadBody>
     
     protected override void OnClick()
     {
-        if (!Target)
+        if (Target == null)
         {
             return;
         }

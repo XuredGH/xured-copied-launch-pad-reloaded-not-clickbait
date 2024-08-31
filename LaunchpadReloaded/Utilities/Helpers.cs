@@ -1,6 +1,8 @@
 ﻿using System.Globalization;
 using System.Linq;
 using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Modifiers;
+using MiraAPI.Utilities;
 using TMPro;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -14,17 +16,12 @@ public static class Helpers
     
     public static bool ShouldCancelClick()
     {
-        return LaunchpadPlayer.LocalPlayer.Dragging;
+        return PlayerControl.LocalPlayer.HasModifier<DragBodyModifier>();
     }
     
     public static string FirstLetterToUpper(string str)
     {
         return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(str.ToLower());
-    }
-
-    public static DeadBody GetBodyById(byte id)
-    {
-        return Object.FindObjectsOfType<DeadBody>().FirstOrDefault(body => body.ParentId == id);
     }
 
     public static TextMeshPro CreateTextLabel(string name, Transform parent,

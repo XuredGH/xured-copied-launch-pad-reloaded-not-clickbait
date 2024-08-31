@@ -3,10 +3,11 @@ using Il2CppSystem;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
+using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Networking.Color;
-using LaunchpadReloaded.Networking.Murder;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
+using MiraAPI.Utilities;
 using Reactor.Networking.Rpc;
 using UnityEngine;
 
@@ -24,28 +25,10 @@ public static class PlayerControlPatches
         switch (__instance.Data.Role)
         {
             case JanitorRole:
-                __result = __result && !__instance.GetLpPlayer().Dragging;
+                __result = __result && !__instance.HasModifier<DragBodyModifier>();
                 break;
         }
     }
-
-    /// <summary>
-    /// Use Custom murder RPC
-    /// </summary>
-    [HarmonyPrefix, HarmonyPatch(nameof(PlayerControl.CmdCheckMurder))]
-    public static bool CheckMurderPrefix(PlayerControl __instance, [HarmonyArgument(0)] PlayerControl target)
-    {
-        __instance.isKilling = true;
-        if (AmongUsClient.Instance.AmHost)
-        {
-            Rpc<CustomCmdCheckMurder>.Instance.Handle(__instance, target);
-            return false;
-        }
-        
-        Rpc<CustomCmdCheckMurder>.Instance.SendTo(AmongUsClient.Instance.HostId, target);
-        return false;
-    }
-
 
     /// <summary>
     /// Use Custom check color RPC

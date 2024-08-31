@@ -2,6 +2,7 @@
 using HarmonyLib;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Voting;
+using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Networking.Voting;
 using LaunchpadReloaded.Options;
 using LaunchpadReloaded.Options.Roles;
@@ -9,6 +10,7 @@ using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
+using MiraAPI.Utilities;
 using Reactor.Networking.Rpc;
 using Reactor.Utilities.Extensions;
 using TMPro;
@@ -38,9 +40,9 @@ public static class MeetingHudPatches
             }
         }
 
-        foreach (var launchpadPlayer in LaunchpadPlayer.GetAllPlayers())
+        foreach (var player in PlayerControl.AllPlayerControls)
         {
-            launchpadPlayer.dragId = 255;
+            player.GetModifierComponent()?.RemoveModifier<DragBodyModifier>();
         }
 
         if (_typeText == null)

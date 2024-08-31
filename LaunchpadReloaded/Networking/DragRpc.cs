@@ -1,7 +1,9 @@
 ﻿using LaunchpadReloaded.Buttons;
+using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using MiraAPI.Hud;
+using MiraAPI.Utilities;
 using Reactor.Networking.Attributes;
 
 namespace LaunchpadReloaded.Networking;
@@ -18,8 +20,8 @@ public static class DragRpc
             return;
         }
 
-        playerControl.GetLpPlayer().dragId = bodyId;
-        playerControl.MyPhysics.Speed = 1.5f;
+        playerControl.GetModifierComponent()?.AddModifier(new DragBodyModifier(bodyId));
+        
         if (playerControl.AmOwner)
         {
             CustomButtonSingleton<DragButton>.Instance.SetDrop();
@@ -29,8 +31,8 @@ public static class DragRpc
     [MethodRpc((uint)LaunchpadRpc.StopDrag)]
     public static void RpcStopDragging(this PlayerControl playerControl)
     {
-        playerControl.GetLpPlayer().dragId = 255;
-        playerControl.MyPhysics.Speed = 2.5f;
+        playerControl.GetModifierComponent()?.RemoveModifier<DragBodyModifier>();
+
         if (playerControl.AmOwner)
         {
             CustomButtonSingleton<DragButton>.Instance.SetDrag();

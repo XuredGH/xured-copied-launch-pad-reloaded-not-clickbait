@@ -2,7 +2,9 @@ using LaunchpadReloaded.Features;
 using Reactor.Utilities.Attributes;
 using System;
 using Il2CppInterop.Runtime.Attributes;
+using LaunchpadReloaded.Modifiers;
 using MiraAPI.Roles;
+using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
 using UnityEngine;
 
@@ -18,7 +20,6 @@ public class JanitorRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
     public Color RoleColor => LaunchpadPalette.JanitorColor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Impostor;
     public override bool IsDead => false;
-    public bool TargetsBodies => true;
     
     [HideFromIl2Cpp]
     public LoadableAsset<Sprite> Icon => LaunchpadAssets.DragButton;
@@ -30,6 +31,6 @@ public class JanitorRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
             return false;
         }
         var console = usable.TryCast<Console>();
-        return !(console != null) || console.AllowImpostor && !LaunchpadPlayer.LocalPlayer.Dragging;
+        return !(console != null) || console.AllowImpostor && !PlayerControl.LocalPlayer.HasModifier<DragBodyModifier>();
     }
 }
