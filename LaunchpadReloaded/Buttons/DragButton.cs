@@ -28,7 +28,7 @@ public class DragButton : CustomActionButton<DeadBody>
         return role is JanitorRole || (OptionGroupSingleton<MedicOptions>.Instance.DragBodies && role is MedicRole);
     }
 
-    public override DeadBody GetTarget()
+    public override DeadBody? GetTarget()
     {
         return PlayerControl.LocalPlayer.GetNearestObjectOfType<DeadBody>(Distance, "DeadBody");
     }

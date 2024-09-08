@@ -34,7 +34,7 @@ public class FunOptions : AbstractOptionGroup
         }
     };
     
-    public ModdedStringOption Character { get; } = new("Character", 0, ["Normal", "Horse", "Long"])
+    public ModdedEnumOption Character { get; } = new("Character", 0, typeof(BodyTypes))
     {
         ChangedEvent = value =>
         {
@@ -51,5 +51,11 @@ public class FunOptions : AbstractOptionGroup
         [1] = PlayerBodyTypes.Horse,
         [2] = PlayerBodyTypes.Long
     };
-    
+
+    public enum BodyTypes
+    {
+        Normal,
+        Horse,
+        Long,
+    }
 }

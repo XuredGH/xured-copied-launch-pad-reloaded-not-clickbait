@@ -18,7 +18,7 @@ public class CallButton : CustomActionButton
     public override int MaxUses => (int)OptionGroupSingleton<CaptainOptions>.Instance.CaptainMeetingCount;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.CallButton;
 
-    public override bool Enabled(RoleBehaviour role)
+    public override bool Enabled(RoleBehaviour? role)
     {
         return role is CaptainRole;
     }

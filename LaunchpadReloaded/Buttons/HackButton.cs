@@ -18,7 +18,7 @@ public class HackButton : CustomActionButton
     public override float EffectDuration => 0;
     public override int MaxUses => (int)OptionGroupSingleton<HackerOptions>.Instance.HackUses;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.HackButton;
-    public override bool Enabled(RoleBehaviour role) => role is HackerRole;
+    public override bool Enabled(RoleBehaviour? role) => role is HackerRole;
     public override bool CanUse() => base.CanUse() && !HackingManager.Instance.AnyPlayerHacked();
 
     protected override void OnClick()

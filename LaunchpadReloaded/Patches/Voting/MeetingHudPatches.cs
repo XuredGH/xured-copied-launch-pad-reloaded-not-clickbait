@@ -69,7 +69,7 @@ public static class MeetingHudPatches
             _confirmVotes.transform.position -= new Vector3(0, 0.1f, 0);
             foreach (var plr in __instance.playerStates.AddItem(__instance.SkipVoteButton))
             {
-                plr.gameObject.GetComponentInChildren<PassiveButton>().OnClick.AddListener((UnityAction)delegate { _confirmVotes.ClearButtons(); });
+                plr.gameObject.GetComponentInChildren<PassiveButton>().OnClick.AddListener((UnityAction)(()=>_confirmVotes.ClearButtons()));
             }
         }
         else if (_confirmVotes != null && !VotingTypesManager.CanVoteMultiple() && !OptionGroupSingleton<VotingOptions>.Instance.AllowConfirmingVotes.Value) _confirmVotes.gameObject.Destroy();

@@ -16,7 +16,7 @@ public class InstinctButton : CustomActionButton
     public override int MaxUses => (int)OptionGroupSingleton<DetectiveOptions>.Instance.InstinctUses;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.InstinctButton;
 
-    public override bool Enabled(RoleBehaviour role)
+    public override bool Enabled(RoleBehaviour? role)
     {
         return role is DetectiveRole;
     }
