@@ -12,7 +12,7 @@ using UnityEngine;
 namespace LaunchpadReloaded.Buttons;
 
 [RegisterButton]
-public class ZoomButton : CustomActionButton
+public class ZoomButton : BaseLaunchpadButton
 {
     public override string Name => "ZOOM";
     
@@ -23,17 +23,14 @@ public class ZoomButton : CustomActionButton
     public override int MaxUses => 0;
     
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.ZoomButton;
+    public override bool TimerAffectedByPlayer => true;
+    public override bool AffectedByHack => true;
     
     public static bool IsZoom { get; private set; }
     
     public override bool Enabled(RoleBehaviour? role)
     {
         return role is CaptainRole;
-    }
-
-    public override bool CanUse()
-    {
-        return base.CanUse() && !PlayerControl.LocalPlayer.Data.IsHacked();
     }
 
     protected override void OnClick()

@@ -8,13 +8,15 @@ using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
 
-public class InstinctButton : CustomActionButton
+public class InstinctButton : BaseLaunchpadButton
 {
     public override string Name => "INSTINCT";
     public override float Cooldown =>  OptionGroupSingleton<DetectiveOptions>.Instance.InstinctCooldown;
     public override float EffectDuration => OptionGroupSingleton<DetectiveOptions>.Instance.InstinctDuration;
     public override int MaxUses => (int)OptionGroupSingleton<DetectiveOptions>.Instance.InstinctUses;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.InstinctButton;
+    public override bool TimerAffectedByPlayer => true;
+    public override bool AffectedByHack => true;
 
     public override bool Enabled(RoleBehaviour? role)
     {

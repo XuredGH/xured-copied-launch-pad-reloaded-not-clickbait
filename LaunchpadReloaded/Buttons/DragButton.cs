@@ -14,7 +14,7 @@ using Helpers = MiraAPI.Utilities.Helpers;
 namespace LaunchpadReloaded.Buttons;
 
 [RegisterButton]
-public class DragButton : CustomActionButton<DeadBody>
+public class DragButton : BaseLaunchpadButton<DeadBody>
 {
     public override string Name => "DRAG";
     public override float Cooldown => 0;
@@ -22,6 +22,8 @@ public class DragButton : CustomActionButton<DeadBody>
     public override int MaxUses => 0;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.DragButton;
     public override float Distance => PlayerControl.LocalPlayer.MaxReportDistance / 4f;
+    public override bool TimerAffectedByPlayer => true;
+    public override bool AffectedByHack => true;
 
     public override bool Enabled(RoleBehaviour? role)
     {

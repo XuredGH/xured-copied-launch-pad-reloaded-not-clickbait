@@ -13,7 +13,7 @@ using UnityEngine;
 namespace LaunchpadReloaded.Buttons;
 
 [RegisterButton]
-public class ReviveButton : CustomActionButton<DeadBody>
+public class ReviveButton : BaseLaunchpadButton<DeadBody>
 {
     public override string Name => "REVIVE";
     
@@ -26,6 +26,8 @@ public class ReviveButton : CustomActionButton<DeadBody>
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.ReviveButton;
     
     public override float Distance => PlayerControl.LocalPlayer.MaxReportDistance / 4f;
+    public override bool TimerAffectedByPlayer => true;
+    public override bool AffectedByHack => true;
     
     public override bool Enabled(RoleBehaviour? role) => role is MedicRole;
 

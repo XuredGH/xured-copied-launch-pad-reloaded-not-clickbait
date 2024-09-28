@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
 
-public class InvestigateButton : CustomActionButton<DeadBody>
+public class InvestigateButton : BaseLaunchpadButton<DeadBody>
 {
     public override string Name => "INVESTIGATE";
     public override float Cooldown => 1;
@@ -17,6 +17,8 @@ public class InvestigateButton : CustomActionButton<DeadBody>
     public override int MaxUses => 0;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.InvestigateButton;
     public override float Distance => PlayerControl.LocalPlayer.MaxReportDistance / 4f;
+    public override bool TimerAffectedByPlayer => true;
+    public override bool AffectedByHack => true;
 
     public override bool Enabled(RoleBehaviour? role)
     {

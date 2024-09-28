@@ -11,13 +11,16 @@ using UnityEngine;
 namespace LaunchpadReloaded.Buttons;
 
 [RegisterButton]
-public class HackButton : CustomActionButton
+public class HackButton : BaseLaunchpadButton
 {
     public override string Name => "HACK";
     public override float Cooldown => (int)OptionGroupSingleton<HackerOptions>.Instance.HackCooldown;
     public override float EffectDuration => 0;
     public override int MaxUses => (int)OptionGroupSingleton<HackerOptions>.Instance.HackUses;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.HackButton;
+    public override bool TimerAffectedByPlayer => true;
+    public override bool AffectedByHack => false;
+
     public override bool Enabled(RoleBehaviour? role) => role is HackerRole;
     public override bool CanUse() => base.CanUse() && !HackingManager.Instance.AnyPlayerHacked();
 

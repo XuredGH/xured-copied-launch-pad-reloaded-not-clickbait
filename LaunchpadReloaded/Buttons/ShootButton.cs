@@ -12,13 +12,15 @@ using UnityEngine;
 namespace LaunchpadReloaded.Buttons;
 
 [RegisterButton]
-public class ShootButton : CustomActionButton<PlayerControl>
+public class ShootButton : BaseLaunchpadButton<PlayerControl>
 {
     public override string Name => "Shoot";
     public override float Cooldown => OptionGroupSingleton<SheriffOptions>.Instance.ShotCooldown;
     public override float EffectDuration => 0;
     public override int MaxUses => (int)OptionGroupSingleton<SheriffOptions>.Instance.ShotsPerGame;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.ShootButton;
+    public override bool TimerAffectedByPlayer => true;
+    public override bool AffectedByHack => true;
     
     public override bool Enabled(RoleBehaviour? role) => role is SheriffRole;
 

@@ -116,7 +116,7 @@ public static class Extensions
 
     public static bool ButtonTimerEnabled(this PlayerControl playerControl)
     {
-        return (playerControl.moveable || playerControl.petting) && !playerControl.inVent && !playerControl.shapeshifting && (!DestroyableSingleton<HudManager>.InstanceExists || !DestroyableSingleton<HudManager>.Instance.IsIntroDisplayed) && !MeetingHud.Instance && !PlayerCustomizationMenu.Instance && !ExileController.Instance && !IntroCutscene.Instance;
+        return (playerControl.moveable || playerControl.petting) && playerControl is { inVent: false, shapeshifting: false } && (!DestroyableSingleton<HudManager>.InstanceExists || !DestroyableSingleton<HudManager>.Instance.IsIntroDisplayed) && !MeetingHud.Instance && !PlayerCustomizationMenu.Instance && !ExileController.Instance && !IntroCutscene.Instance;
     }
 
     public static bool IsHacked(this NetworkedPlayerInfo playerInfo)
@@ -177,44 +177,5 @@ public static class Extensions
     public static bool IsOverride(this MethodInfo methodInfo)
     {
         return methodInfo.GetBaseDefinition() != methodInfo;
-    }
-
-    public static PlayerControl GetClosestPlayer(this PlayerControl playerControl, bool includeImpostors, float distance)
-    {
-        PlayerControl result = null;
-        if (!ShipStatus.Instance)
-        {
-            return null;
-        }
-
-        var truePosition = playerControl.GetTruePosition();
-
-        foreach (var playerInfo in GameData.Instance.AllPlayers)
-        {
-            if (playerInfo.Disconnected || playerInfo.PlayerId == playerControl.PlayerId ||
-                playerInfo.IsDead || !includeImpostors && playerInfo.Role.IsImpostor)
-            {
-                continue;
-            }
-
-            var @object = playerInfo.Object;
-            if (!@object)
-            {
-                continue;
-            }
-
-            var vector = @object.GetTruePosition() - truePosition;
-            var magnitude = vector.magnitude;
-            if (!(magnitude <= distance) || PhysicsHelpers.AnyNonTriggersBetween(truePosition,
-                vector.normalized,
-                magnitude, LayerMask.GetMask("Ship", "Objects")))
-            {
-                continue;
-            }
-
-            result = @object;
-            distance = magnitude;
-        }
-        return result;
     }
 }

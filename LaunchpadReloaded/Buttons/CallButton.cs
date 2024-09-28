@@ -10,19 +10,20 @@ using UnityEngine;
 namespace LaunchpadReloaded.Buttons;
 
 [RegisterButton]
-public class CallButton : CustomActionButton
+public class CallButton : BaseLaunchpadButton
 {
     public override string Name => "CALL";
     public override float Cooldown => OptionGroupSingleton<CaptainOptions>.Instance.CaptainMeetingCooldown;
     public override float EffectDuration => 0;
     public override int MaxUses => (int)OptionGroupSingleton<CaptainOptions>.Instance.CaptainMeetingCount;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.CallButton;
+    public override bool TimerAffectedByPlayer => true;
+    public override bool AffectedByHack => true;
 
     public override bool Enabled(RoleBehaviour? role)
     {
         return role is CaptainRole;
     }
-
     public override bool CanUse() => base.CanUse() && !ZoomButton.IsZoom && !HackingManager.Instance.AnyPlayerHacked();
 
     protected override void ClickHandler()
