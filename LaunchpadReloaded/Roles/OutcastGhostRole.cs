@@ -1,7 +1,6 @@
 ﻿using Reactor.Utilities.Attributes;
 using System;
 using System.Text;
-using AmongUs.GameOptions;
 using Il2CppInterop.Runtime.Attributes;
 using MiraAPI.Roles;
 using UnityEngine;

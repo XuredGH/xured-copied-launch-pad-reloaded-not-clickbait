@@ -1,11 +1,9 @@
 using AmongUs.GameOptions;
-using Il2CppInterop.Runtime.Attributes;
 using Il2CppSystem.Text;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Options.Roles;
 using MiraAPI.GameOptions;
 using MiraAPI.Roles;
-using MiraAPI.Utilities.Assets;
 using Reactor.Utilities.Attributes;
 using UnityEngine;
 
@@ -61,6 +59,5 @@ public class JesterRole(System.IntPtr ptr) : RoleBehaviour(ptr), ICustomRole
                 DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.FakeTasks, Il2CppSystem.Array.Empty<Il2CppSystem.Object>()),
                 "</color>"
         ]);
-
     }
 }
