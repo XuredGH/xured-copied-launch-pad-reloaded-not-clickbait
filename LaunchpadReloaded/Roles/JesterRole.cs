@@ -30,6 +30,7 @@ public class JesterRole(System.IntPtr ptr) : RoleBehaviour(ptr), ICustomRole
     };
 
     public override void AppendTaskHint(StringBuilder taskStringBuilder) { }
+
     public override bool DidWin(GameOverReason reason)
     {
         return reason == (GameOverReason)GameOverReasons.JesterWins;
@@ -39,9 +40,10 @@ public class JesterRole(System.IntPtr ptr) : RoleBehaviour(ptr), ICustomRole
     {
         return $"You've been fooled! {exiled.PlayerName} was The Jester.";
     }
+
     public override bool CanUse(IUsable usable)
     {
-        if (!GameManager.Instance.LogicUsables.CanUse(usable, this.Player))
+        if (!GameManager.Instance.LogicUsables.CanUse(usable, Player))
         {
             return false;
         }
@@ -54,12 +56,11 @@ public class JesterRole(System.IntPtr ptr) : RoleBehaviour(ptr), ICustomRole
     {
         if (playerControl != PlayerControl.LocalPlayer) return;
         var orCreateTask = PlayerTask.GetOrCreateTask<ImportantTextTask>(playerControl);
-        orCreateTask.Text = string.Concat(new string[]
-            {
-                LaunchpadPalette.JesterColor.ToTextColor(),
+        orCreateTask.Text = string.Concat([
+            LaunchpadPalette.JesterColor.ToTextColor(),
                 DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.FakeTasks, Il2CppSystem.Array.Empty<Il2CppSystem.Object>()),
                 "</color>"
-            });
+        ]);
 
     }
 }
