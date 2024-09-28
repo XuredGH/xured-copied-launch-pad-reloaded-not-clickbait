@@ -10,8 +10,14 @@ public class RpcSyncAllColors(LaunchpadReloadedPlugin plugin, uint id) : PlayerC
 {
     public override RpcLocalHandling LocalHandling => RpcLocalHandling.None;
     
-    public override void Write(MessageWriter writer, Dictionary<byte, CustomColorData> data)
+    public override void Write(MessageWriter writer, Dictionary<byte, CustomColorData>? data)
     {
+        if (data == null)
+        {
+            writer.WritePacked(0);
+            return;
+        }
+
         writer.WritePacked(data.Count);
         
         foreach (var var in data)
@@ -35,9 +41,14 @@ public class RpcSyncAllColors(LaunchpadReloadedPlugin plugin, uint id) : PlayerC
         return data;
     }
 
-    public override void Handle(PlayerControl pc, Dictionary<byte, CustomColorData> data)
+    public override void Handle(PlayerControl pc, Dictionary<byte, CustomColorData>? data)
     {
         if (AmongUsClient.Instance.HostId != pc.OwnerId)
+        {
+            return;
+        }
+
+        if (data == null)
         {
             return;
         }

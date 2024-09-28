@@ -3,13 +3,13 @@ using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Roles;
-using LaunchpadReloaded.Utilities;
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
 using Reactor.Utilities.Extensions;
 using UnityEngine;
+using Helpers = MiraAPI.Utilities.Helpers;
 
 namespace LaunchpadReloaded.Buttons;
 
@@ -23,24 +23,24 @@ public class DragButton : CustomActionButton<DeadBody>
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.DragButton;
     public override float Distance => PlayerControl.LocalPlayer.MaxReportDistance / 4f;
 
-    public override bool Enabled(RoleBehaviour role)
+    public override bool Enabled(RoleBehaviour? role)
     {
         return role is JanitorRole || (OptionGroupSingleton<MedicOptions>.Instance.DragBodies && role is MedicRole);
     }
 
     public override DeadBody? GetTarget()
     {
-        return PlayerControl.LocalPlayer.GetNearestObjectOfType<DeadBody>(Distance, "DeadBody");
+        return PlayerControl.LocalPlayer.GetNearestObjectOfType<DeadBody>(Distance, Helpers.CreateFilter(Constants.NotShipMask), "DeadBody");
     }
 
-    public override bool IsTargetValid(DeadBody target)
+    public override bool IsTargetValid(DeadBody? target)
     {
-        return target && !target.Reported;
+        return target != null && !target.Reported;
     }
     
     public override void SetOutline(bool active)
     {
-        if (!Target)
+        if (Target == null)
         {
             return;
         }
@@ -53,7 +53,7 @@ public class DragButton : CustomActionButton<DeadBody>
 
     public override bool CanUse()
     {
-        return base.CanUse() && Target && PlayerControl.LocalPlayer.CanMove && !PlayerControl.LocalPlayer.inVent &&
+        return base.CanUse() && PlayerControl.LocalPlayer.CanMove && !PlayerControl.LocalPlayer.inVent &&
                (!PlayerControl.LocalPlayer.HasModifier<DragBodyModifier>()|| CanDrop());
     }
 
@@ -112,7 +112,4 @@ public class DragButton : CustomActionButton<DeadBody>
             PlayerControl.LocalPlayer.RpcStartDragging(Target.ParentId);
         }
     }
-
-
-
 }

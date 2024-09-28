@@ -17,9 +17,8 @@ public class MedicRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
     public string RoleLongDescription => "Use your revive ability to bring dead bodies\nback to life!";
     public Color RoleColor => LaunchpadPalette.MedicColor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Crewmate;
-    public override bool IsDead => false;
-    public bool TargetsBodies => true;
-    
-    [HideFromIl2Cpp]
-    public LoadableAsset<Sprite> Icon => LaunchpadAssets.ReviveButton;
+    public CustomRoleConfiguration Configuration => new()
+    {
+        Icon = LaunchpadAssets.ReviveButton,
+    };
 }

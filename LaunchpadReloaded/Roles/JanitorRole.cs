@@ -1,11 +1,9 @@
 using LaunchpadReloaded.Features;
 using Reactor.Utilities.Attributes;
 using System;
-using Il2CppInterop.Runtime.Attributes;
 using LaunchpadReloaded.Modifiers;
 using MiraAPI.Roles;
 using MiraAPI.Utilities;
-using MiraAPI.Utilities.Assets;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
@@ -19,10 +17,10 @@ public class JanitorRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
     public string RoleLongDescription => "You can drag bodies and hide them in vents\nWhich will cause them to disappear unless the vent is used.";
     public Color RoleColor => LaunchpadPalette.JanitorColor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Impostor;
-    public override bool IsDead => false;
-    
-    [HideFromIl2Cpp]
-    public LoadableAsset<Sprite> Icon => LaunchpadAssets.DragButton;
+    public CustomRoleConfiguration Configuration => new()
+    {
+        Icon = LaunchpadAssets.DragButton,
+    };
 
     public override bool CanUse(IUsable usable)
     {

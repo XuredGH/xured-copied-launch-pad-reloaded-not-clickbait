@@ -1,4 +1,3 @@
-using System.Linq;
 using AmongUs.GameOptions;
 using Il2CppInterop.Runtime.Attributes;
 using Il2CppSystem.Text;
@@ -21,13 +20,14 @@ public class JesterRole(System.IntPtr ptr) : RoleBehaviour(ptr), ICustomRole
     public string RoleLongDescription => "Convince the crew to vote you out by being suspicious.\nIf you get voted out, you win the game.";
     public Color RoleColor => LaunchpadPalette.JesterColor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Neutral;
-    public bool TasksCount => false;
-    public bool CanUseVent => OptionGroupSingleton<JesterOptions>.Instance.CanUseVents;
-    public RoleTypes GhostRole => (RoleTypes)RoleId.Get<OutcastGhostRole>();
-    public override bool IsDead => false;
-    
-    [HideFromIl2Cpp]
-    public LoadableAsset<Sprite> Icon => LaunchpadAssets.JesterIcon;
+
+    public CustomRoleConfiguration Configuration => new()
+    {
+        TasksCountForProgress = false,
+        CanUseVent = OptionGroupSingleton<JesterOptions>.Instance.CanUseVents,
+        GhostRole = (RoleTypes)RoleId.Get<OutcastGhostRole>(),
+        Icon = LaunchpadAssets.JesterIcon,
+    };
 
     public override void AppendTaskHint(StringBuilder taskStringBuilder) { }
     public override bool DidWin(GameOverReason reason)

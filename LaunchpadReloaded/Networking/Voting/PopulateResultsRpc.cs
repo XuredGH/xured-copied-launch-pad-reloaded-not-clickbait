@@ -11,8 +11,14 @@ public class PopulateResultsRpc(LaunchpadReloadedPlugin plugin, uint id) : Playe
 {
     public override RpcLocalHandling LocalHandling => RpcLocalHandling.Before;
 
-    public override void Write(MessageWriter writer, CustomVote[] votes)
+    public override void Write(MessageWriter writer, CustomVote[]? votes)
     {
+        if (votes == null)
+        {
+            writer.WritePacked(0);
+            return;
+        }
+
         writer.WritePacked(votes.Length);
         foreach (var t in votes)
         {
@@ -33,11 +39,16 @@ public class PopulateResultsRpc(LaunchpadReloadedPlugin plugin, uint id) : Playe
         return votes;
     }
 
-    public override void Handle(PlayerControl player, CustomVote[] votes)
+    public override void Handle(PlayerControl player, CustomVote[]? votes)
     {
         if (AmongUsClient.Instance.HostId != player.OwnerId)
         {
             player.KickForCheating();
+            return;
+        }
+
+        if (votes == null)
+        {
             return;
         }
         

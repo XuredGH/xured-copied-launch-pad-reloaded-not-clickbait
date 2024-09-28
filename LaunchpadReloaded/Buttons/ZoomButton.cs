@@ -26,12 +26,15 @@ public class ZoomButton : CustomActionButton
     
     public static bool IsZoom { get; private set; }
     
-    public override bool Enabled(RoleBehaviour role)
+    public override bool Enabled(RoleBehaviour? role)
     {
         return role is CaptainRole;
     }
 
-    public override bool CanUse() => base.CanUse() && !PlayerControl.LocalPlayer.Data.IsHacked();
+    public override bool CanUse()
+    {
+        return base.CanUse() && !PlayerControl.LocalPlayer.Data.IsHacked();
+    }
 
     protected override void OnClick()
     {

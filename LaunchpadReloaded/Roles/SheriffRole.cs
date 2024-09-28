@@ -17,8 +17,9 @@ public class SheriffRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
     public string RoleLongDescription => $"You can shoot players, if you shoot an {Palette.ImpostorRed.ToTextColor()}Impostor</color> you will kill him\nbut if you shoot a {Palette.CrewmateBlue.ToTextColor()}Crewmate</color>, you will die with him.";
     public Color RoleColor => LaunchpadPalette.SheriffColor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Crewmate;
-    public bool CanKill => true;
-    
-    [HideFromIl2Cpp]
-    public LoadableAsset<Sprite> Icon => LaunchpadAssets.ShootButton;
+
+    public CustomRoleConfiguration Configuration => new()
+    {
+        Icon = LaunchpadAssets.ShootButton,
+    };
 }

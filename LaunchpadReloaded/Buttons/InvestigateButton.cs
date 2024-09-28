@@ -18,24 +18,24 @@ public class InvestigateButton : CustomActionButton<DeadBody>
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.InvestigateButton;
     public override float Distance => PlayerControl.LocalPlayer.MaxReportDistance / 4f;
 
-    public override bool Enabled(RoleBehaviour role)
+    public override bool Enabled(RoleBehaviour? role)
     {
         return role is DetectiveRole;
     }
 
-    public override DeadBody GetTarget()
+    public override DeadBody? GetTarget()
     {
-        return PlayerControl.LocalPlayer.GetNearestObjectOfType<DeadBody>(Distance, "DeadBody");
+        return PlayerControl.LocalPlayer.GetNearestObjectOfType<DeadBody>(Distance, Helpers.CreateFilter(Constants.NotShipMask), "DeadBody");
     }
 
-    public override bool IsTargetValid(DeadBody target)
+    public override bool IsTargetValid(DeadBody? target)
     {
-        return target && !target.Reported;
+        return target != null && !target.Reported;
     }
     
     public override void SetOutline(bool active)
     {
-        if (!Target)
+        if (Target == null)
         {
             return;
         }
@@ -46,14 +46,9 @@ public class InvestigateButton : CustomActionButton<DeadBody>
         }
     }
 
-    public override bool CanUse()
-    {
-        return base.CanUse() && Target;
-    }
-
     protected override void OnClick()
     {
-        if (!Target)
+        if (Target == null)
         {
             return;
         }
