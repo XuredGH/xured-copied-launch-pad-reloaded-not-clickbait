@@ -12,7 +12,7 @@ namespace LaunchpadReloaded.Features.Managers;
 [RegisterInIl2Cpp]
 public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
 {
-    public static HackingManager Instance { get; private set; }
+    public static HackingManager? Instance { get; private set; }
 
     public List<byte> hackedPlayers = [];
     public List<HackNodeComponent> nodes = [];
@@ -138,6 +138,10 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
     public static void ToggleNode(int nodeId, bool value)
     {
         var node = Instance.nodes.Find(node => node.id == nodeId);
+        if (node == null)
+        {
+            return;
+        }
         node.isActive = value;
     }
 

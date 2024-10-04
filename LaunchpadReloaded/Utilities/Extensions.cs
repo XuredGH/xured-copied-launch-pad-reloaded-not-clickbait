@@ -132,6 +132,10 @@ public static class Extensions
     public static void Revive(this DeadBody body)
     {
         var player = PlayerControl.AllPlayerControls.ToArray().ToList().Find(player => player.PlayerId == body.ParentId);
+        if (player == null)
+        {
+            return;
+        }
         player.NetTransform.SnapTo(body.transform.position);
         player.Revive();
 

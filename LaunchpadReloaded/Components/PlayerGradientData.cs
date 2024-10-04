@@ -12,7 +12,7 @@ public class PlayerGradientData(IntPtr ptr) : MonoBehaviour(ptr)
 {
     public byte playerId;
 
-    public PlayerControl player;
+    public PlayerControl? player;
     
     private int _gradientColor = Random.RandomRangeInt(0, Palette.PlayerColors.Length);
     private bool _gradientEnabled = true;

@@ -21,8 +21,8 @@ namespace LaunchpadReloaded.Patches.Voting;
 [HarmonyPatch(typeof(MeetingHud))]
 public static class MeetingHudPatches
 {
-    private static GameObject _typeText;
-    private static PlayerVoteArea _confirmVotes;
+    private static GameObject? _typeText;
+    private static PlayerVoteArea? _confirmVotes;
     
     [HarmonyPostfix]
     [HarmonyPatch(nameof(MeetingHud.Start))]
@@ -157,7 +157,7 @@ public static class MeetingHudPatches
             return false;
         }
 
-        NetworkedPlayerInfo exiled;
+        NetworkedPlayerInfo? exiled;
         bool isTie;
 
         if (VotingTypesManager.UseChance())
@@ -187,10 +187,10 @@ public static class MeetingHudPatches
     {
         if (OptionGroupSingleton<VotingOptions>.Instance.AllowVotingForSamePerson.Value)
         {
-            return LaunchpadPlayer.LocalPlayer.VoteData.VotesRemaining > 0;
+            return LaunchpadPlayer.LocalPlayer?.VoteData.VotesRemaining > 0;
         }
 
-        return !LaunchpadPlayer.LocalPlayer.VoteData.VotedPlayers.Contains(suspect);
+        return LaunchpadPlayer.LocalPlayer?.VoteData.VotedPlayers.Contains(suspect) == false;
     }
 
     [HarmonyPrefix]

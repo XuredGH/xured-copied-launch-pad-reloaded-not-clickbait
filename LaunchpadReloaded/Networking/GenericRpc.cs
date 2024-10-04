@@ -17,7 +17,7 @@ public static class GenericRpc
         }
 
         var body = Helpers.GetBodyById(bodyId);
-        if (body)
+        if (body != null)
         {
             body.Revive();
         }

@@ -22,7 +22,7 @@ public static class DeadBodyRpc
         var body = Helpers.GetBodyById(bodyId);
         var vent = ShipStatus.Instance.AllVents.First(v => v.Id == ventId);
 
-        if (!body || !vent)
+        if (body == null || vent == null)
         {
             return;
         }

@@ -12,11 +12,11 @@ namespace LaunchpadReloaded.Components;
 [RegisterInIl2Cpp]
 public class CustomGameData(IntPtr ptr) : MonoBehaviour(ptr)
 {
-    public static CustomGameData Instance { get; private set; } 
+    public static CustomGameData? Instance { get; private set; } 
     
     public readonly List<CustomPlayerInfo> AllPlayers = [];
 
-    public CustomPlayerInfo GetPlayerById(byte id)
+    public CustomPlayerInfo? GetPlayerById(byte id)
     {
         return AllPlayers.Find(x => x.Data.PlayerId == id);
     }

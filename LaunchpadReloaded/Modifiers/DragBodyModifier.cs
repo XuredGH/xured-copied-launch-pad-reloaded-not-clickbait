@@ -22,11 +22,19 @@ public class DragBodyModifier : BaseModifier
 
     public override void OnActivate()
     {
-        Player.MyPhysics.Speed = 1.5f;
+        if (Player != null)
+        {
+            Player.MyPhysics.Speed = 1.5f;
+        }
     }
 
     public override void OnDeactivate()
     {
+        if (Player == null)
+        {
+            return;
+        }
+
         Player.MyPhysics.Speed = 2.5f;
     }
 

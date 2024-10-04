@@ -162,9 +162,14 @@ public class BattleRoyale : CustomGameMode
     }
 }*/
 
+using LaunchpadReloaded.Features;
+using MiraAPI.GameModes;
+
 namespace LaunchpadReloaded.Gamemodes;
 
-public class BattleRoyale
+public class BattleRoyale : CustomGameMode
 {
-    
+    public override string Name => "Battle Royale";
+    public override string Description => "Everyone can kill.\n<b><i>Last one standing wins.</b></i>";
+    public override int Id => (int)LaunchpadGamemodes.BattleRoyale;
 }

@@ -19,9 +19,9 @@ namespace LaunchpadReloaded.Patches.Colors.Gradients;
 public static class PlayerTabPatches
 {
     public static bool SelectGradient;
-    private static ColorChip _switchButton;
-    private static TextMeshPro _buttonText;
-    private static TextMeshPro _titleText;
+    private static ColorChip? _switchButton;
+    private static TextMeshPro? _buttonText;
+    private static TextMeshPro? _titleText;
 
     private static void SwitchSelector(PlayerTab instance)
     {
@@ -126,7 +126,7 @@ public static class PlayerTabPatches
     [HarmonyPatch(nameof(PlayerTab.Update))]
     public static void UpdatePostfix(PlayerTab __instance)
     {
-        if (_buttonText && _titleText)
+        if (_buttonText != null && _titleText != null)
         {
             _buttonText.text = SelectGradient ? "Main Color" : "Secondary\nColor";
             _titleText.text = SelectGradient ? "Secondary Color: " : "Main Color: ";

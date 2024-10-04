@@ -11,9 +11,9 @@ public class CustomSetting
     public StringNames StringName { get; }
     public bool Enabled;
     public bool Default;
-    public Action<bool> ChangedEvent = null;
+    public Action<bool>? ChangedEvent = null;
 
-    private GameObject _buttonObject;
+    private GameObject? _buttonObject;
 
     public CustomSetting(string name, bool defaultValue)
     {
@@ -43,7 +43,7 @@ public class CustomSetting
     private void ClickHandler()
     {
         Enabled = !Enabled;
-        _buttonObject.GetComponent<ToggleButtonBehaviour>().UpdateText(Enabled);
+        _buttonObject?.GetComponent<ToggleButtonBehaviour>().UpdateText(Enabled);
 
         ChangedEvent?.Invoke(Enabled);
     }

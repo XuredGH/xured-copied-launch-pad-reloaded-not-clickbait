@@ -21,8 +21,6 @@ namespace LaunchpadReloaded;
 public partial class LaunchpadReloadedPlugin : BasePlugin, IMiraPlugin
 {
     public Harmony Harmony { get; } = new(Id);
-    public static LaunchpadReloadedPlugin Instance { get; private set; }
-
     public ConfigFile GetConfigFile()
     {
         return Config;
@@ -32,7 +30,6 @@ public partial class LaunchpadReloadedPlugin : BasePlugin, IMiraPlugin
 
     public override void Load()
     {
-        Instance = this;
         Harmony.PatchAll();
         
         ReactorCredits.Register("Launchpad", Version.Truncate(11, "") ?? Version, true, ReactorCredits.AlwaysShow);

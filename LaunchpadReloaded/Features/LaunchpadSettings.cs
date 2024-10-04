@@ -6,7 +6,7 @@ namespace LaunchpadReloaded.Features;
 
 public class LaunchpadSettings
 {
-    public static LaunchpadSettings Instance { get; private set; }
+    public static LaunchpadSettings? Instance { get; private set; }
 
     public readonly CustomSetting LockedCamera;
     public readonly CustomSetting UniqueDummies;

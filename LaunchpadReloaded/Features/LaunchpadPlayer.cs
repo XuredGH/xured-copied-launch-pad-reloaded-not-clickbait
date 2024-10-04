@@ -38,7 +38,7 @@ public class LaunchpadPlayer(IntPtr ptr) : MonoBehaviour(ptr)
         }
     }
 
-    public static LaunchpadPlayer LocalPlayer { get; private set; }
+    public static LaunchpadPlayer? LocalPlayer { get; private set; }
     
     public static LaunchpadPlayer GetById(byte id) => GameData.Instance.GetPlayerById(id).Object.GetLpPlayer();
     
