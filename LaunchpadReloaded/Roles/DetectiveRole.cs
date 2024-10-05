@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
 
-[RegisterInIl2Cpp]
+
 [RegisterCustomRole]
 public class DetectiveRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
 {
@@ -15,7 +15,7 @@ public class DetectiveRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
     public string RoleLongDescription => "Investigate bodies to get clues and use your instinct ability\nto see recent footsteps around you!";
     public Color RoleColor => LaunchpadPalette.DetectiveColor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Crewmate;
-    public CustomRoleConfiguration Configuration => new()
+    public CustomRoleConfiguration Configuration => new(this)
     {
         Icon = LaunchpadAssets.ZoomButton,
     };

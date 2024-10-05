@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
 
-[RegisterInIl2Cpp]
+
 [RegisterCustomRole]
 public class JanitorRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
 {
@@ -17,7 +17,7 @@ public class JanitorRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
     public string RoleLongDescription => "You can drag bodies and hide them in vents\nWhich will cause them to disappear unless the vent is used.";
     public Color RoleColor => LaunchpadPalette.JanitorColor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Impostor;
-    public CustomRoleConfiguration Configuration => new()
+    public CustomRoleConfiguration Configuration => new(this)
     {
         Icon = LaunchpadAssets.DragButton,
     };

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
 
-[RegisterInIl2Cpp]
+
 [RegisterCustomRole]
 public class SheriffRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
 {
@@ -16,7 +16,7 @@ public class SheriffRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
     public Color RoleColor => LaunchpadPalette.SheriffColor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Crewmate;
 
-    public CustomRoleConfiguration Configuration => new()
+    public CustomRoleConfiguration Configuration => new(this)
     {
         Icon = LaunchpadAssets.ShootButton,
     };

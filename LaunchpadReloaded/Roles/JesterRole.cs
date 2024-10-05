@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
 
-[RegisterInIl2Cpp]
+
 [RegisterCustomRole]
 public class JesterRole(System.IntPtr ptr) : RoleBehaviour(ptr), ICustomRole
 {
@@ -18,8 +18,9 @@ public class JesterRole(System.IntPtr ptr) : RoleBehaviour(ptr), ICustomRole
     public string RoleLongDescription => "Convince the crew to vote you out by being suspicious.\nIf you get voted out, you win the game.";
     public Color RoleColor => LaunchpadPalette.JesterColor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Neutral;
+    public override bool IsDead => false;
 
-    public CustomRoleConfiguration Configuration => new()
+    public CustomRoleConfiguration Configuration => new(this)
     {
         TasksCountForProgress = false,
         CanUseVent = OptionGroupSingleton<JesterOptions>.Instance.CanUseVents,

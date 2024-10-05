@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
 
-[RegisterInIl2Cpp]
+
 [RegisterCustomRole]
 public class MedicRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
 {
@@ -15,7 +15,7 @@ public class MedicRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
     public string RoleLongDescription => "Use your revive ability to bring dead bodies\nback to life!";
     public Color RoleColor => LaunchpadPalette.MedicColor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Crewmate;
-    public CustomRoleConfiguration Configuration => new()
+    public CustomRoleConfiguration Configuration => new(this)
     {
         Icon = LaunchpadAssets.ReviveButton,
     };

@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
 
-[RegisterInIl2Cpp]
+
 [RegisterCustomRole]
 public class OutcastGhostRole(IntPtr ptr) : CrewmateGhostRole(ptr), ICustomRole
 {
@@ -16,11 +16,11 @@ public class OutcastGhostRole(IntPtr ptr) : CrewmateGhostRole(ptr), ICustomRole
     public string RoleLongDescription => string.Empty;
     public Color RoleColor => Color.gray;
     public ModdedRoleTeams Team => ModdedRoleTeams.Neutral;
-    public CustomRoleConfiguration Configuration=> new()
+
+    public CustomRoleConfiguration Configuration => new(this)
     {
         TasksCountForProgress = false,
         CanUseVent = false,
-        IsGhostRole = true,
     };
 
     public override bool IsDead => true;
