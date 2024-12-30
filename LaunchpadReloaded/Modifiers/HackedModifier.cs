@@ -5,6 +5,7 @@ using Reactor.Utilities;
 
 namespace LaunchpadReloaded.Modifiers;
 
+[RegisterModifier]
 public class HackedModifier : BaseModifier
 {
     public override string ModifierName => "Hacked";

@@ -3,6 +3,7 @@ using MiraAPI.Modifiers;
 
 namespace LaunchpadReloaded.Modifiers;
 
+[RegisterModifier]
 public class RevivedModifier : BaseModifier
 {
     public override string ModifierName => "Revived";

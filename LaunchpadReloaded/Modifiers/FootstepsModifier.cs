@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace LaunchpadReloaded.Modifiers;
 
+[RegisterModifier]
 public class FootstepsModifier : BaseModifier
 {
     public override string ModifierName => "Footsteps";

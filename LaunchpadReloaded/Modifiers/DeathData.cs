@@ -4,6 +4,7 @@ using MiraAPI.Modifiers;
 
 namespace LaunchpadReloaded.Modifiers;
 
+[RegisterModifier]
 public class DeathData : BaseModifier
 {
     public override string ModifierName => "DeathData";

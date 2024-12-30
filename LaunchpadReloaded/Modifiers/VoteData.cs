@@ -5,6 +5,7 @@ using MiraAPI.Modifiers;
 
 namespace LaunchpadReloaded.Modifiers;
 
+[RegisterModifier]
 public class VoteData : BaseModifier
 {
     public override string ModifierName => "Vote Data";
