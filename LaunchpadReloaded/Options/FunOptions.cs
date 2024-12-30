@@ -13,7 +13,8 @@ public class FunOptions : AbstractOptionGroup
 {
     public override string GroupName => "Fun Options";
 
-    [ModdedToggleOption("Friendly Fire")] public bool FriendlyFire { get; set; } = false;
+    [ModdedToggleOption("Friendly Fire")]
+    public bool FriendlyFire { get; set; } = false;
     
     public ModdedToggleOption UniqueColors { get; } = new("Unique Colors", true) 
     {
