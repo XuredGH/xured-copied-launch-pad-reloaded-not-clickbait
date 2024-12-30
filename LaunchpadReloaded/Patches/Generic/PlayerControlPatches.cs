@@ -19,7 +19,8 @@ public static class PlayerControlPatches
     /// <summary>
     /// Disable kill timer while janitor is dragging
     /// </summary>
-    [HarmonyPostfix, HarmonyPatch(nameof(PlayerControl.IsKillTimerEnabled), MethodType.Getter)]
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(PlayerControl.IsKillTimerEnabled), MethodType.Getter)]
     public static void GetKillTimerEnabledPostfix(PlayerControl __instance, ref bool __result)
     {
         switch (__instance.Data.Role)
@@ -33,7 +34,8 @@ public static class PlayerControlPatches
     /// <summary>
     /// Use Custom check color RPC
     /// </summary>
-    [HarmonyPrefix, HarmonyPatch(nameof(PlayerControl.CmdCheckColor))]
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(PlayerControl.CmdCheckColor))]
     public static bool CheckColorPatch(PlayerControl __instance, [HarmonyArgument(0)] byte bodyColor)
     {
         if (AmongUsClient.Instance.AmHost)
@@ -49,7 +51,8 @@ public static class PlayerControlPatches
     /// <summary>
     /// Player control update
     /// </summary>
-    [HarmonyPostfix, HarmonyPatch(nameof(PlayerControl.FixedUpdate))]
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(PlayerControl.FixedUpdate))]
     public static void UpdatePatch(PlayerControl __instance)
     {
         if (MeetingHud.Instance || __instance.Data is null)
@@ -57,7 +60,7 @@ public static class PlayerControlPatches
             return;
         }
 
-        if (__instance.GetLpPlayer().wasRevived)
+        if (__instance.HasModifier<RevivedModifier>())
         {
             __instance.cosmetics.SetOutline(true, new Nullable<Color>(LaunchpadPalette.MedicColor));
         }
@@ -66,17 +69,19 @@ public static class PlayerControlPatches
     /// <summary>
     /// Set gradient 
     /// </summary>
-    [HarmonyPrefix, HarmonyPatch("Start")]
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(PlayerControl.Start))]
     public static void StartPrefix(PlayerControl __instance)
     {
         __instance.gameObject.AddComponent<PlayerGradientData>();
-        __instance.gameObject.AddComponent<LaunchpadPlayer>();
+        __instance.GetModifierComponent().AddModifier<VoteData>();
     }
 
     /// <summary>
     /// Update gradient
     /// </summary>
-    [HarmonyPostfix, HarmonyPatch(nameof(PlayerControl.SetPlayerMaterialColors))]
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(PlayerControl.SetPlayerMaterialColors))]
     public static void SetPlayerMaterialColorsPostfix(PlayerControl __instance, [HarmonyArgument(0)] Renderer renderer)
     {
         var playerGradient = __instance.GetComponent<PlayerGradientData>();

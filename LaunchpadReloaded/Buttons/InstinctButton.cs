@@ -1,13 +1,16 @@
 ﻿using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Roles;
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
+using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
 
+[RegisterButton]
 public class InstinctButton : BaseLaunchpadButton
 {
     public override string Name => "INSTINCT";
@@ -25,10 +28,11 @@ public class InstinctButton : BaseLaunchpadButton
 
     public override void OnEffectEnd()
     {
-        LaunchpadPlayer.LocalPlayer.showFootsteps = false;
+        PlayerControl.LocalPlayer.GetModifierComponent()!.AddModifier<FootstepsModifier>();
     }
+
     protected override void OnClick()
     {
-        LaunchpadPlayer.LocalPlayer.showFootsteps = true;
+        PlayerControl.LocalPlayer.GetModifierComponent()!.RemoveModifier<FootstepsModifier>();
     }
 }

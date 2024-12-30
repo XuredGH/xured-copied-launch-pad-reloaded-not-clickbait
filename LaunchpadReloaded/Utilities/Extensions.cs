@@ -6,8 +6,10 @@ using System.Collections.Generic;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
+using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Options;
 using MiraAPI.GameOptions;
+using MiraAPI.Utilities;
 using PowerTools;
 using Reactor.Utilities.Extensions;
 using UnityEngine;
@@ -109,11 +111,6 @@ public static class Extensions
         return result;
     }
 
-    public static LaunchpadPlayer GetLpPlayer(this PlayerControl playerControl)
-    {
-        return playerControl.GetComponent<LaunchpadPlayer>();
-    }
-
     public static bool ButtonTimerEnabled(this PlayerControl playerControl)
     {
         return (playerControl.moveable || playerControl.petting) && playerControl is { inVent: false, shapeshifting: false } && (!DestroyableSingleton<HudManager>.InstanceExists || !DestroyableSingleton<HudManager>.Instance.IsIntroDisplayed) && !MeetingHud.Instance && !PlayerCustomizationMenu.Instance && !ExileController.Instance && !IntroCutscene.Instance;
@@ -136,24 +133,10 @@ public static class Extensions
         {
             return;
         }
+
         player.NetTransform.SnapTo(body.transform.position);
-        player.Revive();
-
-        player.RemainingEmergencies = GameManager.Instance.LogicOptions.GetNumEmergencyMeetings();
-        RoleManager.Instance.SetRole(player, RoleTypes.Crewmate);
-        player.Data.Role.SpawnTaskHeader(player);
-        player.MyPhysics.SetBodyType(player.BodyType);
-
-        if (player.AmOwner)
-        {
-            HudManager.Instance.MapButton.gameObject.SetActive(true);
-            HudManager.Instance.ReportButton.gameObject.SetActive(true);
-            HudManager.Instance.UseButton.gameObject.SetActive(true);
-            player.myTasks.RemoveAt(0);
-        }
-
         body.gameObject.Destroy();
-        player.GetLpPlayer().wasRevived = true;
+        player.GetModifierComponent()!.AddModifier<RevivedModifier>();
     }
     
     public static void HideBody(this DeadBody body)

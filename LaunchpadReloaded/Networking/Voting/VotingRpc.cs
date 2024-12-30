@@ -1,5 +1,7 @@
 ﻿using System.Linq;
 using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Modifiers;
+using MiraAPI.Utilities;
 using Reactor.Networking.Attributes;
 
 namespace LaunchpadReloaded.Networking.Voting;
@@ -25,8 +27,9 @@ public static class VotingRpc
 
         if (!AmongUsClient.Instance.AmHost)
         {
-            LaunchpadPlayer.LocalPlayer.VoteData.VotesRemaining += 1;
-            LaunchpadPlayer.LocalPlayer.VoteData.VotedPlayers.Remove(votedFor);
+            var voteData = PlayerControl.LocalPlayer.GetModifier<VoteData>();
+            voteData.VotesRemaining += 1;
+            voteData.VotedPlayers.Remove(votedFor);
         }
 
         foreach (var t in MeetingHud.Instance.playerStates)

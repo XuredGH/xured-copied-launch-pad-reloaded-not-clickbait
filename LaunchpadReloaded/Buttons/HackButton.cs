@@ -1,10 +1,12 @@
 ﻿using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
+using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Roles;
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
+using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
 using UnityEngine;
 
@@ -20,7 +22,6 @@ public class HackButton : BaseLaunchpadButton
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.HackButton;
     public override bool TimerAffectedByPlayer => true;
     public override bool AffectedByHack => false;
-
     public override bool Enabled(RoleBehaviour? role) => role is HackerRole;
     public override bool CanUse() => base.CanUse() && !HackingManager.Instance.AnyPlayerHacked();
 
@@ -33,7 +34,7 @@ public class HackButton : BaseLaunchpadButton
                 continue;
             }
 
-            PlayerControl.LocalPlayer.RpcHackPlayer(player);
+            player.RpcAddModifier<HackedModifier>();
         }
 
         PlayerControl.LocalPlayer.RawSetColor(15);

@@ -120,21 +120,6 @@ public class HackingManager(IntPtr ptr) : MonoBehaviour(ptr)
         }
     }
 
-    public static void HackPlayer(PlayerControl player)
-    {
-        GradientManager.SetGradientEnabled(player, false);
-        player.cosmetics.SetColor(15);
-        player.cosmetics.gameObject.SetActive(false);
-    }
-    
-    public static void UnHackPlayer(PlayerControl player)
-    {
-        GradientManager.SetGradientEnabled(player, true);
-        player.cosmetics.SetColor((byte)player.Data.DefaultOutfit.ColorId);
-        player.cosmetics.gameObject.SetActive(true);
-        player.SetName(player.Data.PlayerName);
-    }
-
     public static void ToggleNode(int nodeId, bool value)
     {
         var node = Instance.nodes.Find(node => node.id == nodeId);

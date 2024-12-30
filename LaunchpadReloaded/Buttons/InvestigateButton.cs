@@ -9,6 +9,7 @@ using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
 
+[RegisterButton]
 public class InvestigateButton : BaseLaunchpadButton<DeadBody>
 {
     public override string Name => "INVESTIGATE";
@@ -57,6 +58,6 @@ public class InvestigateButton : BaseLaunchpadButton<DeadBody>
         
         var gameObject = Object.Instantiate(LaunchpadAssets.DetectiveGame.LoadAsset(), HudManager.Instance.transform);
         var minigame = gameObject.GetComponent<JournalMinigame>();
-        minigame.Open(LaunchpadPlayer.GetById(Target.ParentId));
+        minigame.Open(GameData.Instance.GetPlayerById(Target.ParentId).Object);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Utilities;
 using MiraAPI.Utilities;
@@ -28,7 +29,7 @@ public class HackNodeComponent(IntPtr ptr) : MonoBehaviour(ptr)
     public void Use()
     {
         SoundManager.Instance.PlaySound(LaunchpadAssets.BeepSound.LoadAsset(), false, 0.5f);
-        PlayerControl.LocalPlayer.RpcUnHackPlayer();
+        PlayerControl.LocalPlayer.RpcRemoveModifier<HackedModifier>();
     }
 
     public float CanUse(NetworkedPlayerInfo pc, out bool canUse, out bool couldUse)

@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using LaunchpadReloaded.Modifiers;
 using MiraAPI.Utilities;
@@ -11,7 +12,12 @@ namespace LaunchpadReloaded.Utilities;
 public static class Helpers
 {
     public static readonly Random Random = new();
-    
+
+    public static List<PlayerControl> GetAlivePlayers()
+    {
+        return PlayerControl.AllPlayerControls.ToArray().Where(x => !x.Data.IsDead).ToList();
+    }
+
     public static bool ShouldCancelClick()
     {
         return PlayerControl.LocalPlayer.HasModifier<DragBodyModifier>();

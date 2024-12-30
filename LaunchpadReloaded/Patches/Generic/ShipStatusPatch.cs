@@ -13,7 +13,6 @@ public static class ShipStatusPatch
 {
     /// <summary>
     /// Add all the managers for the game (probably not the best or cleanest way to do it, but it works).
-    /// Will be replaced with <see cref="LaunchpadPlayer"/> eventually
     /// </summary>
     [HarmonyPostfix, HarmonyPatch("Awake")]
     public static void MapLoadingPatch(ShipStatus __instance)
@@ -21,11 +20,6 @@ public static class ShipStatusPatch
         var managers = new GameObject("LaunchpadManagers");
         managers.transform.SetParent(__instance.transform);
         managers.AddComponent<HackingManager>();
-
-        foreach (var player in LaunchpadPlayer.GetAllPlayers())
-        {
-            player.ResetPlayer();
-        }
 
         __instance.RpcCreateNodes();
     }

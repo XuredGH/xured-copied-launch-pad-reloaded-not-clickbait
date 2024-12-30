@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Options;
+using LaunchpadReloaded.Utilities;
 using MiraAPI.GameOptions;
 using Reactor.Utilities.Extensions;
 using TMPro;
@@ -24,7 +26,7 @@ public static class VotingTypesManager
             RecommendedVotes[
                 Math.Min(
                     Math.Clamp(
-                        LaunchpadPlayer.GetAllAlivePlayers().Count(), 
+                        Helpers.GetAlivePlayers().Count,
                         0, 
                         15),
                     RecommendedVotes.Length)], 
@@ -48,9 +50,9 @@ public static class VotingTypesManager
     #region Vote calculations
     public static List<CustomVote> CalculateVotes()
     {
-        return (from player in LaunchpadPlayer.GetAllAlivePlayers()
-                from vote in player.VoteData.VotedPlayers
-                select new CustomVote(player.playerObject.PlayerId, vote)).ToList();
+        return (from player in Helpers.GetAlivePlayers()
+                from vote in MiraAPI.Utilities.Extensions.GetModifier<VoteData>(player).VotedPlayers
+                select new CustomVote(player.PlayerId, vote)).ToList();
     }
 
     public static Dictionary<byte, float> GetChancePercents(List<CustomVote> votes)

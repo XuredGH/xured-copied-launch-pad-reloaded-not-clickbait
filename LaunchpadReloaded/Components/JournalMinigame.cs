@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Cpp2IL.Core.Extensions;
 using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Options.Roles;
 using MiraAPI.GameOptions;
+using MiraAPI.Utilities;
 using Reactor.Utilities.Attributes;
 using TMPro;
 using UnityEngine;
@@ -36,16 +38,17 @@ public class JournalMinigame(nint ptr) : Minigame(ptr)
         suspects = gameObject.transform.FindChild("Suspects").GetComponentsInChildren<SpriteRenderer>().ToList();
     }
 
-    public void Open(LaunchpadPlayer deadPlayer)
+    public void Open(PlayerControl deadPlayer)
     {
+        var deathData = deadPlayer.GetModifier<DeathData>();
         // init body
-        var timeSinceDeath = DateTime.Now.Subtract(deadPlayer.DeadData.DeathTime);
-        deadPlayerInfo.text = timeSinceDeath.Minutes < 1 ? $"{deadPlayer.playerObject.Data.PlayerName}\n<size=70%>Died {timeSinceDeath.Seconds} seconds ago</size>" :
-            $"{deadPlayer.playerObject.Data.PlayerName}\n<size=70%>Died {timeSinceDeath.Minutes} minutes ago</size>";
+        var timeSinceDeath = DateTime.Now.Subtract(deathData.DeathTime);
+        deadPlayerInfo.text = timeSinceDeath.Minutes < 1 ? $"{deadPlayer.Data.PlayerName}\n<size=70%>Died {timeSinceDeath.Seconds} seconds ago</size>" :
+            $"{deadPlayer.Data.PlayerName}\n<size=70%>Died {timeSinceDeath.Minutes} minutes ago</size>";
 
-        deadPlayer.playerObject.SetPlayerMaterialColors(deadBodyIcon);
+        deadPlayer.SetPlayerMaterialColors(deadBodyIcon);
 
-        if (LaunchpadPlayer.GetAllAlivePlayers().Count() < 4 || OptionGroupSingleton<DetectiveOptions>.Instance.HideSuspects)
+        if (GameManager.Instance.LogicFlow.GetPlayerCounts().Item1 < 4 || OptionGroupSingleton<DetectiveOptions>.Instance.HideSuspects)
         {
             gameObject.transform.FindChild("Suspects").gameObject.SetActive(false);
             gameObject.transform.FindChild("SuspectsText").gameObject.SetActive(false);
@@ -56,12 +59,12 @@ public class JournalMinigame(nint ptr) : Minigame(ptr)
 
         var rand = new Random();
         var chosenRend = suspects[rand.Next(suspects.Count)];
-        deadPlayer.DeadData.Killer.SetPlayerMaterialColors(chosenRend);
+        deathData.Killer.SetPlayerMaterialColors(chosenRend);
 
         var availableSprites = suspects;
         availableSprites.Remove(chosenRend);
 
-        var sus = deadPlayer.DeadData.Suspects.Clone();
+        var sus = deathData.Suspects.Clone();
 
         foreach (var rend in availableSprites)
         {
