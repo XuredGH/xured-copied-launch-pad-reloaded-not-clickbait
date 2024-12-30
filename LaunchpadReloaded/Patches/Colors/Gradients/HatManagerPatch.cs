@@ -12,6 +12,9 @@ public static class HatManagerPatch
         var mat1 = __instance.PlayerMaterial = LaunchpadAssets.GradientMaterial.LoadAsset();
         var mat2 = __instance.MaskedPlayerMaterial = LaunchpadAssets.MaskedGradientMaterial.LoadAsset();
         
+        mat1.SetFloat(ShaderID.Get("_GradientBlend"), 2);
+        mat2.SetFloat(ShaderID.Get("_GradientBlend"), 2);
+
         mat1.SetFloat(ShaderID.Get("_GradientAngle"), 225);
         mat2.SetFloat(ShaderID.Get("_GradientAngle"), 225);
         

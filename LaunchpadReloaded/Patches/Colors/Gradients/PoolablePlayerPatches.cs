@@ -14,7 +14,7 @@ public static class PoolablePlayerPatches
         __instance.gameObject.SetGradientData(playerInfo.PlayerId);
         var mat = __instance.cosmetics.currentBodySprite.BodySprite.material;
         
-        mat.SetFloat(ShaderID.Get("_GradientBlend"), 3f);
+        mat.SetFloat(ShaderID.Get("_GradientBlend"), 25f);
         mat.SetFloat(ShaderID.Get("_GradientOffset"), .4f);
     }
 }
