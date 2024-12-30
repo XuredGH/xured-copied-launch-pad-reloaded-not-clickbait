@@ -69,7 +69,7 @@ public static class PlayerControlPatches
     /// <summary>
     /// Set gradient 
     /// </summary>
-    [HarmonyPrefix]
+    [HarmonyPostfix]
     [HarmonyPatch(nameof(PlayerControl.Start))]
     public static void StartPrefix(PlayerControl __instance)
     {
