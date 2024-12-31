@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using System.Reflection;
-using AmongUs.GameOptions;
 using System.Collections.Generic;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;

@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using HarmonyLib;
-using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Voting;
 using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Networking.Voting;

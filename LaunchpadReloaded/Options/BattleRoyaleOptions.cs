@@ -1,6 +1,4 @@
 ﻿using System;
-using LaunchpadReloaded.Gamemodes;
-using MiraAPI.GameModes;
 using MiraAPI.GameOptions;
 using MiraAPI.GameOptions.Attributes;
 using MiraAPI.GameOptions.OptionTypes;
@@ -11,7 +9,7 @@ public class BattleRoyaleOptions : AbstractOptionGroup
 {
     public override string GroupName => "Battle Royale Options";
 
-    public override Func<bool> GroupVisible => () => CustomGameModeManager.ActiveMode?.GetType() == typeof(BattleRoyale);
+    public override Func<bool> GroupVisible => () => false; //CustomGameModeManager.ActiveMode?.GetType() == typeof(BattleRoyale);
 
     [ModdedToggleOption("Use Seeker Character")] public bool SeekerCharacter { get; set; } = true;
     

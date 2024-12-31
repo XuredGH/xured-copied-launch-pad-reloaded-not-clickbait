@@ -4,7 +4,6 @@ using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Options.Roles;
 using MiraAPI.GameOptions;
 using MiraAPI.Roles;
-using Reactor.Utilities.Attributes;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;

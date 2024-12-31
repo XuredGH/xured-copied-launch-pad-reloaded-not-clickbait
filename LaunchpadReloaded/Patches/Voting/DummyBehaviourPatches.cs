@@ -1,7 +1,6 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Modifiers;
-using LaunchpadReloaded.Utilities;
 using MiraAPI.Utilities;
 
 namespace LaunchpadReloaded.Patches.Voting;

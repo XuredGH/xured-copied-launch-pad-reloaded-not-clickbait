@@ -1,7 +1,5 @@
 ﻿using HarmonyLib;
-using LaunchpadReloaded.Gamemodes;
 using LaunchpadReloaded.Options;
-using MiraAPI.GameModes;
 using MiraAPI.GameOptions;
 using UnityEngine;
 
@@ -22,10 +20,10 @@ public static class NameTagPatch
             return false;
         }
         
-        if (CustomGameModeManager.ActiveMode is BattleRoyale)
+        /*if (CustomGameModeManager.ActiveMode is BattleRoyale)
         {
             return true;
-        }
+        }*/
 
         __result = PlayerControl.LocalPlayer.Data?.Role == otherPlayerRole ? otherPlayerRole.NameColor : Color.white;
 

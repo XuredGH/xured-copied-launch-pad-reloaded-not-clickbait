@@ -1,5 +1,4 @@
 ﻿using HarmonyLib;
-using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Options;
