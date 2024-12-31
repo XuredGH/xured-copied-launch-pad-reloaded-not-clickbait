@@ -136,14 +136,6 @@ public static class PlayerTabPatches
         {
             __instance.currentColorIsEquipped = __instance.currentColor == GradientManager.LocalGradientId;
         }
-        
-        var mat = __instance.PlayerPreview.cosmetics.currentBodySprite.BodySprite.material;
-    
-        mat.SetFloat(ShaderID.Get("_GradientBlend"), 2);
-        mat.SetFloat(ShaderID.Get("_GradientOffset"), .4f);
-    
-
-
     }
 
     [HarmonyPrefix]

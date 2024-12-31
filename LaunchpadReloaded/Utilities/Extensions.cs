@@ -60,6 +60,7 @@ public static class Extensions
         if (bodyType == (int)PlayerBodyTypes.Normal)
         {
             player.cosmetics.currentBodySprite.BodySprite.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
+            player.cosmetics.SetNamePosition(new Vector3(0, 1, -.5f));
         }
     }
     
