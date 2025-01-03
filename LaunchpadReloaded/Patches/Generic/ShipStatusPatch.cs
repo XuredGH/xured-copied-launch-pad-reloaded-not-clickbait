@@ -1,7 +1,6 @@
 ﻿using HarmonyLib;
-using LaunchpadReloaded.Features.Managers;
-using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Options;
+using LaunchpadReloaded.Utilities;
 using MiraAPI.GameOptions;
 using UnityEngine;
 
@@ -11,25 +10,40 @@ namespace LaunchpadReloaded.Patches.Generic;
 public static class ShipStatusPatch
 {
     /// <summary>
-    /// Add all the managers for the game (probably not the best or cleanest way to do it, but it works).
+    /// Create nodes on map load.
     /// </summary>
-    [HarmonyPostfix, HarmonyPatch("Awake")]
-    public static void MapLoadingPatch(ShipStatus __instance)
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(ShipStatus.Awake))]
+    public static void ShipStatusBeginPostfix(ShipStatus __instance)
     {
-        var managers = new GameObject("LaunchpadManagers");
-        managers.transform.SetParent(__instance.transform);
-        managers.AddComponent<HackingManager>();
+        var nodesParent = new GameObject("Nodes");
+        nodesParent.transform.SetParent(__instance.transform);
 
-        __instance.RpcCreateNodes();
+        var nodePositions = HackerUtilities.MapNodePositions[__instance.Type];
+        if (__instance.TryCast<AirshipStatus>())
+        {
+            nodePositions = HackerUtilities.AirshipPositions;
+        }
+
+        for (var i = 0; i < nodePositions.Length; i++)
+        {
+            var nodePos = nodePositions[i];
+            __instance.CreateNode(i, nodesParent.transform, nodePos);
+        }
     }
 
     /// <summary>
     /// Disable the meeting teleportation if option is enabled
     /// </summary>
-    [HarmonyPrefix, HarmonyPatch("SpawnPlayer")]
-    public static bool SpawnPlayerPatch([HarmonyArgument(2)] bool initialSpawn)
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(ShipStatus.SpawnPlayer))]
+    public static bool ShipStatusSpawnPlayerPrefix([HarmonyArgument(2)] bool initialSpawn)
     {
-        if (TutorialManager.InstanceExists) return true;
+        if (TutorialManager.InstanceExists)
+        {
+            return true;
+        }
+
         return initialSpawn || !OptionGroupSingleton<GeneralOptions>.Instance.DisableMeetingTeleport;
     }
 }

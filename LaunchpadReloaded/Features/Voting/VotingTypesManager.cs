@@ -69,7 +69,10 @@ public static class VotingTypesManager
 
     public static byte GetVotedPlayerByChance(List<CustomVote> votes)
     {
-        if (!votes.Any()) return (byte)SpecialVotes.Skip;
+        if (!votes.Any())
+        {
+            return (byte)SpecialVotes.Skip;
+        }
 
         var rand = new Random();
         List<byte> plrs = [.. votes.Select(vote => vote.Suspect)];
@@ -139,7 +142,10 @@ public static class VotingTypesManager
         foreach (var voteArea in MeetingHud.Instance.playerStates)
         {
             chances.TryGetValue(voteArea.TargetPlayerId, out var val);
-            if (voteArea.AmDead || val < 1) continue;
+            if (voteArea.AmDead || val < 1)
+            {
+                continue;
+            }
 
             var text = $"{Math.Round(val, 0)}%";
             var chanceThing = Object.Instantiate(voteArea.LevelNumberText.transform.parent, voteArea.transform).gameObject;

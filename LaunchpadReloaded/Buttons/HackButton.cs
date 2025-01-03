@@ -1,8 +1,8 @@
 ﻿using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Roles;
+using LaunchpadReloaded.Utilities;
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Utilities;
@@ -22,13 +22,13 @@ public class HackButton : BaseLaunchpadButton
     public override bool TimerAffectedByPlayer => true;
     public override bool AffectedByHack => false;
     public override bool Enabled(RoleBehaviour? role) => role is HackerRole;
-    public override bool CanUse() => base.CanUse() && !HackingManager.Instance.AnyPlayerHacked();
+    public override bool CanUse() => base.CanUse() && !HackerUtilities.AnyPlayerHacked();
 
     protected override void OnClick()
     {
         foreach (var player in PlayerControl.AllPlayerControls)
         {
-            if (player.Data.Role.IsImpostor || player.Data.IsDead || player.Data.Disconnected)
+            if (player.Data.IsDead || player.Data.Disconnected)
             {
                 continue;
             }

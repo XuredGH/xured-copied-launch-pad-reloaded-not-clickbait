@@ -11,8 +11,9 @@ namespace LaunchpadReloaded.Patches.Generic;
 [HarmonyPatch]
 public static class DiscordManagerPatch
 {
-    [HarmonyPrefix, HarmonyPatch(typeof(DiscordManager), "Start")]
-    public static bool StartPatch(DiscordManager __instance)
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(DiscordManager), nameof(DiscordManager.Start))]
+    public static bool DiscordManagerStartPrefix(DiscordManager __instance)
     {
         __instance.presence = new Discord.Discord(1217217004474339418, 1UL);
         var activityManager = __instance.presence.GetActivityManager();
@@ -26,8 +27,9 @@ public static class DiscordManagerPatch
         return false;
     }
 
-    [HarmonyPrefix, HarmonyPatch(typeof(ActivityManager), "UpdateActivity")]
-    public static void Prefix(ActivityManager __instance, [HarmonyArgument(0)] Activity activity)
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(ActivityManager), nameof(ActivityManager.UpdateActivity))]
+    public static void ActivityManagerUpdateActivityPrefix(ActivityManager __instance, [HarmonyArgument(0)] Activity activity)
     {
         activity.Details += " All Of Us: Launchpad";
         activity.State += " | dsc.gg/allofus";

@@ -7,7 +7,7 @@ namespace LaunchpadReloaded.Patches.Gamemodes;
 /// <summary>
 /// Allow Impostors to kill each other if can kill is enabled in gamemode or friendly fire is toggled on
 /// </summary>
-[HarmonyPatch(typeof(ImpostorRole), "IsValidTarget")]
+[HarmonyPatch(typeof(ImpostorRole), nameof(ImpostorRole.IsValidTarget))]
 public static class ImpostorValidTargetPatch
 {
     public static bool Prefix(ImpostorRole __instance, [HarmonyArgument(0)] NetworkedPlayerInfo target, ref bool __result)

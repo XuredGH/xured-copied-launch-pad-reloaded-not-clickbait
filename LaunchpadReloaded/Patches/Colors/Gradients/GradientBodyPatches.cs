@@ -22,8 +22,11 @@ public static class HorsePatch
 {
     public static void Postfix(CosmeticsLayer __instance, PlayerBodyTypes bt)
     {
-        if (bt is not PlayerBodyTypes.Horse) return;
-        
+        if (bt is not PlayerBodyTypes.Horse)
+        {
+            return;
+        }
+
         __instance.currentBodySprite.BodySprite.material.SetFloat(ShaderID.Get("_GradientOffset"), 1.5f);
     }
 }

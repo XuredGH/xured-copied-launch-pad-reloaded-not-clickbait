@@ -10,15 +10,25 @@ namespace LaunchpadReloaded.Components;
 // this exists for performance purposes.
 // it is a lot quicker to loop over the AllBodies list than to do an Object.FindObjectsOfType every frame (or fixed update)
 [RegisterInIl2Cpp]
-public class DeadBodyComponent(IntPtr ptr) : MonoBehaviour(ptr)
+public class DeadBodyCacheComponent(IntPtr ptr) : MonoBehaviour(ptr)
 {
-    public static readonly List<DeadBodyComponent> AllBodies = [];
+    public static readonly List<DeadBodyCacheComponent> AllBodies = [];
 
     public DeadBody body;
 
     public bool hidden;
+    
+    public void SetVisibility(bool visible)
+    {
+        hidden = !visible;
+        body.enabled = visible;
+        foreach (var spriteRenderer in body.bodyRenderers)
+        {
+            spriteRenderer.enabled = visible;
+        }
+    }
 
-    private void Awake()
+private void Awake()
     {
         if (!TryGetComponent(out body))
         {

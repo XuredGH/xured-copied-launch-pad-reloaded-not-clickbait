@@ -4,7 +4,6 @@ using System.Reflection;
 using System.Collections.Generic;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Options;
 using MiraAPI.GameOptions;
@@ -19,7 +18,6 @@ namespace LaunchpadReloaded.Utilities;
 public static class Extensions
 {
     private static readonly ContactFilter2D Filter = ContactFilter2D.CreateLegacyFilter(Constants.NotShipMask, float.MinValue, float.MaxValue);
-
     
     public static void SetBodyType(this PlayerControl player, int bodyType)
     {
@@ -116,19 +114,9 @@ public static class Extensions
         return (playerControl.moveable || playerControl.petting) && playerControl is { inVent: false, shapeshifting: false } && (!DestroyableSingleton<HudManager>.InstanceExists || !DestroyableSingleton<HudManager>.Instance.IsIntroDisplayed) && !MeetingHud.Instance && !PlayerCustomizationMenu.Instance && !ExileController.Instance && !IntroCutscene.Instance;
     }
 
-    public static bool IsHacked(this NetworkedPlayerInfo playerInfo)
-    {
-        if (!HackingManager.Instance)
-        {
-            return false;
-        }
-
-        return HackingManager.Instance.hackedPlayers.Contains(playerInfo.PlayerId) || (playerInfo.Role.IsImpostor && HackingManager.Instance.AnyPlayerHacked());
-    }
-
     public static void Revive(this DeadBody body)
     {
-        var player = PlayerControl.AllPlayerControls.ToArray().ToList().Find(player => player.PlayerId == body.ParentId);
+        var player = PlayerControl.AllPlayerControls.ToArray().FirstOrDefault(player => player.PlayerId == body.ParentId);
         if (player == null)
         {
             return;
@@ -141,24 +129,14 @@ public static class Extensions
     
     public static void HideBody(this DeadBody body)
     {
+        body.GetComponent<DeadBodyCacheComponent>().SetVisibility(false);
         body.Reported = true;
-        body.enabled = false;
-        foreach (var spriteRenderer in body.bodyRenderers)
-        {
-            spriteRenderer.enabled = false;
-        }
-        body.GetComponent<DeadBodyComponent>().hidden = true;
     }
 
     public static void ShowBody(this DeadBody body, bool reported)
     {
+        body.GetComponent<DeadBodyCacheComponent>().SetVisibility(true);
         body.Reported = reported;
-        body.enabled = true;
-        foreach (var spriteRenderer in body.bodyRenderers)
-        {
-            spriteRenderer.enabled = true;
-        }
-        body.GetComponent<DeadBodyComponent>().hidden = false;
     }
     
     public static bool IsOverride(this MethodInfo methodInfo)

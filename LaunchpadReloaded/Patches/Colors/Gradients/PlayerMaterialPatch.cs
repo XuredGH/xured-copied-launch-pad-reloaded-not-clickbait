@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace LaunchpadReloaded.Patches.Colors.Gradients;
 
-[HarmonyPatch(typeof(PlayerMaterial), "SetColors", typeof(int), typeof(Renderer))]
+[HarmonyPatch(typeof(PlayerMaterial), nameof(PlayerMaterial.SetColors), typeof(int), typeof(Renderer))]
 public static class PlayerMaterialPatch
 {
     public static void Postfix([HarmonyArgument(0)] int colorId, [HarmonyArgument(1)] Renderer renderer)

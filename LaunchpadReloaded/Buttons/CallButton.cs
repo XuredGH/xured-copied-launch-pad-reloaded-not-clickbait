@@ -1,7 +1,7 @@
 ﻿using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Roles;
+using LaunchpadReloaded.Utilities;
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Utilities.Assets;
@@ -24,9 +24,9 @@ public class CallButton : BaseLaunchpadButton
     {
         return role is CaptainRole;
     }
-    public override bool CanUse() => base.CanUse() && !ZoomButton.IsZoom && !HackingManager.Instance.AnyPlayerHacked();
+    public override bool CanUse() => base.CanUse() && !ZoomButton.IsZoom && !HackerUtilities.AnyPlayerHacked();
 
-    protected override void ClickHandler()
+    public override void ClickHandler()
     {
         if (!CanUse())
         {

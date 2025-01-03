@@ -9,7 +9,7 @@ namespace LaunchpadReloaded.Patches.Generic;
 /// <summary>
 /// Cancel clicking of any action buttons in Among Us (if should cancel click)
 /// </summary>
-[HarmonyPatch]
+//[HarmonyPatch] Disabled temporarily for testing mira events
 public class ButtonPatches
 {
     public static IEnumerable<MethodBase> TargetMethods()

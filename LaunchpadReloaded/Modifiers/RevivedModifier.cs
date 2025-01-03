@@ -1,5 +1,8 @@
-﻿using AmongUs.GameOptions;
+﻿using Il2CppSystem;
+using AmongUs.GameOptions;
+using LaunchpadReloaded.Features;
 using MiraAPI.Modifiers;
+using UnityEngine;
 
 namespace LaunchpadReloaded.Modifiers;
 
@@ -24,5 +27,10 @@ public class RevivedModifier : BaseModifier
             HudManager.Instance.UseButton.gameObject.SetActive(true);
             Player.myTasks.RemoveAt(0);
         }
+    }
+
+    public override void FixedUpdate()
+    {            
+        Player.cosmetics.SetOutline(true, new Nullable<Color>(LaunchpadPalette.MedicColor));
     }
 }

@@ -52,7 +52,11 @@ public class JesterRole(System.IntPtr ptr) : RoleBehaviour(ptr), ICustomRole
 
     public override void SpawnTaskHeader(PlayerControl playerControl)
     {
-        if (playerControl != PlayerControl.LocalPlayer) return;
+        if (playerControl != PlayerControl.LocalPlayer)
+        {
+            return;
+        }
+
         var orCreateTask = PlayerTask.GetOrCreateTask<ImportantTextTask>(playerControl);
         orCreateTask.Text = string.Concat([
             LaunchpadPalette.JesterColor.ToTextColor(),

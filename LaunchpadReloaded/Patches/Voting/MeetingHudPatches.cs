@@ -76,14 +76,19 @@ public static class MeetingHudPatches
         }
         else if (_confirmVotes != null && !VotingTypesManager.CanVoteMultiple() &&
                  !OptionGroupSingleton<VotingOptions>.Instance.AllowConfirmingVotes.Value)
+        {
             _confirmVotes.gameObject.Destroy();
+        }
     }
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(MeetingHud.Update))]
     public static void UpdatePatch(MeetingHud __instance)
     {
-        if (!_typeText) return;
+        if (!_typeText)
+        {
+            return;
+        }
 
         var tmp = _typeText.GetComponent<TextMeshPro>();
         var voteData = PlayerControl.LocalPlayer.GetModifier<VoteData>();
@@ -113,7 +118,11 @@ public static class MeetingHudPatches
 
         if (PlayerControl.LocalPlayer.Data.IsDead)
         {
-            if (_confirmVotes) _confirmVotes.SetDisabled();
+            if (_confirmVotes)
+            {
+                _confirmVotes.SetDisabled();
+            }
+
             _typeText.gameObject.SetActive(false);
             if (__instance.state != MeetingHud.VoteStates.Results)
             {
@@ -135,25 +144,39 @@ public static class MeetingHudPatches
                 if (PlayerControl.LocalPlayer.GetModifier<VoteData>().VotesRemaining == 0)
                 {
                     _typeText.gameObject.SetActive(false);
-                    if (_confirmVotes) _confirmVotes.SetDisabled();
+                    if (_confirmVotes)
+                    {
+                        _confirmVotes.SetDisabled();
+                    }
                 }
                 else
                 {
                     _typeText.gameObject.SetActive(true);
-                    if (_confirmVotes) _confirmVotes.SetEnabled();
+                    if (_confirmVotes)
+                    {
+                        _confirmVotes.SetEnabled();
+                    }
                 }
 
                 break;
 
             case MeetingHud.VoteStates.Results:
-                if (_confirmVotes) _confirmVotes.SetDisabled();
+                if (_confirmVotes)
+                {
+                    _confirmVotes.SetDisabled();
+                }
+
                 _typeText.gameObject.SetActive(false);
                 foreach (var voteArea in __instance.playerStates.Where(state => !state.resultsShowing))
                     voteArea.ClearForResults();
                 break;
 
             default:
-                if (_confirmVotes) _confirmVotes.SetDisabled();
+                if (_confirmVotes)
+                {
+                    _confirmVotes.SetDisabled();
+                }
+
                 _typeText.gameObject.SetActive(false);
                 break;
         }
@@ -210,7 +233,9 @@ public static class MeetingHudPatches
     public static bool HandleDisconnect(MeetingHud __instance, [HarmonyArgument(0)] PlayerControl pc)
     {
         if (!AmongUsClient.Instance.AmHost || __instance.playerStates is null || !pc || !GameData.Instance)
+        {
             return false;
+        }
 
         var playerVoteArea = __instance.playerStates.First(pv => pv.TargetPlayerId == pc.PlayerId);
         playerVoteArea.AmDead = true;

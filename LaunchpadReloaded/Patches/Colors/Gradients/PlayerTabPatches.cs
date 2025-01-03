@@ -30,7 +30,7 @@ public static class PlayerTabPatches
 
 
     [HarmonyPostfix]
-    [HarmonyPatch("OnEnable")]
+    [HarmonyPatch(nameof(PlayerTab.OnEnable))]
     public static void OnEnablePostfix(PlayerTab __instance)
     {
         if (!_switchButton)

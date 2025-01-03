@@ -1,7 +1,5 @@
 using HarmonyLib;
-using Il2CppSystem;
 using LaunchpadReloaded.Components;
-using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Networking.Color;
@@ -45,24 +43,6 @@ public static class PlayerControlPatches
         
         Rpc<CustomCmdCheckColor>.Instance.SendTo(AmongUsClient.Instance.HostId, new CustomColorData(bodyColor, (byte)GradientManager.LocalGradientId));
         return false;
-    }
-
-    /// <summary>
-    /// Player control update
-    /// </summary>
-    [HarmonyPostfix]
-    [HarmonyPatch(nameof(PlayerControl.FixedUpdate))]
-    public static void UpdatePatch(PlayerControl __instance)
-    {
-        if (MeetingHud.Instance || __instance.Data is null)
-        {
-            return;
-        }
-
-        if (__instance.HasModifier<RevivedModifier>())
-        {
-            __instance.cosmetics.SetOutline(true, new Nullable<Color>(LaunchpadPalette.MedicColor));
-        }
     }
 
     /// <summary>

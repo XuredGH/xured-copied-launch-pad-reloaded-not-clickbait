@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Utilities;
@@ -11,12 +12,24 @@ namespace LaunchpadReloaded.Components;
 [RegisterInIl2Cpp(typeof(IUsable))]
 public class HackNodeComponent(IntPtr ptr) : MonoBehaviour(ptr)
 {
+    public static List<HackNodeComponent> AllNodes = [];
+
     public bool isActive;
     public int id;
     public SpriteRenderer image;
     public ImageNames UseIcon => ImageNames.UseButton;
     public float UsableDistance => 0.8f;
     public float PercentCool => 0;
+
+    public void Awake()
+    {
+        AllNodes.Add(this);
+    }
+
+    public void OnDestroy()
+    {
+        AllNodes.Remove(this);
+    }
 
     public void SetOutline(bool on, bool mainTarget)
     {
