@@ -11,7 +11,10 @@ public static class DummyBehaviourPatches
     [HarmonyPatch(nameof(DummyBehaviour.Update))]
     public static void DummyUpdatePatch(DummyBehaviour __instance)
     {
-        __instance.voted = __instance.myPlayer.GetModifier<VoteData>().VotesRemaining == 0;
+        if (MeetingHud.Instance)
+        {
+            __instance.voted = __instance.myPlayer.GetModifier<VoteData>().VotesRemaining == 0;
+        }
     }
 
     [HarmonyPostfix]
