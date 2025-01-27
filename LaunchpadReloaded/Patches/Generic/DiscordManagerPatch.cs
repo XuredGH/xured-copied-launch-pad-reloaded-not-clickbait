@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !ANDROID
+using System;
 using Discord;
 using HarmonyLib;
 using UnityEngine.SceneManagement;
@@ -35,3 +36,4 @@ public static class DiscordManagerPatch
         activity.State += " | dsc.gg/allofus";
     }
 }
+#endif

@@ -6,6 +6,10 @@ namespace LaunchpadReloaded.Buttons;
 
 public abstract class BaseLaunchpadButton : CustomActionButton
 {
+    #if ANDROID
+    public override ButtonLocation Location => ButtonLocation.BottomRight;
+    #endif
+
     public abstract bool TimerAffectedByPlayer { get; }
 
     public abstract bool AffectedByHack { get; }
@@ -20,6 +24,10 @@ public abstract class BaseLaunchpadButton : CustomActionButton
 
 public abstract class BaseLaunchpadButton<T> : CustomActionButton<T> where T : MonoBehaviour
 {
+    #if ANDROID
+    public override ButtonLocation Location => ButtonLocation.BottomRight;
+    #endif
+    
     public abstract bool TimerAffectedByPlayer { get; }
 
     public abstract bool AffectedByHack { get; }
