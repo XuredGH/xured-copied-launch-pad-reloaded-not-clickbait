@@ -32,6 +32,7 @@
     <ItemGroup>
         <EmbeddedResource Condition="$(Platform)=='AnyCPU'" Include="Resources/assets-win-x86.bundle" />
         <EmbeddedResource Condition="$(Platform)=='Android'" Include="Resources/assets-android.bundle" />
+        <EmbeddedResource Include="Resources/Arrow.png" />
         <EmbeddedResource Include="Resources/Footstep.png" />
         <EmbeddedResource Include="Resources/Instinct.png" />
         <EmbeddedResource Include="Resources/Investigate.png" />

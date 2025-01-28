@@ -4,6 +4,8 @@ using LaunchpadReloaded.Networking;
 using Reactor.Utilities.Attributes;
 using Reactor.Utilities.Extensions;
 using System.Linq;
+using LaunchpadReloaded.Modifiers;
+using MiraAPI.Utilities;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -115,7 +117,7 @@ public class NodeMinigame(nint ptr) : Minigame(ptr)
                 statusText.color = Color.green;
 
                 base.StartCoroutine(base.CoStartClose(1f));
-                PlayerControl.LocalPlayer.RpcToggleNode(node.id, false);
+                PlayerControl.LocalPlayer.RpcRemoveModifier<HackedModifier>();
 
                 return;
             }
