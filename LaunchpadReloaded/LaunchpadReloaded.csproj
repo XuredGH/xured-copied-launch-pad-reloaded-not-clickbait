@@ -10,8 +10,11 @@
         <Configurations>Debug;Release</Configurations>
         <Platforms>AnyCPU;Android</Platforms>
     </PropertyGroup>
-    <PropertyGroup Condition="$(Platform)=='Android'">
-        <DefineConstants>ANDROID;$(DefineConstants)</DefineConstants>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|Android' ">
+      <DefineConstants>TRACE;ANDROID</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Android' ">
+      <DefineConstants>TRACE;ANDROID</DefineConstants>
     </PropertyGroup>
     
     <ItemGroup>
@@ -27,11 +30,11 @@
     </ItemGroup>
     
     <ItemGroup>
-        <EmbeddedResource Include="Resources/assets-win-x86.bundle" />
-        <EmbeddedResource Include="Resources/assets-android.bundle" />
-      <EmbeddedResource Include="Resources/Footstep.png" />
-      <EmbeddedResource Include="Resources/Instinct.png" />
-      <EmbeddedResource Include="Resources/Investigate.png" />
+        <EmbeddedResource Condition="$(Platform)=='AnyCPU'" Include="Resources/assets-win-x86.bundle" />
+        <EmbeddedResource Condition="$(Platform)=='Android'" Include="Resources/assets-android.bundle" />
+        <EmbeddedResource Include="Resources/Footstep.png" />
+        <EmbeddedResource Include="Resources/Instinct.png" />
+        <EmbeddedResource Include="Resources/Investigate.png" />
     </ItemGroup>
     
 

@@ -1,5 +1,4 @@
-﻿#if !ANDROID
-using System;
+﻿using System;
 using Discord;
 using HarmonyLib;
 using UnityEngine.SceneManagement;
@@ -16,8 +15,14 @@ public static class DiscordManagerPatch
     [HarmonyPatch(typeof(DiscordManager), nameof(DiscordManager.Start))]
     public static bool DiscordManagerStartPrefix(DiscordManager __instance)
     {
+        DiscordManager.ClientId = 1217217004474339418;
+#if ANDROID
+        return true;
+#else
+
         __instance.presence = new Discord.Discord(1217217004474339418, 1UL);
         var activityManager = __instance.presence.GetActivityManager();
+
         activityManager.RegisterSteam(945360U);
         activityManager.add_OnActivityJoin((Action<string>)__instance.HandleJoinRequest);
         SceneManager.add_sceneLoaded((Action<Scene, LoadSceneMode>)((scene, _)=>
@@ -26,6 +31,7 @@ public static class DiscordManagerPatch
         }));
         __instance.SetInMenus();
         return false;
+#endif
     }
 
     [HarmonyPrefix]
@@ -36,4 +42,3 @@ public static class DiscordManagerPatch
         activity.State += " | dsc.gg/allofus";
     }
 }
-#endif
