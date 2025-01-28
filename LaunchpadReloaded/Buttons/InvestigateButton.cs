@@ -35,14 +35,14 @@ public class InvestigateButton : BaseLaunchpadButton<DeadBody>
     {
         return target != null && !target.Reported;
     }
-    
+
     public override void SetOutline(bool active)
     {
         if (Target == null)
         {
             return;
         }
-        
+
         foreach (var renderer in Target.bodyRenderers)
         {
             renderer.SetOutline(active ? PlayerControl.LocalPlayer.Data.Role.NameColor : null);
@@ -55,9 +55,9 @@ public class InvestigateButton : BaseLaunchpadButton<DeadBody>
         {
             return;
         }
-        
+
         var gameObject = Object.Instantiate(LaunchpadAssets.DetectiveGame.LoadAsset(), HudManager.Instance.transform);
-        var minigame = gameObject.GetComponent<JournalMinigame>();
+        var minigame = gameObject.AddComponent<JournalMinigame>();
         minigame.Open(GameData.Instance.GetPlayerById(Target.ParentId).Object);
     }
 }

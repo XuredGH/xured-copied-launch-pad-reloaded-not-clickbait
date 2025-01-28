@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Cpp2IL.Core.Extensions;
+﻿using Cpp2IL.Core.Extensions;
 using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Options.Roles;
 using MiraAPI.GameOptions;
 using MiraAPI.Utilities;
 using Reactor.Utilities.Attributes;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -30,9 +30,9 @@ public class JournalMinigame(nint ptr) : Minigame(ptr)
         deadPlayerInfo = transform.FindChild("BodyInfo/DeadPlayerInfo").GetComponent<TextMeshPro>();
         deadBodyIcon = transform.FindChild("BodyInfo/Icon").GetComponent<SpriteRenderer>();
 
-        closeButton.OnClick.AddListener((UnityAction)(()=>Close()));
-        
-        outsideButton.OnClick.AddListener((UnityAction)(()=>Close()));
+        closeButton.OnClick.AddListener((UnityAction)(() => Close()));
+
+        outsideButton.OnClick.AddListener((UnityAction)(() => Close()));
 
         suspects = gameObject.transform.FindChild("Suspects").GetComponentsInChildren<SpriteRenderer>().ToList();
     }
@@ -40,8 +40,13 @@ public class JournalMinigame(nint ptr) : Minigame(ptr)
     public void Open(PlayerControl deadPlayer)
     {
         var deathData = deadPlayer.GetModifier<DeathData>();
-        // init body
-        var timeSinceDeath = DateTime.Now.Subtract(deathData.DeathTime);
+
+        if (deathData == null)
+        {
+            return;
+        }
+
+        var timeSinceDeath = DateTime.UtcNow.Subtract(deathData.DeathTime);
         deadPlayerInfo.text = timeSinceDeath.Minutes < 1 ? $"{deadPlayer.Data.PlayerName}\n<size=70%>Died {timeSinceDeath.Seconds} seconds ago</size>" :
             $"{deadPlayer.Data.PlayerName}\n<size=70%>Died {timeSinceDeath.Minutes} minutes ago</size>";
 
