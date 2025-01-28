@@ -1,63 +1,57 @@
-﻿using LaunchpadReloaded.API.Hud;
+﻿using Il2CppSystem;
 using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Roles;
-using LaunchpadReloaded.Utilities;
+using MiraAPI.GameOptions;
+using MiraAPI.Hud;
+using MiraAPI.Networking;
+using MiraAPI.Utilities;
+using MiraAPI.Utilities.Assets;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
-public class ShootButton : CustomActionButton
+
+[RegisterButton]
+public class ShootButton : BaseLaunchpadButton<PlayerControl>
 {
     public override string Name => "Shoot";
-    public override float Cooldown => SheriffRole.ShootCooldown.Value;
+    public override float Cooldown => OptionGroupSingleton<SheriffOptions>.Instance.ShotCooldown;
     public override float EffectDuration => 0;
-    public override int MaxUses => (int)SheriffRole.Shots.Value;
+    public override int MaxUses => (int)OptionGroupSingleton<SheriffOptions>.Instance.ShotsPerGame;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.ShootButton;
+    public override bool TimerAffectedByPlayer => true;
+    public override bool AffectedByHack => true;
     
-    private PlayerControl _currentTarget;
+    public override bool Enabled(RoleBehaviour? role) => role is SheriffRole;
 
-    public override bool Enabled(RoleBehaviour role) => role is SheriffRole;
-
-    protected override void FixedUpdate(PlayerControl playerControl)
+    public override PlayerControl? GetTarget()
     {
-        base.FixedUpdate(playerControl);
-
-        if (_currentTarget)
-        {
-            _currentTarget.cosmetics.currentBodySprite.BodySprite.material.SetColor(ShaderID.OutlineColor, Color.clear);
-            _currentTarget.cosmetics.currentBodySprite.BodySprite.material.SetFloat(ShaderID.Outline, 0);
-            _currentTarget = null;
-        }
-
-        if (UsesLeft <= 0)
-        {
-            return;
-        }
-        
-        _currentTarget = playerControl.GetClosestPlayer(true, GameManager.Instance.LogicOptions.GetKillDistance());
-
-        if (!_currentTarget)
-        {
-            return;
-        }
-        
-        _currentTarget.cosmetics.currentBodySprite.BodySprite.material.SetFloat(ShaderID.Outline, 1);
-        _currentTarget.cosmetics.currentBodySprite.BodySprite.material.SetColor(ShaderID.OutlineColor, LaunchpadPalette.SheriffColor);
+        return PlayerControl.LocalPlayer.GetClosestPlayer(true,
+            GameOptionsManager.Instance.normalGameHostOptions.KillDistance);
     }
 
-    public override bool CanUse() => _currentTarget;
+    public override void SetOutline(bool active)
+    {
+        Target?.cosmetics.SetOutline(active, new Nullable<Color>(LaunchpadPalette.SheriffColor));
+    }
 
     protected override void OnClick()
     {
-        if (_currentTarget.Data.Role.TeamType == RoleTeamTypes.Impostor || (SheriffRole.ShouldCrewmateDie.Value && _currentTarget.Data.Role.TeamType == RoleTeamTypes.Crewmate))
+        if (Target == null)
         {
-            PlayerControl.LocalPlayer.CmdCheckMurder(_currentTarget);
+            return;
         }
 
-        if (_currentTarget.Data.Role.TeamType == RoleTeamTypes.Crewmate && !TutorialManager.InstanceExists)
+        if (Target.Data.Role.TeamType == RoleTeamTypes.Impostor || (OptionGroupSingleton<SheriffOptions>.Instance.ShouldCrewmateDie && Target.Data.Role.TeamType == RoleTeamTypes.Crewmate))
         {
-            PlayerControl.LocalPlayer.CmdCheckMurder(PlayerControl.LocalPlayer);
+            PlayerControl.LocalPlayer.RpcCustomMurder(Target);
         }
 
-        _currentTarget = null;
+        if (Target.Data.Role.TeamType == RoleTeamTypes.Crewmate && !TutorialManager.InstanceExists)
+        {
+            PlayerControl.LocalPlayer.RpcCustomMurder(PlayerControl.LocalPlayer);
+        }
+
+        Target = null;
     }
 }

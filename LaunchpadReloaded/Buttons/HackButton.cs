@@ -1,26 +1,39 @@
-﻿using LaunchpadReloaded.API.Hud;
-using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Features.Managers;
-using LaunchpadReloaded.Networking;
+﻿using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Modifiers;
+using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Roles;
+using LaunchpadReloaded.Utilities;
+using MiraAPI.GameOptions;
+using MiraAPI.Hud;
+using MiraAPI.Utilities;
+using MiraAPI.Utilities.Assets;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
-public class HackButton : CustomActionButton
+
+[RegisterButton]
+public class HackButton : BaseLaunchpadButton
 {
     public override string Name => "HACK";
-    public override float Cooldown => (int)HackerRole.HackCooldown.Value;
+    public override float Cooldown => (int)OptionGroupSingleton<HackerOptions>.Instance.HackCooldown;
     public override float EffectDuration => 0;
-    public override int MaxUses => (int)HackerRole.HackUses.Value;
+    public override int MaxUses => (int)OptionGroupSingleton<HackerOptions>.Instance.HackUses;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.HackButton;
-    public override bool Enabled(RoleBehaviour role) => role is HackerRole;
-    public override bool CanUse() => !HackingManager.Instance.AnyNodesActive();
+    public override bool TimerAffectedByPlayer => true;
+    public override bool AffectedByHack => false;
+    public override bool Enabled(RoleBehaviour? role) => role is HackerRole;
+    public override bool CanUse() => base.CanUse() && !HackerUtilities.AnyPlayerHacked();
 
     protected override void OnClick()
     {
-        foreach (var node in HackingManager.Instance.nodes)
+        foreach (var player in PlayerControl.AllPlayerControls)
         {
-            PlayerControl.LocalPlayer.RpcToggleNode(node.id, true);
+            if (player.Data.IsDead || player.Data.Disconnected)
+            {
+                continue;
+            }
+
+            player.RpcAddModifier<HackedModifier>();
         }
 
         PlayerControl.LocalPlayer.RawSetColor(15);

@@ -4,6 +4,7 @@ using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using Reactor.Networking.Attributes;
 using UnityEngine;
+using Helpers = MiraAPI.Utilities.Helpers;
 
 namespace LaunchpadReloaded.Networking;
 
@@ -14,19 +15,19 @@ public static class DeadBodyRpc
     {
         if (pc.Data.Role is not JanitorRole)
         {
+            pc.KickForCheating();
             return;
         }
         
         var body = Helpers.GetBodyById(bodyId);
         var vent = ShipStatus.Instance.AllVents.First(v => v.Id == ventId);
 
-        if (!body || !vent)
+        if (body == null || vent == null)
         {
             return;
         }
 
-        var ventBody = vent.GetComponent<VentBodyComponent>();
-        if (!ventBody)
+        if (!vent.TryGetComponent<VentBodyComponent>(out var ventBody))
         {
             ventBody = vent.gameObject.AddComponent<VentBodyComponent>();
         }
@@ -37,29 +38,5 @@ public static class DeadBodyRpc
         var pos2 = vent.transform.position;
         transform.position = new Vector3(pos2.x, pos2.y, pos.z);
         ventBody.deadBody = body;
-    }
-    
-    [MethodRpc((uint)LaunchpadRpc.ExposeBody)]
-    public static void RpcExposeBody(this PlayerControl playerControl, int ventId)
-    {
-        if (!playerControl.Data.Role.CanVent)
-        {
-            return;
-        }
-        
-        var vent = ShipStatus.Instance.AllVents.First(v => v.Id == ventId);
-
-        if (!vent)
-        {
-            return;
-        }
-
-        var ventBody = vent.GetComponent<VentBodyComponent>();
-        if (!ventBody)
-        {
-            return;
-        }
-
-        ventBody.ExposeBody();
     }
 }

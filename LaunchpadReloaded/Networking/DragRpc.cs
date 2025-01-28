@@ -1,7 +1,8 @@
-﻿using LaunchpadReloaded.API.Hud;
-using LaunchpadReloaded.Buttons;
-using LaunchpadReloaded.Features.Managers;
+﻿using LaunchpadReloaded.Buttons;
+using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Roles;
+using MiraAPI.Hud;
+using MiraAPI.Utilities;
 using Reactor.Networking.Attributes;
 
 namespace LaunchpadReloaded.Networking;
@@ -11,13 +12,15 @@ public static class DragRpc
     [MethodRpc((uint)LaunchpadRpc.StartDrag)]
     public static void RpcStartDragging(this PlayerControl playerControl, byte bodyId)
     {
-        if (playerControl.Data.Role is not JanitorRole)
+        var role = playerControl.Data.Role;
+        if (role is not JanitorRole && role is not MedicRole)
         {
+            playerControl.KickForCheating();
             return;
         }
+
+        playerControl.GetModifierComponent()?.AddModifier(new DragBodyModifier(bodyId));
         
-        DragManager.Instance.DraggingPlayers.Add(playerControl.PlayerId, bodyId);
-        playerControl.MyPhysics.Speed = 1.5f;
         if (playerControl.AmOwner)
         {
             CustomButtonSingleton<DragButton>.Instance.SetDrop();
@@ -27,8 +30,8 @@ public static class DragRpc
     [MethodRpc((uint)LaunchpadRpc.StopDrag)]
     public static void RpcStopDragging(this PlayerControl playerControl)
     {
-        DragManager.Instance.DraggingPlayers.Remove(playerControl.PlayerId);
-        playerControl.MyPhysics.Speed = 2.5f;
+        playerControl.GetModifierComponent()?.RemoveModifier<DragBodyModifier>();
+
         if (playerControl.AmOwner)
         {
             CustomButtonSingleton<DragButton>.Instance.SetDrag();

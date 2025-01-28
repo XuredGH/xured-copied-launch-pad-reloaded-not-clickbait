@@ -5,8 +5,8 @@ using UnityEngine;
 
 namespace LaunchpadReloaded.Patches.Generic;
 
-[HarmonyPatch(typeof(FollowerCamera), "Update")]
-public static class FollowerCameraPatches
+[HarmonyPatch(typeof(FollowerCamera), nameof(FollowerCamera.Update))]
+public static class FollowerCameraUpdatePatch
 {
     public static void Postfix(FollowerCamera __instance)
     {

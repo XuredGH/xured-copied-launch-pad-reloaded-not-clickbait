@@ -1,7 +1,10 @@
-﻿using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Utilities;
-using Reactor.Utilities.Attributes;
 using System;
+using System.Collections.Generic;
+using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Modifiers;
+using LaunchpadReloaded.Utilities;
+using MiraAPI.Utilities;
+using Reactor.Utilities.Attributes;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Components;
@@ -9,12 +12,24 @@ namespace LaunchpadReloaded.Components;
 [RegisterInIl2Cpp(typeof(IUsable))]
 public class HackNodeComponent(IntPtr ptr) : MonoBehaviour(ptr)
 {
+    public static List<HackNodeComponent> AllNodes = [];
+
     public bool isActive;
     public int id;
     public SpriteRenderer image;
     public ImageNames UseIcon => ImageNames.UseButton;
     public float UsableDistance => 0.8f;
     public float PercentCool => 0;
+
+    public void Awake()
+    {
+        AllNodes.Add(this);
+    }
+
+    public void OnDestroy()
+    {
+        AllNodes.Remove(this);
+    }
 
     public void SetOutline(bool on, bool mainTarget)
     {
@@ -30,7 +45,7 @@ public class HackNodeComponent(IntPtr ptr) : MonoBehaviour(ptr)
         miniGame.Open(this);
     }
 
-    public float CanUse(GameData.PlayerInfo pc, out bool canUse, out bool couldUse)
+    public float CanUse(NetworkedPlayerInfo pc, out bool canUse, out bool couldUse)
     {
         var num = float.MaxValue;
         var @object = pc.Object;

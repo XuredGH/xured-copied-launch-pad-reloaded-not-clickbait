@@ -2,7 +2,7 @@
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
-using LaunchpadReloaded.Utilities;
+using MiraAPI.Utilities;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Patches.Colors.Gradients;
@@ -10,7 +10,7 @@ namespace LaunchpadReloaded.Patches.Colors.Gradients;
 [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.BloopAVoteIcon))]
 public static class PlayerVoteIconPatch
 {
-    public static bool Prefix(MeetingHud __instance, GameData.PlayerInfo voterPlayer, int index, Transform parent)
+    public static bool Prefix(MeetingHud __instance, NetworkedPlayerInfo voterPlayer, int index, Transform parent)
     {
         if (!GradientManager.TryGetColor(voterPlayer.PlayerId, out var gradient))
         {
@@ -33,8 +33,8 @@ public static class PlayerVoteIconPatch
             gradientComp.SetColor(voterPlayer.DefaultOutfit.ColorId, gradient);
         }
         
-        gradientComp.mat.SetFloat(ShaderID.GradientBlend, 10);
-        gradientComp.mat.SetFloat(ShaderID.GradientOffset, .5f);
+        gradientComp.mat.SetFloat(ShaderID.Get("GradientBlend"), 2);
+        gradientComp.mat.SetFloat(ShaderID.Get("GradientOffset"), .3f);
         
         spriteRenderer.transform.localScale = Vector3.zero;
         var component = parent.GetComponent<PlayerVoteArea>();

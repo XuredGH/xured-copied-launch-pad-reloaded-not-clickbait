@@ -8,7 +8,7 @@ namespace LaunchpadReloaded.Patches.Colors.Gradients;
 [HarmonyPatch(typeof(LogEntryBubble),nameof(LogEntryBubble.SetText))]
 public static class ColorblindMiraLogPatch
 {
-    public static void Postfix(LogEntryBubble __instance, [HarmonyArgument(1)] GameData.PlayerInfo playerData)
+    public static void Postfix(LogEntryBubble __instance, [HarmonyArgument(1)] NetworkedPlayerInfo playerData)
     {
         var colorId = playerData.DefaultOutfit.ColorId;
         if (!DataManager.Settings.Accessibility.ColorBlindMode)

@@ -6,7 +6,7 @@ namespace LaunchpadReloaded.Features;
 
 public class LaunchpadSettings
 {
-    public static LaunchpadSettings Instance { get; private set; }
+    public static LaunchpadSettings? Instance { get; private set; }
 
     public readonly CustomSetting LockedCamera;
     public readonly CustomSetting UniqueDummies;
@@ -34,7 +34,7 @@ public class LaunchpadSettings
                     }
 
                     dummy.myPlayer.SetName(val ? AccountManager.Instance.GetRandomName() :
-                        DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.Dummy, Array.Empty<Object>()) + " " + i.ToString(), true);
+                        DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.Dummy, Array.Empty<Object>()) + " " + i);
                 }
             }
         };

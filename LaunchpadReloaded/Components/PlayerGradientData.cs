@@ -12,7 +12,7 @@ public class PlayerGradientData(IntPtr ptr) : MonoBehaviour(ptr)
 {
     public byte playerId;
 
-    public PlayerControl player;
+    public PlayerControl? player;
     
     private int _gradientColor = Random.RandomRangeInt(0, Palette.PlayerColors.Length);
     private bool _gradientEnabled = true;
@@ -26,15 +26,19 @@ public class PlayerGradientData(IntPtr ptr) : MonoBehaviour(ptr)
                 return _gradientEnabled;
             }
 
-            if (GradientManager.TryGetEnabled(playerId, out var gradEnabled))
+
+            if (!GameData.Instance)
             {
-                return gradEnabled;
+                return _gradientEnabled;
+            }
+            
+            var data = GameData.Instance.GetPlayerById(playerId).Object.GetComponent<PlayerGradientData>();
+            if (data is not null)
+            {
+                return data.GradientEnabled;
             }
 
-            if (GameData.Instance)
-            {
-                Logger<LaunchpadReloadedPlugin>.Warning($"No gradient data found for id {playerId}, player: {(bool)player}!");
-            }
+            Logger<LaunchpadReloadedPlugin>.Warning($"No gradient data found for id {playerId}, player: {(bool)player}!");
             return _gradientEnabled;
         }
         set => _gradientEnabled = value;
@@ -49,16 +53,19 @@ public class PlayerGradientData(IntPtr ptr) : MonoBehaviour(ptr)
                 return _gradientColor;
             }
 
-            if (GradientManager.TryGetColor(playerId, out var color))
+            if (!GameData.Instance)
             {
-                return color;
-            }
-
-            if (GameData.Instance)
-            {
-                Logger<LaunchpadReloadedPlugin>.Error($"No gradient color found for id {playerId}, player: {(bool)player}!");
+                return _gradientColor;
             }
             
+            var data = GameData.Instance.GetPlayerById(playerId).Object.GetComponent<PlayerGradientData>();
+            if (data is not null)
+            {
+                return data.GradientColor;
+            }
+
+            Logger<LaunchpadReloadedPlugin>.Error($"No gradient color found for id {playerId}, player: {(bool)player}!");
+
             return _gradientColor;
         }
         set => _gradientColor = value;

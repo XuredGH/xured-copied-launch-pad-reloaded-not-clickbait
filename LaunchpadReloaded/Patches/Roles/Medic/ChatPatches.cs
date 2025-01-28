@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Utilities;
+using LaunchpadReloaded.Modifiers;
+using MiraAPI.Utilities;
 
 namespace LaunchpadReloaded.Patches.Roles.Medic;
 
@@ -10,10 +11,11 @@ namespace LaunchpadReloaded.Patches.Roles.Medic;
 [HarmonyPatch(typeof(ChatController))]
 public static class ChatPatches
 {
-    [HarmonyPostfix, HarmonyPatch("Update")]
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(ChatController.Update))]
     public static void UpdatePatch(ChatController __instance)
     {
-        if (!PlayerControl.LocalPlayer.IsRevived())
+        if (PlayerControl.LocalPlayer && PlayerControl.LocalPlayer.HasModifier<RevivedModifier>() == false)
         {
             return;
         }
@@ -34,12 +36,12 @@ public static class ChatPatches
     [HarmonyPrefix, HarmonyPatch(nameof(ChatController.SendChat))]
     public static bool SendChatPatch()
     {
-        return !PlayerControl.LocalPlayer.IsRevived();
+        return !PlayerControl.LocalPlayer.HasModifier<RevivedModifier>();
     }
     
     [HarmonyPrefix, HarmonyPatch(nameof(ChatController.AddChat))]
     public static bool AddChatPatch([HarmonyArgument(0)] PlayerControl player)
     {
-        return !player.IsRevived();
+        return !player.HasModifier<RevivedModifier>();
     }
 }

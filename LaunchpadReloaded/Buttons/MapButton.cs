@@ -1,16 +1,23 @@
-﻿using LaunchpadReloaded.API.Hud;
-using LaunchpadReloaded.Features;
+﻿using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Roles;
+using MiraAPI.GameOptions;
+using MiraAPI.Hud;
+using MiraAPI.Utilities.Assets;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
-public class MapButton : CustomActionButton
+
+[RegisterButton]
+public class MapButton : BaseLaunchpadButton
 {
     public override string Name => "Map";
-    public override float Cooldown => (int)HackerRole.MapCooldown.Value;
-    public override float EffectDuration => (int)HackerRole.MapDuration.Value;
+    public override float Cooldown => (int)OptionGroupSingleton<HackerOptions>.Instance.MapCooldown;
+    public override float EffectDuration => (int)OptionGroupSingleton<HackerOptions>.Instance.MapDuration;
     public override int MaxUses => 0;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.MapButton;
+    public override bool TimerAffectedByPlayer => true;
+    public override bool AffectedByHack => false;
 
     private readonly MapOptions _mapOptions = new()
     {
@@ -20,14 +27,14 @@ public class MapButton : CustomActionButton
         Mode = MapOptions.Modes.CountOverlay,
     };
     
-    public override bool Enabled(RoleBehaviour role) => role is HackerRole;
+    public override bool Enabled(RoleBehaviour? role) => role is HackerRole;
 
     protected override void OnClick()
     {
         HudManager.Instance.ToggleMapVisible(_mapOptions);
     }
 
-    protected override void OnEffectEnd()
+    public override void OnEffectEnd()
     {
         base.OnEffectEnd();
         if (MapBehaviour.Instance.IsOpen)

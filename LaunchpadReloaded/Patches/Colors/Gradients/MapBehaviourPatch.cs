@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Utilities;
+using MiraAPI.Utilities;
 
 namespace LaunchpadReloaded.Patches.Colors.Gradients;
 
@@ -16,8 +16,8 @@ public static class MapBehaviourPatch
 
         var mat = __instance.HerePoint.material;
         
-        mat.SetFloat(ShaderID.GradientBlend, 10);
-        mat.SetFloat(ShaderID.GradientOffset, .35f);
+        mat.SetFloat(ShaderID.Get("_GradientBlend"), 2);
+        mat.SetFloat(ShaderID.Get("_GradientOffset"), .3f);
         
     }
 }

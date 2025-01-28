@@ -1,54 +1,53 @@
-﻿using Cpp2IL.Core.Extensions;
-using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Roles;
-using Reactor.Utilities.Attributes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cpp2IL.Core.Extensions;
+using LaunchpadReloaded.Modifiers;
+using LaunchpadReloaded.Options.Roles;
+using MiraAPI.GameOptions;
+using MiraAPI.Utilities;
+using Reactor.Utilities.Attributes;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using Random = System.Random;
 
+namespace LaunchpadReloaded.Components;
+
 [RegisterInIl2Cpp]
 public class JournalMinigame(nint ptr) : Minigame(ptr)
 {
-    public TextMeshPro DeadPlayerInfo;
-    public PassiveButton CloseButton;
-    public PassiveButton OutsideButton;
-    public SpriteRenderer DeadBodyIcon;
-    public List<SpriteRenderer> Suspects;
+    public TextMeshPro deadPlayerInfo;
+    public PassiveButton closeButton;
+    public PassiveButton outsideButton;
+    public SpriteRenderer deadBodyIcon;
+    public List<SpriteRenderer> suspects;
 
     private void Awake()
     {
-        OutsideButton = transform.FindChild("Background/OutsideCloseButton").GetComponent<PassiveButton>();
-        CloseButton = transform.FindChild("CloseButton").GetComponent<PassiveButton>();
-        DeadPlayerInfo = transform.FindChild("BodyInfo/DeadPlayerInfo").GetComponent<TextMeshPro>();
-        DeadBodyIcon = transform.FindChild("BodyInfo/Icon").GetComponent<SpriteRenderer>();
+        outsideButton = transform.FindChild("Background/OutsideCloseButton").GetComponent<PassiveButton>();
+        closeButton = transform.FindChild("CloseButton").GetComponent<PassiveButton>();
+        deadPlayerInfo = transform.FindChild("BodyInfo/DeadPlayerInfo").GetComponent<TextMeshPro>();
+        deadBodyIcon = transform.FindChild("BodyInfo/Icon").GetComponent<SpriteRenderer>();
 
-        CloseButton.OnClick.AddListener((UnityAction)(() =>
-        {
-            Close();
-        }));
+        closeButton.OnClick.AddListener((UnityAction)(()=>Close()));
+        
+        outsideButton.OnClick.AddListener((UnityAction)(()=>Close()));
 
-        OutsideButton.OnClick.AddListener((UnityAction)(() =>
-        {
-            Close();
-        }));
-
-        Suspects = gameObject.transform.FindChild("Suspects").GetComponentsInChildren<SpriteRenderer>().ToList();
+        suspects = gameObject.transform.FindChild("Suspects").GetComponentsInChildren<SpriteRenderer>().ToList();
     }
 
-    public void Open(LaunchpadPlayer deadPlayer)
+    public void Open(PlayerControl deadPlayer)
     {
+        var deathData = deadPlayer.GetModifier<DeathData>();
         // init body
-        TimeSpan timeSinceDeath = DateTime.Now.Subtract(deadPlayer.DeadData.DeathTime);
-        DeadPlayerInfo.text = timeSinceDeath.Minutes < 1 ? $"{deadPlayer.player.Data.PlayerName}\n<size=70%>Died {timeSinceDeath.Seconds} seconds ago</size>" :
-            $"{deadPlayer.player.Data.PlayerName}\n<size=70%>Died {timeSinceDeath.Minutes} minutes ago</size>";
+        var timeSinceDeath = DateTime.Now.Subtract(deathData.DeathTime);
+        deadPlayerInfo.text = timeSinceDeath.Minutes < 1 ? $"{deadPlayer.Data.PlayerName}\n<size=70%>Died {timeSinceDeath.Seconds} seconds ago</size>" :
+            $"{deadPlayer.Data.PlayerName}\n<size=70%>Died {timeSinceDeath.Minutes} minutes ago</size>";
 
-        deadPlayer.player.SetPlayerMaterialColors(DeadBodyIcon);
+        deadPlayer.SetPlayerMaterialColors(deadBodyIcon);
 
-        if (LaunchpadPlayer.GetAllAlivePlayers().Count() < 4 || DetectiveRole.HideSuspects.Value)
+        if (GameManager.Instance.LogicFlow.GetPlayerCounts().Item1 < 4 || OptionGroupSingleton<DetectiveOptions>.Instance.HideSuspects)
         {
             gameObject.transform.FindChild("Suspects").gameObject.SetActive(false);
             gameObject.transform.FindChild("SuspectsText").gameObject.SetActive(false);
@@ -57,18 +56,18 @@ public class JournalMinigame(nint ptr) : Minigame(ptr)
             return;
         }
 
-        Random rand = new Random();
-        SpriteRenderer chosenRend = Suspects[rand.Next(Suspects.Count)];
-        deadPlayer.DeadData.Killer.SetPlayerMaterialColors(chosenRend);
+        var rand = new Random();
+        var chosenRend = suspects[rand.Next(suspects.Count)];
+        deathData.Killer.SetPlayerMaterialColors(chosenRend);
 
-        List<SpriteRenderer> availableSprites = Suspects;
+        var availableSprites = suspects;
         availableSprites.Remove(chosenRend);
 
-        List<PlayerControl> sus = deadPlayer.DeadData.Suspects.Clone();
+        var sus = deathData.Suspects.Clone();
 
-        foreach (SpriteRenderer rend in availableSprites)
+        foreach (var rend in availableSprites)
         {
-            PlayerControl randPlayer = sus[rand.Next(sus.Count)];
+            var randPlayer = sus[rand.Next(sus.Count)];
             randPlayer.SetPlayerMaterialColors(rend);
             sus.Remove(randPlayer);
         }

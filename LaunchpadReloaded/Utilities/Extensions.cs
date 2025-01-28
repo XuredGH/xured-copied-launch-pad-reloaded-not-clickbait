@@ -1,13 +1,15 @@
-using AmongUs.GameOptions;
-using LaunchpadReloaded.API.Roles;
-using LaunchpadReloaded.Components;
-using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Features.Managers;
-using Reactor.Utilities.Extensions;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Collections.Generic;
+using LaunchpadReloaded.Components;
+using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Modifiers;
+using LaunchpadReloaded.Options;
+using MiraAPI.GameOptions;
+using MiraAPI.Utilities;
+using PowerTools;
+using Reactor.Utilities.Extensions;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -16,7 +18,49 @@ namespace LaunchpadReloaded.Utilities;
 public static class Extensions
 {
     private static readonly ContactFilter2D Filter = ContactFilter2D.CreateLegacyFilter(Constants.NotShipMask, float.MinValue, float.MaxValue);
+    
+    public static void SetBodyType(this PlayerControl player, int bodyType)
+    {
+        if (bodyType == 6)
+        {
+            player.MyPhysics.SetBodyType(PlayerBodyTypes.Seeker);
+            if (!OptionGroupSingleton<BattleRoyaleOptions>.Instance.ShowKnife.Value)
+            {
+                return;
+            }
 
+            var seekerHand = player.transform.FindChild("BodyForms/Seeker/SeekerHand").gameObject;
+            var hand = Object.Instantiate(seekerHand).gameObject;
+            hand.transform.SetParent(seekerHand.transform.parent);
+            hand.transform.localScale = new Vector3(2, 2, 2);
+            hand.name = "KnifeHand";
+            hand.layer = LayerMask.NameToLayer("Players");
+
+            var transform = player.transform;
+
+            hand.transform.localPosition = transform.localPosition;
+            hand.transform.position = transform.position;
+
+            var nodeSync = hand.GetComponent<SpriteAnimNodeSync>();
+            nodeSync.flipOffset = new Vector3(-1.5f, 0.5f, 0);
+            nodeSync.normalOffset = new Vector3(1.5f, 0.5f, 0);
+
+            var rend = hand.GetComponent<SpriteRenderer>();
+            rend.sprite = LaunchpadAssets.KnifeHandSprite.LoadAsset();
+
+            hand.SetActive(true);
+            return;
+        }
+
+        player.MyPhysics.SetBodyType((PlayerBodyTypes)bodyType);
+        
+        if (bodyType == (int)PlayerBodyTypes.Normal)
+        {
+            player.cosmetics.currentBodySprite.BodySprite.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
+            player.cosmetics.SetNamePosition(new Vector3(0, 1, -.5f));
+        }
+    }
+    
     public static void SetGradientData(this GameObject gameObject, byte playerId)
     {
         var data = gameObject.GetComponent<PlayerGradientData>();
@@ -65,151 +109,38 @@ public static class Extensions
         return result;
     }
 
-    public static LaunchpadPlayer GetLpPlayer(this PlayerControl playerControl)
-    {
-        return playerControl.GetComponent<LaunchpadPlayer>();
-    }
-
     public static bool ButtonTimerEnabled(this PlayerControl playerControl)
     {
-        return (playerControl.moveable || playerControl.petting) && !playerControl.inVent && !playerControl.shapeshifting && (!DestroyableSingleton<HudManager>.InstanceExists || !DestroyableSingleton<HudManager>.Instance.IsIntroDisplayed) && !MeetingHud.Instance && !PlayerCustomizationMenu.Instance && !ExileController.Instance && !IntroCutscene.Instance;
-    }
-
-    public static bool IsHacked(this GameData.PlayerInfo playerInfo)
-    {
-        if (!HackingManager.Instance)
-        {
-            return false;
-        }
-
-        return HackingManager.Instance.AnyNodesActive() && !playerInfo.IsDead;
-    }
-
-    public static bool IsRevived(this PlayerControl player)
-    {
-        return RevivalManager.Instance is not null && RevivalManager.Instance.revivedPlayers.Contains(player.PlayerId);
+        return (playerControl.moveable || playerControl.petting) && playerControl is { inVent: false, shapeshifting: false } && (!DestroyableSingleton<HudManager>.InstanceExists || !DestroyableSingleton<HudManager>.Instance.IsIntroDisplayed) && !MeetingHud.Instance && !PlayerCustomizationMenu.Instance && !ExileController.Instance && !IntroCutscene.Instance;
     }
 
     public static void Revive(this DeadBody body)
     {
-        var player = PlayerControl.AllPlayerControls.ToArray().ToList().Find(player => player.PlayerId == body.ParentId);
-        player.NetTransform.SnapTo(body.transform.position);
-        player.Revive();
-
-        player.RemainingEmergencies = GameManager.Instance.LogicOptions.GetNumEmergencyMeetings();
-        RoleManager.Instance.SetRole(player, RoleTypes.Crewmate);
-        player.Data.Role.SpawnTaskHeader(player);
-        player.MyPhysics.SetBodyType(player.BodyType);
-
-        if (player.AmOwner)
+        var player = PlayerControl.AllPlayerControls.ToArray().FirstOrDefault(player => player.PlayerId == body.ParentId);
+        if (player == null)
         {
-            HudManager.Instance.MapButton.gameObject.SetActive(true);
-            HudManager.Instance.ReportButton.gameObject.SetActive(true);
-            HudManager.Instance.UseButton.gameObject.SetActive(true);
-            player.myTasks.RemoveAt(0);
+            return;
         }
 
+        player.NetTransform.SnapTo(body.transform.position);
         body.gameObject.Destroy();
-        RevivalManager.Instance.revivedPlayers.Add(player.PlayerId);
+        player.GetModifierComponent()!.AddModifier<RevivedModifier>();
     }
-
+    
     public static void HideBody(this DeadBody body)
     {
+        body.GetComponent<DeadBodyCacheComponent>().SetVisibility(false);
         body.Reported = true;
-        body.enabled = false;
-        foreach (var spriteRenderer in body.bodyRenderers)
-        {
-            spriteRenderer.enabled = false;
-        }
     }
 
     public static void ShowBody(this DeadBody body, bool reported)
     {
+        body.GetComponent<DeadBodyCacheComponent>().SetVisibility(true);
         body.Reported = reported;
-        body.enabled = true;
-        foreach (var spriteRenderer in body.bodyRenderers)
-        {
-            spriteRenderer.enabled = true;
-        }
     }
+    
     public static bool IsOverride(this MethodInfo methodInfo)
     {
         return methodInfo.GetBaseDefinition() != methodInfo;
-    }
-    public static void UpdateBodies(this PlayerControl playerControl, Color outlineColor, ref DeadBody target)
-    {
-        foreach (var body in Object.FindObjectsOfType<DeadBody>())
-        {
-            foreach (var bodyRenderer in body.bodyRenderers)
-            {
-                bodyRenderer.SetOutline(null);
-            }
-        }
-
-        if (playerControl.Data.Role is not ICustomRole { TargetsBodies: true })
-        {
-            return;
-        }
-
-        target = playerControl.NearestDeadBody();
-        if (!target)
-        {
-            return;
-        }
-
-        foreach (var renderer in target.bodyRenderers)
-        {
-            renderer.SetOutline(outlineColor);
-        }
-
-    }
-
-    public static DeadBody NearestDeadBody(this PlayerControl playerControl)
-    {
-        var results = new Il2CppSystem.Collections.Generic.List<Collider2D>();
-        Physics2D.OverlapCircle(playerControl.GetTruePosition(), playerControl.MaxReportDistance / 4f, Filter, results);
-        return results.ToArray()
-            .Where(collider2D => collider2D.CompareTag("DeadBody"))
-            .Select(collider2D => collider2D.GetComponent<DeadBody>())
-            .FirstOrDefault(component => component && !component.Reported);
-    }
-
-    public static PlayerControl GetClosestPlayer(this PlayerControl playerControl, bool includeImpostors, float distance)
-    {
-        PlayerControl result = null;
-        if (!ShipStatus.Instance)
-        {
-            return null;
-        }
-
-        var truePosition = playerControl.GetTruePosition();
-
-        foreach (var playerInfo in GameData.Instance.AllPlayers)
-        {
-            if (playerInfo.Disconnected || playerInfo.PlayerId == playerControl.PlayerId ||
-                playerInfo.IsDead || !includeImpostors && playerInfo.Role.IsImpostor)
-            {
-                continue;
-            }
-
-            var @object = playerInfo.Object;
-            if (!@object)
-            {
-                continue;
-            }
-
-            var vector = @object.GetTruePosition() - truePosition;
-            var magnitude = vector.magnitude;
-            if (!(magnitude <= distance) || PhysicsHelpers.AnyNonTriggersBetween(truePosition,
-                vector.normalized,
-                magnitude, LayerMask.GetMask("Ship", "Objects")))
-            {
-                continue;
-            }
-
-            result = @object;
-            distance = magnitude;
-        }
-        return result;
     }
 }

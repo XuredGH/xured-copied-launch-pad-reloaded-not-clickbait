@@ -1,11 +1,10 @@
-﻿using System.Globalization;
+﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
-using System.Text;
-using LaunchpadReloaded.API.Roles;
-using LaunchpadReloaded.Features.Managers;
+using LaunchpadReloaded.Modifiers;
+using MiraAPI.Utilities;
 using TMPro;
 using UnityEngine;
-using Object = UnityEngine.Object;
 using Random = System.Random;
 
 namespace LaunchpadReloaded.Utilities;
@@ -13,20 +12,20 @@ namespace LaunchpadReloaded.Utilities;
 public static class Helpers
 {
     public static readonly Random Random = new();
-    
+
+    public static List<PlayerControl> GetAlivePlayers()
+    {
+        return PlayerControl.AllPlayerControls.ToArray().Where(x => !x.Data.IsDead).ToList();
+    }
+
     public static bool ShouldCancelClick()
     {
-        return DragManager.Instance is not null && DragManager.Instance.IsDragging(PlayerControl.LocalPlayer.PlayerId);
+        return PlayerControl.LocalPlayer.HasModifier<DragBodyModifier>() || PlayerControl.LocalPlayer.HasModifier<HackedModifier>();
     }
     
     public static string FirstLetterToUpper(string str)
     {
         return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(str.ToLower());
-    }
-
-    public static DeadBody GetBodyById(byte id)
-    {
-        return Object.FindObjectsOfType<DeadBody>().FirstOrDefault(body => body.ParentId == id);
     }
 
     public static TextMeshPro CreateTextLabel(string name, Transform parent,
@@ -60,39 +59,5 @@ public static class Helpers
     {
         return new string(Enumerable.Repeat(chars, length)
             .Select(s => s[UnityEngine.Random.RandomRangeInt(0,s.Length)]).ToArray());
-    }
-
-    public static string GetSuffix(NumberSuffixes suffix)
-    {
-        return suffix switch
-        {
-            NumberSuffixes.None => string.Empty,
-            NumberSuffixes.Multiplier => "x",
-            NumberSuffixes.Seconds => "s",
-            _ => string.Empty
-        };
-    }
-
-    public static void SendNotification(string text, Color textColor, float duration = 2f, float fontSize = 3f)
-    {
-        var notifs = HudManager.Instance.Notifier.transform.parent.FindChild("LaunchpadNotifications").GetComponent<NotificationPopper>();
-        notifs.TextArea.text = text;
-        notifs.TextArea.fontSize = fontSize;
-        notifs.textColor = textColor;
-        notifs.alphaTimer = duration;
-    }
-
-    public static PlainShipRoom GetRoom(Vector3 pos)
-    {
-        return ShipStatus.Instance.AllRooms.ToList().Find(room => room.roomArea.OverlapPoint(pos));
-    }
-
-    public static StringBuilder CreateForRole(ICustomRole role)
-    {
-        var taskStringBuilder = new StringBuilder();
-        taskStringBuilder.AppendLine($"{role.RoleColor.ToTextColor()}You are a <b>{role.RoleName}.</b></color>");
-        taskStringBuilder.Append("<size=70%>");
-        taskStringBuilder.AppendLine($"{role.RoleLongDescription}");
-        return taskStringBuilder;
     }
 }

@@ -1,6 +1,6 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Utilities;
+using MiraAPI.Utilities;
 
 namespace LaunchpadReloaded.Patches.Colors.Gradients;
 
@@ -12,11 +12,14 @@ public static class HatManagerPatch
         var mat1 = __instance.PlayerMaterial = LaunchpadAssets.GradientMaterial.LoadAsset();
         var mat2 = __instance.MaskedPlayerMaterial = LaunchpadAssets.MaskedGradientMaterial.LoadAsset();
         
-        mat1.SetFloat(ShaderID.GradientAngle, 225);
-        mat2.SetFloat(ShaderID.GradientAngle, 225);
+        mat1.SetFloat(ShaderID.Get("_GradientBlend"), 1);
+        mat2.SetFloat(ShaderID.Get("_GradientBlend"), 1);
+
+        mat1.SetFloat(ShaderID.Get("_GradientAngle"), 225);
+        mat2.SetFloat(ShaderID.Get("_GradientAngle"), 225);
         
-        mat1.SetFloat(ShaderID.GradientOffset, .4f);
-        mat2.SetFloat(ShaderID.GradientOffset, .4f);
+        mat1.SetFloat(ShaderID.Get("_GradientOffset"), .4f);
+        mat2.SetFloat(ShaderID.Get("_GradientOffset"), .4f);
         
     }
 }

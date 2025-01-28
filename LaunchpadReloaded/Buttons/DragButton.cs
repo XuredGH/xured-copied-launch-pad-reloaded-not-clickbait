@@ -1,33 +1,67 @@
-﻿using LaunchpadReloaded.API.Hud;
-using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Features.Managers;
+﻿using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Networking;
+using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Roles;
+using MiraAPI.GameOptions;
+using MiraAPI.Hud;
+using MiraAPI.Utilities;
+using MiraAPI.Utilities.Assets;
+using Reactor.Utilities.Extensions;
 using UnityEngine;
+using Helpers = MiraAPI.Utilities.Helpers;
 
 namespace LaunchpadReloaded.Buttons;
 
-public class DragButton : CustomActionButton
+[RegisterButton]
+public class DragButton : BaseLaunchpadButton<DeadBody>
 {
     public override string Name => "DRAG";
     public override float Cooldown => 0;
     public override float EffectDuration => 0;
     public override int MaxUses => 0;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.DragButton;
-    
-    public override bool Enabled(RoleBehaviour role)
+    public override float Distance => PlayerControl.LocalPlayer.MaxReportDistance / 4f;
+    public override bool TimerAffectedByPlayer => true;
+    public override bool AffectedByHack => true;
+
+    public override bool Enabled(RoleBehaviour? role)
     {
-        return role is JanitorRole || (MedicRole.DragBodies.Value && role is MedicRole);
+        return role is JanitorRole || (OptionGroupSingleton<MedicOptions>.Instance.DragBodies && role is MedicRole);
+    }
+
+    public override DeadBody? GetTarget()
+    {
+        return PlayerControl.LocalPlayer.GetNearestObjectOfType<DeadBody>(Distance, Helpers.CreateFilter(Constants.NotShipMask), "DeadBody");
+    }
+
+    public override bool IsTargetValid(DeadBody? target)
+    {
+        return target != null && !target.Reported;
+    }
+    
+    public override void SetOutline(bool active)
+    {
+        if (Target == null)
+        {
+            return;
+        }
+        
+        foreach (var renderer in Target.bodyRenderers)
+        {
+            renderer.SetOutline(active ? PlayerControl.LocalPlayer.Data.Role.NameColor : null);
+        }
     }
 
     public override bool CanUse()
     {
-        return DeadBodyTarget && DragManager.Instance && PlayerControl.LocalPlayer.CanMove && !PlayerControl.LocalPlayer.inVent;
+        return base.CanUse() && PlayerControl.LocalPlayer.CanMove && !PlayerControl.LocalPlayer.inVent &&
+               (!PlayerControl.LocalPlayer.HasModifier<DragBodyModifier>()|| CanDrop());
     }
 
     protected override void FixedUpdate(PlayerControl playerControl)
     {
-        if (!DragManager.Instance || !DragManager.Instance.IsDragging(playerControl.PlayerId))
+        if (!playerControl.HasModifier<DragBodyModifier>())
         {
             return;
         }
@@ -54,28 +88,30 @@ public class DragButton : CustomActionButton
         OverrideSprite(LaunchpadAssets.DropButton.LoadAsset());
     }
 
-    public bool CanDrop()
+    private bool CanDrop()
     {
-        if (DeadBodyTarget || DragManager.Instance is null)
+        if (Target == null)
         {
             return false;
         }
 
-        return !PhysicsHelpers.AnythingBetween(PlayerControl.LocalPlayer.Collider, PlayerControl.LocalPlayer.Collider.bounds.center, DeadBodyTarget.TruePosition, Constants.ShipAndAllObjectsMask, false);
+        return !PhysicsHelpers.AnythingBetween(PlayerControl.LocalPlayer.Collider, PlayerControl.LocalPlayer.Collider.bounds.center, Target.TruePosition, Constants.ShipAndAllObjectsMask, false);
     }
 
     protected override void OnClick()
     {
-        if (DragManager.Instance.IsDragging(PlayerControl.LocalPlayer.PlayerId))
+        if (Target == null)
+        {
+            return;
+        }
+        
+        if (PlayerControl.LocalPlayer.HasModifier<DragBodyModifier>())
         {
             PlayerControl.LocalPlayer.RpcStopDragging();
         }
         else
         {
-            PlayerControl.LocalPlayer.RpcStartDragging(DeadBodyTarget.ParentId);
+            PlayerControl.LocalPlayer.RpcStartDragging(Target.ParentId);
         }
     }
-
-
-
 }

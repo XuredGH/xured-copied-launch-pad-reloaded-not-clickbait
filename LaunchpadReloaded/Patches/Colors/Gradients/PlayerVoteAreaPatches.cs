@@ -7,7 +7,7 @@ namespace LaunchpadReloaded.Patches.Colors.Gradients;
 public static class PlayerVoteAreaPatches
 {
     [HarmonyPrefix, HarmonyPatch(nameof(PlayerVoteArea.SetCosmetics))]
-    public static void SetCosmeticsPrefix(PlayerVoteArea __instance, [HarmonyArgument(0)] GameData.PlayerInfo playerInfo)
+    public static void SetCosmeticsPrefix(PlayerVoteArea __instance, [HarmonyArgument(0)] NetworkedPlayerInfo playerInfo)
     {
         __instance.PlayerIcon.gameObject.SetGradientData(playerInfo.PlayerId);
     }

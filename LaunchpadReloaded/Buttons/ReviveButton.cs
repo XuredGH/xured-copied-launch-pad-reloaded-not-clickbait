@@ -1,35 +1,70 @@
-﻿using LaunchpadReloaded.API.Hud;
-using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Features.Managers;
+﻿using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Networking;
+using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Roles;
+using MiraAPI.GameOptions;
+using MiraAPI.Hud;
+using MiraAPI.Utilities;
+using MiraAPI.Utilities.Assets;
+using Reactor.Utilities.Extensions;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
 
-public class ReviveButton : CustomActionButton
+[RegisterButton]
+public class ReviveButton : BaseLaunchpadButton<DeadBody>
 {
     public override string Name => "REVIVE";
     
-    public override float Cooldown => MedicRole.ReviveCooldown.Value;
+    public override float Cooldown => OptionGroupSingleton<MedicOptions>.Instance.ReviveCooldown;
     
     public override float EffectDuration => 0;
     
-    public override int MaxUses => (int)MedicRole.MaxRevives.Value;
+    public override int MaxUses => (int)OptionGroupSingleton<MedicOptions>.Instance.MaxRevives;
     
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.ReviveButton;
     
-    public override bool Enabled(RoleBehaviour role) => role is MedicRole;
+    public override float Distance => PlayerControl.LocalPlayer.MaxReportDistance / 4f;
+    public override bool TimerAffectedByPlayer => true;
+    public override bool AffectedByHack => true;
+    
+    public override bool Enabled(RoleBehaviour? role) => role is MedicRole;
 
-    public override bool CanUse()
+    public override void SetOutline(bool active)
     {
-        return RevivalManager.Instance && DeadBodyTarget && CanRevive() && !PlayerControl.LocalPlayer.Data.IsDead && PlayerControl.LocalPlayer.CanMove &&
-            !DragManager.Instance.DraggingPlayers.ContainsValue(DeadBodyTarget.ParentId);
+        if (Target == null)
+        {
+            return;
+        }
+        
+        foreach (var renderer in Target.bodyRenderers)
+        {
+            renderer.SetOutline(active ? LaunchpadPalette.MedicColor : null);
+        }
+    }
+    
+    public override DeadBody? GetTarget()
+    {
+        return PlayerControl.LocalPlayer.GetNearestObjectOfType<DeadBody>(Distance, Helpers.CreateFilter(Constants.NotShipMask), "DeadBody");
     }
 
-    public bool CanRevive()
+    public override bool IsTargetValid(DeadBody? target)
     {
-        if (!MedicRole.OnlyAllowInMedbay.Value)
+        return target != null && !target.Reported;
+    }
+    
+    public override bool CanUse()
+    {
+        return base.CanUse() && CanRevive() && Target && 
+               !PlayerControl.LocalPlayer.Data.IsDead &&
+               PlayerControl.LocalPlayer.CanMove &&
+               !PlayerControl.LocalPlayer.HasModifier<DragBodyModifier>();
+    }
+
+    private static bool CanRevive()
+    {
+        if (!OptionGroupSingleton<MedicOptions>.Instance.OnlyAllowInMedbay)
         {
             return true;
         }
@@ -56,7 +91,11 @@ public class ReviveButton : CustomActionButton
     
     protected override void OnClick()
     {
-        PlayerControl.LocalPlayer.RpcRevive(DeadBodyTarget.ParentId);
-        DeadBodyTarget = null;
+        if (Target == null)
+        {
+            return;
+        }
+        
+        PlayerControl.LocalPlayer.RpcRevive(Target.ParentId);
     }
 }

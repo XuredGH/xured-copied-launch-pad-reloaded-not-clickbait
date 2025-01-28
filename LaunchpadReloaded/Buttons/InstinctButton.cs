@@ -1,29 +1,38 @@
-﻿using LaunchpadReloaded.API.Hud;
-using LaunchpadReloaded.Features;
+﻿using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Modifiers;
+using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Roles;
+using MiraAPI.GameOptions;
+using MiraAPI.Hud;
+using MiraAPI.Utilities;
+using MiraAPI.Utilities.Assets;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
 
-public class InstinctButton : CustomActionButton
+[RegisterButton]
+public class InstinctButton : BaseLaunchpadButton
 {
     public override string Name => "INSTINCT";
-    public override float Cooldown => DetectiveRole.InstinctCooldown.Value;
-    public override float EffectDuration => DetectiveRole.InstinctDuration.Value;
-    public override int MaxUses => (int)DetectiveRole.InstinctUses.Value;
+    public override float Cooldown =>  OptionGroupSingleton<DetectiveOptions>.Instance.InstinctCooldown;
+    public override float EffectDuration => OptionGroupSingleton<DetectiveOptions>.Instance.InstinctDuration;
+    public override int MaxUses => (int)OptionGroupSingleton<DetectiveOptions>.Instance.InstinctUses;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.InstinctButton;
+    public override bool TimerAffectedByPlayer => true;
+    public override bool AffectedByHack => true;
 
-    public override bool Enabled(RoleBehaviour role)
+    public override bool Enabled(RoleBehaviour? role)
     {
         return role is DetectiveRole;
     }
 
-    protected override void OnEffectEnd()
+    public override void OnEffectEnd()
     {
-        LaunchpadPlayer.LocalPlayer.ShowFootsteps = false;
+        PlayerControl.LocalPlayer.GetModifierComponent()!.AddModifier<FootstepsModifier>();
     }
+
     protected override void OnClick()
     {
-        LaunchpadPlayer.LocalPlayer.ShowFootsteps = true;
+        PlayerControl.LocalPlayer.GetModifierComponent()!.RemoveModifier<FootstepsModifier>();
     }
 }

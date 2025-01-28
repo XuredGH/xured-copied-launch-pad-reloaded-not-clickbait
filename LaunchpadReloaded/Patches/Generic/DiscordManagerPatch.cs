@@ -11,11 +11,18 @@ namespace LaunchpadReloaded.Patches.Generic;
 [HarmonyPatch]
 public static class DiscordManagerPatch
 {
-    [HarmonyPrefix, HarmonyPatch(typeof(DiscordManager), "Start")]
-    public static bool StartPatch(DiscordManager __instance)
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(DiscordManager), nameof(DiscordManager.Start))]
+    public static bool DiscordManagerStartPrefix(DiscordManager __instance)
     {
+        DiscordManager.ClientId = 1217217004474339418;
+#if ANDROID
+        return true;
+#else
+
         __instance.presence = new Discord.Discord(1217217004474339418, 1UL);
         var activityManager = __instance.presence.GetActivityManager();
+
         activityManager.RegisterSteam(945360U);
         activityManager.add_OnActivityJoin((Action<string>)__instance.HandleJoinRequest);
         SceneManager.add_sceneLoaded((Action<Scene, LoadSceneMode>)((scene, _)=>
@@ -24,10 +31,12 @@ public static class DiscordManagerPatch
         }));
         __instance.SetInMenus();
         return false;
+#endif
     }
 
-    [HarmonyPrefix, HarmonyPatch(typeof(ActivityManager), "UpdateActivity")]
-    public static void Prefix(ActivityManager __instance, [HarmonyArgument(0)] Activity activity)
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(ActivityManager), nameof(ActivityManager.UpdateActivity))]
+    public static void ActivityManagerUpdateActivityPrefix(ActivityManager __instance, [HarmonyArgument(0)] Activity activity)
     {
         activity.Details += " All Of Us: Launchpad";
         activity.State += " | dsc.gg/allofus";

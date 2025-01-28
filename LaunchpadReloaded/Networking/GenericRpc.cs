@@ -1,10 +1,8 @@
-﻿using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Roles;
+﻿using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
-using PowerTools;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities;
-using UnityEngine;
+using Helpers = MiraAPI.Utilities.Helpers;
 
 namespace LaunchpadReloaded.Networking;
 public static class GenericRpc
@@ -15,10 +13,11 @@ public static class GenericRpc
         if (playerControl.Data.Role is not MedicRole)
         {
             playerControl.KickForCheating();
+            return;
         }
 
         var body = Helpers.GetBodyById(bodyId);
-        if (body)
+        if (body != null)
         {
             body.Revive();
         }
@@ -26,43 +25,5 @@ public static class GenericRpc
         {
             Logger<LaunchpadReloadedPlugin>.Warning($"Body for id {bodyId} not found");
         }
-    }
-
-
-    [MethodRpc((uint)LaunchpadRpc.SetBodyType)]
-    public static void RpcSetBodyType(this GameData gameData, PlayerControl player, int bodyType)
-    {
-        if (bodyType == 6)
-        {
-            player.MyPhysics.SetBodyType(PlayerBodyTypes.Seeker);
-            if (!LaunchpadGameOptions.Instance.ShowKnife.Value)
-            {
-                return;
-            }
-
-            var seekerHand = player.transform.FindChild("BodyForms/Seeker/SeekerHand").gameObject;
-            var hand = Object.Instantiate(seekerHand).gameObject;
-            hand.transform.SetParent(seekerHand.transform.parent);
-            hand.transform.localScale = new Vector3(2, 2, 2);
-            hand.name = "KnifeHand";
-            hand.layer = LayerMask.NameToLayer("Players");
-
-            var transform = player.transform;
-
-            hand.transform.localPosition = transform.localPosition;
-            hand.transform.position = transform.position;
-
-            var nodeSync = hand.GetComponent<SpriteAnimNodeSync>();
-            nodeSync.flipOffset = new Vector3(-1.5f, 0.5f, 0);
-            nodeSync.normalOffset = new Vector3(1.5f, 0.5f, 0);
-
-            var rend = hand.GetComponent<SpriteRenderer>();
-            rend.sprite = LaunchpadAssets.KnifeHandSprite.LoadAsset();
-
-            hand.SetActive(true);
-            return;
-        }
-
-        player.MyPhysics.SetBodyType((PlayerBodyTypes)bodyType);
     }
 }

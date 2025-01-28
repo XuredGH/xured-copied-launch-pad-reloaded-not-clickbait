@@ -2,8 +2,9 @@
 using HarmonyLib;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
-using LaunchpadReloaded.Networking;
-using LaunchpadReloaded.Utilities;
+using LaunchpadReloaded.Networking.Color;
+using LaunchpadReloaded.Options;
+using MiraAPI.GameOptions;
 using Reactor.Networking.Rpc;
 using Reactor.Utilities.Extensions;
 using TMPro;
@@ -17,9 +18,9 @@ namespace LaunchpadReloaded.Patches.Colors.Gradients;
 public static class PlayerTabPatches
 {
     public static bool SelectGradient;
-    private static ColorChip _switchButton;
-    private static TextMeshPro _buttonText;
-    private static TextMeshPro _titleText;
+    private static ColorChip? _switchButton;
+    private static TextMeshPro? _buttonText;
+    private static TextMeshPro? _titleText;
 
     private static void SwitchSelector(PlayerTab instance)
     {
@@ -29,7 +30,7 @@ public static class PlayerTabPatches
 
 
     [HarmonyPostfix]
-    [HarmonyPatch("OnEnable")]
+    [HarmonyPatch(nameof(PlayerTab.OnEnable))]
     public static void OnEnablePostfix(PlayerTab __instance)
     {
         if (!_switchButton)
@@ -79,8 +80,8 @@ public static class PlayerTabPatches
             __instance.PlayerPreview.UpdateFromDataManager(PlayerMaterial.MaskType.None);
             if (__instance.HasLocalPlayer())
             {
-                Rpc<CustomCheckColorRpc>.Instance.SendTo(AmongUsClient.Instance.HostId,
-                    new CustomCheckColorRpc.Data(
+                Rpc<CustomCmdCheckColor>.Instance.SendTo(AmongUsClient.Instance.HostId,
+                    new CustomColorData(
                         (byte)PlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId, 
                         (byte)__instance.currentColor));
             }
@@ -124,7 +125,7 @@ public static class PlayerTabPatches
     [HarmonyPatch(nameof(PlayerTab.Update))]
     public static void UpdatePostfix(PlayerTab __instance)
     {
-        if (_buttonText && _titleText)
+        if (_buttonText != null && _titleText != null)
         {
             _buttonText.text = SelectGradient ? "Main Color" : "Secondary\nColor";
             _titleText.text = SelectGradient ? "Secondary Color: " : "Main Color: ";
@@ -134,14 +135,6 @@ public static class PlayerTabPatches
         {
             __instance.currentColorIsEquipped = __instance.currentColor == GradientManager.LocalGradientId;
         }
-        
-        var mat = __instance.PlayerPreview.cosmetics.currentBodySprite.BodySprite.material;
-    
-        mat.SetFloat(ShaderID.GradientBlend, 2);
-        mat.SetFloat(ShaderID.GradientOffset, .4f);
-    
-
-
     }
 
     [HarmonyPrefix]
@@ -152,7 +145,7 @@ public static class PlayerTabPatches
         {
             __instance.AvailableColors.Add(i);
         }
-        if (!LaunchpadGameOptions.Instance.UniqueColors.Value)
+        if (!OptionGroupSingleton<FunOptions>.Instance.UniqueColors.Value)
         {
             return false;
         }
