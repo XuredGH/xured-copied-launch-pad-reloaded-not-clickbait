@@ -19,7 +19,7 @@ public static class NameTagPatch
             __result = otherPlayerRole.NameColor;
             return false;
         }
-        
+
         /*if (CustomGameModeManager.ActiveMode is BattleRoyale)
         {
             return true;
