@@ -33,13 +33,15 @@ public static class ChatPatches
         __instance.openKeyboardButton.gameObject.SetActive(false);
     }
     
-    [HarmonyPrefix, HarmonyPatch(nameof(ChatController.SendChat))]
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(ChatController.SendChat))]
     public static bool SendChatPatch()
     {
         return !PlayerControl.LocalPlayer.HasModifier<RevivedModifier>();
     }
     
-    [HarmonyPrefix, HarmonyPatch(nameof(ChatController.AddChat))]
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(ChatController.AddChat))]
     public static bool AddChatPatch([HarmonyArgument(0)] PlayerControl player)
     {
         return !player.HasModifier<RevivedModifier>();

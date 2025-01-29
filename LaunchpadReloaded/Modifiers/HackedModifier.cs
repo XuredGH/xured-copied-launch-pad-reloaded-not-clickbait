@@ -15,7 +15,11 @@ public class HackedModifier : BaseModifier
 {
     public override string ModifierName => "Hacked";
 
+    public override bool HideOnUi => true;
+
     public bool IsImpostor;
+
+    public bool DeActivating;
     
     public override void FixedUpdate()
     {
@@ -48,6 +52,7 @@ public class HackedModifier : BaseModifier
 
     public override void OnDeactivate()
     {
+        DeActivating = true;
         GradientManager.SetGradientEnabled(Player, true);
         Player.cosmetics.SetColor((byte)Player.Data.DefaultOutfit.ColorId);
         Player.cosmetics.gameObject.SetActive(true);
@@ -56,7 +61,7 @@ public class HackedModifier : BaseModifier
         // remove hacked modifier from impostors when all crewmates fix hack
         if (!Player.AmOwner && PlayerControl.LocalPlayer.Data.Role.IsImpostor)
         {
-            var shouldRemove = HackerUtilities.CountHackedPlayers(false) <= 1; // account for current player being unhacked
+            var shouldRemove = HackerUtilities.CountHackedPlayers(false) < 1;
             if (shouldRemove)
             {
                 MiraAPI.Utilities.Extensions.RpcRemoveModifier<HackedModifier>(PlayerControl.LocalPlayer);

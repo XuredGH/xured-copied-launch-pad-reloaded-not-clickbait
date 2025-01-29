@@ -20,7 +20,7 @@ public static class Helpers
 
     public static bool ShouldCancelClick()
     {
-        return PlayerControl.LocalPlayer.HasModifier<DragBodyModifier>() || PlayerControl.LocalPlayer.HasModifier<HackedModifier>();
+        return PlayerControl.LocalPlayer.HasModifier<DragBodyModifier>() || PlayerControl.LocalPlayer.GetModifier<HackedModifier>() is { DeActivating:false };
     }
     
     public static string FirstLetterToUpper(string str)

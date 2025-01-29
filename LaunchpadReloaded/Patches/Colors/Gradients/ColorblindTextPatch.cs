@@ -1,14 +1,14 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Utilities;
+using Reactor.Utilities;
 
 namespace LaunchpadReloaded.Patches.Colors.Gradients;
 
-[HarmonyPatch(typeof(CosmeticsLayer))]
-public static class ColorblindPatch
+[HarmonyPatch(typeof(CosmeticsLayer), nameof(CosmeticsLayer.GetColorBlindText))]
+public static class ColorblindTextPatch
 {
-    [HarmonyPrefix, HarmonyPatch(nameof(CosmeticsLayer.GetColorBlindText))]
-    public static bool GetColorBlindTextPrefix(CosmeticsLayer __instance, ref string __result)
+    public static bool Prefix(CosmeticsLayer __instance, ref string __result)
     {
         if (!__instance.TryGetComponent(out PlayerGradientData comp) &&
             !__instance.transform.parent.TryGetComponent(out comp))

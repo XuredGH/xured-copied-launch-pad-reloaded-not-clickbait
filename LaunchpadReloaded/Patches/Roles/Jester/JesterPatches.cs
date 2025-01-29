@@ -31,7 +31,8 @@ public static class JesterPatches
     /// <summary>
     /// If Jester gets voted out, end game
     /// </summary>
-    [HarmonyPrefix, HarmonyPatch(typeof(ExileController), nameof(ExileController.WrapUp))]
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(ExileController), nameof(ExileController.WrapUp))]
     public static bool WrapUp(ExileController __instance)
     {
         if (TutorialManager.InstanceExists)
