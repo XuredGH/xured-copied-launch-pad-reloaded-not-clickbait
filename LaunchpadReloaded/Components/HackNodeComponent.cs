@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Modifiers;
-using LaunchpadReloaded.Utilities;
 using MiraAPI.Utilities;
 using Reactor.Utilities.Attributes;
 using UnityEngine;
@@ -40,8 +38,8 @@ public class HackNodeComponent(IntPtr ptr) : MonoBehaviour(ptr)
 
     public void Use()
     {
-        GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(LaunchpadAssets.NodeGame.LoadAsset(), HudManager.Instance.transform);
-        NodeMinigame miniGame = gameObject.AddComponent<NodeMinigame>();
+        var nodeGame = Instantiate(LaunchpadAssets.NodeGame.LoadAsset(), HudManager.Instance.transform);
+        var miniGame = nodeGame.AddComponent<NodeMinigame>();
         miniGame.Open(this);
     }
 

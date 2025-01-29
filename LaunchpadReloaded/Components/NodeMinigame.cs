@@ -1,6 +1,5 @@
 ﻿using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Networking;
 using Reactor.Utilities.Attributes;
 using Reactor.Utilities.Extensions;
 using System.Linq;
@@ -14,8 +13,8 @@ using UnityEngine.Events;
 public class NodeMinigame(nint ptr) : Minigame(ptr)
 {
     public Collider2D[] Sliders;
-    private Controller myController = new Controller();
-    public FloatRange SliderX = new FloatRange(-0.65f, 1.85f);
+    private Controller myController = new();
+    public FloatRange SliderX = new(-0.65f, 1.85f);
     private int sliderId;
     public TextMeshPro statusText;
     public TextMeshPro nodeIdText;
@@ -56,25 +55,25 @@ public class NodeMinigame(nint ptr) : Minigame(ptr)
             Close();
         }));
 
-        for (int i = 0; i < this.Sliders.Length; i++)
+        for (int i = 0; i < Sliders.Length; i++)
         {
-            if (i != this.sliderId)
+            if (i != sliderId)
             {
-                this.Sliders[i].GetComponent<SpriteRenderer>().color = new Color(0, 0.5188679f, 0.1322604f);
+                Sliders[i].GetComponent<SpriteRenderer>().color = new Color(0, 0.5188679f, 0.1322604f);
             }
         }
     }
 
     private void FixedUpdate()
     {
-        this.myController.Update();
+        myController.Update();
 
         if (!node.isActive && amClosing == CloseState.None)
         {
             statusText.text = "enabled";
             statusText.color = Color.green;
 
-            base.StartCoroutine(base.CoStartClose(0.6f));
+            StartCoroutine(CoStartClose(0.6f));
             return;
         }
 
@@ -83,13 +82,13 @@ public class NodeMinigame(nint ptr) : Minigame(ptr)
 
         if (sliderId == Sliders.Count()) return;
 
-        Collider2D collider2D2 = this.Sliders[sliderId];
+        Collider2D collider2D2 = Sliders[sliderId];
         Vector2 vector2 = collider2D2.transform.localPosition;
-        DragState dragState = this.myController.CheckDrag(collider2D2);
+        DragState dragState = myController.CheckDrag(collider2D2);
         if (dragState == DragState.Dragging)
         {
             Vector2 vector3 = myController.DragPosition - (Vector2)collider2D2.transform.parent.position;
-            vector3.x = this.SliderX.Clamp(vector3.x);
+            vector3.x = SliderX.Clamp(vector3.x);
             vector2.x = vector3.x;
             collider2D2.transform.localPosition = vector2;
             return;
@@ -100,7 +99,7 @@ public class NodeMinigame(nint ptr) : Minigame(ptr)
             return;
         }
 
-        if (this.SliderX.max - vector2.x < 0.05f)
+        if (SliderX.max - vector2.x < 0.05f)
         {
             sliderId += 1;
             collider2D2.GetComponent<SpriteRenderer>().color = new Color(0, 0.5188679f, 0.1322604f);
@@ -116,10 +115,8 @@ public class NodeMinigame(nint ptr) : Minigame(ptr)
                 statusText.text = "enabled";
                 statusText.color = Color.green;
 
-                base.StartCoroutine(base.CoStartClose(1f));
+                StartCoroutine(CoStartClose(1f));
                 PlayerControl.LocalPlayer.RpcRemoveModifier<HackedModifier>();
-
-                return;
             }
         }
     }

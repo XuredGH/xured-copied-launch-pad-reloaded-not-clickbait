@@ -13,7 +13,7 @@ public static class DummyBehaviourPatches
     {
         if (MeetingHud.Instance)
         {
-            __instance.voted = __instance.myPlayer.GetModifier<VoteData>().VotesRemaining == 0;
+            __instance.voted = __instance.myPlayer.GetModifier<VoteData>()!.VotesRemaining == 0;
         }
     }
 
@@ -21,7 +21,7 @@ public static class DummyBehaviourPatches
     [HarmonyPatch(nameof(DummyBehaviour.Start))]
     public static void DummyStartPatch(DummyBehaviour __instance)
     {
-        if (LaunchpadSettings.Instance.UniqueDummies.Enabled)
+        if (LaunchpadSettings.Instance?.UniqueDummies.Enabled == true)
         {
             __instance.myPlayer.RpcSetName(AccountManager.Instance.GetRandomName());
         }

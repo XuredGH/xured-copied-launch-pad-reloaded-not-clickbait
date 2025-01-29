@@ -10,7 +10,7 @@ public static class FollowerCameraUpdatePatch
 {
     public static void Postfix(FollowerCamera __instance)
     {
-        if (__instance.Target && !__instance.Locked && LaunchpadSettings.Instance.LockedCamera.Enabled)
+        if (__instance.Target && !__instance.Locked && LaunchpadSettings.Instance?.LockedCamera.Enabled == true)
         {
             __instance.centerPosition = __instance.Target.transform.position + (Vector3) __instance.Offset;
             var v = __instance.centerPosition;

@@ -27,7 +27,10 @@ public class JesterRole(System.IntPtr ptr) : RoleBehaviour(ptr), ICustomRole
         Icon = LaunchpadAssets.JesterIcon,
     };
 
-    public override void AppendTaskHint(StringBuilder taskStringBuilder) { }
+    public override void AppendTaskHint(StringBuilder taskStringBuilder)
+    {
+        // remove default task hint
+    }
 
     public override bool DidWin(GameOverReason reason)
     {

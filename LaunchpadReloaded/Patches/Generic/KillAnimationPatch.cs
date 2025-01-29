@@ -1,10 +1,12 @@
-﻿using HarmonyLib;
-using LaunchpadReloaded.Networking;
+﻿using System;
+using HarmonyLib;
 using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Roles;
 using MiraAPI.GameOptions;
 using MiraAPI.Networking;
 using System.Linq;
+using LaunchpadReloaded.Modifiers;
+using MiraAPI.Utilities;
 
 namespace LaunchpadReloaded.Patches.Generic;
 
@@ -16,11 +18,10 @@ public static class KillAnimationPatch
         var suspects = PlayerControl.AllPlayerControls.ToArray()
             .Where(pc => pc != target && pc != source && !pc.Data.IsDead && pc.Data.Role is not DetectiveRole)
             .Take((int)OptionGroupSingleton<DetectiveOptions>.Instance.SuspectCount)
-            .Append(source)
-            .Select(pc => pc.PlayerId)
-            .ToArray();
+            .Append(source);
 
-        target.RpcDeathData(source, suspects);
+        var deathData = new DeathData(DateTime.UtcNow, source, suspects);
+        target.GetModifierComponent()!.AddModifier(deathData);
     }
 
     [HarmonyPostfix]

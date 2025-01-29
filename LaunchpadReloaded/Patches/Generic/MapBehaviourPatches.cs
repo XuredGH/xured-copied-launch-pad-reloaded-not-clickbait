@@ -9,8 +9,8 @@ public class MapBehaviourPatches
     /// <summary>
     /// Only show map if click is not cancelled
     /// </summary>
-    [HarmonyPrefix, HarmonyPatch(nameof(MapBehaviour.Show))]
-    public static bool MapBehaviourShowPrefix()
+    [HarmonyPatch(nameof(MapBehaviour.Show))]
+    public static bool Prefix()
     {
         return !Helpers.ShouldCancelClick();
     }

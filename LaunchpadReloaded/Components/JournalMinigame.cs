@@ -25,7 +25,6 @@ public class JournalMinigame(nint ptr) : Minigame(ptr)
         deadBodyIcon = transform.FindChild("BodyInfo/Icon").GetComponent<SpriteRenderer>();
 
         closeButton.OnClick.AddListener((UnityAction)(() => Close()));
-
         outsideButton.OnClick.AddListener((UnityAction)(() => Close()));
     }
 
@@ -56,11 +55,10 @@ public class JournalMinigame(nint ptr) : Minigame(ptr)
         //    return;
         //}
 
-        System.Random rnd = new System.Random();
+        var rnd = new System.Random();
         foreach (var suspect in deathData.Suspects.OrderBy(_ => rnd.Next()))
         {
-            var newTemplate = Instantiate(suspectTemplate);
-            newTemplate.transform.SetParent(suspectsHolder);
+            var newTemplate = Instantiate(suspectTemplate, suspectsHolder);
             suspect.SetPlayerMaterialColors(newTemplate.GetComponent<SpriteRenderer>());
             newTemplate.gameObject.SetActive(true);
             newTemplate.transform.position = new Vector3(0, 0, -120);

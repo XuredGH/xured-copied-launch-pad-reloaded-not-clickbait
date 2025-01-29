@@ -6,9 +6,8 @@ namespace LaunchpadReloaded.Patches.Roles.Scientist;
 [HarmonyPatch(typeof(ScientistRole))]
 public static class ScientistPatches
 {
-    [HarmonyPrefix]
     [HarmonyPatch(nameof(ScientistRole.RefreshAbilityButton))]
-    public static bool RefreshButtonPatch()
+    public static bool Prefix()
     {
         if (PlayerControl.LocalPlayer.Data.IsHacked())
         {

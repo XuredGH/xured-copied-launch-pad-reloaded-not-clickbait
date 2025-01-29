@@ -9,7 +9,5 @@ public enum LaunchpadRpc : uint
     CustomSetColor,
     SyncAllColors,
     RemoveVote,
-    PopulateResults,
-    ToggleNode,
-    UnhackPlayer
+    PopulateResults
 }
