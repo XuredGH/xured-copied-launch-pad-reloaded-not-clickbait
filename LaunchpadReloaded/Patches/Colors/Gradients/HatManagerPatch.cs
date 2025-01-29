@@ -20,6 +20,5 @@ public static class HatManagerPatch
         
         mat1.SetFloat(ShaderID.Get("_GradientOffset"), .4f);
         mat2.SetFloat(ShaderID.Get("_GradientOffset"), .4f);
-        
     }
 }

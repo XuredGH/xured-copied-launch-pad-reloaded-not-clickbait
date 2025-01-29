@@ -18,6 +18,5 @@ public static class MapBehaviourPatch
         
         mat.SetFloat(ShaderID.Get("_GradientBlend"), 2);
         mat.SetFloat(ShaderID.Get("_GradientOffset"), .3f);
-        
     }
 }

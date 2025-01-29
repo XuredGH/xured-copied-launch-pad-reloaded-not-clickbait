@@ -166,35 +166,20 @@ public static class PlayerTabPatches
                 continue;
             }
 
-            // TODO: simplify logic
-            if (SelectGradient)
-            {
-                var isSame = data.DefaultOutfit.ColorId == localColorId;
-                var isOpposite = gradColor == localColorId;
-                if (isSame)
-                {
-                    __instance.AvailableColors.Remove(gradColor);
-                }
+            var primaryColor = SelectGradient ? data.DefaultOutfit.ColorId : gradColor;
+            var secondaryColor = SelectGradient ? gradColor : data.DefaultOutfit.ColorId;
 
-                if (isOpposite)
-                {
-                    __instance.AvailableColors.Remove(data.DefaultOutfit.ColorId);
-                }
+            var isSame = primaryColor == (SelectGradient ? localColorId : localGradId);
+            var isOpposite = secondaryColor == (SelectGradient ? localColorId : localGradId);
+
+            if (isSame)
+            {
+                __instance.AvailableColors.Remove(secondaryColor);
             }
-            else
+
+            if (isOpposite)
             {
-                var isSame = gradColor == localGradId;
-                var isOpposite = data.DefaultOutfit.ColorId == localGradId;
-                if (isSame)
-                {
-                    __instance.AvailableColors.Remove(data.DefaultOutfit.ColorId);
-                }
-
-                if (isOpposite)
-                {
-                    __instance.AvailableColors.Remove(gradColor);
-                }
-
+                __instance.AvailableColors.Remove(primaryColor);
             }
         }
 
