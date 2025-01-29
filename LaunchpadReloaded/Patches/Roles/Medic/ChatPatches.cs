@@ -2,6 +2,7 @@
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Modifiers;
 using MiraAPI.Utilities;
+using UnityEngine;
 
 namespace LaunchpadReloaded.Patches.Roles.Medic;
 
@@ -11,26 +12,26 @@ namespace LaunchpadReloaded.Patches.Roles.Medic;
 [HarmonyPatch(typeof(ChatController))]
 public static class ChatPatches
 {
-    [HarmonyPostfix]
+    //[HarmonyPostfix]
     [HarmonyPatch(nameof(ChatController.Update))]
     public static void UpdatePatch(ChatController __instance)
     {
-        if (PlayerControl.LocalPlayer && PlayerControl.LocalPlayer.HasModifier<RevivedModifier>() == false)
+        if (PlayerControl.LocalPlayer?.HasModifier<RevivedModifier>() == true)
         {
-            return;
+            __instance.sendRateMessageText.gameObject.SetActive(true);
+            __instance.sendRateMessageText.text = "You have been revived. You can no longer speak.";
+            __instance.sendRateMessageText.color = LaunchpadPalette.MedicColor;
+            __instance.quickChatButton.gameObject.SetActive(false);
+            __instance.freeChatField.textArea.gameObject.SetActive(false);
+            __instance.openKeyboardButton.gameObject.SetActive(false);
         }
-
-        if (!__instance.freeChatField)
+        else
         {
-            return;
+            __instance.sendRateMessageText.color = Color.red;
+            __instance.quickChatButton.gameObject.SetActive(true);
+            __instance.freeChatField.textArea.gameObject.SetActive(true);
+            __instance.openKeyboardButton.gameObject.SetActive(true);
         }
-
-        __instance.sendRateMessageText.gameObject.SetActive(true);
-        __instance.sendRateMessageText.text = "You have been revived. You can no longer speak.";
-        __instance.sendRateMessageText.color = LaunchpadPalette.MedicColor;
-        __instance.quickChatButton.gameObject.SetActive(false);
-        __instance.freeChatField.textArea.gameObject.SetActive(false);
-        __instance.openKeyboardButton.gameObject.SetActive(false);
     }
     
     [HarmonyPrefix]
