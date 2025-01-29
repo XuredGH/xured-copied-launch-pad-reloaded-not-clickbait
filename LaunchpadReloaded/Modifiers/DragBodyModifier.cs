@@ -1,4 +1,6 @@
-﻿using MiraAPI.Modifiers;
+﻿using LaunchpadReloaded.Options.Roles;
+using MiraAPI.GameOptions;
+using MiraAPI.Modifiers;
 using MiraAPI.Utilities;
 using UnityEngine;
 
@@ -24,7 +26,7 @@ public class DragBodyModifier : BaseModifier
     {
         if (Player != null)
         {
-            Player.MyPhysics.Speed = 1.5f;
+            Player.MyPhysics.Speed = OptionGroupSingleton<JanitorOptions>.Instance.DragSpeed;
         }
     }
 
@@ -44,12 +46,12 @@ public class DragBodyModifier : BaseModifier
         {
             return;
         }
-        
+
         if (!DeadBody)
         {
             return;
         }
-        
+
         DeadBody.transform.position = Vector3.Lerp(DeadBody.transform.position, Player.transform.position, 5f * Time.deltaTime);
     }
 }

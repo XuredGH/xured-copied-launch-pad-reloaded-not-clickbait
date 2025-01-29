@@ -1,6 +1,5 @@
 ﻿using LaunchpadReloaded.Modifiers;
 using MiraAPI.Utilities;
-using Reactor.Utilities;
 using System;
 using System.Collections.Generic;
 
@@ -21,7 +20,6 @@ public static class DeathDataRpc
         }
 
         var deathData = new DeathData(DateTime.UtcNow, killer, suspects);
-        Logger<LaunchpadReloadedPlugin>.Error(deathData.Killer.Data.PlayerName);
         playerControl.GetModifierComponent()!.AddModifier(deathData);
     }
 }

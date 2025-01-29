@@ -6,6 +6,7 @@ using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
+using System.Linq;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
@@ -14,7 +15,7 @@ namespace LaunchpadReloaded.Buttons;
 public class InstinctButton : BaseLaunchpadButton
 {
     public override string Name => "INSTINCT";
-    public override float Cooldown =>  OptionGroupSingleton<DetectiveOptions>.Instance.InstinctCooldown;
+    public override float Cooldown => OptionGroupSingleton<DetectiveOptions>.Instance.InstinctCooldown;
     public override float EffectDuration => OptionGroupSingleton<DetectiveOptions>.Instance.InstinctDuration;
     public override int MaxUses => (int)OptionGroupSingleton<DetectiveOptions>.Instance.InstinctUses;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.InstinctButton;
@@ -28,11 +29,17 @@ public class InstinctButton : BaseLaunchpadButton
 
     public override void OnEffectEnd()
     {
-        PlayerControl.LocalPlayer.GetModifierComponent()!.AddModifier<FootstepsModifier>();
+        foreach (var player in PlayerControl.AllPlayerControls.ToArray().Where(plr => plr.HasModifier<FootstepsModifier>()))
+        {
+            player.GetModifierComponent()!.RemoveModifier<FootstepsModifier>();
+        }
     }
 
     protected override void OnClick()
     {
-        PlayerControl.LocalPlayer.GetModifierComponent()!.RemoveModifier<FootstepsModifier>();
+        foreach (var player in PlayerControl.AllPlayerControls.ToArray().Where(plr => !plr.Data.IsDead))
+        {
+            player.GetModifierComponent()!.AddModifier<FootstepsModifier>();
+        }
     }
 }

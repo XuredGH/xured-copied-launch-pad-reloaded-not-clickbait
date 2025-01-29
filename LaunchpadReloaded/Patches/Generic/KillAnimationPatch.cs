@@ -1,5 +1,8 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.Networking;
+using LaunchpadReloaded.Options.Roles;
+using LaunchpadReloaded.Roles;
+using MiraAPI.GameOptions;
 using MiraAPI.Networking;
 using System.Linq;
 
@@ -11,8 +14,9 @@ public static class KillAnimationPatch
     public static void MakeDeathData(PlayerControl source, PlayerControl target)
     {
         var suspects = PlayerControl.AllPlayerControls.ToArray()
-            .Where(pc => pc != target && !pc.Data.IsDead)
-            .Take(5)
+            .Where(pc => pc != target && pc != source && !pc.Data.IsDead && pc.Data.Role is not DetectiveRole)
+            .Take((int)OptionGroupSingleton<DetectiveOptions>.Instance.SuspectCount)
+            .Append(source)
             .Select(pc => pc.PlayerId)
             .ToArray();
 
