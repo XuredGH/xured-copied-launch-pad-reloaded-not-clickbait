@@ -1,8 +1,8 @@
 using LaunchpadReloaded.Features;
-using System;
 using LaunchpadReloaded.Modifiers;
 using MiraAPI.Roles;
 using MiraAPI.Utilities;
+using System;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
@@ -19,6 +19,7 @@ public class JanitorRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
     public CustomRoleConfiguration Configuration => new(this)
     {
         Icon = LaunchpadAssets.DragButton,
+        OptionsScreenshot = LaunchpadAssets.JanitorBanner,
     };
 
     public override bool CanUse(IUsable usable)

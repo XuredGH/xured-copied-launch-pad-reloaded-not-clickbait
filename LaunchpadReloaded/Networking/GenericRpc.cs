@@ -1,5 +1,7 @@
-﻿using LaunchpadReloaded.Roles;
+﻿using LaunchpadReloaded.Modifiers;
+using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
+using MiraAPI.Utilities;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities;
 using Helpers = MiraAPI.Utilities.Helpers;
@@ -25,5 +27,18 @@ public static class GenericRpc
         {
             Logger<LaunchpadReloadedPlugin>.Warning($"Body for id {bodyId} not found");
         }
+    }
+
+    [MethodRpc((uint)LaunchpadRpc.Poison)]
+    public static void RpcPoison(this PlayerControl playerControl, PlayerControl victim, int time)
+    {
+        if (playerControl.Data.Role is not SurgeonRole)
+        {
+            playerControl.KickForCheating();
+            return;
+        }
+
+        var poison = new PoisonModifier(playerControl, time);
+        victim.GetModifierComponent()!.AddModifier(poison);
     }
 }

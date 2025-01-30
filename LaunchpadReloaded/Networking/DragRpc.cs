@@ -20,7 +20,7 @@ public static class DragRpc
         }
 
         playerControl.GetModifierComponent()?.AddModifier(new DragBodyModifier(bodyId));
-        
+
         if (playerControl.AmOwner)
         {
             CustomButtonSingleton<DragButton>.Instance.SetDrop();

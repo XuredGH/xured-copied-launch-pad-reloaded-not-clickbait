@@ -41,7 +41,7 @@ public class HideButton : BaseLaunchpadButton<DeadBody>
         {
             return;
         }
-        
+
         foreach (var renderer in Target.bodyRenderers)
         {
             renderer.SetOutline(active ? PlayerControl.LocalPlayer.Data.Role.NameColor : null);
@@ -62,7 +62,7 @@ public class HideButton : BaseLaunchpadButton<DeadBody>
         {
             return;
         }
-        
+
         PlayerControl.LocalPlayer.RpcStopDragging();
         PlayerControl.LocalPlayer.RpcHideBodyInVent(Target.ParentId, VentTarget.Id);
     }

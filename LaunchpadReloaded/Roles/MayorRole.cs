@@ -1,6 +1,6 @@
 ﻿using LaunchpadReloaded.Features;
-using System;
 using MiraAPI.Roles;
+using System;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
@@ -14,5 +14,8 @@ public class MayorRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
     public string RoleLongDescription => "You get extra votes every round.\nUse these votes to eject the Impostor!";
     public Color RoleColor => LaunchpadPalette.MayorColor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Crewmate;
-    public CustomRoleConfiguration Configuration => new(this);
+    public CustomRoleConfiguration Configuration => new(this)
+    {
+        OptionsScreenshot = LaunchpadAssets.MayorBanner,
+    };
 }

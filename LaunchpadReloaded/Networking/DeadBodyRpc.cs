@@ -1,8 +1,8 @@
-﻿using System.Linq;
-using LaunchpadReloaded.Components;
+﻿using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using Reactor.Networking.Attributes;
+using System.Linq;
 using UnityEngine;
 using Helpers = MiraAPI.Utilities.Helpers;
 
@@ -18,7 +18,7 @@ public static class DeadBodyRpc
             pc.KickForCheating();
             return;
         }
-        
+
         var body = Helpers.GetBodyById(bodyId);
         var vent = ShipStatus.Instance.AllVents.First(v => v.Id == ventId);
 

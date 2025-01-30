@@ -39,14 +39,14 @@ public class DragButton : BaseLaunchpadButton<DeadBody>
     {
         return target != null && !target.Reported;
     }
-    
+
     public override void SetOutline(bool active)
     {
         if (Target == null)
         {
             return;
         }
-        
+
         foreach (var renderer in Target.bodyRenderers)
         {
             renderer.SetOutline(active ? PlayerControl.LocalPlayer.Data.Role.NameColor : null);
@@ -56,7 +56,7 @@ public class DragButton : BaseLaunchpadButton<DeadBody>
     public override bool CanUse()
     {
         return base.CanUse() && PlayerControl.LocalPlayer.CanMove && !PlayerControl.LocalPlayer.inVent &&
-               (!PlayerControl.LocalPlayer.HasModifier<DragBodyModifier>()|| CanDrop());
+               (!PlayerControl.LocalPlayer.HasModifier<DragBodyModifier>() || CanDrop());
     }
 
     protected override void FixedUpdate(PlayerControl playerControl)
@@ -65,7 +65,7 @@ public class DragButton : BaseLaunchpadButton<DeadBody>
         {
             return;
         }
-        
+
         // can probably be improved but whatever
         HudManager.Instance.KillButton.SetDisabled();
         HudManager.Instance.ReportButton.SetDisabled();
@@ -104,7 +104,7 @@ public class DragButton : BaseLaunchpadButton<DeadBody>
         {
             return;
         }
-        
+
         if (PlayerControl.LocalPlayer.HasModifier<DragBodyModifier>())
         {
             PlayerControl.LocalPlayer.RpcStopDragging();

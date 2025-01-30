@@ -1,6 +1,6 @@
-using System;
 using LaunchpadReloaded.Features;
 using MiraAPI.Roles;
+using System;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
@@ -16,6 +16,7 @@ public class DetectiveRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
     public ModdedRoleTeams Team => ModdedRoleTeams.Crewmate;
     public CustomRoleConfiguration Configuration => new(this)
     {
-        Icon = LaunchpadAssets.ZoomButton,
+        Icon = LaunchpadAssets.InvestigateButton,
+        OptionsScreenshot = LaunchpadAssets.DetectiveBanner,
     };
 }

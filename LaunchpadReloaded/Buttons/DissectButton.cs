@@ -1,5 +1,4 @@
-﻿using LaunchpadReloaded.Components;
-using LaunchpadReloaded.Features;
+﻿using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
 using MiraAPI.Hud;
 using MiraAPI.Utilities;
@@ -10,20 +9,19 @@ using UnityEngine;
 namespace LaunchpadReloaded.Buttons;
 
 [RegisterButton]
-public class InvestigateButton : BaseLaunchpadButton<DeadBody>
+public class DissectButton : BaseLaunchpadButton<DeadBody>
 {
-    public override string Name => "INVESTIGATE";
+    public override string Name => "Dissect";
     public override float Cooldown => 1;
     public override float EffectDuration => 0;
     public override int MaxUses => 0;
-    public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.InvestigateButton;
-    public override float Distance => PlayerControl.LocalPlayer.MaxReportDistance / 4f;
+    public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.DissectButton;
     public override bool TimerAffectedByPlayer => true;
-    public override bool AffectedByHack => true;
+    public override bool AffectedByHack => false;
 
     public override bool Enabled(RoleBehaviour? role)
     {
-        return role is DetectiveRole;
+        return role is SurgeonRole;
     }
 
     public override DeadBody? GetTarget()
@@ -33,7 +31,7 @@ public class InvestigateButton : BaseLaunchpadButton<DeadBody>
 
     public override bool IsTargetValid(DeadBody? target)
     {
-        return target != null && !target.Reported && target.enabled;
+        return target != null && target.enabled;
     }
 
     public override void SetOutline(bool active)
@@ -56,8 +54,9 @@ public class InvestigateButton : BaseLaunchpadButton<DeadBody>
             return;
         }
 
-        var gameObject = Object.Instantiate(LaunchpadAssets.DetectiveGame.LoadAsset(), HudManager.Instance.transform);
-        var minigame = gameObject.GetComponent<JournalMinigame>();
-        minigame.Open(GameData.Instance.GetPlayerById(Target.ParentId).Object);
+        //Target.transform.FindChild("Sprite").GetComponent<SpriteRenderer>().sprite = LaunchpadAssets.Bone.LoadAsset();
+        Target.Reported = true;
+        Target.enabled = false;
+        Target = null;
     }
 }
