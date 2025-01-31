@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Modifiers;
 using MiraAPI.Utilities;
+using Reactor.Utilities;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Utilities;
@@ -47,29 +49,40 @@ public static class HackerUtilities
         new Vector3(-14.2747f, -4.8171f, -0.0048f),
         new Vector3(1.4743f, -2.5041f, -0.0025f),
     ];
+    
+    public static readonly Func<PlayerControl?, bool> PlayerHacked = player => player?.GetModifier<HackedModifier>() is { DeActivating:false };
 
     public static int CountHackedPlayers(bool includeImpostors = true)
     {
-        return PlayerControl.AllPlayerControls.ToArray().Count(x => x.HasModifier<HackedModifier>() && (includeImpostors || !x.Data.Role.IsImpostor));
+        return PlayerControl.AllPlayerControls.ToArray().Count(x => PlayerHacked(x) && (includeImpostors || !x.Data.Role.IsImpostor));
     }
 
-    public static bool AnyPlayerHacked(bool includeImpostors = true)
+    public static bool AnyPlayerHacked()
     {
-        return PlayerControl.AllPlayerControls.ToArray().Any(x=>x.HasModifier<HackedModifier>() && (includeImpostors || !x.Data.Role.IsImpostor));
+        return PlayerControl.AllPlayerControls.ToArray().Any(x=> PlayerHacked(x));
     }
 
     public static bool IsHacked(this NetworkedPlayerInfo playerInfo)
     {
-        return AmongUsClient.Instance.IsGameStarted && (playerInfo.Object.HasModifier<HackedModifier>() || (playerInfo.Role.IsImpostor && AnyPlayerHacked()));
+        var hacked = playerInfo.Role?.IsImpostor == true ? CountHackedPlayers(false) > 0 : PlayerHacked(playerInfo.Object);
+        return AmongUsClient.Instance.IsGameStarted && hacked;
     }
 
     public static bool UsableWhenHacked(this IUsable? usable)
     {
+        // allow sabotage related consoles
         if (usable?.TryCast<Console>() is { } console)
         {
             return console.FindTask(PlayerControl.LocalPlayer).TryCast<SabotageTask>();
         }
+        
+        // disable emergency button
+        if (usable?.TryCast<SystemConsole>() is { } systemConsole)
+        {
+            return !systemConsole.MinigamePrefab.TryCast<EmergencyMinigame>();
+        }
 
+        // disable all other consoles
         return !usable?.TryCast<Console>();
     }
 

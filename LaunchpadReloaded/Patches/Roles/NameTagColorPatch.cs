@@ -8,11 +8,10 @@ namespace LaunchpadReloaded.Patches.Roles;
 /// <summary>
 /// Set nametag color depending on option
 /// </summary>
-[HarmonyPatch(typeof(PlayerNameColor))]
-public static class NameTagPatch
+[HarmonyPatch(typeof(PlayerNameColor), nameof(PlayerNameColor.Get), typeof(RoleBehaviour))]
+public static class NameTagColorPatch
 {
-    [HarmonyPrefix, HarmonyPatch(nameof(PlayerNameColor.Get), typeof(RoleBehaviour))]
-    public static bool GetPatch([HarmonyArgument(0)] RoleBehaviour otherPlayerRole, ref Color __result)
+    public static bool Prefix([HarmonyArgument(0)] RoleBehaviour otherPlayerRole, ref Color __result)
     {
         if (PlayerControl.LocalPlayer.Data.IsDead && OptionGroupSingleton<GeneralOptions>.Instance.GhostsSeeRoles)
         {

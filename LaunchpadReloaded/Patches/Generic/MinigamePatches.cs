@@ -6,7 +6,6 @@ namespace LaunchpadReloaded.Patches.Generic;
 public static class MinigameBeginPatch
 {
     [HarmonyPatch(typeof(Minigame), nameof(Minigame.Begin))]
-    [HarmonyPrefix]
     public static void Prefix(Minigame __instance)
     {
         // this somehow fixes the journal minigame?? credits to submerged

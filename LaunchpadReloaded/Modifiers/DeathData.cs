@@ -1,6 +1,6 @@
-﻿using System;
+﻿using MiraAPI.Modifiers;
+using System;
 using System.Collections.Generic;
-using MiraAPI.Modifiers;
 
 namespace LaunchpadReloaded.Modifiers;
 
@@ -10,12 +10,11 @@ public class DeathData : BaseModifier
     public override string ModifierName => "DeathData";
 
     public override bool HideOnUi => true;
+    public DateTime DeathTime { get; }
+    public PlayerControl Killer { get; }
+    public IEnumerable<PlayerControl> Suspects { get; }
 
-    public DateTime DeathTime { get; init; }
-    public PlayerControl Killer { get; init; }
-    public List<PlayerControl> Suspects { get; init; }
-
-    public DeathData(DateTime deathTime, PlayerControl killer, List<PlayerControl> suspects)
+    public DeathData(DateTime deathTime, PlayerControl killer, IEnumerable<PlayerControl> suspects)
     {
         DeathTime = deathTime;
         Killer = killer;

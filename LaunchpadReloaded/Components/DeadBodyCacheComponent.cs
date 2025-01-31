@@ -28,7 +28,7 @@ public class DeadBodyCacheComponent(IntPtr ptr) : MonoBehaviour(ptr)
         }
     }
 
-private void Awake()
+    private void Awake()
     {
         if (!TryGetComponent(out body))
         {

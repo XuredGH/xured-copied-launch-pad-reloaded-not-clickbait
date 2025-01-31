@@ -50,10 +50,10 @@ public static class PlayerControlPatches
     /// </summary>
     [HarmonyPostfix]
     [HarmonyPatch(nameof(PlayerControl.Start))]
-    public static void StartPrefix(PlayerControl __instance)
+    public static void StartPostfix(PlayerControl __instance)
     {
         __instance.gameObject.AddComponent<PlayerGradientData>();
-        __instance.GetModifierComponent().AddModifier<VoteData>();
+        __instance.GetModifierComponent()!.AddModifier<VoteData>();
     }
 
     /// <summary>

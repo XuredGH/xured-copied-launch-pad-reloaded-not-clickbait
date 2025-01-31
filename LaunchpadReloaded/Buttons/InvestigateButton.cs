@@ -57,7 +57,7 @@ public class InvestigateButton : BaseLaunchpadButton<DeadBody>
         }
 
         var gameObject = Object.Instantiate(LaunchpadAssets.DetectiveGame.LoadAsset(), HudManager.Instance.transform);
-        var minigame = gameObject.GetComponent<JournalMinigame>();
+        var minigame = gameObject.AddComponent<JournalMinigame>();
         minigame.Open(GameData.Instance.GetPlayerById(Target.ParentId).Object);
     }
 }

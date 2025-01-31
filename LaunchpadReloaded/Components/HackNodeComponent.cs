@@ -1,8 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Modifiers;
-using LaunchpadReloaded.Utilities;
 using MiraAPI.Utilities;
 using Reactor.Utilities.Attributes;
 using UnityEngine;
@@ -40,15 +38,16 @@ public class HackNodeComponent(IntPtr ptr) : MonoBehaviour(ptr)
 
     public void Use()
     {
-        SoundManager.Instance.PlaySound(LaunchpadAssets.BeepSound.LoadAsset(), false, 0.5f);
-        PlayerControl.LocalPlayer.RpcRemoveModifier<HackedModifier>();
+        var nodeGame = Instantiate(LaunchpadAssets.NodeGame.LoadAsset(), HudManager.Instance.transform);
+        var miniGame = nodeGame.AddComponent<NodeMinigame>();
+        miniGame.Open(this);
     }
 
     public float CanUse(NetworkedPlayerInfo pc, out bool canUse, out bool couldUse)
     {
         var num = float.MaxValue;
         var @object = pc.Object;
-        couldUse = !pc.IsDead && @object.CanMove && isActive && pc.IsHacked();
+        couldUse = !pc.IsDead && @object.CanMove && isActive && !(!TutorialManager.InstanceExists && PlayerControl.LocalPlayer.Data.Role.IsImpostor);
         canUse = couldUse;
         if (canUse)
         {

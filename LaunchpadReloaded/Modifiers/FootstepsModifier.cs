@@ -20,32 +20,34 @@ public class FootstepsModifier : BaseModifier
         _lastPos = Player!.transform.position;
     }
 
-    public override void Update()
+    public override void FixedUpdate()
     {
-        if (Vector3.Distance(_lastPos, Player!.transform.position) > 1)
+        if (Vector3.Distance(_lastPos, Player!.transform.position) < 1)
         {
-            var angle = Mathf.Atan2(Player.MyPhysics.Velocity.y, Player.MyPhysics.Velocity.x) * Mathf.Rad2Deg;
-
-            var footstep = new GameObject("Footstep")
-            {
-                transform =
-                {
-                    parent = ShipStatus.Instance.transform,
-                    position = new Vector3(Player.transform.position.x, Player.transform.position.y, 2.5708f),
-                    rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward)
-                }
-            };
-
-            var sprite = footstep.AddComponent<SpriteRenderer>();
-            sprite.sprite = LaunchpadAssets.Footstep.LoadAsset();
-            sprite.material = LaunchpadAssets.GradientMaterial.LoadAsset();
-            footstep.layer = LayerMask.NameToLayer("Players");
-
-            sprite.transform.localScale = new Vector3(0.06f, 0.06f, 0.06f);
-            Player.SetPlayerMaterialColors(sprite);
-
-            _lastPos = Player.transform.position;
-            Object.Destroy(footstep, OptionGroupSingleton<DetectiveOptions>.Instance.FootstepsDuration);
+            return;
         }
+
+        var angle = Mathf.Atan2(Player.MyPhysics.Velocity.y, Player.MyPhysics.Velocity.x) * Mathf.Rad2Deg;
+
+        var footstep = new GameObject("Footstep")
+        {
+            transform =
+            {
+                parent = ShipStatus.Instance.transform,
+                position = new Vector3(Player.transform.position.x, Player.transform.position.y, 2.5708f),
+                rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward)
+            }
+        };
+
+        var sprite = footstep.AddComponent<SpriteRenderer>();
+        sprite.sprite = LaunchpadAssets.Footstep.LoadAsset();
+        sprite.material = LaunchpadAssets.GradientMaterial.LoadAsset();
+        footstep.layer = LayerMask.NameToLayer("Players");
+
+        sprite.transform.localScale = new Vector3(0.06f, 0.06f, 0.06f);
+        Player.SetPlayerMaterialColors(sprite);
+
+        _lastPos = Player.transform.position;
+        Object.Destroy(footstep, OptionGroupSingleton<DetectiveOptions>.Instance.FootstepsDuration);
     }
 }
