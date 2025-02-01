@@ -20,7 +20,7 @@ jobs:
         with:
           verbosity: Diagnostic
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: LaunchpadReloaded.dll
           path: LaunchpadReloaded/bin/Release/net6.0/LaunchpadReloaded.dll
