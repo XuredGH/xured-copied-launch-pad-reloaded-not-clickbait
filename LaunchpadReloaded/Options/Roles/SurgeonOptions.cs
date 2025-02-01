@@ -27,6 +27,6 @@ public class SurgeonOptions : AbstractOptionGroup
     [ModdedNumberOption("Poison Death Delay", 5, 60, 5, MiraNumberSuffixes.Seconds)]
     public float PoisonDelay { get; set; } = 10;
 
-    [ModdedToggleOption("Can Use Standard Kill")]
-    public bool StandardKill { get; set; } = false;
+    //    [ModdedToggleOption("Can Use Standard Kill")] NEED FIX
+    //    public bool StandardKill { get; set; } = false; NEED FIX
 }

@@ -57,6 +57,7 @@ public class DissectButton : BaseLaunchpadButton<DeadBody>
             return;
         }
 
+        SoundManager.Instance.PlaySound(LaunchpadAssets.DissectSound.LoadAsset(), false, volume: 2);
         PlayerControl.LocalPlayer.RpcDissect(Target.ParentId);
     }
 }

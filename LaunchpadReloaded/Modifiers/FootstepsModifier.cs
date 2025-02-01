@@ -1,7 +1,11 @@
 ﻿using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Options.Roles;
+using LaunchpadReloaded.Utilities;
 using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
+using Reactor.Utilities;
+using Reactor.Utilities.Extensions;
+using System.Collections;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Modifiers;
@@ -19,6 +23,15 @@ public class FootstepsModifier : BaseModifier
     {
         _lastPos = Player!.transform.position;
     }
+
+    public IEnumerator FootstepDisappear(GameObject obj, SpriteRenderer rend)
+    {
+        yield return new WaitForSeconds(OptionGroupSingleton<DetectiveOptions>.Instance.FootstepsDuration);
+        yield return Helpers.FadeOut(rend, 0.0001f, 0.05f);
+        obj.DestroyImmediate();
+    }
+
+    private bool _lastFlip = false;
 
     public override void FixedUpdate()
     {
@@ -44,10 +57,21 @@ public class FootstepsModifier : BaseModifier
         sprite.material = LaunchpadAssets.GradientMaterial.LoadAsset();
         footstep.layer = LayerMask.NameToLayer("Players");
 
+        if (_lastFlip == false)
+        {
+            _lastFlip = true;
+            sprite.flipX = true;
+        }
+        else
+        {
+            _lastFlip = false;
+            sprite.flipX = false;
+        }
+
         sprite.transform.localScale = new Vector3(0.06f, 0.06f, 0.06f);
         Player.SetPlayerMaterialColors(sprite);
 
         _lastPos = Player.transform.position;
-        Object.Destroy(footstep, OptionGroupSingleton<DetectiveOptions>.Instance.FootstepsDuration);
+        Coroutines.Start(FootstepDisappear(footstep, sprite));
     }
 }

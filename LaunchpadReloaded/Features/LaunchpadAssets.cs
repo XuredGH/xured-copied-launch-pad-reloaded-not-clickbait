@@ -40,6 +40,7 @@ public static class LaunchpadAssets
     public static readonly LoadableAsset<Sprite> MayorBanner = new LoadableResourceAsset("LaunchpadReloaded.Resources.Banners.Mayor.png");
     public static readonly LoadableAsset<Sprite> MedicBanner = new LoadableResourceAsset("LaunchpadReloaded.Resources.Banners.Medic.png");
     public static readonly LoadableAsset<Sprite> SheriffBanner = new LoadableResourceAsset("LaunchpadReloaded.Resources.Banners.Sheriff.png");
+    public static readonly LoadableAsset<Sprite> SurgeonBanner = new LoadableResourceAsset("LaunchpadReloaded.Resources.Banners.Surgeon.png");
 
     // Object Sprites
     public static readonly LoadableAsset<Sprite> Arrow = new LoadableResourceAsset("LaunchpadReloaded.Resources.Arrow.png");
@@ -52,6 +53,7 @@ public static class LaunchpadAssets
     // Sounds
     public static readonly LoadableAsset<AudioClip> BeepSound = new LoadableBundleAsset<AudioClip>("Beep.wav", Bundle);
     public static readonly LoadableAsset<AudioClip> InjectSound = new LoadableBundleAsset<AudioClip>("Inject.mp3", Bundle);
+    public static readonly LoadableAsset<AudioClip> DissectSound = new LoadableBundleAsset<AudioClip>("Dissect.mp3", Bundle);
     public static readonly LoadableAsset<AudioClip> HackingSound = new LoadableBundleAsset<AudioClip>("HackAmbience.mp3", Bundle);
     public static readonly LoadableAsset<AudioClip> PingSound = new LoadableBundleAsset<AudioClip>("Ping.mp3", Bundle);
 

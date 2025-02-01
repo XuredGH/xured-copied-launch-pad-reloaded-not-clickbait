@@ -1,6 +1,4 @@
 using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Options.Roles;
-using MiraAPI.GameOptions;
 using MiraAPI.Roles;
 using System;
 using UnityEngine;
@@ -18,7 +16,8 @@ public class SurgeonRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
     public ModdedRoleTeams Team => ModdedRoleTeams.Impostor;
     public CustomRoleConfiguration Configuration => new(this)
     {
-        Icon = LaunchpadAssets.DragButton,
-        UseVanillaKillButton = OptionGroupSingleton<SurgeonOptions>.Instance.StandardKill,
+        Icon = LaunchpadAssets.DissectButton,
+        //        UseVanillaKillButton = OptionGroupSingleton<SurgeonOptions>.Instance.StandardKill, NEEDS FIX
+        OptionsScreenshot = LaunchpadAssets.SurgeonBanner,
     };
 }
