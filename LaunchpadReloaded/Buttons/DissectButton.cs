@@ -3,6 +3,7 @@ using LaunchpadReloaded.Roles;
 using MiraAPI.Hud;
 using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
+using PowerTools;
 using Reactor.Utilities.Extensions;
 using UnityEngine;
 
@@ -36,7 +37,7 @@ public class DissectButton : BaseLaunchpadButton<DeadBody>
 
     public override void SetOutline(bool active)
     {
-        if (Target == null)
+        if (Target == null || Target.Reported)
         {
             return;
         }
@@ -53,10 +54,11 @@ public class DissectButton : BaseLaunchpadButton<DeadBody>
         {
             return;
         }
-
-        //Target.transform.FindChild("Sprite").GetComponent<SpriteRenderer>().sprite = LaunchpadAssets.Bone.LoadAsset();
-        Target.Reported = true;
-        Target.enabled = false;
-        Target = null;
+        var bone = new GameObject("Bone").AddComponent<SpriteRenderer>();
+        bone.sprite = LaunchpadAssets.Bone.LoadAsset();
+        bone.transform.position = new Vector3(Target.transform.position.x, Target.transform.position.y, 0);
+        bone.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+        bone.gameObject.layer = Target.gameObject.layer;
+        Target.gameObject.SetActive(false);
     }
 }

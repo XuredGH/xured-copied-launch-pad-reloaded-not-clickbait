@@ -16,18 +16,6 @@
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Android' ">
       <DefineConstants>TRACE;ANDROID</DefineConstants>
     </PropertyGroup>
-    <ItemGroup>
-      <None Remove="Resources\Banners\Captain.png" />
-      <None Remove="Resources\Banners\Detective.png" />
-      <None Remove="Resources\Banners\Hacker.png" />
-      <None Remove="Resources\Banners\Janitor.png" />
-      <None Remove="Resources\Banners\Jester.png" />
-      <None Remove="Resources\Banners\Mayor.png" />
-      <None Remove="Resources\Banners\Medic.png" />
-      <None Remove="Resources\Banners\Sheriff.png" />
-      <None Remove="Resources\Dissect.png" />
-      <None Remove="Resources\Inject.png" />
-    </ItemGroup>
     
     <ItemGroup>
         <PackageReference Include="AllOfUs.MiraAPI" Version="0.1.9-ci.169" />
@@ -44,20 +32,7 @@
     <ItemGroup>
         <EmbeddedResource Condition="$(Platform)=='AnyCPU'" Include="Resources/assets-win-x86.bundle" />
         <EmbeddedResource Condition="$(Platform)=='Android'" Include="Resources/assets-android.bundle" />
-        <EmbeddedResource Include="Resources/Arrow.png" />
-        <EmbeddedResource Include="Resources/Footstep.png" />
-        <EmbeddedResource Include="Resources/Instinct.png" />
-        <EmbeddedResource Include="Resources/Investigate.png" />
-        <EmbeddedResource Include="Resources\Banners\Captain.png" />
-        <EmbeddedResource Include="Resources\Banners\Detective.png" />
-        <EmbeddedResource Include="Resources\Banners\Hacker.png" />
-        <EmbeddedResource Include="Resources\Banners\Janitor.png" />
-        <EmbeddedResource Include="Resources\Banners\Jester.png" />
-        <EmbeddedResource Include="Resources\Banners\Mayor.png" />
-        <EmbeddedResource Include="Resources\Banners\Medic.png" />
-        <EmbeddedResource Include="Resources\Banners\Sheriff.png" />
-        <EmbeddedResource Include="Resources\Dissect.png" />
-        <EmbeddedResource Include="Resources\Inject.png" />
+        <EmbeddedResource Include="Resources/**/*.png" />
     </ItemGroup>
     
 
