@@ -1,9 +1,11 @@
 ﻿using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Networking;
+using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Roles;
+using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
-using PowerTools;
 using Reactor.Utilities.Extensions;
 using UnityEngine;
 
@@ -13,9 +15,9 @@ namespace LaunchpadReloaded.Buttons;
 public class DissectButton : BaseLaunchpadButton<DeadBody>
 {
     public override string Name => "Dissect";
-    public override float Cooldown => 1;
+    public override float Cooldown => OptionGroupSingleton<SurgeonOptions>.Instance.DissectCooldown;
     public override float EffectDuration => 0;
-    public override int MaxUses => 0;
+    public override int MaxUses => (int)OptionGroupSingleton<SurgeonOptions>.Instance.DissectUses;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.DissectButton;
     public override bool TimerAffectedByPlayer => true;
     public override bool AffectedByHack => false;
@@ -54,11 +56,7 @@ public class DissectButton : BaseLaunchpadButton<DeadBody>
         {
             return;
         }
-        var bone = new GameObject("Bone").AddComponent<SpriteRenderer>();
-        bone.sprite = LaunchpadAssets.Bone.LoadAsset();
-        bone.transform.position = new Vector3(Target.transform.position.x, Target.transform.position.y, 0);
-        bone.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-        bone.gameObject.layer = Target.gameObject.layer;
-        Target.gameObject.SetActive(false);
+
+        PlayerControl.LocalPlayer.RpcDissect(Target.ParentId);
     }
 }

@@ -18,6 +18,12 @@ public class SurgeonOptions : AbstractOptionGroup
     [ModdedNumberOption("Inject Uses", 0, 10, zeroInfinity: true)]
     public float InjectUses { get; set; } = 0;
 
+    [ModdedNumberOption("Dissect Cooldown", 0, 120, 5, MiraNumberSuffixes.Seconds)]
+    public float DissectCooldown { get; set; } = 35f;
+
+    [ModdedNumberOption("Dissect Uses", 0, 10, zeroInfinity: true)]
+    public float DissectUses { get; set; } = 0;
+
     [ModdedNumberOption("Poison Death Delay", 5, 60, 5, MiraNumberSuffixes.Seconds)]
     public float PoisonDelay { get; set; } = 10;
 

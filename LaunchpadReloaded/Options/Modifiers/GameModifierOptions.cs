@@ -10,7 +10,7 @@ public class GameModifierOptions : AbstractOptionGroup
     public override string GroupName => "Game Modifiers";
 
     [ModdedNumberOption("Player Modifier Limit", 0f, 10, 1, suffixType: MiraNumberSuffixes.None, zeroInfinity: true)]
-    public float ModifierLimit { get; set; } = 0f;
+    public float ModifierLimit { get; set; } = 1f;
 
     [ModdedNumberOption("Giant Chance", 0f, 100f, 10f, suffixType: MiraNumberSuffixes.Percent)]
     public float GiantChance { get; set; } = 0f;

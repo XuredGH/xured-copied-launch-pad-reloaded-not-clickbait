@@ -16,7 +16,7 @@ public sealed class GiantModifier : LPModifier
     {
         if (Player != null)
         {
-            Player.MyPhysics.Speed *= 0.75f;
+            Player.MyPhysics.Speed *= 0.8f;
             Player.transform.localScale /= 0.7f;
         }
     }
@@ -25,7 +25,7 @@ public sealed class GiantModifier : LPModifier
     {
         if (Player != null)
         {
-            Player.MyPhysics.Speed /= 0.75f;
+            Player.MyPhysics.Speed /= 0.8f;
             Player.transform.localScale *= 0.7f;
         }
     }
