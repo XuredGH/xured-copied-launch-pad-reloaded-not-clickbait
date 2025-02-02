@@ -10,6 +10,7 @@ public class DeathData : BaseModifier
     public override string ModifierName => "DeathData";
 
     public override bool HideOnUi => true;
+
     public DateTime DeathTime { get; }
     public PlayerControl Killer { get; }
     public IEnumerable<PlayerControl> Suspects { get; }
