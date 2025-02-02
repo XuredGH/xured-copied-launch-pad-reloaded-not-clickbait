@@ -1,5 +1,5 @@
-﻿using Il2CppSystem;
-using AmongUs.GameOptions;
+﻿using AmongUs.GameOptions;
+using Il2CppSystem;
 using LaunchpadReloaded.Features;
 using MiraAPI.Modifiers;
 using UnityEngine;
@@ -29,8 +29,13 @@ public class RevivedModifier : BaseModifier
         }
     }
 
+    public override void OnDeath(DeathReason reason)
+    {
+        ModifierComponent!.RemoveModifier(this);
+    }
+
     public override void FixedUpdate()
-    {            
-        Player.cosmetics.SetOutline(true, new Nullable<Color>(LaunchpadPalette.MedicColor));
+    {
+        Player!.cosmetics.SetOutline(true, new Nullable<Color>(LaunchpadPalette.MedicColor));
     }
 }

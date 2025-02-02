@@ -6,6 +6,7 @@ using MiraAPI.Modifiers;
 using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Modifiers;
@@ -19,16 +20,32 @@ public class FootstepsModifier : BaseModifier
 
     private Vector3 _lastPos;
 
+    private Dictionary<GameObject, SpriteRenderer> _currentSteps;
+
     public override void OnActivate()
     {
+        _currentSteps = new();
         _lastPos = Player!.transform.position;
+    }
+
+    public override void OnDeactivate()
+    {
+        foreach (var obj in _currentSteps)
+        {
+            Coroutines.Start(FootstepFadeout(obj.Key, obj.Value));
+        }
+    }
+
+    public IEnumerator FootstepFadeout(GameObject obj, SpriteRenderer rend)
+    {
+        yield return Helpers.FadeOut(rend, 0.0001f, 0.05f);
+        obj.DestroyImmediate();
     }
 
     public IEnumerator FootstepDisappear(GameObject obj, SpriteRenderer rend)
     {
         yield return new WaitForSeconds(OptionGroupSingleton<DetectiveOptions>.Instance.FootstepsDuration);
-        yield return Helpers.FadeOut(rend, 0.0001f, 0.05f);
-        obj.DestroyImmediate();
+        yield return FootstepFadeout(obj, rend);
     }
 
     private bool _lastFlip = false;
@@ -71,7 +88,13 @@ public class FootstepsModifier : BaseModifier
         sprite.transform.localScale = new Vector3(0.06f, 0.06f, 0.06f);
         Player.SetPlayerMaterialColors(sprite);
 
+        _currentSteps.Add(footstep, sprite);
         _lastPos = Player.transform.position;
         Coroutines.Start(FootstepDisappear(footstep, sprite));
+    }
+
+    public override void OnDeath(DeathReason reason)
+    {
+        ModifierComponent!.RemoveModifier(this);
     }
 }

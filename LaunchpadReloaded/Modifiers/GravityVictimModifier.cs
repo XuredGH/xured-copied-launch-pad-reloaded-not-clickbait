@@ -36,4 +36,9 @@ public class GravityVictimModifier : BaseModifier
 
         Player!.MyPhysics.Speed = clamp;
     }
+
+    public override void OnDeath(DeathReason reason)
+    {
+        ModifierComponent!.RemoveModifier(this);
+    }
 }

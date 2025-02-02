@@ -15,8 +15,8 @@ namespace LaunchpadReloaded.Buttons;
 public class HackButton : BaseLaunchpadButton
 {
     public override string Name => "HACK";
-    public override float Cooldown => (int)OptionGroupSingleton<HackerOptions>.Instance.HackCooldown;
-    public override float EffectDuration => 0;
+    public override float Cooldown => 0;//(int)OptionGroupSingleton<HackerOptions>.Instance.HackCooldown;
+    public override float EffectDuration => OptionGroupSingleton<HackerOptions>.Instance.HackDuration;
     public override int MaxUses => (int)OptionGroupSingleton<HackerOptions>.Instance.HackUses;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.HackButton;
     public override bool TimerAffectedByPlayer => true;

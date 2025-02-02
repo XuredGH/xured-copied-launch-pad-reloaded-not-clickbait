@@ -16,14 +16,22 @@ public class DragBodyModifier : BaseModifier
     private byte BodyId { get; }
     private DeadBody DeadBody { get; }
 
+    private float _prevSpeed;
+
     public DragBodyModifier(byte bodyId)
     {
         BodyId = bodyId;
         DeadBody = Helpers.GetBodyById(BodyId);
     }
 
+    public override void OnDeath(DeathReason reason)
+    {
+        ModifierComponent!.RemoveModifier(this);
+    }
+
     public override void OnActivate()
     {
+        _prevSpeed = Player!.MyPhysics.Speed;
         if (Player != null)
         {
             Player.MyPhysics.Speed = OptionGroupSingleton<JanitorOptions>.Instance.DragSpeed;
@@ -37,7 +45,7 @@ public class DragBodyModifier : BaseModifier
             return;
         }
 
-        Player.MyPhysics.Speed = 2.5f;
+        Player.MyPhysics.Speed = _prevSpeed;
     }
 
     public override void Update()

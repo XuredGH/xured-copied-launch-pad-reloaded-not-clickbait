@@ -32,4 +32,9 @@ public class PoisonModifier : TimedModifier
 
         Killer.RpcCustomMurder(Player, resetKillTimer: false, createDeadBody: true, teleportMurderer: false, showKillAnim: false);
     }
+
+    public override void OnDeath(DeathReason reason)
+    {
+        ModifierComponent!.RemoveModifier(this);
+    }
 }

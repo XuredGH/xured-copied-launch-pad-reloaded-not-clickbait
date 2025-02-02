@@ -1,38 +1,57 @@
-﻿using System.Collections;
-using LaunchpadReloaded.Components;
+﻿using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
+using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Utilities;
+using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
+using MiraAPI.Modifiers.Types;
+using MiraAPI.Networking;
 using Reactor.Utilities;
+using Reactor.Utilities.Extensions;
+using System;
+using System.Collections;
+using TMPro;
 using UnityEngine;
+using Helpers = LaunchpadReloaded.Utilities.Helpers;
 using Random = System.Random;
 
 namespace LaunchpadReloaded.Modifiers;
 
 [RegisterModifier]
-public class HackedModifier : BaseModifier
+public class HackedModifier : TimedModifier
 {
     public override string ModifierName => "Hacked";
 
-    public override bool HideOnUi => true;
+    public override bool HideOnUi => false;
+    public override bool AutoStart => true;
+    public override float Duration => OptionGroupSingleton<HackerOptions>.Instance.HackDuration;
 
     public bool IsImpostor;
 
     public bool DeActivating;
-    
+
+    private TextMeshPro _hackedText;
+
     public override void FixedUpdate()
     {
+        base.FixedUpdate();
+
         var randomString = Helpers.RandomString(Helpers.Random.Next(4, 6),
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#!?$(???#@)$@@@@0000");
         Player!.cosmetics.SetName(randomString);
         Player.cosmetics.SetNameMask(true);
         Player.cosmetics.gameObject.SetActive(false);
+
+        if (_hackedText)
+        {
+            _hackedText.text = $"Find a node on the map to unhack!\nIf you don't unhack in time, <b>YOU WILL DIE.</b>\n<size=70%>{Math.Round(TimeRemaining, 0)} seconds remaining.</size>";
+        }
     }
 
     public override void OnActivate()
     {
-        IsImpostor = Player.Data.Role.IsImpostor;
+        IsImpostor = Player!.Data.Role.IsImpostor;
 
         GradientManager.SetGradientEnabled(Player, false);
         Player.cosmetics.SetColor(15);
@@ -43,7 +62,9 @@ public class HackedModifier : BaseModifier
             return;
         }
 
-        Coroutines.Start(HackEffect());   
+        _hackedText = MiraAPI.Utilities.Helpers.CreateTextLabel("HackedText", HudManager.Instance.transform, AspectPosition.EdgeAlignments.Top, new Vector3(0, 1, 0));
+
+        Coroutines.Start(HackEffect());
         foreach (var node in HackNodeComponent.AllNodes)
         {
             node.isActive = true;
@@ -53,8 +74,8 @@ public class HackedModifier : BaseModifier
     public override void OnDeactivate()
     {
         DeActivating = true;
-        GradientManager.SetGradientEnabled(Player, true);
-        Player.cosmetics.SetColor((byte)Player.Data.DefaultOutfit.ColorId);
+        GradientManager.SetGradientEnabled(Player!, true);
+        Player!.cosmetics.SetColor((byte)Player.Data.DefaultOutfit.ColorId);
         Player.cosmetics.gameObject.SetActive(true);
         Player.SetName(Player.Data.PlayerName);
 
@@ -78,6 +99,8 @@ public class HackedModifier : BaseModifier
         {
             node.isActive = false;
         }
+
+        _hackedText.gameObject.DestroyImmediate();
     }
 
     public override void OnDeath(DeathReason reason)
@@ -129,6 +152,14 @@ public class HackedModifier : BaseModifier
             HudManager.Instance.FullScreen.gameObject.SetActive(false);
             HudManager.Instance.UseButton.transform.localPosition = originalPos2;
             HudManager.Instance.ReportButton.transform.localPosition = originalPos;
+        }
+    }
+
+    public override void OnTimerComplete()
+    {
+        if (Player is not null && !IsImpostor)
+        {
+            Player.RpcCustomMurder(Player, true, false, false, false, false, true);
         }
     }
 }
