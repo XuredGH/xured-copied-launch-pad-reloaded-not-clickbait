@@ -21,7 +21,7 @@ public class ShootButton : BaseLaunchpadButton<PlayerControl>
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.ShootButton;
     public override bool TimerAffectedByPlayer => true;
     public override bool AffectedByHack => true;
-    
+
     public override bool Enabled(RoleBehaviour? role) => role is SheriffRole;
 
     public override PlayerControl? GetTarget()

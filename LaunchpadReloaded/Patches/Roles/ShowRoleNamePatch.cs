@@ -33,7 +33,7 @@ public static class ShowRoleNamePatch
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.FixedUpdate))]
     public static void PlayerUpdatePatch(PlayerControl __instance)
     {
-        if (!ShipStatus.Instance || __instance.Data is null || __instance.Data.IsDead || __instance.Data.Disconnected)
+        if (!ShipStatus.Instance || __instance.Data is null || __instance.Data.IsDead || __instance.Data.Disconnected || PlayerControl.LocalPlayer is null || PlayerControl.LocalPlayer.Data is null)
         {
             if (__instance.cosmetics.nameText)
             {

@@ -1,11 +1,11 @@
 ﻿using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Roles;
-using Reactor.Utilities;
-using System.Collections;
 using LaunchpadReloaded.Options.Roles;
+using LaunchpadReloaded.Roles;
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Utilities.Assets;
+using Reactor.Utilities;
+using System.Collections;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
@@ -14,19 +14,19 @@ namespace LaunchpadReloaded.Buttons;
 public class ZoomButton : BaseLaunchpadButton
 {
     public override string Name => "ZOOM";
-    
+
     public override float Cooldown => OptionGroupSingleton<CaptainOptions>.Instance.ZoomCooldown;
-    
+
     public override float EffectDuration => OptionGroupSingleton<CaptainOptions>.Instance.ZoomDuration;
-    
+
     public override int MaxUses => 0;
-    
+
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.ZoomButton;
     public override bool TimerAffectedByPlayer => true;
     public override bool AffectedByHack => true;
-    
+
     public static bool IsZoom { get; private set; }
-    
+
     public override bool Enabled(RoleBehaviour? role)
     {
         return role is CaptainRole;
