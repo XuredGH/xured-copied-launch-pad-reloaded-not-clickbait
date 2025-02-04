@@ -12,18 +12,19 @@ public static class LaunchpadEventListeners
         MiraEventManager.RegisterEventHandler<UseButtonClickEvent>(UseButtonEvent);
     }
 
+    // prevent meetings during hack
     public static void StartMeetingEvent(StartMeetingEvent meetingEvent)
     {
         if (HackerUtilities.AnyPlayerHacked())
         {
             meetingEvent.Cancel();
         }
-
     }
 
+    // prevent tasks during hack
     public static void UseButtonEvent(UseButtonClickEvent useButtonEvent)
     {
-        if (HackerUtilities.AnyPlayerHacked() && !useButtonEvent.Button.currentTarget.UsableWhenHacked())
+        if (PlayerControl.LocalPlayer.Data.IsHacked() && !useButtonEvent.Button.currentTarget.UsableWhenHacked())
         {
             useButtonEvent.Cancel();
         }
