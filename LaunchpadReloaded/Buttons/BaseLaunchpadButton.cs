@@ -18,7 +18,7 @@ public abstract class BaseLaunchpadButton : CustomActionButton
     {
         var buttonTimer = !TimerAffectedByPlayer || PlayerControl.LocalPlayer.ButtonTimerEnabled();
         var hack = !AffectedByHack || !PlayerControl.LocalPlayer.Data.IsHacked();
-        return base.CanUse() && buttonTimer && hack;
+        return base.CanUse() && PlayerControl.LocalPlayer.CanMove && buttonTimer && hack;
     }
 }
 
@@ -36,6 +36,6 @@ public abstract class BaseLaunchpadButton<T> : CustomActionButton<T> where T : M
     {
         var buttonTimer = !TimerAffectedByPlayer || PlayerControl.LocalPlayer.ButtonTimerEnabled();
         var hack = !AffectedByHack || !PlayerControl.LocalPlayer.Data.IsHacked();
-        return base.CanUse() && buttonTimer && hack;
+        return base.CanUse() && PlayerControl.LocalPlayer.CanMove && buttonTimer && hack;
     }
 }

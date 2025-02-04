@@ -1,8 +1,8 @@
-﻿using System.Linq;
-using HarmonyLib;
+﻿using HarmonyLib;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
 using MiraAPI.Utilities;
+using System.Linq;
 
 namespace LaunchpadReloaded.Patches.Roles.Jester;
 [HarmonyPatch]
@@ -35,6 +35,11 @@ public static class JesterPatches
     [HarmonyPatch(typeof(ExileController), nameof(ExileController.WrapUp))]
     public static bool WrapUp(ExileController __instance)
     {
+        if (NotepadHud.Instance != null)
+        {
+            NotepadHud.Instance.UpdateAspectPos();
+        }
+
         if (TutorialManager.InstanceExists)
         {
             return true;
@@ -45,7 +50,7 @@ public static class JesterPatches
             GameManager.Instance.RpcEndGame((GameOverReason)GameOverReasons.JesterWins, false);
             return false;
         }
-        
+
         return true;
     }
 }

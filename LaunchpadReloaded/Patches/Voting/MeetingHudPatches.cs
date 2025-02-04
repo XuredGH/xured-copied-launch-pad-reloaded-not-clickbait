@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using HarmonyLib;
+﻿using HarmonyLib;
+using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Voting;
 using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Networking.Voting;
@@ -11,6 +11,7 @@ using MiraAPI.GameOptions;
 using MiraAPI.Utilities;
 using Reactor.Networking.Rpc;
 using Reactor.Utilities.Extensions;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -28,6 +29,11 @@ public static class MeetingHudPatches
     [HarmonyPatch(nameof(MeetingHud.Start))]
     public static void AwakePostfix(MeetingHud __instance)
     {
+        if (NotepadHud.Instance != null)
+        {
+            NotepadHud.Instance.UpdateAspectPos();
+        }
+
         foreach (var plr in PlayerControl.AllPlayerControls)
         {
             var voteData = plr.GetModifier<VoteData>();
@@ -245,7 +251,7 @@ public static class MeetingHudPatches
         {
             var pva = __instance.playerStates.First(pv => pv.TargetPlayerId == player.PlayerId);
             var voteData = player.GetModifier<VoteData>();
-            
+
             if (pva.AmDead || !voteData.VotedPlayers.Contains(pc.PlayerId))
             {
                 continue;

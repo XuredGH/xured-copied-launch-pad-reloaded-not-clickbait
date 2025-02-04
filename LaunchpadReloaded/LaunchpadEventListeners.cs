@@ -18,6 +18,7 @@ public static class LaunchpadEventListeners
         {
             meetingEvent.Cancel();
         }
+
     }
 
     public static void UseButtonEvent(UseButtonClickEvent useButtonEvent)

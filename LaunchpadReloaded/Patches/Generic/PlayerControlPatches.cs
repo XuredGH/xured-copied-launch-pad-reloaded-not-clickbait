@@ -1,5 +1,6 @@
 using HarmonyLib;
 using LaunchpadReloaded.Components;
+using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Networking.Color;
@@ -27,6 +28,21 @@ public static class PlayerControlPatches
                 break;
         }
     }
+
+
+    /// <summary>
+    /// Disable kill timer while janitor is dragging
+    /// </summary>
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(PlayerControl.CanMove), MethodType.Getter)]
+    public static void CanMovePatch(PlayerControl __instance, ref bool __result)
+    {
+        if (NotepadHud.Instance != null && NotepadHud.Instance.Notepad.active)
+        {
+            __result = false;
+        }
+    }
+
 
     /// <summary>
     /// Use Custom check color RPC
