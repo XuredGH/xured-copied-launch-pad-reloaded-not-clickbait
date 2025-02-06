@@ -10,9 +10,16 @@ public class LaunchpadSettings
 
     public readonly CustomSetting LockedCamera;
     public readonly CustomSetting UniqueDummies;
+#if !ANDROID
+    public readonly CustomSetting ButtonLocation;
+#endif
 
     private LaunchpadSettings()
     {
+#if !ANDROID
+        // TODO: update button location mid-game
+        ButtonLocation = new CustomSetting("Buttons On Left", true);
+#endif
         LockedCamera = new CustomSetting("Locked Camera", false);
         UniqueDummies = new CustomSetting("Unique Dummies", true)
         {

@@ -10,11 +10,11 @@
         <Configurations>Debug;Release</Configurations>
         <Platforms>AnyCPU;Android</Platforms>
     </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|Android' ">
-      <DefineConstants>TRACE;ANDROID</DefineConstants>
+    <PropertyGroup Condition=" '$(Platform)' == 'Android' ">
+        <DefineConstants>TRACE;ANDROID</DefineConstants>
     </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Android' ">
-      <DefineConstants>TRACE;ANDROID</DefineConstants>
+    <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
+        <DefineConstants>TRACE;PC</DefineConstants>
     </PropertyGroup>
     
     <ItemGroup>
@@ -36,7 +36,7 @@
     </ItemGroup>
     
 
-    <Target Name="Copy" AfterTargets="Build" Condition="'$(AmongUs)' != ''">
+    <Target Name="Copy" AfterTargets="Build" Condition="'$(AmongUs)' != '' And '$(Platform)' == 'AnyCPU'">
         <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(AmongUs)/BepInEx/plugins/" />
     </Target>
 </Project>
