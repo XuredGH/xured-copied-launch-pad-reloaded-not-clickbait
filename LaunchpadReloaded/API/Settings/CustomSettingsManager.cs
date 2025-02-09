@@ -36,7 +36,7 @@ public static class CustomSettingsManager
         var aspectPosition = launchpadTab.AddComponent<AspectPosition>();
         gridArrange.Alignment = GridArrange.StartAlign.Left;
         aspectPosition.Alignment = AspectPosition.EdgeAlignments.Top;
-        gridArrange.CellSize = new Vector2(2.6f, 0.5f);
+        gridArrange.CellSize = new Vector2(2.6f, -0.5f);
         gridArrange.MaxColumns = 2;
         
         foreach (var customOption in CustomSettings)
