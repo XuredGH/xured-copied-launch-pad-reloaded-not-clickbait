@@ -3,12 +3,13 @@ using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Networking.Roles;
 using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Roles;
+using LaunchpadReloaded.Utilities;
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
-using Reactor.Utilities.Extensions;
 using UnityEngine;
+using Helpers = MiraAPI.Utilities.Helpers;
 
 namespace LaunchpadReloaded.Buttons;
 
@@ -41,12 +42,7 @@ public class SealButton : BaseLaunchpadButton<Vent>
 
     public override void SetOutline(bool active)
     {
-        if (Target == null)
-        {
-            return;
-        }
-
-        Target.myRend.SetOutline(active ? PlayerControl.LocalPlayer.Data.Role.NameColor : null);
+        Target?.myRend.UpdateOutline(active ? PlayerControl.LocalPlayer.Data.Role.NameColor : null);
     }
 
     protected override void OnClick()
@@ -57,6 +53,8 @@ public class SealButton : BaseLaunchpadButton<Vent>
         }
 
         PlayerControl.LocalPlayer.RpcSealVent(Target.Id);
+
+        SetOutline(false);
         Target = null;
     }
 }

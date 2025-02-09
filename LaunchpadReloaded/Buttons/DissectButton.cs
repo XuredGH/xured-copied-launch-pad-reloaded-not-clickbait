@@ -2,11 +2,11 @@
 using LaunchpadReloaded.Networking.Roles;
 using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Roles;
+using LaunchpadReloaded.Utilities;
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
-using Reactor.Utilities.Extensions;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
@@ -46,7 +46,7 @@ public class DissectButton : BaseLaunchpadButton<DeadBody>
 
         foreach (var renderer in Target.bodyRenderers)
         {
-            renderer.SetOutline(active ? PlayerControl.LocalPlayer.Data.Role.NameColor : null);
+            renderer.UpdateOutline(active ? PlayerControl.LocalPlayer.Data.Role.NameColor : null);
         }
     }
 
@@ -59,5 +59,8 @@ public class DissectButton : BaseLaunchpadButton<DeadBody>
 
         SoundManager.Instance.PlaySound(LaunchpadAssets.DissectSound.LoadAsset(), false, volume: 2);
         PlayerControl.LocalPlayer.RpcDissect(Target.ParentId);
+
+        SetOutline(false);
+        Target = null;
     }
 }

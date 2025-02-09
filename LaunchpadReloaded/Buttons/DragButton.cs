@@ -3,11 +3,11 @@ using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Networking.Roles;
 using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Roles;
+using LaunchpadReloaded.Utilities;
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
-using Reactor.Utilities.Extensions;
 using UnityEngine;
 using Helpers = MiraAPI.Utilities.Helpers;
 
@@ -49,7 +49,7 @@ public class DragButton : BaseLaunchpadButton<DeadBody>
 
         foreach (var renderer in Target.bodyRenderers)
         {
-            renderer.SetOutline(active ? PlayerControl.LocalPlayer.Data.Role.NameColor : null);
+            renderer.UpdateOutline(active ? PlayerControl.LocalPlayer.Data.Role.NameColor : null);
         }
     }
 
@@ -108,6 +108,9 @@ public class DragButton : BaseLaunchpadButton<DeadBody>
         if (PlayerControl.LocalPlayer.HasModifier<DragBodyModifier>())
         {
             PlayerControl.LocalPlayer.RpcStopDragging();
+
+            SetOutline(false);
+            Target = null;
         }
         else
         {

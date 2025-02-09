@@ -51,6 +51,8 @@ public class InjectButton : BaseLaunchpadButton<PlayerControl>
 
         SoundManager.Instance.PlaySound(LaunchpadAssets.InjectSound.LoadAsset(), false, volume: 3);
         PlayerControl.LocalPlayer.RpcPoison(Target, (int)OptionGroupSingleton<SurgeonOptions>.Instance.PoisonDelay);
+
+        SetOutline(false);
         Target = null;
     }
 }

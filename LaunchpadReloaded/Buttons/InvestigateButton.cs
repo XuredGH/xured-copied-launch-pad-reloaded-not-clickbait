@@ -1,11 +1,12 @@
 ﻿using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
+using LaunchpadReloaded.Utilities;
 using MiraAPI.Hud;
 using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
-using Reactor.Utilities.Extensions;
 using UnityEngine;
+using Helpers = MiraAPI.Utilities.Helpers;
 
 namespace LaunchpadReloaded.Buttons;
 
@@ -45,7 +46,7 @@ public class InvestigateButton : BaseLaunchpadButton<DeadBody>
 
         foreach (var renderer in Target.bodyRenderers)
         {
-            renderer.SetOutline(active ? PlayerControl.LocalPlayer.Data.Role.NameColor : null);
+            renderer.UpdateOutline(active ? PlayerControl.LocalPlayer.Data.Role.NameColor : null);
         }
     }
 
@@ -59,5 +60,8 @@ public class InvestigateButton : BaseLaunchpadButton<DeadBody>
         var gameObject = Object.Instantiate(LaunchpadAssets.DetectiveGame.LoadAsset(), HudManager.Instance.transform);
         var minigame = gameObject.AddComponent<JournalMinigame>();
         minigame.Open(GameData.Instance.GetPlayerById(Target.ParentId).Object);
+
+        SetOutline(false);
+        Target = null;
     }
 }

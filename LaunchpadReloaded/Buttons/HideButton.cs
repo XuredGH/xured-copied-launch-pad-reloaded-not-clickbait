@@ -4,11 +4,12 @@ using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Networking.Roles;
 using LaunchpadReloaded.Roles;
+using LaunchpadReloaded.Utilities;
 using MiraAPI.Hud;
 using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
-using Reactor.Utilities.Extensions;
 using UnityEngine;
+using Helpers = MiraAPI.Utilities.Helpers;
 
 namespace LaunchpadReloaded.Buttons;
 
@@ -45,7 +46,7 @@ public class HideButton : BaseLaunchpadButton<DeadBody>
 
         foreach (var renderer in Target.bodyRenderers)
         {
-            renderer.SetOutline(active ? PlayerControl.LocalPlayer.Data.Role.NameColor : null);
+            renderer.UpdateOutline(active ? PlayerControl.LocalPlayer.Data.Role.NameColor : null);
         }
     }
 
@@ -66,6 +67,9 @@ public class HideButton : BaseLaunchpadButton<DeadBody>
 
         PlayerControl.LocalPlayer.RpcStopDragging();
         PlayerControl.LocalPlayer.RpcHideBodyInVent(Target.ParentId, VentTarget.Id);
+
+        SetOutline(false);
+        Target = null;
     }
 
     public override bool Enabled(RoleBehaviour? role)

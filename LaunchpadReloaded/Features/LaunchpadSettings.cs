@@ -22,7 +22,7 @@ public class LaunchpadSettings
         {
             ChangedEvent = val =>
             {
-                // We need to make CustomButtonManager NOT INTERNAL.
+
             }
         };
 #endif

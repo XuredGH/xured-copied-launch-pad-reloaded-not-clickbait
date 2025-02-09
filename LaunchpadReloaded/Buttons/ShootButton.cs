@@ -52,6 +52,7 @@ public class ShootButton : BaseLaunchpadButton<PlayerControl>
             PlayerControl.LocalPlayer.RpcCustomMurder(PlayerControl.LocalPlayer);
         }
 
+        SetOutline(false);
         Target = null;
     }
 }
