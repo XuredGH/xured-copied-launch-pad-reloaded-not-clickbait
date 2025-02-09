@@ -11,5 +11,7 @@ public enum LaunchpadRpc : uint
     RemoveVote,
     PopulateResults,
     Poison,
-    Dissect
+    Dissect,
+    DigVent,
+    SealVent
 }

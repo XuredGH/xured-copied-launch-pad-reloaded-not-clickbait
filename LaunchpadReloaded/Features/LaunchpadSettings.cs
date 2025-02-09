@@ -18,7 +18,13 @@ public class LaunchpadSettings
     {
 #if !ANDROID
         // TODO: update button location mid-game
-        ButtonLocation = new CustomSetting("Buttons On Left", true);
+        ButtonLocation = new CustomSetting("Buttons On Left", true)
+        {
+            ChangedEvent = val =>
+            {
+                // We need to make CustomButtonManager NOT INTERNAL.
+            }
+        };
 #endif
         LockedCamera = new CustomSetting("Locked Camera", false);
         UniqueDummies = new CustomSetting("Unique Dummies", true)

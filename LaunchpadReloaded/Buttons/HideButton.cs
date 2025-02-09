@@ -2,6 +2,7 @@
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Networking;
+using LaunchpadReloaded.Networking.Roles;
 using LaunchpadReloaded.Roles;
 using MiraAPI.Hud;
 using MiraAPI.Utilities;

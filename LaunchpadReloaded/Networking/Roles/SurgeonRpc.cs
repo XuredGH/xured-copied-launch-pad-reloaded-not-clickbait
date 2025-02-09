@@ -8,7 +8,7 @@ using System.Collections;
 using UnityEngine;
 using Helpers = MiraAPI.Utilities.Helpers;
 
-namespace LaunchpadReloaded.Networking;
+namespace LaunchpadReloaded.Networking.Roles;
 public static class SurgeonRpc
 {
     [MethodRpc((uint)LaunchpadRpc.Poison)]

@@ -1,7 +1,7 @@
-﻿using System;
-using LaunchpadReloaded.Utilities;
+﻿using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Attributes;
 using Reactor.Utilities.Extensions;
+using System;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Components;

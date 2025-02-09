@@ -23,6 +23,7 @@ public static class LaunchpadAssets
     public static readonly LoadableAsset<Sprite> InjectButton = new LoadableResourceAsset("LaunchpadReloaded.Resources.Inject.png");
     public static readonly LoadableAsset<Sprite> InstinctButton = new LoadableResourceAsset("LaunchpadReloaded.Resources.Instinct.png");
     public static readonly LoadableAsset<Sprite> InvestigateButton = new LoadableResourceAsset("LaunchpadReloaded.Resources.Investigate.png");
+    public static readonly LoadableAsset<Sprite> DigVentButton = new LoadableResourceAsset("LaunchpadReloaded.Resources.DigVent.png");
     public static readonly LoadableAsset<Sprite> JesterIcon = new LoadableBundleAsset<Sprite>("Jester.png", Bundle);
     public static readonly LoadableAsset<Sprite> MapButton = new LoadableBundleAsset<Sprite>("Map.png", Bundle);
     public static readonly LoadableAsset<Sprite> ReviveButton = new LoadableBundleAsset<Sprite>("Revive.png", Bundle);

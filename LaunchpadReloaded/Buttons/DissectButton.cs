@@ -1,5 +1,5 @@
 ﻿using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Networking;
+using LaunchpadReloaded.Networking.Roles;
 using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Roles;
 using MiraAPI.GameOptions;
