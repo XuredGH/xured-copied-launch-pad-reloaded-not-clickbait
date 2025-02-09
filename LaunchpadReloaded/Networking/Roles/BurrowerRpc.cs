@@ -22,7 +22,7 @@ public static class BurrowerRpc
             return;
         }
 
-        var newVent = Object.Instantiate(prefab, prefab.transform.parent);
+        var newVent = Object.Instantiate(prefab, ShipStatus.Instance.transform);
         var ventId = Enumerable.Range(0, int.MaxValue)
                      .First(id => ShipStatus.Instance.AllVents.All(v => v.Id != id));
 

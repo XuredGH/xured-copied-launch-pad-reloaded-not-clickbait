@@ -1,9 +1,11 @@
 ﻿using LaunchpadReloaded.Components;
+using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Roles;
 using MiraAPI.GameOptions;
 using Reactor.Networking.Attributes;
 using System.Linq;
+using UnityEngine;
 
 namespace LaunchpadReloaded.Networking.Roles;
 public static class SealerRpc
@@ -32,5 +34,17 @@ public static class SealerRpc
         seal.Sealer = playerControl;
 
         sealer.SealedVents.Add(seal);
+
+        GameObject ventTape = new GameObject("VentTape");
+        ventTape.transform.SetParent(vent.transform);
+        ventTape.transform.localPosition = new Vector3(0, -0.05f, -0.05f);
+        ventTape.transform.localScale = new Vector3(0.55f, 0.35f, 0.4f);
+        ventTape.layer = vent.gameObject.layer;
+
+        SpriteRenderer rend = ventTape.AddComponent<SpriteRenderer>();
+        rend.sprite = LaunchpadAssets.VentTape.LoadAsset();
+        rend.color = new UnityEngine.Color(1, 1, 1, 0.5f);
+
+        //TODO; IMPLEMENT DIFFERENT TEXTURES FOR MAPS.
     }
 }

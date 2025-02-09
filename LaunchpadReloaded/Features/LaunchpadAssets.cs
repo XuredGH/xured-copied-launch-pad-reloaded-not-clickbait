@@ -50,6 +50,7 @@ public static class LaunchpadAssets
     public static readonly LoadableAsset<Sprite> Arrow = new LoadableResourceAsset("LaunchpadReloaded.Resources.Arrow.png");
     public static readonly LoadableAsset<Sprite> Bone = new LoadableResourceAsset("LaunchpadReloaded.Resources.Bone.png");
     public static readonly LoadableAsset<Sprite> Footstep = new LoadableResourceAsset("LaunchpadReloaded.Resources.Footstep.png");
+    public static readonly LoadableAsset<Sprite> VentTape = new LoadableResourceAsset("LaunchpadReloaded.Resources.VentTape.png");
     public static readonly LoadableAsset<Sprite> KnifeHandSprite = new LoadableBundleAsset<Sprite>("KnifeHand.png", Bundle);
     public static readonly LoadableAsset<Sprite> NodeSprite = new LoadableBundleAsset<Sprite>("Node.png", Bundle);
     public static readonly LoadableAsset<Sprite> ScannerSprite = new LoadableBundleAsset<Sprite>("Scanner.png", Bundle);

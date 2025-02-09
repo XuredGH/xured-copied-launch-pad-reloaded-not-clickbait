@@ -36,6 +36,8 @@ public static class MeetingHudPatches
 
         foreach (var plr in PlayerControl.AllPlayerControls)
         {
+            if (!plr.HasModifier<VoteData>()) continue;
+
             var voteData = plr.GetModifier<VoteData>();
             voteData.VotesRemaining = VotingTypesManager.GetVotes();
             voteData.VotedPlayers.Clear();
@@ -113,7 +115,7 @@ public static class MeetingHudPatches
                 if (AmongUsClient.Instance.AmHost && num2 >= votingTime)
                 {
                     foreach (var player in Helpers.GetAlivePlayers()
-                                 .Where(x => x.GetModifier<VoteData>().VotesRemaining > 0))
+                                 .Where(x => x.GetModifier<VoteData>()!.VotesRemaining > 0))
                     {
                         __instance.CastVote(player.PlayerId, (byte)SpecialVotes.Confirm);
                     }
@@ -147,7 +149,7 @@ public static class MeetingHudPatches
         {
             case MeetingHud.VoteStates.Voted:
             case MeetingHud.VoteStates.NotVoted:
-                if (PlayerControl.LocalPlayer.GetModifier<VoteData>().VotesRemaining == 0)
+                if (PlayerControl.LocalPlayer.GetModifier<VoteData>()!.VotesRemaining == 0)
                 {
                     _typeText.gameObject.SetActive(false);
                     if (_confirmVotes)
@@ -192,7 +194,7 @@ public static class MeetingHudPatches
     [HarmonyPatch(nameof(MeetingHud.CheckForEndVoting))]
     public static bool EndCheck(MeetingHud __instance)
     {
-        if (Helpers.GetAlivePlayers().Any(plr => plr.GetModifier<VoteData>().VotesRemaining > 0))
+        if (Helpers.GetAlivePlayers().Where(plr => plr.HasModifier<VoteData>()).Any(plr => plr.GetModifier<VoteData>()!.VotesRemaining > 0))
         {
             return false;
         }
@@ -231,7 +233,7 @@ public static class MeetingHudPatches
             return PlayerControl.LocalPlayer?.GetModifier<VoteData>()?.VotesRemaining > 0;
         }
 
-        return PlayerControl.LocalPlayer?.GetModifier<VoteData>()?.VotedPlayers.Contains(suspect) == false;
+        return PlayerControl.LocalPlayer.GetModifier<VoteData>()!.VotedPlayers.Contains(suspect);
     }
 
     [HarmonyPrefix]
@@ -310,6 +312,12 @@ public static class MeetingHudPatches
         [HarmonyArgument(1)] byte suspectIdx)
     {
         var plr = GameData.Instance.GetPlayerById(playerId);
+
+        if (plr is null || !plr.Object.HasModifier<VoteData>())
+        {
+            return false;
+        }
+
         var voteData = plr.Object.GetModifier<VoteData>();
         if (voteData.VotesRemaining == 0 ||
             (voteData.VotedPlayers.Contains(suspectIdx) &&
