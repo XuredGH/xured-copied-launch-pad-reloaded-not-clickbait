@@ -1,6 +1,7 @@
 ﻿using LaunchpadReloaded.Utilities;
 using MiraAPI.Events;
 using MiraAPI.Events.Vanilla;
+using MiraAPI.Events.Vanilla.Meeting;
 
 namespace LaunchpadReloaded;
 

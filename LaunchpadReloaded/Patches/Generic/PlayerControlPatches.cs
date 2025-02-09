@@ -37,7 +37,7 @@ public static class PlayerControlPatches
     [HarmonyPatch(nameof(PlayerControl.CanMove), MethodType.Getter)]
     public static void CanMovePatch(PlayerControl __instance, ref bool __result)
     {
-        if (NotepadHud.Instance != null && NotepadHud.Instance.Notepad.active)
+        if (NotepadHud.Instance?.Notepad.active == true)
         {
             __result = false;
         }
