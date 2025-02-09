@@ -3,7 +3,6 @@ using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Networking.Roles;
 using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Roles;
-using LaunchpadReloaded.Utilities;
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Utilities;
@@ -37,7 +36,9 @@ public class SealButton : BaseLaunchpadButton<Vent>
 
     public override bool IsTargetValid(Vent? target)
     {
-        return target != null && target.enabled && target.gameObject.GetComponent<SealedVentComponent>() == null;
+        return target != null && target.enabled &&
+            !PlayerControl.LocalPlayer.MustCleanVent(target.Id)
+            && target.gameObject.GetComponent<SealedVentComponent>() == null;
     }
 
     public override void SetOutline(bool active)
@@ -54,7 +55,6 @@ public class SealButton : BaseLaunchpadButton<Vent>
 
         PlayerControl.LocalPlayer.RpcSealVent(Target.Id);
 
-        SetOutline(false);
-        Target = null;
+        ResetTarget();
     }
 }

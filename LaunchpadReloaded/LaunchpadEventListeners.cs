@@ -1,7 +1,8 @@
-﻿using LaunchpadReloaded.Utilities;
+﻿using LaunchpadReloaded.Components;
+using LaunchpadReloaded.Utilities;
 using MiraAPI.Events;
-using MiraAPI.Events.Vanilla;
 using MiraAPI.Events.Vanilla.Meeting;
+using MiraAPI.Events.Vanilla.Usables;
 
 namespace LaunchpadReloaded;
 
@@ -10,7 +11,7 @@ public static class LaunchpadEventListeners
     public static void Initialize()
     {
         MiraEventManager.RegisterEventHandler<StartMeetingEvent>(StartMeetingEvent);
-        MiraEventManager.RegisterEventHandler<UseButtonClickEvent>(UseButtonEvent);
+        MiraEventManager.RegisterEventHandler<PlayerCanUseEvent>(CanUseEvent, 10);
     }
 
     // prevent meetings during hack
@@ -23,11 +24,26 @@ public static class LaunchpadEventListeners
     }
 
     // prevent tasks during hack
-    public static void UseButtonEvent(UseButtonClickEvent useButtonEvent)
+    public static void CanUseEvent(PlayerCanUseEvent @event)
     {
-        if (PlayerControl.LocalPlayer.Data.IsHacked() && !useButtonEvent.Button.currentTarget.UsableWhenHacked())
+        if (@event.IsVent)
         {
-            useButtonEvent.Cancel();
+            var vent = @event.Usable.Cast<Vent>();
+            if (vent.gameObject.GetComponent<SealedVentComponent>())
+            {
+                @event.Cancel();
+            }
+        }
+
+        if (PlayerControl.LocalPlayer && PlayerControl.LocalPlayer.Data.IsHacked() && @event.IsPrimaryConsole)
+        {
+            @event.Cancel();
+        }
+
+        if (HackerUtilities.AnyPlayerHacked() &&
+            @event.Usable.TryCast<SystemConsole>() || @event.Usable.TryCast<MapConsole>())
+        {
+            @event.Cancel();
         }
     }
 }

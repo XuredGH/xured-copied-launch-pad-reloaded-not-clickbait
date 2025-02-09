@@ -3,7 +3,6 @@ using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Roles;
-using LaunchpadReloaded.Utilities;
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Utilities;
@@ -99,7 +98,6 @@ public class ReviveButton : BaseLaunchpadButton<DeadBody>
 
         PlayerControl.LocalPlayer.RpcRevive(Target.ParentId);
 
-        SetOutline(false);
-        Target = null;
+        ResetTarget();
     }
 }

@@ -1,7 +1,6 @@
 ﻿using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
-using LaunchpadReloaded.Utilities;
 using MiraAPI.Hud;
 using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
@@ -61,7 +60,6 @@ public class InvestigateButton : BaseLaunchpadButton<DeadBody>
         var minigame = gameObject.AddComponent<JournalMinigame>();
         minigame.Open(GameData.Instance.GetPlayerById(Target.ParentId).Object);
 
-        SetOutline(false);
-        Target = null;
+        ResetTarget();
     }
 }

@@ -41,6 +41,12 @@ public abstract class BaseLaunchpadButton<T> : CustomActionButton<T> where T : M
 
     public abstract bool AffectedByHack { get; }
 
+    public override void ResetTarget()
+    {
+        SetOutline(false);
+        Target = null;
+    }
+
     public override bool CanUse()
     {
         var buttonTimer = !TimerAffectedByPlayer || PlayerControl.LocalPlayer.ButtonTimerEnabled();

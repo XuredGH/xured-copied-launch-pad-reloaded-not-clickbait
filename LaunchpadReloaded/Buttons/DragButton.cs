@@ -3,7 +3,6 @@ using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Networking.Roles;
 using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Roles;
-using LaunchpadReloaded.Utilities;
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Utilities;
@@ -109,8 +108,7 @@ public class DragButton : BaseLaunchpadButton<DeadBody>
         {
             PlayerControl.LocalPlayer.RpcStopDragging();
 
-            SetOutline(false);
-            Target = null;
+            ResetTarget();
         }
         else
         {

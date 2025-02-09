@@ -1,5 +1,6 @@
 ﻿using Il2CppSystem;
 using LaunchpadReloaded.API.Settings;
+using MiraAPI.PluginLoading;
 using System.Linq;
 
 namespace LaunchpadReloaded.Features;
@@ -22,7 +23,11 @@ public class LaunchpadSettings
         {
             ChangedEvent = val =>
             {
-
+                var plugin = MiraPluginManager.GetPluginByGuid(LaunchpadReloadedPlugin.Id);
+                foreach (var button in plugin.GetButtons())
+                {
+                    button.SetButtonLocation(val ? MiraAPI.Hud.ButtonLocation.BottomLeft : MiraAPI.Hud.ButtonLocation.BottomRight);
+                }
             }
         };
 #endif

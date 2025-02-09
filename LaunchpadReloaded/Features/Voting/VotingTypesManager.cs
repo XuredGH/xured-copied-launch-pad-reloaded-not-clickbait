@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using LaunchpadReloaded.Modifiers;
+﻿using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Options;
 using LaunchpadReloaded.Utilities;
 using MiraAPI.GameOptions;
 using Reactor.Utilities.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -21,15 +21,15 @@ public static class VotingTypesManager
         1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5
     ];
 
-    public static int GetDynamicVotes() => 
+    public static int GetDynamicVotes() =>
         (int)Math.Min(
             RecommendedVotes[
                 Math.Min(
                     Math.Clamp(
                         Helpers.GetAlivePlayers().Count,
-                        0, 
+                        0,
                         15),
-                    RecommendedVotes.Length)], 
+                    RecommendedVotes.Length)],
             OptionGroupSingleton<VotingOptions>.Instance.MaxVotes.Value);
 
     public static int GetVotes()
@@ -105,7 +105,7 @@ public static class VotingTypesManager
         {
             var delays = new Dictionary<byte, int>();
             var num2 = 0;
-            
+
             foreach (var vote in votes)
             {
                 if (vote.Suspect == (byte)SpecialVotes.Skip)
@@ -121,7 +121,7 @@ public static class VotingTypesManager
                 {
                     delays[vote.Suspect]++;
                 }
-                
+
                 MeetingHud.Instance.BloopAVoteIcon(GameData.Instance.GetPlayerById(vote.Voter), delays[vote.Suspect], playerVoteArea.transform);
             }
         }
