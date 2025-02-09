@@ -5,7 +5,7 @@ using MiraAPI.Hud;
 using MiraAPI.Utilities;
 using Reactor.Networking.Attributes;
 
-namespace LaunchpadReloaded.Networking;
+namespace LaunchpadReloaded.Networking.Roles;
 
 public static class DragRpc
 {
