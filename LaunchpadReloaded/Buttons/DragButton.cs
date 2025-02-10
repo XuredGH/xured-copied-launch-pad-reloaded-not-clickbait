@@ -68,9 +68,7 @@ public class DragButton : BaseLaunchpadButton<DeadBody>
         // can probably be improved but whatever
         HudManager.Instance.KillButton.SetDisabled();
         HudManager.Instance.ReportButton.SetDisabled();
-        HudManager.Instance.UseButton.SetDisabled();
         HudManager.Instance.SabotageButton.SetDisabled();
-        HudManager.Instance.ImpostorVentButton.SetDisabled();
         HudManager.Instance.AdminButton.SetDisabled();
         HudManager.Instance.ReportButton.SetDisabled();
     }
@@ -107,8 +105,6 @@ public class DragButton : BaseLaunchpadButton<DeadBody>
         if (PlayerControl.LocalPlayer.HasModifier<DragBodyModifier>())
         {
             PlayerControl.LocalPlayer.RpcStopDragging();
-
-            ResetTarget();
         }
         else
         {

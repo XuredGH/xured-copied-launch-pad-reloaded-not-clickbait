@@ -1,7 +1,3 @@
-using System;
-using System.Linq;
-using System.Reflection;
-using System.Collections.Generic;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Modifiers;
@@ -10,6 +6,10 @@ using MiraAPI.GameOptions;
 using MiraAPI.Utilities;
 using PowerTools;
 using Reactor.Utilities.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -18,7 +18,7 @@ namespace LaunchpadReloaded.Utilities;
 public static class Extensions
 {
     private static readonly ContactFilter2D Filter = ContactFilter2D.CreateLegacyFilter(Constants.NotShipMask, float.MinValue, float.MaxValue);
-    
+
     public static void SetBodyType(this PlayerControl player, int bodyType)
     {
         if (bodyType == 6)
@@ -53,14 +53,14 @@ public static class Extensions
         }
 
         player.MyPhysics.SetBodyType((PlayerBodyTypes)bodyType);
-        
+
         if (bodyType == (int)PlayerBodyTypes.Normal)
         {
             player.cosmetics.currentBodySprite.BodySprite.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
             player.cosmetics.SetNamePosition(new Vector3(0, 1, -.5f));
         }
     }
-    
+
     public static void SetGradientData(this GameObject gameObject, byte playerId)
     {
         var data = gameObject.GetComponent<PlayerGradientData>();
@@ -114,6 +114,11 @@ public static class Extensions
         return (playerControl.moveable || playerControl.petting) && playerControl is { inVent: false, shapeshifting: false } && (!DestroyableSingleton<HudManager>.InstanceExists || !DestroyableSingleton<HudManager>.Instance.IsIntroDisplayed) && !MeetingHud.Instance && !PlayerCustomizationMenu.Instance && !ExileController.Instance && !IntroCutscene.Instance;
     }
 
+    public static bool IsSealed(this Vent vent)
+    {
+        return vent.gameObject.TryGetComponent<SealedVentComponent>(out _);
+    }
+
     public static void Revive(this DeadBody body)
     {
         var player = PlayerControl.AllPlayerControls.ToArray().FirstOrDefault(player => player.PlayerId == body.ParentId);
@@ -126,7 +131,7 @@ public static class Extensions
         body.gameObject.Destroy();
         player.GetModifierComponent()!.AddModifier<RevivedModifier>();
     }
-    
+
     public static void HideBody(this DeadBody body)
     {
         body.GetComponent<DeadBodyCacheComponent>().SetVisibility(false);
@@ -138,7 +143,7 @@ public static class Extensions
         body.GetComponent<DeadBodyCacheComponent>().SetVisibility(true);
         body.Reported = reported;
     }
-    
+
     public static bool IsOverride(this MethodInfo methodInfo)
     {
         return methodInfo.GetBaseDefinition() != methodInfo;

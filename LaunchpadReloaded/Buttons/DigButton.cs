@@ -2,6 +2,7 @@
 using LaunchpadReloaded.Networking.Roles;
 using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Roles;
+using LaunchpadReloaded.Utilities;
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Utilities.Assets;
@@ -30,7 +31,7 @@ public class DigButton : BaseLaunchpadButton
 
     public override bool CanUse()
     {
-        return base.CanUse() && !ShipStatus.Instance.AllVents.Any(vent =>
+        return base.CanUse() && !ShipStatus.Instance.AllVents.Where(vent => !vent.IsSealed()).Any(vent =>
             Vector2.Distance(PlayerControl.LocalPlayer.GetTruePosition(), vent.transform.position) < _ventDist);
     }
 

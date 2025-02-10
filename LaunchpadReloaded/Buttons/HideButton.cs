@@ -4,6 +4,7 @@ using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Networking.Roles;
 using LaunchpadReloaded.Roles;
+using LaunchpadReloaded.Utilities;
 using MiraAPI.Hud;
 using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
@@ -54,7 +55,8 @@ public class HideButton : BaseLaunchpadButton<DeadBody>
         return base.CanUse() &&
                Target &&
                PlayerControl.LocalPlayer.HasModifier<DragBodyModifier>() &&
-               VentTarget && !VentTarget.gameObject.GetComponent<VentBodyComponent>();
+               VentTarget && !VentTarget.gameObject.GetComponent<VentBodyComponent>()
+               && !VentTarget.IsSealed();
     }
 
     protected override void OnClick()

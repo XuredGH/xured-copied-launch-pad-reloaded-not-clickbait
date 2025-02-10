@@ -1,8 +1,8 @@
-﻿using LaunchpadReloaded.Components;
-using LaunchpadReloaded.Features;
+﻿using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Networking.Roles;
 using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Roles;
+using LaunchpadReloaded.Utilities;
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Utilities;
@@ -15,11 +15,11 @@ namespace LaunchpadReloaded.Buttons;
 [RegisterButton]
 public class SealButton : BaseLaunchpadButton<Vent>
 {
-    public override string Name => "Seal";
+    public override string Name => "Seal Vent";
     public override float Cooldown => OptionGroupSingleton<SealerOptions>.Instance.SealVentCooldown;
     public override float EffectDuration => 0;
     public override int MaxUses => (int)OptionGroupSingleton<SealerOptions>.Instance.SealVentUses;
-    public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.DissectButton;
+    public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.SealButton;
     public override bool TimerAffectedByPlayer => true;
     public override bool AffectedByHack => false;
     public override float Distance => 1f;
@@ -38,7 +38,7 @@ public class SealButton : BaseLaunchpadButton<Vent>
     {
         return target != null && target.enabled &&
             !PlayerControl.LocalPlayer.MustCleanVent(target.Id)
-            && target.gameObject.GetComponent<SealedVentComponent>() == null;
+            && !target.IsSealed();
     }
 
     public override void SetOutline(bool active)
