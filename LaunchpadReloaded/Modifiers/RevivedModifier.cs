@@ -1,5 +1,4 @@
 ﻿using AmongUs.GameOptions;
-using Il2CppSystem;
 using LaunchpadReloaded.Features;
 using MiraAPI.Modifiers;
 using UnityEngine;
@@ -10,6 +9,7 @@ namespace LaunchpadReloaded.Modifiers;
 public class RevivedModifier : BaseModifier
 {
     public override string ModifierName => "Revived";
+    private readonly int VisorColor = Shader.PropertyToID("_VisorColor");
 
     public override void OnActivate()
     {
@@ -36,6 +36,7 @@ public class RevivedModifier : BaseModifier
 
     public override void FixedUpdate()
     {
-        Player!.cosmetics.SetOutline(true, new Nullable<Color>(LaunchpadPalette.MedicColor));
+        Player!.cosmetics.visor.SetVisorColor(LaunchpadPalette.MedicColor);
+        Player!.cosmetics.currentBodySprite.BodySprite.material.SetColor(VisorColor, LaunchpadPalette.MedicColor);
     }
 }
