@@ -57,7 +57,16 @@ public class HackedModifier : TimedModifier
         Player.cosmetics.SetColor(15);
         Player.cosmetics.gameObject.SetActive(false);
 
-        if (!Player.AmOwner || IsImpostor)
+        if (!Player.AmOwner)
+        {
+            return;
+        }
+        foreach (var node in HackNodeComponent.AllNodes)
+        {
+            node.isActive = true;
+        }
+        
+        if (IsImpostor)
         {
             return;
         }
@@ -65,10 +74,6 @@ public class HackedModifier : TimedModifier
         _hackedText = MiraAPI.Utilities.Helpers.CreateTextLabel("HackedText", HudManager.Instance.transform, AspectPosition.EdgeAlignments.Top, new Vector3(0, 1, 0));
 
         Coroutines.Start(HackEffect());
-        foreach (var node in HackNodeComponent.AllNodes)
-        {
-            node.isActive = true;
-        }
     }
 
     public override void OnDeactivate()
@@ -89,17 +94,22 @@ public class HackedModifier : TimedModifier
             }
         }
 
-        if (!Player.AmOwner || IsImpostor)
+        if (!Player.AmOwner)
         {
             return;
         }
-
-        Coroutines.Stop(HackEffect());
+        
         foreach (var node in HackNodeComponent.AllNodes)
         {
             node.isActive = false;
         }
 
+        if (IsImpostor)
+        {
+            return;
+        }
+
+        Coroutines.Stop(HackEffect());
         _hackedText.gameObject.DestroyImmediate();
     }
 

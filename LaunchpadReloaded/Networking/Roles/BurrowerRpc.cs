@@ -33,9 +33,9 @@ public static class BurrowerRpc
         newVent.Center = null;
         newVent.Right = null;
 
-        if (burrower.DiggedVents.Count > 0)
+        if (burrower.DugVents.Count > 0)
         {
-            var otherVent = burrower.DiggedVents.Last();
+            var otherVent = burrower.DugVents.Last();
             newVent.Left = otherVent;
             otherVent.Right = newVent;
         }
@@ -44,6 +44,6 @@ public static class BurrowerRpc
         allVents.Add(newVent);
         ShipStatus.Instance.AllVents = allVents.ToArray();
 
-        burrower.DiggedVents.Add(newVent);
+        burrower.DugVents.Add(newVent);
     }
 }

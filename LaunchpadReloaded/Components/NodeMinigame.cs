@@ -32,7 +32,7 @@ public class NodeMinigame(nint ptr) : Minigame(ptr)
 
     private void Awake()
     {
-        DivertPowerMinigame miniGame = GetComponent<DivertPowerMinigame>();
+        var miniGame = GetComponent<DivertPowerMinigame>();
         Sliders = miniGame.Sliders;
         OpenSound = miniGame.OpenSound;
         CloseSound = miniGame.CloseSound;
@@ -55,7 +55,7 @@ public class NodeMinigame(nint ptr) : Minigame(ptr)
             Close();
         }));
 
-        for (int i = 0; i < Sliders.Length; i++)
+        for (var i = 0; i < Sliders.Length; i++)
         {
             if (i != sliderId)
             {
@@ -80,14 +80,14 @@ public class NodeMinigame(nint ptr) : Minigame(ptr)
         if (amClosing != CloseState.None) return;
 
 
-        if (sliderId == Sliders.Count()) return;
+        if (sliderId == Sliders.Length) return;
 
-        Collider2D collider2D2 = Sliders[sliderId];
+        var collider2D2 = Sliders[sliderId];
         Vector2 vector2 = collider2D2.transform.localPosition;
-        DragState dragState = myController.CheckDrag(collider2D2);
+        var dragState = myController.CheckDrag(collider2D2);
         if (dragState == DragState.Dragging)
         {
-            Vector2 vector3 = myController.DragPosition - (Vector2)collider2D2.transform.parent.position;
+            var vector3 = myController.DragPosition - (Vector2)collider2D2.transform.parent.position;
             vector3.x = SliderX.Clamp(vector3.x);
             vector2.x = vector3.x;
             collider2D2.transform.localPosition = vector2;
@@ -106,7 +106,7 @@ public class NodeMinigame(nint ptr) : Minigame(ptr)
 
             SoundManager.Instance.PlaySoundImmediate(LaunchpadAssets.BeepSound.LoadAsset(), false, 0.8f);
 
-            if (sliderId != Sliders.Count())
+            if (sliderId != Sliders.Length)
             {
                 Sliders[sliderId].GetComponent<SpriteRenderer>().color = new Color(0, 1, 0.2549479f);
             }
@@ -116,6 +116,17 @@ public class NodeMinigame(nint ptr) : Minigame(ptr)
                 statusText.color = Color.green;
 
                 StartCoroutine(CoStartClose(1f));
+                if (TutorialManager.InstanceExists)
+                {
+                    foreach (var plr in PlayerControl.AllPlayerControls)
+                    {
+                        if (plr.AmOwner)
+                        {
+                            continue;
+                        }
+                        plr.RpcRemoveModifier<HackedModifier>();
+                    }
+                }
                 PlayerControl.LocalPlayer.RpcRemoveModifier<HackedModifier>();
             }
         }
