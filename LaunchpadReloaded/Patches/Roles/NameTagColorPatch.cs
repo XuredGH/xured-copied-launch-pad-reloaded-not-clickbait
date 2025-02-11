@@ -1,7 +1,6 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.Options;
 using MiraAPI.GameOptions;
-using Reactor.Utilities;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Patches.Roles;
@@ -14,8 +13,6 @@ public static class NameTagColorPatch
     [HarmonyPatch(nameof(PlayerNameColor.Get), typeof(RoleBehaviour))]
     public static bool GetPatch([HarmonyArgument(0)] RoleBehaviour otherPlayerRole, ref Color __result)
     {
-        Logger<LaunchpadReloadedPlugin>.Instance.LogError("What was i gonna do");
-
         if (PlayerControl.LocalPlayer.Data.IsDead && OptionGroupSingleton<GeneralOptions>.Instance.GhostsSeeRoles)
         {
             __result = otherPlayerRole.NameColor;

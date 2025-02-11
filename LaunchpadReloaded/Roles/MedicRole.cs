@@ -7,7 +7,7 @@ namespace LaunchpadReloaded.Roles;
 
 
 [RegisterCustomRole]
-public class MedicRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
+public class MedicRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole, ILaunchpadRole
 {
     public string RoleName => "Medic";
     public string RoleDescription => "Help the crewmates by reviving dead players.";

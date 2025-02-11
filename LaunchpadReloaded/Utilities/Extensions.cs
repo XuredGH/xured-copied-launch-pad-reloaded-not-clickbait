@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
 namespace LaunchpadReloaded.Utilities;
@@ -18,6 +19,11 @@ namespace LaunchpadReloaded.Utilities;
 public static class Extensions
 {
     private static readonly ContactFilter2D Filter = ContactFilter2D.CreateLegacyFilter(Constants.NotShipMask, float.MinValue, float.MaxValue);
+
+    public static PlayerTagManager? GetTagManager(this PlayerControl player)
+    {
+        return player.GetComponent<PlayerTagManager>();
+    }
 
     public static void SetBodyType(this PlayerControl player, int bodyType)
     {
@@ -107,6 +113,26 @@ public static class Extensions
             }
         }
         return result;
+    }
+
+
+    // Source: https://stackoverflow.com/a/78897981
+    public static int GetColumnCount(this GridLayoutGroup grid)
+    {
+        if (grid.transform.childCount <= 1) return grid.transform.childCount;
+
+        float maxWidth = grid.GetComponent<RectTransform>().rect.width;
+        float cellWidth = grid.cellSize.x;
+        float cellSpacing = grid.spacing.x;
+        for (int i = 2; i < grid.transform.childCount; ++i)
+        {
+            if (i * cellWidth + (i - 1) * cellSpacing > maxWidth)
+            {
+                return i - 1;
+            }
+        }
+
+        return grid.transform.childCount;
     }
 
     public static bool ButtonTimerEnabled(this PlayerControl playerControl)

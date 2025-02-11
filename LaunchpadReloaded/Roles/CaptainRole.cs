@@ -7,7 +7,7 @@ namespace LaunchpadReloaded.Roles;
 
 
 [RegisterCustomRole]
-public class CaptainRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
+public class CaptainRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole, ILaunchpadRole
 {
     public string RoleName => "Captain";
     public string RoleDescription => "Protect the crew with your abilities";

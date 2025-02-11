@@ -10,7 +10,7 @@ namespace LaunchpadReloaded.Roles;
 
 
 [RegisterCustomRole]
-public class JesterRole(System.IntPtr ptr) : RoleBehaviour(ptr), ICustomRole
+public class JesterRole(System.IntPtr ptr) : RoleBehaviour(ptr), ICustomRole, ILaunchpadRole
 {
     public string RoleName => "Jester";
     public string RoleDescription => "Get ejected to win";

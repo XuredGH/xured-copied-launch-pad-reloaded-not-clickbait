@@ -7,7 +7,7 @@ namespace LaunchpadReloaded.Roles;
 
 
 [RegisterCustomRole]
-public class SheriffRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
+public class SheriffRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole, ILaunchpadRole
 {
     public string RoleName => "Sheriff";
     public string RoleDescription => "Take your chance by shooting a player.";

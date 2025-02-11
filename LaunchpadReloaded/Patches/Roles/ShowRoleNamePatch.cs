@@ -6,11 +6,10 @@ using MiraAPI.GameOptions;
 using MiraAPI.Roles;
 using MiraAPI.Utilities;
 using TMPro;
-using UnityEngine;
 
 namespace LaunchpadReloaded.Patches.Roles;
 
-[HarmonyPatch]
+//[HarmonyPatch]
 public static class ShowRoleNamePatch
 {
     [HarmonyPostfix]
@@ -51,7 +50,7 @@ public static class ShowRoleNamePatch
         {
             if (__instance.cosmetics.nameText)
             {
-                __instance.cosmetics.nameText.transform.localPosition = new Vector3(0, 0, 0);
+                // __instance.cosmetics.nameText.transform.localPosition = new Vector3(0, 0, 0);
                 __instance.cosmetics.nameText.text = __instance.Data!.PlayerName;
             }
             return;
@@ -72,7 +71,7 @@ public static class ShowRoleNamePatch
             }
 
             __instance.cosmetics.nameText.text = nameText;
-            __instance.cosmetics.nameText.transform.localPosition = __instance.cosmetics.colorBlindText.gameObject.active ? new Vector3(0, 0.2f, 0) : new Vector3(0, 0, 0);
+            // __instance.cosmetics.nameText.transform.localPosition = __instance.cosmetics.colorBlindText.gameObject.active ? new Vector3(0, 0.2f, 0) : new Vector3(0, 0, 0);
             return;
         }
 

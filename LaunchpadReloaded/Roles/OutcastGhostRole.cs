@@ -1,14 +1,12 @@
-﻿using System;
-using System.Text;
-using Il2CppInterop.Runtime.Attributes;
-using MiraAPI.Roles;
+﻿using MiraAPI.Roles;
+using System;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
 
 
 [RegisterCustomRole]
-public class OutcastGhostRole(IntPtr ptr) : CrewmateGhostRole(ptr), ICustomRole
+public class OutcastGhostRole(IntPtr ptr) : CrewmateGhostRole(ptr), ICustomRole, ILaunchpadRole
 {
     public string RoleName => "Outcast Ghost";
     public string RoleDescription => string.Empty;
@@ -33,6 +31,11 @@ public class OutcastGhostRole(IntPtr ptr) : CrewmateGhostRole(ptr), ICustomRole
     }
 
     public override bool DidWin(GameOverReason gameOverReason)
+    {
+        return false;
+    }
+
+    public bool CanSeeRoleTag()
     {
         return false;
     }

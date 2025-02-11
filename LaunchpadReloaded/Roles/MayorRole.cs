@@ -7,7 +7,7 @@ namespace LaunchpadReloaded.Roles;
 
 
 [RegisterCustomRole]
-public class MayorRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
+public class MayorRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole, ILaunchpadRole
 {
     public string RoleName => "Mayor";
     public string RoleDescription => "You get extra votes.";

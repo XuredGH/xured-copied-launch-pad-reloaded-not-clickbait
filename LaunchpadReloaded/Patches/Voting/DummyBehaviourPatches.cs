@@ -1,6 +1,8 @@
-﻿using HarmonyLib;
+﻿using AmongUs.GameOptions;
+using HarmonyLib;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Modifiers;
+using LaunchpadReloaded.Utilities;
 using MiraAPI.Utilities;
 
 namespace LaunchpadReloaded.Patches.Voting;
@@ -21,6 +23,15 @@ public static class DummyBehaviourPatches
     [HarmonyPatch(nameof(DummyBehaviour.Start))]
     public static void DummyStartPatch(DummyBehaviour __instance)
     {
+        __instance.myPlayer.RpcSetRole(RoleTypes.Crewmate, false);
+
+        var tagManager = __instance.myPlayer.GetTagManager();
+
+        if (tagManager != null)
+        {
+            tagManager.UpdatePosition();
+        }
+
         if (LaunchpadSettings.Instance?.UniqueDummies.Enabled == true)
         {
             __instance.myPlayer.RpcSetName(AccountManager.Instance.GetRandomName());

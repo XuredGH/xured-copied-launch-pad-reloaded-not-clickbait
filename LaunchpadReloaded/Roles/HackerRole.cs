@@ -1,4 +1,6 @@
 using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Options;
+using MiraAPI.GameOptions;
 using MiraAPI.Roles;
 using System;
 using UnityEngine;
@@ -7,7 +9,7 @@ namespace LaunchpadReloaded.Roles;
 
 
 [RegisterCustomRole]
-public class HackerRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
+public class HackerRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole, ILaunchpadRole
 {
     public string RoleName => "Hacker";
     public string RoleDescription => "Hack meetings and sabotage the crewmates";
@@ -19,4 +21,10 @@ public class HackerRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
         Icon = LaunchpadAssets.HackButton,
         OptionsScreenshot = LaunchpadAssets.HackerBanner,
     };
+
+    public bool CanSeeRoleTag()
+    {
+        var baseVisibility = OptionGroupSingleton<GeneralOptions>.Instance.GhostsSeeRoles && PlayerControl.LocalPlayer.Data.IsDead;
+        return baseVisibility || PlayerControl.LocalPlayer.Data.Role.IsImpostor;
+    }
 }

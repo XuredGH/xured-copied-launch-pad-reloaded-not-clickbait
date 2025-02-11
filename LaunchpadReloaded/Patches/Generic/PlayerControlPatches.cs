@@ -70,6 +70,7 @@ public static class PlayerControlPatches
     {
         __instance.gameObject.AddComponent<PlayerGradientData>();
         __instance.GetModifierComponent()!.AddModifier<VoteData>();
+        __instance.gameObject.AddComponent<PlayerTagManager>();
     }
 
     /// <summary>

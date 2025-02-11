@@ -1,5 +1,7 @@
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Modifiers;
+using LaunchpadReloaded.Options;
+using MiraAPI.GameOptions;
 using MiraAPI.Roles;
 using MiraAPI.Utilities;
 using System;
@@ -9,7 +11,7 @@ namespace LaunchpadReloaded.Roles;
 
 
 [RegisterCustomRole]
-public class JanitorRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
+public class JanitorRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole, ILaunchpadRole
 {
     public string RoleName => "Janitor";
     public string RoleDescription => "Drag bodies and hide them in vents";
@@ -30,5 +32,11 @@ public class JanitorRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
         }
         var console = usable.TryCast<Console>();
         return !(console != null) || console.AllowImpostor && !PlayerControl.LocalPlayer.HasModifier<DragBodyModifier>();
+    }
+
+    public bool CanSeeRoleTag()
+    {
+        var baseVisibility = OptionGroupSingleton<GeneralOptions>.Instance.GhostsSeeRoles && PlayerControl.LocalPlayer.Data.IsDead;
+        return baseVisibility || PlayerControl.LocalPlayer.Data.Role.IsImpostor;
     }
 }

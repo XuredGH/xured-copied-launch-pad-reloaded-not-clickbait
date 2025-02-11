@@ -67,4 +67,7 @@ public static class LaunchpadAssets
     public static readonly LoadableAsset<GameObject> DetectiveGame = new LoadableBundleAsset<GameObject>("JournalMinigame", Bundle);
     public static readonly LoadableAsset<GameObject> Notepad = new LoadableBundleAsset<GameObject>("Notepad", Bundle);
     public static readonly LoadableAsset<GameObject> NodeGame = new LoadableBundleAsset<GameObject>("NodeMinigame", Bundle);
+
+    public static readonly LoadableAsset<GameObject> PlayerTags = new LoadableBundleAsset<GameObject>("PlayerTags", Bundle);
+    public static readonly LoadableAsset<Sprite> TagBackground = new LoadableResourceAsset("LaunchpadReloaded.Resources.TagBackground.png");
 }
