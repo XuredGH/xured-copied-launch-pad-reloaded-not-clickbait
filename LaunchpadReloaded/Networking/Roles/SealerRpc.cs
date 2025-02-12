@@ -13,7 +13,7 @@ public static class SealerRpc
     [MethodRpc((uint)LaunchpadRpc.SealVent)]
     public static void RpcSealVent(this PlayerControl playerControl, int ventId)
     {
-        if (playerControl.Data.Role is not SealerRole sealer)
+        if (playerControl.Data.Role is not LocksmithRole sealer)
         {
             playerControl.KickForCheating();
             return;
@@ -25,7 +25,7 @@ public static class SealerRpc
             return;
         }
 
-        if (OptionGroupSingleton<SealerOptions>.Instance.SealReveal && vent.gameObject.TryGetComponent<VentBodyComponent>(out var body))
+        if (OptionGroupSingleton<LocksmithOptions>.Instance.SealReveal && vent.gameObject.TryGetComponent<VentBodyComponent>(out var body))
         {
             body.ExposeBody();
         }

@@ -9,9 +9,9 @@ namespace LaunchpadReloaded.Roles;
 
 
 [RegisterCustomRole]
-public class SealerRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole, ILaunchpadRole
+public class LocksmithRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole, ILaunchpadRole
 {
-    public string RoleName => "Sealer";
+    public string RoleName => "Locksmith";
     public string RoleDescription => "Seal vents around the map.";
     public string RoleLongDescription => "Seal vents around the map.\nThis will prevent anyone from entering the vent.";
     public Color RoleColor => LaunchpadPalette.SealerColor;

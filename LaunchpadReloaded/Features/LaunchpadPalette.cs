@@ -15,4 +15,5 @@ public static class LaunchpadPalette
     public static readonly Color MayorColor = new Color32(221, 176, 152, 255);
     public static readonly Color DetectiveColor = new Color32(67, 166, 198, 255);
     public static readonly Color BurrowerColor = new Color32(111, 78, 55, 255);
+    public static readonly Color SwapperColor = Palette.Purple;
 }

@@ -6,11 +6,11 @@ using System;
 
 namespace LaunchpadReloaded.Options.Roles;
 
-public class SealerOptions : AbstractOptionGroup
+public class LocksmithOptions : AbstractOptionGroup
 {
-    public override string GroupName => "Sealer";
+    public override string GroupName => "Locksmith";
 
-    public override Type AdvancedRole => typeof(SealerRole);
+    public override Type AdvancedRole => typeof(LocksmithRole);
 
     [ModdedNumberOption("Seal Vent Cooldown", 0, 120, 5, MiraNumberSuffixes.Seconds)]
     public float SealVentCooldown { get; set; } = 35;

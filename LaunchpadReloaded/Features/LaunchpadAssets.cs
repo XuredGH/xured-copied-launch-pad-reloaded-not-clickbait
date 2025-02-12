@@ -32,6 +32,9 @@ public static class LaunchpadAssets
     public static readonly LoadableAsset<Sprite> TrackButton = new LoadableBundleAsset<Sprite>("Track.png", Bundle);
     public static readonly LoadableAsset<Sprite> ZoomButton = new LoadableBundleAsset<Sprite>("Zoom.png", Bundle);
     public static readonly LoadableAsset<Sprite> SealButton = new LoadableResourceAsset("LaunchpadReloaded.Resources.SealVent.png");
+    public static readonly LoadableAsset<Sprite> SwapButton = new LoadableResourceAsset("LaunchpadReloaded.Resources.Swap.png");
+    public static readonly LoadableAsset<Sprite> FreezeButton = new LoadableResourceAsset("LaunchpadReloaded.Resources.Freeze.png");
+    public static readonly LoadableAsset<Sprite> SoulButton = new LoadableResourceAsset("LaunchpadReloaded.Resources.StealSoul.png");
 
     public static readonly LoadableAsset<Sprite> NotepadSprite = new LoadableResourceAsset("LaunchpadReloaded.Resources.NotepadButton.png");
     public static readonly LoadableAsset<Sprite> NotepadActiveSprite = new LoadableResourceAsset("LaunchpadReloaded.Resources.NotepadButtonActive.png");
