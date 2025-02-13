@@ -5,15 +5,124 @@ using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Networking.Color;
 using LaunchpadReloaded.Roles;
+using LaunchpadReloaded.Utilities;
 using MiraAPI.Utilities;
 using Reactor.Networking.Rpc;
 using UnityEngine;
+using Action = System.Action;
 
 namespace LaunchpadReloaded.Patches.Generic;
 
 [HarmonyPatch(typeof(PlayerControl))]
 public static class PlayerControlPatches
 {
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(PlayerControl.Shapeshift))]
+    public static bool ShapeshiftPatch(PlayerControl __instance, PlayerControl targetPlayer, bool animate)
+    {
+        __instance.waitingForShapeshiftResponse = false;
+        if (__instance.CurrentOutfitType == PlayerOutfitType.MushroomMixup)
+        {
+            __instance.logger.Info("Ignoring shapeshift message for " + ((targetPlayer == null) ? "null player" : targetPlayer.PlayerId.ToString()) + " because of mushroom mixup", null);
+
+            if (__instance.AmOwner && __instance.Data.Role is ShapeshifterRole)
+            {
+                DestroyableSingleton<HudManager>.Instance.AbilityButton.SetFromSettings(__instance.Data.Role.Ability);
+                __instance.Data.Role.SetCooldown();
+            }
+
+            return false;
+        }
+        NetworkedPlayerInfo targetPlayerInfo = targetPlayer.Data;
+        NetworkedPlayerInfo.PlayerOutfit newOutfit;
+        if (targetPlayerInfo.PlayerId == __instance.Data.PlayerId)
+        {
+            newOutfit = __instance.Data.Outfits[PlayerOutfitType.Default];
+        }
+        else
+        {
+            newOutfit = targetPlayer.Data.Outfits[PlayerOutfitType.Default];
+        }
+
+        Action changeOutfit = new Action(() =>
+        {
+            if (targetPlayerInfo.PlayerId == __instance.Data.PlayerId)
+            {
+                __instance.RawSetOutfit(newOutfit, PlayerOutfitType.Default);
+                __instance.logger.Info(string.Format("Player {0} Shapeshift is reverting", __instance.PlayerId), null);
+                __instance.shapeshiftTargetPlayerId = -1;
+
+                if (__instance.AmOwner && __instance.Data.Role is ShapeshifterRole)
+                {
+                    DestroyableSingleton<HudManager>.Instance.AbilityButton.SetFromSettings(__instance.Data.Role.Ability);
+                    return;
+                }
+            }
+            else
+            {
+                __instance.RawSetOutfit(newOutfit, PlayerOutfitType.Shapeshifted);
+                __instance.logger.Info(string.Format("Player {0} is shapeshifting into {1}", __instance.PlayerId, targetPlayer.PlayerId), null);
+                __instance.shapeshiftTargetPlayerId = (int)targetPlayer.PlayerId;
+
+                if (__instance.AmOwner && __instance.Data.Role is ShapeshifterRole)
+                {
+                    DestroyableSingleton<HudManager>.Instance.AbilityButton.OverrideText(DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.ShapeshiftAbilityUndo, Il2CppSystem.Array.Empty<Il2CppSystem.Object>()));
+                }
+            }
+
+            __instance.GetTagManager()?.UpdatePosition();
+        });
+
+
+        if (animate)
+        {
+            __instance.shapeshifting = true;
+            __instance.MyPhysics.SetNormalizedVelocity(Vector2.zero);
+            if (__instance.AmOwner && !Minigame.Instance)
+            {
+                PlayerControl.HideCursorTemporarily();
+            }
+            RoleEffectAnimation roleEffectAnimation = Object.Instantiate(DestroyableSingleton<RoleManager>.Instance.shapeshiftAnim, __instance.gameObject.transform);
+            roleEffectAnimation.SetMaskLayerBasedOnWhoShouldSee(__instance.AmOwner);
+            roleEffectAnimation.SetMaterialColor(__instance.Data.Outfits[PlayerOutfitType.Default].ColorId);
+            if (__instance.cosmetics.FlipX)
+            {
+                roleEffectAnimation.transform.position -= new Vector3(0.14f, 0f, 0f);
+            }
+
+            roleEffectAnimation.MidAnimCB = new Action(() =>
+            {
+                changeOutfit();
+                __instance.cosmetics.SetScale(__instance.MyPhysics.Animations.DefaultPlayerScale, __instance.defaultCosmeticsScale);
+
+                if (__instance.Data.Role is ShapeshifterRole role)
+                {
+                    role.SetEvidence();
+                }
+            });
+
+            float shapeshiftScale = __instance.MyPhysics.Animations.ShapeshiftScale;
+            if (AprilFoolsMode.ShouldLongAround())
+            {
+                __instance.cosmetics.ShowLongModeParts(false);
+                __instance.cosmetics.SetHatVisorVisible(false);
+            }
+            __instance.StartCoroutine(__instance.ScalePlayer(shapeshiftScale, 0.25f));
+            roleEffectAnimation.Play(__instance, new Action(() =>
+            {
+                __instance.shapeshifting = false;
+                if (AprilFoolsMode.ShouldLongAround())
+                {
+                    __instance.cosmetics.ShowLongModeParts(true);
+                    __instance.cosmetics.SetHatVisorVisible(true);
+                }
+            }), PlayerControl.LocalPlayer.cosmetics.FlipX, RoleEffectAnimation.SoundType.Local, 0f, true, 0f);
+            return false;
+        }
+        changeOutfit();
+
+        return false;
+    }
     /// <summary>
     /// Disable kill timer while janitor is dragging
     /// </summary>

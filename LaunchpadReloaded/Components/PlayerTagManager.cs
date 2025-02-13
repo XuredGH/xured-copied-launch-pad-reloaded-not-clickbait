@@ -39,9 +39,9 @@ public class PlayerTagManager(IntPtr ptr) : MonoBehaviour(ptr)
 
     public void FixedUpdate()
     {
-        foreach (var tagPair in Tags)
+        foreach (var tagPair in Tags.Where(pair => pair.Value != null))
         {
-            tagPair.Value.SetActive(tagPair.Key.IsLocallyVisible(Player));
+            tagPair.Value.SetActive(tagPair.Key.IsLocallyVisible(Player) && Player.cosmetics.nameText.gameObject.active);
         }
     }
 

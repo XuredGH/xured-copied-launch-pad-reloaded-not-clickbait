@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features.Managers;
+using Reactor.Utilities;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Patches.Colors.Gradients;
@@ -17,7 +18,7 @@ public static class PlayerMaterialPatch
 
         var color2 = GradientManager.LocalGradientId;
         var enabled = true;
-        
+
         if (PlayerCustomizationMenu.Instance && PlayerTabPatches.SelectGradient)
         {
             var plrTab = PlayerCustomizationMenu.Instance.GetComponentInChildren<PlayerTab>();
@@ -69,6 +70,8 @@ public static class PlayerMaterialPatch
         {
             gradColor = renderer.gameObject.AddComponent<GradientColorComponent>();
         }
+
+        Logger<LaunchpadReloadedPlugin>.Error($"Color1: {colorId} ; Color2: {color2}");
 
         gradColor.SetColor(colorId, enabled ? color2 : colorId);
 

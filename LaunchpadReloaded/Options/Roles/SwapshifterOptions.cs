@@ -6,14 +6,17 @@ using System;
 
 namespace LaunchpadReloaded.Options.Roles;
 
-public class SwapperOptions : AbstractOptionGroup
+public class SwapshifterOptions : AbstractOptionGroup
 {
-    public override string GroupName => "Swapper";
+    public override string GroupName => "Swapshifter";
 
-    public override Type AdvancedRole => typeof(SwapperRole);
+    public override Type AdvancedRole => typeof(SwapshifterRole);
 
     [ModdedNumberOption("Swap Cooldown", 0, 120, 5, MiraNumberSuffixes.Seconds)]
     public float SwapCooldown { get; set; } = 30;
+
+    [ModdedNumberOption("Swap Duration", 0, 70, 5, MiraNumberSuffixes.Seconds)]
+    public float SwapDuration { get; set; } = 15;
 
     [ModdedNumberOption("Swap Uses", 0, 8, zeroInfinity: true)]
     public float SwapUses { get; set; } = 3;

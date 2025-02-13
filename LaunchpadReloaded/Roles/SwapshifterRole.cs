@@ -9,9 +9,9 @@ namespace LaunchpadReloaded.Roles;
 
 
 [RegisterCustomRole]
-public class SwapperRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole, ILaunchpadRole
+public class SwapshifterRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole, ILaunchpadRole
 {
-    public string RoleName => "Swapper";
+    public string RoleName => "Swapshifter";
     public string RoleDescription => "You can swap locations with any player on the map.";
     public string RoleLongDescription => RoleDescription + "\nThis can help you frame other players.";
     public Color RoleColor => LaunchpadPalette.SwapperColor;
