@@ -37,7 +37,7 @@ public static class HudManagerPatches
         var local = PlayerControl.LocalPlayer;
         if (!local || MeetingHud.Instance)
         {
-            if (ZoomButton.IsZoom)
+            if (CustomButtonSingleton<ZoomButton>.Instance.EffectActive)
             {
                 CustomButtonSingleton<ZoomButton>.Instance.OnEffectEnd();
             }

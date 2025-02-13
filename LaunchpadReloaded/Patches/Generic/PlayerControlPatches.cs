@@ -52,28 +52,17 @@ public static class PlayerControlPatches
                 __instance.RawSetOutfit(newOutfit, PlayerOutfitType.Default);
                 __instance.logger.Info(string.Format("Player {0} Shapeshift is reverting", __instance.PlayerId), null);
 
-                var player = GameData.Instance.GetPlayerById((byte)__instance.shapeshiftTargetPlayerId).Object;
+                var playerModComponent = __instance.GetModifierComponent();
 
-                var playerModifiers = player.GetModifierComponent()?.ActiveModifiers.ToList();
-                var targetModifiers = targetPlayer.GetModifierComponent()?.ActiveModifiers.ToList();
-
-                if (playerModifiers != null && targetModifiers != null)
+                if (playerModComponent != null
+                    && __instance.gameObject.TryGetComponent<ModifierStorageComponent>(out var modStorage)
+                    && modStorage.Modifiers != null)
                 {
-                    var playerModComponent = player.GetModifierComponent();
-                    var targetModComponent = targetPlayer.GetModifierComponent();
+                    playerModComponent.ClearModifiers();
 
-                    playerModComponent!.ClearModifiers();
-                    targetModComponent!.ClearModifiers();
-
-                    foreach (var mod in targetModifiers)
+                    foreach (var mod in modStorage.Modifiers)
                     {
-                        playerModComponent!.AddModifier(mod);
-                        mod.OnActivate();
-                    }
-                    foreach (var mod in playerModifiers)
-                    {
-                        targetModComponent!.AddModifier(mod);
-                        mod.OnActivate();
+                        playerModComponent.AddModifier(mod);
                     }
                 }
 
@@ -93,24 +82,18 @@ public static class PlayerControlPatches
 
                 var playerModifiers = __instance.GetModifierComponent()?.ActiveModifiers.ToList();
                 var targetModifiers = targetPlayer.GetModifierComponent()?.ActiveModifiers.ToList();
+                var playerModComponent = __instance.GetModifierComponent();
+                var modifierStorage = __instance.gameObject.AddComponent<ModifierStorageComponent>();
 
-                if (playerModifiers != null && targetModifiers != null)
+                modifierStorage.Modifiers = playerModifiers;
+
+                if (playerModifiers != null && targetModifiers != null && playerModComponent != null)
                 {
-                    var playerModComponent = __instance.GetModifierComponent();
-                    var targetModComponent = targetPlayer.GetModifierComponent();
-
-                    playerModComponent!.ClearModifiers();
-                    targetModComponent!.ClearModifiers();
+                    playerModComponent.ClearModifiers();
 
                     foreach (var mod in targetModifiers)
                     {
-                        playerModComponent!.AddModifier(mod);
-                        mod.OnActivate();
-                    }
-                    foreach (var mod in playerModifiers)
-                    {
-                        targetModComponent!.AddModifier(mod);
-                        mod.OnActivate();
+                        playerModComponent.AddModifier(mod);
                     }
                 }
 

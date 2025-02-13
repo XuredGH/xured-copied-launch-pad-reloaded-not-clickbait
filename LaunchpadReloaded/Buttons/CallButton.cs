@@ -24,7 +24,10 @@ public class CallButton : BaseLaunchpadButton
     {
         return role is CaptainRole;
     }
-    public override bool CanUse() => base.CanUse() && !ZoomButton.IsZoom && !HackerUtilities.AnyPlayerHacked();
+    public override bool CanUse() =>
+        base.CanUse()
+        && !CustomButtonSingleton<ZoomButton>.Instance.EffectActive
+        && !HackerUtilities.AnyPlayerHacked();
 
     public override void ClickHandler()
     {

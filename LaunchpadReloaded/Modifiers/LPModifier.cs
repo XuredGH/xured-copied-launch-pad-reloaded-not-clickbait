@@ -1,5 +1,4 @@
 ﻿using LaunchpadReloaded.Options.Modifiers;
-using LaunchpadReloaded.Roles;
 using MiraAPI.GameOptions;
 using MiraAPI.Modifiers.Types;
 using MiraAPI.Utilities;
@@ -14,7 +13,7 @@ public abstract class LPModifier : GameModifier
 
     public override bool IsModifierValidOn(RoleBehaviour role)
     {
-        if (role is SwapshifterRole || OptionGroupSingleton<GameModifierOptions>.Instance.ModifierLimit == 0) return true;
+        if (OptionGroupSingleton<GameModifierOptions>.Instance.ModifierLimit == 0) return true;
 
         return role.Player.GetModifierComponent()!.ActiveModifiers.OfType<LPModifier>().Count() < OptionGroupSingleton<GameModifierOptions>.Instance.ModifierLimit;
     }

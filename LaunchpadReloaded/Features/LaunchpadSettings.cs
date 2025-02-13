@@ -32,7 +32,7 @@ public class LaunchpadSettings
         };
 #endif
         LockedCamera = new CustomSetting("Locked Camera", false);
-        UniqueDummies = new CustomSetting("Unique Dummies", true)
+        UniqueDummies = new CustomSetting("Unique Freeplay Dummies", true)
         {
             ChangedEvent = val =>
             {

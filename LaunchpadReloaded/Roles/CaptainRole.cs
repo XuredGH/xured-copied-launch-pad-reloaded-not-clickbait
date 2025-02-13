@@ -1,4 +1,6 @@
+using LaunchpadReloaded.Buttons;
 using LaunchpadReloaded.Features;
+using MiraAPI.Hud;
 using MiraAPI.Roles;
 using System;
 using UnityEngine;
@@ -19,4 +21,22 @@ public class CaptainRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole, ILaunchpa
         Icon = LaunchpadAssets.ZoomButton,
         OptionsScreenshot = LaunchpadAssets.CaptainBanner,
     };
+
+    public override void OnDeath(DeathReason reason)
+    {
+        Deinitialize(Player);
+    }
+
+    public override void Deinitialize(PlayerControl targetPlayer)
+    {
+        if (!targetPlayer.AmOwner)
+        {
+            return;
+        }
+
+        if (CustomButtonSingleton<ZoomButton>.Instance.EffectActive)
+        {
+            CustomButtonSingleton<ZoomButton>.Instance.OnEffectEnd();
+        }
+    }
 }

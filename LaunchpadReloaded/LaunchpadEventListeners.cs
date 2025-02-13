@@ -13,6 +13,7 @@ public static class LaunchpadEventListeners
     public static void Initialize()
     {
         MiraEventManager.RegisterEventHandler<StartMeetingEvent>(StartMeetingEvent);
+        //  MiraEventManager.RegisterEventHandler<EjectionEvent>(EjectEvent); BROKEN
         MiraEventManager.RegisterEventHandler<PlayerCanUseEvent>(CanUseEvent, 10);
 
         MiraEventManager.RegisterEventHandler<PlayerOpenSabotageEvent>(@event =>
@@ -24,12 +25,27 @@ public static class LaunchpadEventListeners
         });
     }
 
+    public static void EjectEvent(EjectionEvent @event)
+    {
+        var tagManager = PlayerControl.LocalPlayer.GetTagManager();
+        if (tagManager != null)
+        {
+            tagManager.MeetingEnd();
+        }
+    }
+
     // prevent meetings during hack
     public static void StartMeetingEvent(StartMeetingEvent meetingEvent)
     {
         if (HackerUtilities.AnyPlayerHacked() || meetingEvent.Reporter.HasModifier<DragBodyModifier>())
         {
             meetingEvent.Cancel();
+            return;
+        }
+
+        if (PlayerControl.LocalPlayer.HasModifier<DragBodyModifier>())
+        {
+            PlayerControl.LocalPlayer.RpcRemoveModifier<DragBodyModifier>();
         }
     }
 

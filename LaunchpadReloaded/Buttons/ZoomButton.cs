@@ -25,8 +25,6 @@ public class ZoomButton : BaseLaunchpadButton
     public override bool TimerAffectedByPlayer => true;
     public override bool AffectedByHack => true;
 
-    public static bool IsZoom { get; private set; }
-
     public override bool Enabled(RoleBehaviour? role)
     {
         return role is CaptainRole;
@@ -42,10 +40,9 @@ public class ZoomButton : BaseLaunchpadButton
         Coroutines.Start(ZoomInCoroutine());
     }
 
-    private static IEnumerator ZoomOutCoroutine()
+    public IEnumerator ZoomOutCoroutine()
     {
         HudManager.Instance.ShadowQuad.gameObject.SetActive(false);
-        IsZoom = true;
         var zoomDistance = OptionGroupSingleton<CaptainOptions>.Instance.ZoomDistance;
         for (var ft = Camera.main!.orthographicSize; ft < zoomDistance; ft += 0.3f)
         {
@@ -59,7 +56,7 @@ public class ZoomButton : BaseLaunchpadButton
         ResolutionManager.ResolutionChanged.Invoke((float)Screen.width / Screen.height, Screen.width, Screen.height, Screen.fullScreen);
     }
 
-    private static IEnumerator ZoomInCoroutine()
+    public IEnumerator ZoomInCoroutine()
     {
         for (var ft = Camera.main!.orthographicSize; ft > 3f; ft -= 0.3f)
         {
@@ -72,7 +69,6 @@ public class ZoomButton : BaseLaunchpadButton
 
         foreach (var cam in Camera.allCameras) cam.orthographicSize = 3f;
         HudManager.Instance.ShadowQuad.gameObject.SetActive(true);
-        IsZoom = false;
 
         ResolutionManager.ResolutionChanged.Invoke((float)Screen.width / Screen.height, Screen.width, Screen.height, Screen.fullScreen);
     }

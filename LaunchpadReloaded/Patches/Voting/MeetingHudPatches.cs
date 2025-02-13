@@ -36,6 +36,16 @@ public static class MeetingHudPatches
 
         foreach (var plr in PlayerControl.AllPlayerControls)
         {
+            var state = __instance.playerStates.FirstOrDefault(state => state.TargetPlayerId == plr.PlayerId);
+            var tagManager = plr.GetTagManager();
+
+            if (state != null && tagManager != null)
+            {
+                tagManager.MeetingStart();
+            }
+
+            plr.GetModifierComponent()?.RemoveModifier<DragBodyModifier>();
+
             if (!plr.HasModifier<VoteData>()) continue;
 
             var voteData = plr.GetModifier<VoteData>();
@@ -46,11 +56,6 @@ public static class MeetingHudPatches
             {
                 voteData.VotesRemaining += (int)OptionGroupSingleton<MayorOptions>.Instance.ExtraVotes;
             }
-        }
-
-        foreach (var player in PlayerControl.AllPlayerControls)
-        {
-            player.GetModifierComponent()?.RemoveModifier<DragBodyModifier>();
         }
 
         if (_typeText == null)
@@ -93,13 +98,13 @@ public static class MeetingHudPatches
     [HarmonyPatch(nameof(MeetingHud.Update))]
     public static void UpdatePatch(MeetingHud __instance)
     {
-        if (!_typeText)
+        var voteData = PlayerControl.LocalPlayer.GetModifier<VoteData>();
+        if (voteData == null || _typeText == null)
         {
             return;
         }
 
         var tmp = _typeText.GetComponent<TextMeshPro>();
-        var voteData = PlayerControl.LocalPlayer.GetModifier<VoteData>();
         tmp.text = VotingTypesManager.SelectedType != VotingTypes.Classic
             ? $"<size=160%>{voteData.VotesRemaining} votes left</size>\nVoting Type: {VotingTypesManager.SelectedType}"
             : $"<size=160%>{voteData.VotesRemaining} votes left</size>";
@@ -126,7 +131,7 @@ public static class MeetingHudPatches
 
         if (PlayerControl.LocalPlayer.Data.IsDead)
         {
-            if (_confirmVotes)
+            if (_confirmVotes != null)
             {
                 _confirmVotes.SetDisabled();
             }
@@ -152,7 +157,7 @@ public static class MeetingHudPatches
                 if (PlayerControl.LocalPlayer.GetModifier<VoteData>()!.VotesRemaining == 0)
                 {
                     _typeText.gameObject.SetActive(false);
-                    if (_confirmVotes)
+                    if (_confirmVotes != null)
                     {
                         _confirmVotes.SetDisabled();
                     }
@@ -160,7 +165,7 @@ public static class MeetingHudPatches
                 else
                 {
                     _typeText.gameObject.SetActive(true);
-                    if (_confirmVotes)
+                    if (_confirmVotes != null)
                     {
                         _confirmVotes.SetEnabled();
                     }
@@ -169,7 +174,7 @@ public static class MeetingHudPatches
                 break;
 
             case MeetingHud.VoteStates.Results:
-                if (_confirmVotes)
+                if (_confirmVotes != null)
                 {
                     _confirmVotes.SetDisabled();
                 }
@@ -180,7 +185,7 @@ public static class MeetingHudPatches
                 break;
 
             default:
-                if (_confirmVotes)
+                if (_confirmVotes != null)
                 {
                     _confirmVotes.SetDisabled();
                 }
@@ -224,17 +229,30 @@ public static class MeetingHudPatches
         return false;
     }
 
+
     [HarmonyPrefix]
     [HarmonyPatch(nameof(MeetingHud.Select))]
-    public static bool SelectPatch(MeetingHud __instance, [HarmonyArgument(0)] byte suspect)
+    public static bool SelectPatch(MeetingHud __instance, int suspectStateIdx)
     {
-        if (OptionGroupSingleton<VotingOptions>.Instance.AllowVotingForSamePerson.Value)
+        var voteData = PlayerControl.LocalPlayer.GetModifier<VoteData>();
+        if (voteData == null)
         {
-            return PlayerControl.LocalPlayer?.GetModifier<VoteData>()?.VotesRemaining > 0;
+            return false;
         }
 
-        return PlayerControl.LocalPlayer.GetModifier<VoteData>()!.VotedPlayers.Contains(suspect);
+        bool hasVotes = voteData.VotesRemaining > 0;
+        bool hasVotedFor = voteData.VotedPlayers.Contains((byte)suspectStateIdx);
+
+        if (OptionGroupSingleton<VotingOptions>.Instance.AllowVotingForSamePerson.Value
+            && hasVotes)
+        {
+            return true;
+        }
+
+        return hasVotes && !hasVotedFor;
     }
+
+
 
     [HarmonyPrefix]
     [HarmonyPatch(nameof(MeetingHud.HandleDisconnect), [typeof(PlayerControl), typeof(DisconnectReasons)])]
@@ -254,7 +272,7 @@ public static class MeetingHudPatches
             var pva = __instance.playerStates.First(pv => pv.TargetPlayerId == player.PlayerId);
             var voteData = player.GetModifier<VoteData>();
 
-            if (pva.AmDead || !voteData.VotedPlayers.Contains(pc.PlayerId))
+            if (pva.AmDead || voteData == null || !voteData.VotedPlayers.Contains(pc.PlayerId))
             {
                 continue;
             }
@@ -319,7 +337,7 @@ public static class MeetingHudPatches
         }
 
         var voteData = plr.Object.GetModifier<VoteData>();
-        if (voteData.VotesRemaining == 0 ||
+        if (voteData == null || voteData.VotesRemaining == 0 ||
             (voteData.VotedPlayers.Contains(suspectIdx) &&
              !OptionGroupSingleton<VotingOptions>.Instance.AllowVotingForSamePerson.Value))
         {
@@ -353,7 +371,7 @@ public static class MeetingHudPatches
 
         if (!AmongUsClient.Instance.AmHost)
         {
-            if (voteData.VotesRemaining == 0 ||
+            if (voteData == null || voteData.VotesRemaining == 0 ||
                 (voteData.VotedPlayers.Contains(suspectIdx) &&
                  !OptionGroupSingleton<VotingOptions>.Instance.AllowVotingForSamePerson.Value))
             {
@@ -382,7 +400,8 @@ public static class MeetingHudPatches
 
         __instance.SkipVoteButton.ClearButtons();
 
-        if (PlayerControl.LocalPlayer.GetModifier<VoteData>().VotesRemaining == 0)
+        var localVoteData = PlayerControl.LocalPlayer.GetModifier<VoteData>();
+        if (localVoteData != null && localVoteData.VotesRemaining == 0)
         {
             __instance.SkipVoteButton.voteComplete = true;
             __instance.SkipVoteButton.gameObject.SetActive(false);
@@ -396,5 +415,19 @@ public static class MeetingHudPatches
         __instance.CmdCastVote(PlayerControl.LocalPlayer.PlayerId, suspect);
 
         return false;
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(MeetingHud.Close))]
+    public static void ClosePatch(MeetingHud __instance)
+    {
+        foreach (var plr in PlayerControl.AllPlayerControls)
+        {
+            var tagManager = plr.GetTagManager();
+            if (tagManager != null)
+            {
+                tagManager.MeetingEnd();
+            }
+        }
     }
 }

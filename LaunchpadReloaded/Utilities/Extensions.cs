@@ -30,7 +30,6 @@ public static class Extensions
     {
         foreach (var mod in comp.ActiveModifiers)
         {
-            mod.OnDeactivate();
             comp.RemoveModifier(mod);
         }
     }
