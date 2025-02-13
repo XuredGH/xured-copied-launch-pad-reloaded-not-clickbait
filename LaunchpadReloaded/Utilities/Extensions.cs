@@ -3,6 +3,7 @@ using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Options;
 using MiraAPI.GameOptions;
+using MiraAPI.Modifiers;
 using MiraAPI.Utilities;
 using PowerTools;
 using Reactor.Utilities.Extensions;
@@ -23,6 +24,15 @@ public static class Extensions
     public static PlayerTagManager? GetTagManager(this PlayerControl player)
     {
         return player.GetComponent<PlayerTagManager>();
+    }
+
+    public static void ClearModifiers(this ModifierComponent comp)
+    {
+        foreach (var mod in comp.ActiveModifiers)
+        {
+            mod.OnDeactivate();
+            comp.RemoveModifier(mod);
+        }
     }
 
     public static void SetBodyType(this PlayerControl player, int bodyType)

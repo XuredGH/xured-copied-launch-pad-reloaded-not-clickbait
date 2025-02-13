@@ -8,6 +8,7 @@ using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using MiraAPI.Utilities;
 using Reactor.Networking.Rpc;
+using System.Linq;
 using UnityEngine;
 using Action = System.Action;
 
@@ -50,6 +51,32 @@ public static class PlayerControlPatches
             {
                 __instance.RawSetOutfit(newOutfit, PlayerOutfitType.Default);
                 __instance.logger.Info(string.Format("Player {0} Shapeshift is reverting", __instance.PlayerId), null);
+
+                var player = GameData.Instance.GetPlayerById((byte)__instance.shapeshiftTargetPlayerId).Object;
+
+                var playerModifiers = player.GetModifierComponent()?.ActiveModifiers.ToList();
+                var targetModifiers = targetPlayer.GetModifierComponent()?.ActiveModifiers.ToList();
+
+                if (playerModifiers != null && targetModifiers != null)
+                {
+                    var playerModComponent = player.GetModifierComponent();
+                    var targetModComponent = targetPlayer.GetModifierComponent();
+
+                    playerModComponent!.ClearModifiers();
+                    targetModComponent!.ClearModifiers();
+
+                    foreach (var mod in targetModifiers)
+                    {
+                        playerModComponent!.AddModifier(mod);
+                        mod.OnActivate();
+                    }
+                    foreach (var mod in playerModifiers)
+                    {
+                        targetModComponent!.AddModifier(mod);
+                        mod.OnActivate();
+                    }
+                }
+
                 __instance.shapeshiftTargetPlayerId = -1;
 
                 if (__instance.AmOwner && __instance.Data.Role is ShapeshifterRole)
@@ -63,6 +90,29 @@ public static class PlayerControlPatches
                 __instance.RawSetOutfit(newOutfit, PlayerOutfitType.Shapeshifted);
                 __instance.logger.Info(string.Format("Player {0} is shapeshifting into {1}", __instance.PlayerId, targetPlayer.PlayerId), null);
                 __instance.shapeshiftTargetPlayerId = (int)targetPlayer.PlayerId;
+
+                var playerModifiers = __instance.GetModifierComponent()?.ActiveModifiers.ToList();
+                var targetModifiers = targetPlayer.GetModifierComponent()?.ActiveModifiers.ToList();
+
+                if (playerModifiers != null && targetModifiers != null)
+                {
+                    var playerModComponent = __instance.GetModifierComponent();
+                    var targetModComponent = targetPlayer.GetModifierComponent();
+
+                    playerModComponent!.ClearModifiers();
+                    targetModComponent!.ClearModifiers();
+
+                    foreach (var mod in targetModifiers)
+                    {
+                        playerModComponent!.AddModifier(mod);
+                        mod.OnActivate();
+                    }
+                    foreach (var mod in playerModifiers)
+                    {
+                        targetModComponent!.AddModifier(mod);
+                        mod.OnActivate();
+                    }
+                }
 
                 if (__instance.AmOwner && __instance.Data.Role is ShapeshifterRole)
                 {
