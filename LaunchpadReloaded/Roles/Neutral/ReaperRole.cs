@@ -17,6 +17,8 @@ public class ReaperRole(System.IntPtr ptr) : RoleBehaviour(ptr), ICustomRole
     public ModdedRoleTeams Team => ModdedRoleTeams.Neutral;
     public override bool IsDead => false;
 
+    public int CollectedSouls = 0;
+
     public CustomRoleConfiguration Configuration => new(this)
     {
         TasksCountForProgress = false,

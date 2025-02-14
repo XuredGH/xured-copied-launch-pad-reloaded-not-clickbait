@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using LaunchpadReloaded.Features.Managers;
+﻿using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Networking.Color;
 using LaunchpadReloaded.Utilities;
 using MiraAPI.GameOptions;
 using MiraAPI.GameOptions.Attributes;
 using MiraAPI.GameOptions.OptionTypes;
 using Reactor.Networking.Rpc;
+using System.Collections.Generic;
 
 namespace LaunchpadReloaded.Options;
 
@@ -15,8 +15,8 @@ public class FunOptions : AbstractOptionGroup
 
     [ModdedToggleOption("Friendly Fire")]
     public bool FriendlyFire { get; set; } = false;
-    
-    public ModdedToggleOption UniqueColors { get; } = new("Unique Colors", true) 
+
+    public ModdedToggleOption UniqueColors { get; } = new("Unique Colors", true)
     {
         ChangedEvent = value =>
         {
@@ -34,7 +34,7 @@ public class FunOptions : AbstractOptionGroup
             }
         }
     };
-    
+
     public ModdedEnumOption Character { get; } = new("Character", 0, typeof(BodyTypes))
     {
         ChangedEvent = value =>
@@ -45,7 +45,7 @@ public class FunOptions : AbstractOptionGroup
             }
         }
     };
-    
+
     public static readonly Dictionary<int, PlayerBodyTypes> IntToBodyTypes = new()
     {
         [0] = PlayerBodyTypes.Normal,

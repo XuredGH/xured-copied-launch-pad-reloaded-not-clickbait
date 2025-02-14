@@ -1,4 +1,4 @@
-using LaunchpadReloaded.Buttons;
+using LaunchpadReloaded.Buttons.Crewmate;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Modifiers;
 using MiraAPI.Hud;

@@ -8,7 +8,7 @@ using MiraAPI.Utilities.Assets;
 using System.Linq;
 using UnityEngine;
 
-namespace LaunchpadReloaded.Buttons;
+namespace LaunchpadReloaded.Buttons.Impostor;
 
 public class DigButton : BaseLaunchpadButton
 {

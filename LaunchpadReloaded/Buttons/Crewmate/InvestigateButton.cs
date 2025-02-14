@@ -6,7 +6,7 @@ using MiraAPI.Utilities.Assets;
 using UnityEngine;
 using Helpers = MiraAPI.Utilities.Helpers;
 
-namespace LaunchpadReloaded.Buttons;
+namespace LaunchpadReloaded.Buttons.Crewmate;
 
 public class InvestigateButton : BaseLaunchpadButton<DeadBody>
 {

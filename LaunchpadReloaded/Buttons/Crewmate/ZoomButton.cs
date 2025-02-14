@@ -7,7 +7,7 @@ using Reactor.Utilities;
 using System.Collections;
 using UnityEngine;
 
-namespace LaunchpadReloaded.Buttons;
+namespace LaunchpadReloaded.Buttons.Crewmate;
 
 public class ZoomButton : BaseLaunchpadButton
 {

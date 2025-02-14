@@ -82,7 +82,7 @@ public static class PlayerTabPatches
             {
                 Rpc<CustomCmdCheckColor>.Instance.SendTo(AmongUsClient.Instance.HostId,
                     new CustomColorData(
-                        (byte)PlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId, 
+                        (byte)PlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId,
                         (byte)__instance.currentColor));
             }
             return false;

@@ -9,7 +9,7 @@ namespace LaunchpadReloaded.Networking.Color;
 public class RpcSyncAllColors(LaunchpadReloadedPlugin plugin, uint id) : PlayerCustomRpc<LaunchpadReloadedPlugin, Dictionary<byte, CustomColorData>>(plugin, id)
 {
     public override RpcLocalHandling LocalHandling => RpcLocalHandling.None;
-    
+
     public override void Write(MessageWriter writer, Dictionary<byte, CustomColorData>? data)
     {
         if (data == null)
@@ -19,7 +19,7 @@ public class RpcSyncAllColors(LaunchpadReloadedPlugin plugin, uint id) : PlayerC
         }
 
         writer.WritePacked(data.Count);
-        
+
         foreach (var var in data)
         {
             writer.Write(var.Key);
@@ -32,7 +32,7 @@ public class RpcSyncAllColors(LaunchpadReloadedPlugin plugin, uint id) : PlayerC
     {
         var data = new Dictionary<byte, CustomColorData>();
         var length = reader.ReadPackedInt32();
-        
+
         for (var i = 0; i < length; i++)
         {
             data.Add(reader.ReadByte(), new CustomColorData(reader.ReadByte(), reader.ReadByte()));
@@ -60,7 +60,7 @@ public class RpcSyncAllColors(LaunchpadReloadedPlugin plugin, uint id) : PlayerC
             {
                 return;
             }
-            
+
             Rpc<CustomRpcSetColor>.Instance.Handle(player.Object, new CustomColorData(info.Value.ColorId, info.Value.GradientId));
         }
     }

@@ -7,7 +7,7 @@ using MiraAPI.Hud;
 using MiraAPI.Utilities.Assets;
 using UnityEngine;
 
-namespace LaunchpadReloaded.Buttons;
+namespace LaunchpadReloaded.Buttons.Crewmate;
 
 public class CallButton : BaseLaunchpadButton
 {

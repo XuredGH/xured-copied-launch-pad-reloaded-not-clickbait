@@ -8,7 +8,7 @@ using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
 using UnityEngine;
 
-namespace LaunchpadReloaded.Buttons;
+namespace LaunchpadReloaded.Buttons.Impostor;
 
 public class HackButton : BaseLaunchpadButton
 {

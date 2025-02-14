@@ -113,6 +113,11 @@ public static class LaunchpadEventListeners
     // prevent tasks during hack
     public static void CanUseEvent(PlayerCanUseEvent @event)
     {
+        if (PlayerControl.LocalPlayer == null)
+        {
+            return;
+        }
+
         if (PlayerControl.LocalPlayer.HasModifier<DragBodyModifier>())
         {
             @event.Cancel();
@@ -128,7 +133,7 @@ public static class LaunchpadEventListeners
             }
         }
 
-        if (PlayerControl.LocalPlayer && PlayerControl.LocalPlayer.Data.IsHacked() && @event.IsPrimaryConsole)
+        if (PlayerControl.LocalPlayer.Data.IsHacked() && @event.IsPrimaryConsole)
         {
             @event.Cancel();
         }

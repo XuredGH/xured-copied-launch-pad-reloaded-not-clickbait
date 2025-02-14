@@ -8,7 +8,7 @@ using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
 using UnityEngine;
 
-namespace LaunchpadReloaded.Buttons;
+namespace LaunchpadReloaded.Buttons.Crewmate;
 
 public class ShootButton : BaseLaunchpadButton<PlayerControl>
 {
@@ -40,7 +40,7 @@ public class ShootButton : BaseLaunchpadButton<PlayerControl>
             return;
         }
 
-        if (Target.Data.Role.TeamType == RoleTeamTypes.Impostor || (OptionGroupSingleton<SheriffOptions>.Instance.ShouldCrewmateDie && Target.Data.Role.TeamType == RoleTeamTypes.Crewmate))
+        if (Target.Data.Role.TeamType == RoleTeamTypes.Impostor || OptionGroupSingleton<SheriffOptions>.Instance.ShouldCrewmateDie && Target.Data.Role.TeamType == RoleTeamTypes.Crewmate)
         {
             PlayerControl.LocalPlayer.RpcCustomMurder(Target);
         }

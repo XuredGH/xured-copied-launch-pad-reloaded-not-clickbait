@@ -9,7 +9,7 @@ namespace LaunchpadReloaded.Networking.Color;
 public class CustomRpcSetColor(LaunchpadReloadedPlugin plugin, uint id) : PlayerCustomRpc<LaunchpadReloadedPlugin, CustomColorData>(plugin, id)
 {
     public override RpcLocalHandling LocalHandling => RpcLocalHandling.Before;
-    
+
     public override void Write(MessageWriter writer, CustomColorData data)
     {
         writer.Write(data.ColorId);
@@ -24,6 +24,6 @@ public class CustomRpcSetColor(LaunchpadReloadedPlugin plugin, uint id) : Player
     public override void Handle(PlayerControl playerControl, CustomColorData data)
     {
         playerControl.SetColor(data.ColorId);
-        playerControl.SetGradient(data.GradientId);    
+        playerControl.SetGradient(data.GradientId);
     }
 }

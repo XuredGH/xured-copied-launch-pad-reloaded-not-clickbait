@@ -13,5 +13,6 @@ public enum LaunchpadRpc : uint
     Poison,
     Dissect,
     DigVent,
-    SealVent
+    SealVent,
+    ReaperCollect
 }
