@@ -1,4 +1,4 @@
-﻿using LaunchpadReloaded.Options.Roles;
+﻿using LaunchpadReloaded.Options.Roles.Impostor;
 using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
 using MiraAPI.Utilities;

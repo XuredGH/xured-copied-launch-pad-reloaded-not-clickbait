@@ -1,6 +1,6 @@
 ﻿using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Modifiers;
-using LaunchpadReloaded.Roles;
+using LaunchpadReloaded.Roles.Impostor;
 using MiraAPI.Utilities;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities;

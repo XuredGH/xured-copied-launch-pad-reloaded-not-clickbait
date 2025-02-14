@@ -4,7 +4,7 @@ using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Networking.Color;
-using LaunchpadReloaded.Roles;
+using LaunchpadReloaded.Roles.Impostor;
 using LaunchpadReloaded.Utilities;
 using MiraAPI.Utilities;
 using Reactor.Networking.Rpc;

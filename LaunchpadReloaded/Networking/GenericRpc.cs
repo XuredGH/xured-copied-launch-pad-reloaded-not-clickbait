@@ -1,4 +1,4 @@
-﻿using LaunchpadReloaded.Roles;
+﻿using LaunchpadReloaded.Roles.Crewmate;
 using LaunchpadReloaded.Utilities;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities;

@@ -1,5 +1,5 @@
 ﻿using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Options.Roles;
+using LaunchpadReloaded.Options.Roles.Crewmate;
 using LaunchpadReloaded.Utilities;
 using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;

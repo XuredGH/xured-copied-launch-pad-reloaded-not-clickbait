@@ -1,5 +1,5 @@
 ﻿using LaunchpadReloaded.Components;
-using LaunchpadReloaded.Roles;
+using LaunchpadReloaded.Roles.Impostor;
 using LaunchpadReloaded.Utilities;
 using Reactor.Networking.Attributes;
 using System.Linq;

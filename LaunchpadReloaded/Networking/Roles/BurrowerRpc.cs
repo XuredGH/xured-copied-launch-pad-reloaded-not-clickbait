@@ -1,4 +1,4 @@
-﻿using LaunchpadReloaded.Roles;
+﻿using LaunchpadReloaded.Roles.Impostor;
 using Reactor.Networking.Attributes;
 using System.Linq;
 using UnityEngine;

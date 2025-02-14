@@ -1,12 +1,12 @@
 ﻿using System;
 using HarmonyLib;
-using LaunchpadReloaded.Options.Roles;
-using LaunchpadReloaded.Roles;
 using MiraAPI.GameOptions;
 using MiraAPI.Networking;
 using System.Linq;
 using LaunchpadReloaded.Modifiers;
 using MiraAPI.Utilities;
+using LaunchpadReloaded.Options.Roles.Crewmate;
+using LaunchpadReloaded.Roles.Crewmate;
 
 namespace LaunchpadReloaded.Patches.Generic;
 

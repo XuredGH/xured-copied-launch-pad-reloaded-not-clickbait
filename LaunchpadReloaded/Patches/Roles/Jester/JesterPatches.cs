@@ -1,6 +1,6 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Roles;
+using LaunchpadReloaded.Roles.Neutral;
 using MiraAPI.Utilities;
 using System.Linq;
 

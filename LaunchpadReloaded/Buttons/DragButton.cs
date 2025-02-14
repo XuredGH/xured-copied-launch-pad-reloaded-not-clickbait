@@ -1,8 +1,9 @@
 ﻿using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Networking.Roles;
-using LaunchpadReloaded.Options.Roles;
-using LaunchpadReloaded.Roles;
+using LaunchpadReloaded.Options.Roles.Crewmate;
+using LaunchpadReloaded.Roles.Crewmate;
+using LaunchpadReloaded.Roles.Impostor;
 using MiraAPI.GameOptions;
 using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;

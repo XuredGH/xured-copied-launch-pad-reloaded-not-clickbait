@@ -1,6 +1,6 @@
 ﻿using HarmonyLib;
 using InnerNet;
-using LaunchpadReloaded.Buttons;
+using LaunchpadReloaded.Buttons.Crewmate;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Utilities;
 using MiraAPI.Hud;

@@ -1,6 +1,7 @@
 ﻿using LaunchpadReloaded.Buttons;
 using LaunchpadReloaded.Modifiers;
-using LaunchpadReloaded.Roles;
+using LaunchpadReloaded.Roles.Crewmate;
+using LaunchpadReloaded.Roles.Impostor;
 using MiraAPI.Hud;
 using MiraAPI.Utilities;
 using Reactor.Networking.Attributes;

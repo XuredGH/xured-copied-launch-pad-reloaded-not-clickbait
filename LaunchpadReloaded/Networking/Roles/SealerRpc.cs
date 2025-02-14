@@ -1,7 +1,7 @@
 ﻿using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Options.Roles;
-using LaunchpadReloaded.Roles;
+using LaunchpadReloaded.Options.Roles.Crewmate;
+using LaunchpadReloaded.Roles.Crewmate;
 using MiraAPI.GameOptions;
 using Reactor.Networking.Attributes;
 using System.Linq;
