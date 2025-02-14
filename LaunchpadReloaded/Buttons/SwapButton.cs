@@ -8,7 +8,6 @@ using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
 
-[RegisterButton]
 public class SwapButton : BaseLaunchpadButton
 {
     public override string Name => "Swap";
@@ -42,6 +41,7 @@ public class SwapButton : BaseLaunchpadButton
 
     protected override void OnClick()
     {
+
         CustomPlayerMenu playerMenu = CustomPlayerMenu.Create();
         playerMenu.Begin(plr => !plr.AmOwner && !plr.Data.IsDead && !plr.Data.Disconnected &&
         (!plr.Data.Role.IsImpostor || OptionGroupSingleton<SwapshifterOptions>.Instance.CanSwapImpostors), plr =>

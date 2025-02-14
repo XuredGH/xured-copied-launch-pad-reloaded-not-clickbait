@@ -4,14 +4,12 @@ using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using MiraAPI.GameOptions;
-using MiraAPI.Hud;
 using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
 
-[RegisterButton]
 public class HackButton : BaseLaunchpadButton
 {
     public override string Name => "HACK";

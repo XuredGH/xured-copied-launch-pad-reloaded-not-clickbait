@@ -3,7 +3,6 @@ using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Roles;
 using MiraAPI.GameOptions;
-using MiraAPI.Hud;
 using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
 using System.Linq;
@@ -11,7 +10,6 @@ using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
 
-[RegisterButton]
 public class InstinctButton : BaseLaunchpadButton
 {
     public override string Name => "INSTINCT";

@@ -1,10 +1,12 @@
 ﻿using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Utilities;
 using MiraAPI.Hud;
+using MiraAPI.PluginLoading;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
 
+[MiraIgnore]
 public abstract class BaseLaunchpadButton : CustomActionButton
 {
 #if ANDROID
@@ -27,6 +29,7 @@ public abstract class BaseLaunchpadButton : CustomActionButton
     }
 }
 
+[MiraIgnore]
 public abstract class BaseLaunchpadButton<T> : CustomActionButton<T> where T : MonoBehaviour
 {
 #if ANDROID

@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace LaunchpadReloaded.Modifiers;
 
-[RegisterModifier]
 public class DragBodyModifier : BaseModifier
 {
     public override string ModifierName => "Drag Body";

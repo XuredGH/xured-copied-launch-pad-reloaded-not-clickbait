@@ -2,13 +2,11 @@
 using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Roles;
 using MiraAPI.GameOptions;
-using MiraAPI.Hud;
 using MiraAPI.Utilities.Assets;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
 
-[RegisterButton]
 public class MapButton : BaseLaunchpadButton
 {
     public override string Name => "Map";
@@ -26,7 +24,7 @@ public class MapButton : BaseLaunchpadButton
         ShowLivePlayerPosition = true,
         Mode = MapOptions.Modes.CountOverlay,
     };
-    
+
     public override bool Enabled(RoleBehaviour? role) => role is HackerRole;
 
     protected override void OnClick()

@@ -4,14 +4,12 @@ using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using MiraAPI.GameOptions;
-using MiraAPI.Hud;
 using MiraAPI.Utilities.Assets;
 using System.Linq;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
 
-[RegisterButton]
 public class DigButton : BaseLaunchpadButton
 {
     public override string Name => "Dig Vent";

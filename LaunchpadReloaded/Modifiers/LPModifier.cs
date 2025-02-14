@@ -1,11 +1,13 @@
 ﻿using LaunchpadReloaded.Options.Modifiers;
 using MiraAPI.GameOptions;
 using MiraAPI.Modifiers.Types;
+using MiraAPI.PluginLoading;
 using MiraAPI.Utilities;
 using System.Linq;
 
 namespace LaunchpadReloaded.Modifiers;
 
+[MiraIgnore]
 public abstract class LPModifier : GameModifier
 {
     public virtual bool RemoveOnDeath => true;

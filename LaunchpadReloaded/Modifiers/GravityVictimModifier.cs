@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace LaunchpadReloaded.Modifiers;
 
-[RegisterModifier]
 public class GravityVictimModifier : BaseModifier
 {
     public override string ModifierName => "Victim of Gravity";

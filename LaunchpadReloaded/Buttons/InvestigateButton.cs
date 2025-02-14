@@ -1,7 +1,6 @@
 ﻿using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Roles;
-using MiraAPI.Hud;
 using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
 using UnityEngine;
@@ -9,7 +8,6 @@ using Helpers = MiraAPI.Utilities.Helpers;
 
 namespace LaunchpadReloaded.Buttons;
 
-[RegisterButton]
 public class InvestigateButton : BaseLaunchpadButton<DeadBody>
 {
     public override string Name => "INVESTIGATE";

@@ -1,13 +1,13 @@
 ﻿using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Modifiers;
 using MiraAPI.Roles;
+using MiraAPI.Utilities;
 using System;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
 
-
-[RegisterCustomRole]
-public class SheriffRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole, ILaunchpadRole
+public class SheriffRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
 {
     public string RoleName => "Sheriff";
     public string RoleDescription => "Take your chance by shooting a player.";
@@ -20,4 +20,10 @@ public class SheriffRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole, ILaunchpa
         Icon = LaunchpadAssets.ShootButton,
         OptionsScreenshot = LaunchpadAssets.SheriffBanner,
     };
+
+    public bool CanLocalPlayerSeeRole(PlayerControl player)
+    {
+        if (player.HasModifier<RevealedModifier>()) return true;
+        return PlayerControl.LocalPlayer.Data.IsDead;
+    }
 }

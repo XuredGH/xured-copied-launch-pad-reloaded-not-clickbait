@@ -1,15 +1,13 @@
 using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Options;
-using MiraAPI.GameOptions;
+using LaunchpadReloaded.Modifiers;
 using MiraAPI.Roles;
+using MiraAPI.Utilities;
 using System;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
 
-
-[RegisterCustomRole]
-public class SwapshifterRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole, ILaunchpadRole
+public class SwapshifterRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
 {
     public string RoleName => "Swapshifter";
     public string RoleDescription => "Shift and swap into other players.";
@@ -22,9 +20,9 @@ public class SwapshifterRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole, ILaun
         OptionsScreenshot = LaunchpadAssets.HackerBanner,
     };
 
-    public bool CanSeeRoleTag()
+    public bool CanLocalPlayerSeeRole(PlayerControl player)
     {
-        var baseVisibility = OptionGroupSingleton<GeneralOptions>.Instance.GhostsSeeRoles && PlayerControl.LocalPlayer.Data.IsDead;
-        return baseVisibility || PlayerControl.LocalPlayer.Data.Role.IsImpostor;
+        if (player.HasModifier<RevealedModifier>()) return true;
+        return PlayerControl.LocalPlayer.Data.IsDead || PlayerControl.LocalPlayer.Data.Role.IsImpostor;
     }
 }

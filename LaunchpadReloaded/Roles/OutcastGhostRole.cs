@@ -4,9 +4,7 @@ using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
 
-
-[RegisterCustomRole]
-public class OutcastGhostRole(IntPtr ptr) : CrewmateGhostRole(ptr), ICustomRole, ILaunchpadRole
+public class OutcastGhostRole(IntPtr ptr) : CrewmateGhostRole(ptr), ICustomRole
 {
     public string RoleName => "Outcast Ghost";
     public string RoleDescription => string.Empty;
@@ -35,7 +33,7 @@ public class OutcastGhostRole(IntPtr ptr) : CrewmateGhostRole(ptr), ICustomRole,
         return false;
     }
 
-    public bool CanSeeRoleTag()
+    public bool CanLocalPlayerSeeRole(PlayerControl player)
     {
         return false;
     }

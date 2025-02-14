@@ -5,7 +5,6 @@ using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Networking.Roles;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
-using MiraAPI.Hud;
 using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
 using UnityEngine;
@@ -13,7 +12,6 @@ using Helpers = MiraAPI.Utilities.Helpers;
 
 namespace LaunchpadReloaded.Buttons;
 
-[RegisterButton]
 public class HideButton : BaseLaunchpadButton<DeadBody>
 {
     public override string Name => "HIDE";

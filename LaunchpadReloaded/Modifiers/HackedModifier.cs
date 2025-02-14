@@ -4,7 +4,6 @@ using LaunchpadReloaded.Features.Managers;
 using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Utilities;
 using MiraAPI.GameOptions;
-using MiraAPI.Modifiers;
 using MiraAPI.Modifiers.Types;
 using MiraAPI.Networking;
 using Reactor.Utilities;
@@ -18,7 +17,6 @@ using Random = System.Random;
 
 namespace LaunchpadReloaded.Modifiers;
 
-[RegisterModifier]
 public class HackedModifier : TimedModifier
 {
     public override string ModifierName => "Hacked";
@@ -65,7 +63,7 @@ public class HackedModifier : TimedModifier
         {
             node.isActive = true;
         }
-        
+
         if (IsImpostor)
         {
             return;
@@ -98,7 +96,7 @@ public class HackedModifier : TimedModifier
         {
             return;
         }
-        
+
         foreach (var node in HackNodeComponent.AllNodes)
         {
             node.isActive = false;

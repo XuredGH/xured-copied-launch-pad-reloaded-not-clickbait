@@ -1,11 +1,9 @@
-﻿using MiraAPI.Modifiers;
-using MiraAPI.Modifiers.Types;
+﻿using MiraAPI.Modifiers.Types;
 using MiraAPI.Networking;
 using System;
 
 namespace LaunchpadReloaded.Modifiers;
 
-[RegisterModifier]
 public class PoisonModifier : TimedModifier
 {
     public override string ModifierName => "Poisoned";

@@ -4,7 +4,6 @@ using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Roles;
 using LaunchpadReloaded.Utilities;
 using MiraAPI.GameOptions;
-using MiraAPI.Hud;
 using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
 using UnityEngine;
@@ -12,7 +11,6 @@ using Helpers = MiraAPI.Utilities.Helpers;
 
 namespace LaunchpadReloaded.Buttons;
 
-[RegisterButton]
 public class SealButton : BaseLaunchpadButton<Vent>
 {
     public override string Name => "Seal Vent";

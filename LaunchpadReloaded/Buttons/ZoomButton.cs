@@ -2,7 +2,6 @@
 using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Roles;
 using MiraAPI.GameOptions;
-using MiraAPI.Hud;
 using MiraAPI.Utilities.Assets;
 using Reactor.Utilities;
 using System.Collections;
@@ -10,7 +9,6 @@ using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
 
-[RegisterButton]
 public class ZoomButton : BaseLaunchpadButton
 {
     public override string Name => "ZOOM";

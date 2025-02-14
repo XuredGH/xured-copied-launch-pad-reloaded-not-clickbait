@@ -1,16 +1,16 @@
 using AmongUs.GameOptions;
 using Il2CppSystem.Text;
 using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Options.Roles;
 using MiraAPI.GameOptions;
 using MiraAPI.Roles;
+using MiraAPI.Utilities;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
 
-
-[RegisterCustomRole]
-public class JesterRole(System.IntPtr ptr) : RoleBehaviour(ptr), ICustomRole, ILaunchpadRole
+public class JesterRole(System.IntPtr ptr) : RoleBehaviour(ptr), ICustomRole
 {
     public string RoleName => "Jester";
     public string RoleDescription => "Get ejected to win";
@@ -67,5 +67,11 @@ public class JesterRole(System.IntPtr ptr) : RoleBehaviour(ptr), ICustomRole, IL
                 DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.FakeTasks, Il2CppSystem.Array.Empty<Il2CppSystem.Object>()),
                 "</color>"
         ]);
+    }
+
+    public bool CanLocalPlayerSeeRole(PlayerControl player)
+    {
+        if (player.HasModifier<RevealedModifier>()) return true;
+        return PlayerControl.LocalPlayer.Data.IsDead;
     }
 }

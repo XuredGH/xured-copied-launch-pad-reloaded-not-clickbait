@@ -416,18 +416,4 @@ public static class MeetingHudPatches
 
         return false;
     }
-
-    [HarmonyPostfix]
-    [HarmonyPatch(nameof(MeetingHud.Close))]
-    public static void ClosePatch(MeetingHud __instance)
-    {
-        foreach (var plr in PlayerControl.AllPlayerControls)
-        {
-            var tagManager = plr.GetTagManager();
-            if (tagManager != null)
-            {
-                tagManager.MeetingEnd();
-            }
-        }
-    }
 }

@@ -1,15 +1,13 @@
 using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Options;
-using MiraAPI.GameOptions;
+using LaunchpadReloaded.Modifiers;
 using MiraAPI.Roles;
+using MiraAPI.Utilities;
 using System;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
 
-
-[RegisterCustomRole]
-public class SurgeonRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole, ILaunchpadRole
+public class SurgeonRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
 {
     public string RoleName => "Surgeon";
     public string RoleDescription => "Poison other players and dissect bodies";
@@ -23,9 +21,9 @@ public class SurgeonRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole, ILaunchpa
         OptionsScreenshot = LaunchpadAssets.SurgeonBanner,
     };
 
-    public bool CanSeeRoleTag()
+    public bool CanLocalPlayerSeeRole(PlayerControl player)
     {
-        var baseVisibility = OptionGroupSingleton<GeneralOptions>.Instance.GhostsSeeRoles && PlayerControl.LocalPlayer.Data.IsDead;
-        return baseVisibility || PlayerControl.LocalPlayer.Data.Role.IsImpostor;
+        if (player.HasModifier<RevealedModifier>()) return true;
+        return PlayerControl.LocalPlayer.Data.IsDead || PlayerControl.LocalPlayer.Data.Role.IsImpostor;
     }
 }

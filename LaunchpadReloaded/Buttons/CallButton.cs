@@ -9,7 +9,6 @@ using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
 
-[RegisterButton]
 public class CallButton : BaseLaunchpadButton
 {
     public override string Name => "CALL";

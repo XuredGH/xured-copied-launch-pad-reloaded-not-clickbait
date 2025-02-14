@@ -1,11 +1,9 @@
 ﻿using LaunchpadReloaded.Options.Modifiers;
 using MiraAPI.GameOptions;
-using MiraAPI.Modifiers;
 using MiraAPI.Utilities;
 
 namespace LaunchpadReloaded.Modifiers.Fun;
 
-[RegisterModifier]
 public sealed class SmolModifier : LPModifier
 {
     public override string ModifierName => "Smol";

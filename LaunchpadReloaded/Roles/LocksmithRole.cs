@@ -1,15 +1,15 @@
 ﻿using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Modifiers;
 using MiraAPI.Roles;
+using MiraAPI.Utilities;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
 
-
-[RegisterCustomRole]
-public class LocksmithRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole, ILaunchpadRole
+public class LocksmithRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
 {
     public string RoleName => "Locksmith";
     public string RoleDescription => "Seal vents around the map.";
@@ -23,4 +23,10 @@ public class LocksmithRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole, ILaunch
     };
 
     public List<SealedVentComponent> SealedVents { get; } = new List<SealedVentComponent>();
+
+    public bool CanLocalPlayerSeeRole(PlayerControl player)
+    {
+        if (player.HasModifier<RevealedModifier>()) return true;
+        return PlayerControl.LocalPlayer.Data.IsDead;
+    }
 }

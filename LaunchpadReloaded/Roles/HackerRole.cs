@@ -1,15 +1,13 @@
 using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Options;
-using MiraAPI.GameOptions;
+using LaunchpadReloaded.Modifiers;
 using MiraAPI.Roles;
+using MiraAPI.Utilities;
 using System;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles;
 
-
-[RegisterCustomRole]
-public class HackerRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole, ILaunchpadRole
+public class HackerRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
 {
     public string RoleName => "Hacker";
     public string RoleDescription => "Hack meetings and sabotage the crewmates";
@@ -22,9 +20,9 @@ public class HackerRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole, ILaunchpad
         OptionsScreenshot = LaunchpadAssets.HackerBanner,
     };
 
-    public bool CanSeeRoleTag()
+    public bool CanLocalPlayerSeeRole(PlayerControl player)
     {
-        var baseVisibility = OptionGroupSingleton<GeneralOptions>.Instance.GhostsSeeRoles && PlayerControl.LocalPlayer.Data.IsDead;
-        return baseVisibility || PlayerControl.LocalPlayer.Data.Role.IsImpostor;
+        if (player.HasModifier<RevealedModifier>()) return true;
+        return PlayerControl.LocalPlayer.Data.IsDead || PlayerControl.LocalPlayer.Data.Role.IsImpostor;
     }
 }

@@ -15,6 +15,4 @@ public class GeneralOptions : AbstractOptionGroup
 
     [ModdedToggleOption("Disable Meeting Teleport")] public bool DisableMeetingTeleport { get; set; } = false;
 
-    [ModdedToggleOption("Ghosts See Roles")] public bool GhostsSeeRoles { get; set; } = false;
-
 }

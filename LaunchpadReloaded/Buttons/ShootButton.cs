@@ -3,7 +3,6 @@ using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Options.Roles;
 using LaunchpadReloaded.Roles;
 using MiraAPI.GameOptions;
-using MiraAPI.Hud;
 using MiraAPI.Networking;
 using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
@@ -11,7 +10,6 @@ using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons;
 
-[RegisterButton]
 public class ShootButton : BaseLaunchpadButton<PlayerControl>
 {
     public override string Name => "Shoot";

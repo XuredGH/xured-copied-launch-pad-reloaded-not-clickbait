@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 namespace LaunchpadReloaded.Modifiers;
 
-[RegisterModifier]
 public class DeathData : BaseModifier
 {
     public override string ModifierName => "DeathData";
