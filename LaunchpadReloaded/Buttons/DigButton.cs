@@ -36,6 +36,7 @@ public class DigButton : BaseLaunchpadButton
 
     protected override void OnClick()
     {
+        SoundManager.Instance.PlaySound(LaunchpadAssets.DigSound.LoadAsset(), false, volume: 2);
         PlayerControl.LocalPlayer.RpcDigVent();
     }
 }

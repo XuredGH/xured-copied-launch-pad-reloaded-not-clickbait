@@ -29,6 +29,10 @@ public class GambleButton : BaseLaunchpadButton<PlayerControl>
             GameOptionsManager.Instance.normalGameHostOptions.KillDistance);
     }
 
+    public override bool CanUse()
+    {
+        return base.CanUse() && !Minigame.Instance;
+    }
     public override void SetOutline(bool active)
     {
         Target?.cosmetics.SetOutline(active, new Nullable<Color>(LaunchpadPalette.GamblerColor));
@@ -46,10 +50,11 @@ public class GambleButton : BaseLaunchpadButton<PlayerControl>
         {
             if (selectedRole.Role != Target.Data.Role.Role)
             {
-                Target.RpcCustomMurder(PlayerControl.LocalPlayer, resetKillTimer: false, teleportMurderer: false, showKillAnim: false, playKillSound: false);
+                Target.RpcCustomMurder(PlayerControl.LocalPlayer, resetKillTimer: false, teleportMurderer: false, showKillAnim: false, playKillSound: true);
             }
             else
             {
+                SoundManager.Instance.PlaySound(LaunchpadAssets.MoneySound.LoadAsset(), false, volume: 5);
                 Target.RpcAddModifier<RevealedModifier>();
             }
 

@@ -51,6 +51,7 @@ public class SealButton : BaseLaunchpadButton<Vent>
             return;
         }
 
+        SoundManager.Instance.PlaySound(LaunchpadAssets.TapeSound.LoadAsset(), false, volume: 2);
         PlayerControl.LocalPlayer.RpcSealVent(Target.Id);
 
         ResetTarget();
