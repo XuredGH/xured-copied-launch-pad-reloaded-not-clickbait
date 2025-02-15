@@ -20,6 +20,20 @@ public class DeadlockButton : BaseLaunchpadButton
 
     protected override void OnClick()
     {
-        // implement hitman code here
+        var hitmanRole = PlayerControl.LocalPlayer.Data.Role as HitmanRole;
+        var manager = hitmanRole?.Manager;
+        if (manager == null)
+        {
+            return;
+        }
+
+        if (manager.isDeadEyeActive)
+        {
+            hitmanRole?.Manager.StopDeadEye();
+        }
+        else
+        {
+            hitmanRole?.Manager.StartDeadEye();
+        }
     }
 }

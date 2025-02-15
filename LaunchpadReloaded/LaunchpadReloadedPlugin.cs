@@ -10,6 +10,8 @@ using MiraAPI;
 using MiraAPI.PluginLoading;
 using MiraAPI.Utilities;
 using Reactor.Utilities;
+using Il2CppInterop.Runtime.Injection;
+using LaunchpadReloaded.Components;
 
 namespace LaunchpadReloaded;
 
@@ -31,6 +33,8 @@ public partial class LaunchpadReloadedPlugin : BasePlugin, IMiraPlugin
     public override void Load()
     {
         LaunchpadEventListeners.Initialize();
+
+        ClassInjector.RegisterTypeInIl2Cpp<HitmanManagerComponent>();
 
         Harmony.PatchAll();
 
