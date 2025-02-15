@@ -46,6 +46,7 @@ public class HitmanRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
 
         if (CustomButtonSingleton<DeadlockButton>.Instance.EffectActive)
         {
+            HitmanUtilities.ClearMarks();
             CustomButtonSingleton<DeadlockButton>.Instance.OnEffectEnd();
         }
     }
