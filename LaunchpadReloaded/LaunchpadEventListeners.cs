@@ -1,4 +1,5 @@
 ﻿using LaunchpadReloaded.Components;
+using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Utilities;
 using MiraAPI.Events;
@@ -31,6 +32,11 @@ public static class LaunchpadEventListeners
 
     public static void SetRoleEvent(SetRoleEvent @event)
     {
+        if (@event.Player.AmOwner && NotepadHud.Instance != null)
+        {
+            NotepadHud.Instance?.UpdateAspectPos();
+        }
+
         var tagManager = @event.Player.GetTagManager();
 
         if (tagManager == null)

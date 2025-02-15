@@ -1,9 +1,11 @@
 using AmongUs.GameOptions;
-using Il2CppSystem.Text;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Modifiers;
+using LaunchpadReloaded.Options.Roles.Neutral;
+using MiraAPI.GameOptions;
 using MiraAPI.Roles;
 using MiraAPI.Utilities;
+using System.Text;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles.Neutral;
@@ -28,10 +30,56 @@ public class ReaperRole(System.IntPtr ptr) : RoleBehaviour(ptr), ICustomRole
         OptionsScreenshot = LaunchpadAssets.JesterBanner,
     };
 
-    public override void AppendTaskHint(StringBuilder taskStringBuilder)
+    public StringBuilder SetTabText()
+    {
+        var sb = Helpers.CreateForRole(this);
+        sb.Append($"\n<b>{CollectedSouls}/{OptionGroupSingleton<ReaperOptions>.Instance.SoulCollections} souls collected.");
+        return sb;
+    }
+
+    public override void AppendTaskHint(Il2CppSystem.Text.StringBuilder taskStringBuilder)
     {
         // remove default task hint
     }
+
+    /*
+    private GameObject _display;
+    private TextMeshPro _displayText;
+
+    public void UpdateSoulsCollected()
+    {
+        if (_display != null)
+        {
+            _displayText.text = $"{CollectedSouls}/{OptionGroupSingleton<ReaperOptions>.Instance.SoulCollections} Souls";
+        }
+    }
+    
+        public override void SpawnTaskHeader(PlayerControl playerControl)
+        {
+            if (playerControl.AmOwner)
+            {
+                _display = Instantiate(LaunchpadAssets.ReaperDisplay.LoadAsset(), HudManager.Instance.transform);
+                var aspectPosition = _display.AddComponent<AspectPosition>();
+                aspectPosition.Alignment = AspectPosition.EdgeAlignments.Top;
+                aspectPosition.DistanceFromEdge = new Vector3(0, 0.8f, 0);
+                aspectPosition.AdjustPosition();
+
+                _display.transform.localPosition = new Vector3(_display.transform.localPosition.x, _display.transform.localPosition.y, 20);
+                _displayText = _display.transform.GetChild(0).gameObject.GetComponent<TextMeshPro>();
+                _displayText.font = HudManager.Instance.TaskPanel.taskText.font;
+                _displayText.fontMaterial = HudManager.Instance.TaskPanel.taskText.fontMaterial;
+
+                UpdateSoulsCollected();
+            }
+        }
+
+    public override void Deinitialize(PlayerControl targetPlayer)
+    {
+        if (targetPlayer.AmOwner && _display != null)
+        {
+            _display.gameObject.DestroyImmediate();
+        }
+    }*/
 
     public override bool DidWin(GameOverReason reason)
     {

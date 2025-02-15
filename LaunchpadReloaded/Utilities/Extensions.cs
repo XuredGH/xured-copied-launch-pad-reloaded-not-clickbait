@@ -26,31 +26,6 @@ public static class Extensions
         return player.GetComponent<PlayerTagManager>();
     }
 
-    public static void SetRole(this ShapeshifterPanel panel, int index, RoleBehaviour roleBehaviour, Action onClick)
-    {
-        panel.shapeshift = onClick;
-
-        SpriteRenderer[] componentsInChildren = panel.GetComponentsInChildren<SpriteRenderer>();
-        for (int i = 0; i < componentsInChildren.Length; i++)
-        {
-            componentsInChildren[i].material.SetInt(PlayerMaterial.MaskLayer, index + 2);
-        }
-
-        panel.PlayerIcon.gameObject.SetActive(false);
-        panel.LevelNumberText.transform.parent.gameObject.SetActive(false);
-
-        var color = roleBehaviour.NameColor == Color.white ? roleBehaviour.TeamColor : roleBehaviour.NameColor;
-
-        panel.NameText.transform.localPosition = new Vector3(0, 0, 0);
-        panel.NameText.text = roleBehaviour.NiceName;
-        panel.NameText.color = color.LightenColor();
-        panel.Background.color = color.DarkenColor();
-
-        var outline = panel.Background.gameObject.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>();
-        outline.color = new Color(1, 1, 1, 0);
-        outline.transform.GetChild(0).gameObject.SetActive(false);
-    }
-
     public static void ClearModifiers(this ModifierComponent comp)
     {
         foreach (var mod in comp.ActiveModifiers)

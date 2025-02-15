@@ -1,4 +1,5 @@
 ﻿using Il2CppSystem;
+using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Options.Roles.Crewmate;
@@ -31,7 +32,7 @@ public class GambleButton : BaseLaunchpadButton<PlayerControl>
 
     public override bool CanUse()
     {
-        return base.CanUse() && !Minigame.Instance;
+        return base.CanUse() && !Target.HasModifier<RevealedModifier>();
     }
     public override void SetOutline(bool active)
     {
@@ -45,12 +46,12 @@ public class GambleButton : BaseLaunchpadButton<PlayerControl>
             return;
         }
 
-        GuessRoleMenu playerMenu = GuessRoleMenu.Create();
-        playerMenu.Begin((role) => !role.IsDead, (selectedRole) =>
+        GuessRoleMinigame playerMenu = GuessRoleMinigame.Create();
+        playerMenu.Open((role) => !role.IsDead, (selectedRole) =>
         {
             if (selectedRole.Role != Target.Data.Role.Role)
             {
-                Target.RpcCustomMurder(PlayerControl.LocalPlayer, resetKillTimer: false, teleportMurderer: false, showKillAnim: false, playKillSound: true);
+                PlayerControl.LocalPlayer.RpcCustomMurder(PlayerControl.LocalPlayer, resetKillTimer: false, teleportMurderer: false, showKillAnim: false, playKillSound: true);
             }
             else
             {

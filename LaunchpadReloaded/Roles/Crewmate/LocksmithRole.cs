@@ -18,7 +18,7 @@ public class LocksmithRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
     public ModdedRoleTeams Team => ModdedRoleTeams.Crewmate;
     public CustomRoleConfiguration Configuration => new(this)
     {
-        Icon = LaunchpadAssets.ReviveButton,
+        Icon = LaunchpadAssets.SealButton,
         OptionsScreenshot = LaunchpadAssets.MedicBanner,
     };
 

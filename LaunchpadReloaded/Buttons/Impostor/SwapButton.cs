@@ -29,10 +29,16 @@ public class SwapButton : BaseLaunchpadButton
     {
         if (_currentTarget != null)
         {
+            if (_currentTarget.Data.IsDead || _currentTarget.Data.Disconnected)
+            {
+                PlayerControl.LocalPlayer.RpcShapeshift(PlayerControl.LocalPlayer, false);
+                _currentTarget = null;
+                return;
+            }
+
             var currentPos2 = _currentTarget.GetTruePosition();
             _currentTarget.NetTransform.RpcSnapTo(PlayerControl.LocalPlayer.GetTruePosition());
             PlayerControl.LocalPlayer.NetTransform.RpcSnapTo(currentPos2);
-
             PlayerControl.LocalPlayer.RpcShapeshift(PlayerControl.LocalPlayer, false);
 
             _currentTarget = null;
