@@ -1,12 +1,14 @@
 ﻿using AmongUs.Data;
 using LaunchpadReloaded.Buttons.Impostor;
 using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Roles.Impostor;
 using MiraAPI.Hud;
 using MiraAPI.Networking;
 using Reactor.Utilities.Extensions;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Sentry.MeasurementUnit;
 
 namespace LaunchpadReloaded.Utilities;
 public static class HitmanUtilities
@@ -18,6 +20,7 @@ public static class HitmanUtilities
 
     public static bool OgShake;
     public static IEnumerator? ClockTick = null;
+    public static IEnumerator? OverlayTick = null;
     public static List<PlayerControl>? MarkedPlayers;
 
     public static void Initialize()
@@ -135,7 +138,7 @@ public static class HitmanUtilities
         }
     }
 
-    public static IEnumerator TransitionColor(Color targetColor, SpriteRenderer rend, float time = 1f)
+    public static IEnumerator TransitionColor(Color targetColor, SpriteRenderer rend, float time = 1f, System.Action? action = null)
     {
         Color startColor = rend.color;
         float elapsedTime = 0f;
@@ -148,6 +151,7 @@ public static class HitmanUtilities
         }
 
         rend.color = targetColor;
+        action?.Invoke();
     }
 
     public static IEnumerator ClockTickRoutine()
@@ -163,6 +167,24 @@ public static class HitmanUtilities
             SoundManager.Instance.StopSound(LaunchpadAssets.DeadlockClockRight.LoadAsset());
             SoundManager.Instance.PlaySound(LaunchpadAssets.DeadlockClockRight.LoadAsset(), false, 0.5f);
             yield return new WaitForSeconds(tickInterval);
+        }
+    }
+
+    public static IEnumerator OverlayColorRoutine()
+    {
+        var button = CustomButtonSingleton<DeadlockButton>.Instance;
+        var role = PlayerControl.LocalPlayer.Data.Role as HitmanRole;
+
+        while (HudManager.InstanceExists && button.EffectActive)
+        {
+            float progress = (button.EffectDuration - button.Timer) / button.EffectDuration;
+            float newAlpha = Mathf.Lerp(0.4f, 1f, progress);
+
+            Color newColor = role.OverlayColor;
+            newColor.a = newAlpha;
+            role._overlayRend.color = newColor;
+
+            yield return null;
         }
     }
 }

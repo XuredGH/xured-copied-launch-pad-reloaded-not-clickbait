@@ -53,36 +53,45 @@ public class HitmanRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
 
     public bool InDeadlockMode = false;
     public GameObject? Overlay;
+    public readonly Color OverlayColor = new(10f / 255f, 30f / 255f, 10f / 255f, 0.4f);
 
-    private SpriteRenderer? _overlayRend;
+    public SpriteRenderer? _overlayRend { get; private set; }
     private IEnumerator? _transitionCoroutine = null;
 
-    public void StartTransition(Color targetColor)
+    public void StartTransition(Color targetColor, Action? action = null)
     {
         if (_transitionCoroutine != null)
         {
             Coroutines.Stop(_transitionCoroutine);
         }
 
-        _transitionCoroutine = Coroutines.Start(HitmanUtilities.TransitionColor(targetColor, _overlayRend!));
+        _transitionCoroutine = Coroutines.Start(HitmanUtilities.TransitionColor(targetColor, _overlayRend!, 1f, action));
     }
 
     public override void SpawnTaskHeader(PlayerControl playerControl)
     {
-        Overlay = GameObject.Find("OverlayTint");
+        Overlay = GameObject.Find("DeadlockTint");
 
         if (Overlay == null)
         {
-            Overlay = Instantiate(HudManager.Instance.FullScreen).gameObject;
+            Overlay = new("DeadlockTint");
             Overlay.gameObject.SetActive(false);
-            Overlay.name = "OverlayTint";
             Overlay.transform.SetParent(HudManager.Instance.transform, true);
 
+            _overlayRend = Overlay.AddComponent<SpriteRenderer>();
+            _overlayRend.sprite = LaunchpadAssets.DeadlockVignette.LoadAsset();
+            _overlayRend.color = OverlayColor;
+
+            Camera mainCamera = Camera.main;
+            float screenHeight = mainCamera.orthographicSize * 2f;
+            float screenWidth = screenHeight * mainCamera.aspect;
+            float spriteWidth = _overlayRend.sprite.bounds.size.x;
+            float spriteHeight = _overlayRend.sprite.bounds.size.y;
+
+            Overlay.transform.localScale = new Vector3(screenWidth / spriteWidth, screenHeight / spriteHeight, 1f);
             var position = HudManager.Instance.transform.position;
             Overlay.transform.localPosition = new Vector3(position.x, position.y, 20f);
         }
-
-        _overlayRend = Overlay.GetComponent<SpriteRenderer>();
     }
 
     public void FixedUpdate()

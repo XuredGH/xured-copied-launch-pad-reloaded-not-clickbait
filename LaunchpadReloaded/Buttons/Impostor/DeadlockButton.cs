@@ -33,7 +33,7 @@ public class DeadlockButton : BaseLaunchpadButton
 
         hitman.InDeadlockMode = true;
         hitman.Overlay?.gameObject.SetActive(true);
-        hitman.StartTransition(new(2f / 255f, 48f / 255f, 32f / 255f, 0.4f));
+        hitman.StartTransition(hitman.OverlayColor);
 
         DataManager.Settings.Gameplay.ScreenShake = true;
         HudManager.Instance?.AlertFlash?.SetOverlay(true);
@@ -53,6 +53,12 @@ public class DeadlockButton : BaseLaunchpadButton
             HitmanUtilities.ClockTick = null;
         }
 
+        if (HitmanUtilities.OverlayTick != null)
+        {
+            Coroutines.Stop(HitmanUtilities.OverlayTick);
+            HitmanUtilities.OverlayTick = null;
+        }
+
         if (!HudManager.InstanceExists)
         {
             return;
@@ -67,8 +73,7 @@ public class DeadlockButton : BaseLaunchpadButton
         HitmanUtilities.Deinitialize();
 
         hitman.InDeadlockMode = false;
-        hitman.StartTransition(new(0f, 0f, 0f, 0f));
-        hitman.Overlay?.gameObject.SetActive(false);
+        hitman.StartTransition(new(0f, 0f, 0f, 0f), new System.Action(() => hitman.Overlay?.gameObject.SetActive(false)));
 
         HudManager.Instance?.AlertFlash?.SetOverlay(false);
         SoundManager.Instance.PlaySound(LaunchpadAssets.DeadlockFadeOut.LoadAsset(), false);
@@ -90,6 +95,11 @@ public class DeadlockButton : BaseLaunchpadButton
         if (HitmanUtilities.ClockTick == null)
         {
             HitmanUtilities.ClockTick = Coroutines.Start(HitmanUtilities.ClockTickRoutine());
+        }
+
+        if (HitmanUtilities.OverlayTick == null)
+        {
+            HitmanUtilities.OverlayTick = Coroutines.Start(HitmanUtilities.OverlayColorRoutine());
         }
 
         if (HitmanUtilities.MarkedPlayers?.Count >= OptionGroupSingleton<HitmanOptions>.Instance.MarkLimit)

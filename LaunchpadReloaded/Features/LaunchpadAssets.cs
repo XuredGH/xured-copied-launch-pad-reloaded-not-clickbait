@@ -62,6 +62,7 @@ public static class LaunchpadAssets
 
     public static readonly LoadableAsset<Sprite> DeadlockHonor = new LoadableResourceAsset("LaunchpadReloaded.Resources.DeadlockHonor.png");
     public static readonly LoadableAsset<Sprite> DeadlockTarget = new LoadableResourceAsset("LaunchpadReloaded.Resources.DeadlockTarget.png");
+    public static readonly LoadableAsset<Sprite> DeadlockVignette = new LoadableResourceAsset("LaunchpadReloaded.Resources.DeadlockVignette.png");
 
     // Sounds
     public static readonly LoadableAsset<AudioClip> BeepSound = new LoadableBundleAsset<AudioClip>("Beep.wav", Bundle);
