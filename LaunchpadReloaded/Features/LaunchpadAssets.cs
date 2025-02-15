@@ -59,7 +59,9 @@ public static class LaunchpadAssets
     public static readonly LoadableAsset<Sprite> KnifeHandSprite = new LoadableBundleAsset<Sprite>("KnifeHand.png", Bundle);
     public static readonly LoadableAsset<Sprite> NodeSprite = new LoadableBundleAsset<Sprite>("Node.png", Bundle);
     public static readonly LoadableAsset<Sprite> ScannerSprite = new LoadableBundleAsset<Sprite>("Scanner.png", Bundle);
+
     public static readonly LoadableAsset<Sprite> DeadlockHonor = new LoadableResourceAsset("LaunchpadReloaded.Resources.DeadlockHonor.png");
+    public static readonly LoadableAsset<Sprite> DeadlockTarget = new LoadableResourceAsset("LaunchpadReloaded.Resources.DeadlockTarget.png");
 
     // Sounds
     public static readonly LoadableAsset<AudioClip> BeepSound = new LoadableBundleAsset<AudioClip>("Beep.wav", Bundle);
