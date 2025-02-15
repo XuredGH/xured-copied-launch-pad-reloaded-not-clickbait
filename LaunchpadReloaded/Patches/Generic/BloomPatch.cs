@@ -1,5 +1,5 @@
 ﻿using HarmonyLib;
-using Kino;
+using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Utilities;
 using UnityEngine;

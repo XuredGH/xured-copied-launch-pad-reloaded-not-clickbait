@@ -22,14 +22,15 @@
 // THE SOFTWARE.
 //
 
+using System;
 using LaunchpadReloaded.Features;
 using Reactor.Utilities.Attributes;
 using UnityEngine;
 
-namespace Kino;
+namespace LaunchpadReloaded.Components;
 
 [RegisterInIl2Cpp]
-public class Bloom : MonoBehaviour
+public class Bloom(IntPtr cppPtr) : MonoBehaviour(cppPtr)
 {
     #region Public Properties
 

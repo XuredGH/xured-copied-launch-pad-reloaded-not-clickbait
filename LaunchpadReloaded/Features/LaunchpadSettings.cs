@@ -2,7 +2,7 @@
 using LaunchpadReloaded.API.Settings;
 using MiraAPI.PluginLoading;
 using System.Linq;
-using Kino;
+using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Utilities;
 using Reactor.Utilities.Extensions;
 using UnityEngine;
