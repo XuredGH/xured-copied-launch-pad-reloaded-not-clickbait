@@ -45,7 +45,7 @@ public class ShootButton : BaseLaunchpadButton<PlayerControl>
             PlayerControl.LocalPlayer.RpcCustomMurder(Target);
         }
 
-        if (Target.Data.Role.TeamType == RoleTeamTypes.Crewmate && !TutorialManager.InstanceExists)
+        if (Target.Data.Role.TeamType == RoleTeamTypes.Crewmate)
         {
             PlayerControl.LocalPlayer.RpcCustomMurder(PlayerControl.LocalPlayer);
         }
