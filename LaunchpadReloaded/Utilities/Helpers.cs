@@ -18,6 +18,37 @@ public static class Helpers
         return PlayerControl.AllPlayerControls.ToArray().Where(x => !x.Data.IsDead).ToList();
     }
 
+    public static ArrowBehaviour CreateArrow(Transform parent, Color color)
+    {
+        var prefab = Object.FindObjectOfType<ArrowBehaviour>(true);
+        var arrow = Object.Instantiate(prefab, parent);
+        arrow.image = arrow.gameObject.GetComponent<SpriteRenderer>();
+        arrow.image.color = color;
+        arrow.gameObject.layer = 5;
+        arrow.gameObject.SetActive(true);
+        return arrow;
+    }
+
+    public static T? FindClosestObject<T>(List<T> objectList, Vector3 position) where T : MonoBehaviour
+    {
+        T? closest = null;
+        float closestDistanceSqr = Mathf.Infinity;
+
+        foreach (T obj in objectList)
+        {
+            if (obj == null) continue;
+
+            float sqrDistance = (obj.transform.position - position).sqrMagnitude;
+            if (sqrDistance < closestDistanceSqr)
+            {
+                closestDistanceSqr = sqrDistance;
+                closest = obj;
+            }
+        }
+
+        return closest;
+    }
+
     public static bool ShouldCancelClick()
     {
         return PlayerControl.LocalPlayer.HasModifier<DragBodyModifier>() || PlayerControl.LocalPlayer.GetModifier<HackedModifier>() is { DeActivating: false };

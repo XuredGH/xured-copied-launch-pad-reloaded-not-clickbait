@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using LaunchpadReloaded.Components;
+﻿using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Modifiers;
 using MiraAPI.Utilities;
-using Reactor.Utilities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Utilities;
@@ -49,8 +48,8 @@ public static class HackerUtilities
         new Vector3(-14.2747f, -4.8171f, -0.0048f),
         new Vector3(1.4743f, -2.5041f, -0.0025f),
     ];
-    
-    public static readonly Func<PlayerControl?, bool> PlayerHacked = player => player?.GetModifier<HackedModifier>() is { DeActivating:false };
+
+    public static readonly Func<PlayerControl?, bool> PlayerHacked = player => player?.GetModifier<HackedModifier>() is { DeActivating: false };
 
     public static int CountHackedPlayers(bool includeImpostors = true)
     {
@@ -59,7 +58,12 @@ public static class HackerUtilities
 
     public static bool AnyPlayerHacked()
     {
-        return PlayerControl.AllPlayerControls.ToArray().Any(x=> PlayerHacked(x));
+        return PlayerControl.AllPlayerControls.ToArray().Any(x => PlayerHacked(x));
+    }
+
+    public static HackNodeComponent? GetClosestNode(Vector2 position)
+    {
+        return Helpers.FindClosestObject(HackNodeComponent.AllNodes, position);
     }
 
     public static bool IsHacked(this NetworkedPlayerInfo playerInfo)
@@ -75,7 +79,7 @@ public static class HackerUtilities
         {
             return console.FindTask(PlayerControl.LocalPlayer).TryCast<SabotageTask>();
         }
-        
+
         // disable emergency button
         if (usable?.TryCast<SystemConsole>() is { } systemConsole)
         {

@@ -25,15 +25,18 @@ public class HackedModifier : TimedModifier
     public override bool AutoStart => true;
     public override float Duration => OptionGroupSingleton<HackerOptions>.Instance.HackDuration;
 
-    public bool IsImpostor;
-
+    public bool IsImpostor = false;
     public bool DeActivating;
 
-    private TextMeshPro _hackedText;
+    private TextMeshPro? _hackedText = null;
+    private HackNodeComponent? _lastCloseNode = null;
+    private HackNodeComponent? _closestNode = null;
 
     public override void FixedUpdate()
     {
         base.FixedUpdate();
+
+        IsImpostor = Player!.Data.Role.IsImpostor;
 
         var randomString = Helpers.RandomString(Helpers.Random.Next(4, 6),
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#!?$(???#@)$@@@@0000");
@@ -41,7 +44,25 @@ public class HackedModifier : TimedModifier
         Player.cosmetics.SetNameMask(true);
         Player.cosmetics.gameObject.SetActive(false);
 
-        if (_hackedText)
+        if (!Player.AmOwner || IsImpostor)
+        {
+            return;
+        }
+
+        _closestNode = Helpers.FindClosestObject(HackNodeComponent.AllNodes, PlayerControl.LocalPlayer.transform.position);
+
+        if (_closestNode != null && _lastCloseNode != _closestNode)
+        {
+            foreach (var node in HackNodeComponent.AllNodes)
+            {
+                node.SetArrowActive(false);
+            }
+            _closestNode.SetArrowActive(true);
+        }
+
+        _lastCloseNode = _closestNode;
+
+        if (_hackedText != null)
         {
             _hackedText.text = $"Find a node on the map to unhack!\nIf you don't unhack in time, <b>YOU WILL DIE.</b>\n<size=70%>{Math.Round(TimeRemaining, 0)} seconds remaining.</size>";
         }
@@ -49,8 +70,6 @@ public class HackedModifier : TimedModifier
 
     public override void OnActivate()
     {
-        IsImpostor = Player!.Data.Role.IsImpostor;
-
         GradientManager.SetGradientEnabled(Player, false);
         Player.cosmetics.SetColor(15);
         Player.cosmetics.gameObject.SetActive(false);
@@ -59,6 +78,7 @@ public class HackedModifier : TimedModifier
         {
             return;
         }
+
         foreach (var node in HackNodeComponent.AllNodes)
         {
             node.isActive = true;
@@ -100,6 +120,7 @@ public class HackedModifier : TimedModifier
         foreach (var node in HackNodeComponent.AllNodes)
         {
             node.isActive = false;
+            node.SetArrowActive(false);
         }
 
         if (IsImpostor)
@@ -108,7 +129,11 @@ public class HackedModifier : TimedModifier
         }
 
         Coroutines.Stop(HackEffect());
-        _hackedText.gameObject.DestroyImmediate();
+
+        if (_hackedText != null)
+        {
+            _hackedText.gameObject.DestroyImmediate();
+        }
     }
 
     public override void OnDeath(DeathReason reason)
@@ -165,7 +190,7 @@ public class HackedModifier : TimedModifier
 
     public override void OnTimerComplete()
     {
-        if (Player is not null && !IsImpostor)
+        if (Player is not null && !IsImpostor && !TutorialManager.InstanceExists)
         {
             Player.RpcCustomMurder(Player, true, false, false, false, false, true);
         }
