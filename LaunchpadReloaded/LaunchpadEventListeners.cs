@@ -145,16 +145,17 @@ public static class LaunchpadEventListeners
             if (vent.IsSealed())
             {
                 @event.Cancel();
+                return;
             }
         }
 
         if (PlayerControl.LocalPlayer.Data.IsHacked() && @event.IsPrimaryConsole)
         {
             @event.Cancel();
+            return;
         }
 
-        if (HackerUtilities.AnyPlayerHacked() &&
-            @event.Usable.TryCast<SystemConsole>() || @event.Usable.TryCast<MapConsole>())
+        if (HackerUtilities.AnyPlayerHacked() && (@event.Usable.TryCast<SystemConsole>() || @event.Usable.TryCast<MapConsole>()))
         {
             @event.Cancel();
         }
