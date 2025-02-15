@@ -8,6 +8,9 @@ public static class LaunchpadAssets
 {
     public static readonly AssetBundle Bundle = AssetBundleManager.Load("assets");
 
+    // Shaders
+    public static readonly LoadableAsset<Shader> BloomShader = new LoadableBundleAsset<Shader>("Bloom.shader", Bundle);
+
     // Materials
     public static readonly LoadableAsset<Material> GradientMaterial = new LoadableBundleAsset<Material>("GradientPlayerMaterial", Bundle);
     public static readonly LoadableAsset<Material> MaskedGradientMaterial = new LoadableBundleAsset<Material>("MaskedGradientMaterial", Bundle);
