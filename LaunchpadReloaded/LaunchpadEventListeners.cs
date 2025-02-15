@@ -1,12 +1,15 @@
-﻿using LaunchpadReloaded.Components;
+﻿using LaunchpadReloaded.Buttons.Impostor;
+using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Modifiers;
+using LaunchpadReloaded.Roles.Impostor;
 using LaunchpadReloaded.Utilities;
 using MiraAPI.Events;
 using MiraAPI.Events.Vanilla.Gameplay;
 using MiraAPI.Events.Vanilla.Map;
 using MiraAPI.Events.Vanilla.Meeting;
 using MiraAPI.Events.Vanilla.Usables;
+using MiraAPI.Hud;
 using MiraAPI.Roles;
 using MiraAPI.Utilities;
 
@@ -113,6 +116,12 @@ public static class LaunchpadEventListeners
         if (PlayerControl.LocalPlayer.HasModifier<DragBodyModifier>())
         {
             PlayerControl.LocalPlayer.RpcRemoveModifier<DragBodyModifier>();
+        }
+
+        if (PlayerControl.LocalPlayer.Data.Role is HitmanRole hitman && hitman.InDeadlockMode && HitmanUtilities.MarkedPlayers != null)
+        {
+            HitmanUtilities.ClearMarks();
+            CustomButtonSingleton<DeadlockButton>.Instance.OnEffectEnd();
         }
     }
 

@@ -1,17 +1,15 @@
 ﻿using BepInEx;
+using BepInEx.Configuration;
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using LaunchpadReloaded.Features;
-using Reactor;
-using Reactor.Networking;
-using Reactor.Networking.Attributes;
-using BepInEx.Configuration;
 using MiraAPI;
 using MiraAPI.PluginLoading;
 using MiraAPI.Utilities;
+using Reactor;
+using Reactor.Networking;
+using Reactor.Networking.Attributes;
 using Reactor.Utilities;
-using Il2CppInterop.Runtime.Injection;
-using LaunchpadReloaded.Components;
 
 namespace LaunchpadReloaded;
 
@@ -34,12 +32,10 @@ public partial class LaunchpadReloadedPlugin : BasePlugin, IMiraPlugin
     {
         LaunchpadEventListeners.Initialize();
 
-        ClassInjector.RegisterTypeInIl2Cpp<HitmanManagerComponent>();
-
         Harmony.PatchAll();
 
         ReactorCredits.Register("Launchpad", Version.Truncate(11, "") ?? Version, true, ReactorCredits.AlwaysShow);
-        
+
         LaunchpadSettings.Initialize();
 
         Config.Save();

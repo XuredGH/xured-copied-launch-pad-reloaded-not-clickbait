@@ -18,6 +18,9 @@ public class HitmanOptions : AbstractOptionGroup
     [ModdedNumberOption("Deadlock Uses", 0, 12, 2, zeroInfinity: true)]
     public float DeadlockUses { get; set; } = 3;
 
+    [ModdedNumberOption("Deadlock Mark Limit", 1, 12, 1, zeroInfinity: false)]
+    public float MarkLimit { get; set; } = 2;
+
     [ModdedNumberOption("Deadlock Duration", 15, 50, 2.5f)]
     public float DeadlockDuration { get; set; } = 20;
 }

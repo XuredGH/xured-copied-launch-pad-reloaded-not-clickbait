@@ -1,0 +1,168 @@
+﻿using AmongUs.Data;
+using LaunchpadReloaded.Buttons.Impostor;
+using LaunchpadReloaded.Features;
+using MiraAPI.Hud;
+using MiraAPI.Networking;
+using Reactor.Utilities.Extensions;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace LaunchpadReloaded.Utilities;
+public static class HitmanUtilities
+{
+    public static float LastMarkTime = 0f;
+    public static float OgShakeAmount;
+    public static float OgShakePeriod;
+    public static float OgSpeed;
+
+    public static bool OgShake;
+    public static IEnumerator? ClockTick = null;
+    public static List<PlayerControl>? MarkedPlayers;
+
+    public static void Initialize()
+    {
+        ClockTick = null;
+        MarkedPlayers = new();
+
+        var followerCam = HudManager.Instance.PlayerCam;
+        OgShakeAmount = followerCam.shakeAmount;
+        OgShakePeriod = followerCam.shakePeriod;
+        followerCam.shakeAmount = 0.15f;
+        followerCam.shakePeriod = 1.2f;
+
+        OgShake = DataManager.Settings.Gameplay.screenShake;
+
+        OgSpeed = PlayerControl.LocalPlayer.MyPhysics.Speed;
+        PlayerControl.LocalPlayer.MyPhysics.Speed = OgSpeed * 0.75f;
+
+        LastMarkTime = Time.unscaledTime;
+    }
+
+    public static void Deinitialize()
+    {
+        var followerCam = HudManager.Instance!.PlayerCam;
+        followerCam.shakeAmount = OgShakeAmount;
+        followerCam.shakePeriod = OgShakePeriod;
+        PlayerControl.LocalPlayer.MyPhysics.Speed = OgSpeed;
+        DataManager.Settings.Gameplay.ScreenShake = OgShake;
+    }
+
+    public static void PlayerMarkCheck()
+    {
+        if (Input.GetMouseButtonDown(0) && Time.unscaledTime - LastMarkTime >= 1)
+        {
+            var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            var plr = Helpers.GetPlayerToPoint(new Vector3(mousePos.x, mousePos.y, 0));
+
+            if (MarkedPlayers == null || plr == null)
+            {
+                return;
+            }
+
+            if (MarkedPlayers.Contains(plr) || plr == PlayerControl.LocalPlayer)
+            {
+                return;
+            }
+
+            CreatePlayerMark(plr);
+        }
+    }
+
+    public static void CreatePlayerMark(PlayerControl plr)
+    {
+        LastMarkTime = Time.unscaledTime;
+        MarkedPlayers?.Add(plr);
+
+        GameObject mark = new("Mark");
+        mark.transform.SetParent(plr.transform);
+        mark.transform.localPosition = new Vector3(0f, 0f, -1f);
+        mark.transform.localScale = new Vector3(0.6f, 0.6f, 1f);
+        var rend = mark.gameObject.AddComponent<SpriteRenderer>();
+        rend.sprite = LaunchpadAssets.DeadlockTarget.LoadAsset();
+        SoundManager.Instance.PlaySound(LaunchpadAssets.DeadlockMark.LoadAsset(), false, 2f);
+
+        HudManager.Instance.StartCoroutine(Effects.Bloop(0.1f, mark.transform, 0.25f, 1f));
+        HudManager.Instance.StartCoroutine(HudManager.Instance.PlayerCam.CoShakeScreen(0.4f, 3f));
+    }
+
+    public static void ClearMarks()
+    {
+        if (MarkedPlayers != null && MarkedPlayers.Count > 0)
+        {
+            foreach (var plr in MarkedPlayers)
+            {
+                var mark = plr.transform.Find("Mark");
+                if (mark != null)
+                {
+                    mark.gameObject.Destroy();
+                }
+            }
+
+            MarkedPlayers.Clear();
+            MarkedPlayers = null;
+        }
+    }
+
+    public static IEnumerator KillMarkedPlayers()
+    {
+        var origCount = MarkedPlayers!.Count;
+
+        while (MarkedPlayers!.Count > 0)
+        {
+            PlayerControl player = MarkedPlayers[0];
+            MarkedPlayers.RemoveAt(0);
+
+            if (player != null)
+            {
+                PlayerControl.LocalPlayer.RpcCustomMurder(player, resetKillTimer: false, createDeadBody: true, teleportMurderer: false, showKillAnim: true);
+
+                var mark = player.transform.Find("Mark");
+                if (mark != null)
+                {
+                    mark.gameObject.Destroy();
+                }
+            }
+
+            yield return new WaitForSeconds(0.2f);
+        }
+
+        if (origCount > 0)
+        {
+            Helpers.AddMessage($"  <size=130%>- (x{origCount})</size>",
+                LaunchpadAssets.DeadlockHonor.LoadAsset(), LaunchpadAssets.DeadlockKillConfirmal.LoadAsset(), Color.red,
+                new Vector3(0f, 1.4f, -2f), out _);
+        }
+    }
+
+    public static IEnumerator TransitionColor(Color targetColor, SpriteRenderer rend, float time = 1f)
+    {
+        Color startColor = rend.color;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < time)
+        {
+            rend.color = Color.Lerp(startColor, targetColor, elapsedTime / time);
+            elapsedTime += Time.deltaTime * 4f;
+            yield return null;
+        }
+
+        rend.color = targetColor;
+    }
+
+    public static IEnumerator ClockTickRoutine()
+    {
+        var button = CustomButtonSingleton<DeadlockButton>.Instance;
+
+        while (HudManager.InstanceExists && button.EffectActive)
+        {
+            float tickInterval = Mathf.Lerp(1.5f, 0.2f, (button.EffectDuration - button.Timer) / button.EffectDuration);
+            SoundManager.Instance.StopSound(LaunchpadAssets.DeadlockClockLeft.LoadAsset());
+            SoundManager.Instance.PlaySound(LaunchpadAssets.DeadlockClockLeft.LoadAsset(), false, 0.5f);
+            yield return new WaitForSeconds(tickInterval);
+            SoundManager.Instance.StopSound(LaunchpadAssets.DeadlockClockRight.LoadAsset());
+            SoundManager.Instance.PlaySound(LaunchpadAssets.DeadlockClockRight.LoadAsset(), false, 0.5f);
+            yield return new WaitForSeconds(tickInterval);
+        }
+    }
+}

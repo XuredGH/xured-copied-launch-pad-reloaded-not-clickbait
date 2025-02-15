@@ -22,11 +22,27 @@ public static class Helpers
     {
         return PlayerControl.LocalPlayer.HasModifier<DragBodyModifier>() || PlayerControl.LocalPlayer.GetModifier<HackedModifier>() is { DeActivating: false };
     }
-    public static void AddMessage(string item, Sprite spr, AudioClip clip, Color color, out LobbyNotificationMessage msg)
+
+    public static PlayerControl? GetPlayerToPoint(Vector3 position)
+    {
+        Collider2D[] hitColliders = Physics2D.OverlapPointAll(position);
+
+        foreach (Collider2D hitCollider in hitColliders)
+        {
+            PlayerControl playerControl = hitCollider.GetComponent<PlayerControl>();
+            if (playerControl != null)
+            {
+                return playerControl;
+            }
+        }
+
+        return null;
+    }
+    public static void AddMessage(string item, Sprite spr, AudioClip clip, Color color, Vector3 localPos, out LobbyNotificationMessage msg)
     {
         NotificationPopper popper = HudManager.Instance.Notifier;
         LobbyNotificationMessage newMessage = GameObject.Instantiate(popper.notificationMessageOrigin, Vector3.zero, Quaternion.identity, popper.transform);
-        newMessage.transform.localPosition = new Vector3(0f, 0f, -2f);
+        newMessage.transform.localPosition = localPos;
         newMessage.SetUp(item, spr, color, new System.Action(() => popper.OnMessageDestroy(newMessage)));
         popper.lastMessageKey = -1;
         popper.ShiftMessages();
@@ -35,7 +51,7 @@ public static class Helpers
         if (clip != null)
         {
             SoundManager.Instance.StopSound(clip);
-            SoundManager.Instance.PlaySound(clip, false);
+            SoundManager.Instance.PlaySound(clip, false, 2f);
         }
     }
 

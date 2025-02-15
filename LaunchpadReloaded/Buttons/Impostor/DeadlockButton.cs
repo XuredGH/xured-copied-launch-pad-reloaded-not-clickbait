@@ -1,8 +1,11 @@
-﻿using LaunchpadReloaded.Features;
+﻿using AmongUs.Data;
+using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Options.Roles.Impostor;
 using LaunchpadReloaded.Roles.Impostor;
+using LaunchpadReloaded.Utilities;
 using MiraAPI.GameOptions;
 using MiraAPI.Utilities.Assets;
+using Reactor.Utilities;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons.Impostor;
@@ -20,20 +23,80 @@ public class DeadlockButton : BaseLaunchpadButton
 
     protected override void OnClick()
     {
-        var hitmanRole = PlayerControl.LocalPlayer.Data.Role as HitmanRole;
-        var manager = hitmanRole?.Manager;
-        if (manager == null)
+        HitmanRole hitman = PlayerControl.LocalPlayer.Data.Role.TryCast<HitmanRole>()!;
+        if (hitman == null)
         {
             return;
         }
 
-        if (manager.isDeadEyeActive)
+        HitmanUtilities.Initialize();
+
+        hitman.InDeadlockMode = true;
+        hitman.Overlay?.gameObject.SetActive(true);
+        hitman.StartTransition(new(2f / 255f, 48f / 255f, 32f / 255f, 0.4f));
+
+        DataManager.Settings.Gameplay.ScreenShake = true;
+        HudManager.Instance?.AlertFlash?.SetOverlay(true);
+
+        SoundManager.Instance.StopSound(LaunchpadAssets.DeadlockFadeIn.LoadAsset());
+        SoundManager.Instance.PlaySound(LaunchpadAssets.DeadlockFadeIn.LoadAsset(), false);
+
+        SoundManager.instance.StopSound(LaunchpadAssets.DeadlockAmbience.LoadAsset());
+        SoundManager.Instance.PlaySound(LaunchpadAssets.DeadlockAmbience.LoadAsset(), true, 1f, SoundManager.Instance.sfxMixer);
+    }
+
+    public override void OnEffectEnd()
+    {
+        if (HitmanUtilities.ClockTick != null)
         {
-            hitmanRole?.Manager.StopDeadEye();
+            Coroutines.Stop(HitmanUtilities.ClockTick);
+            HitmanUtilities.ClockTick = null;
         }
-        else
+
+        if (!HudManager.InstanceExists)
         {
-            hitmanRole?.Manager.StartDeadEye();
+            return;
         }
+
+        HitmanRole hitman = PlayerControl.LocalPlayer.Data.Role.TryCast<HitmanRole>()!;
+        if (hitman == null)
+        {
+            return;
+        }
+
+        HitmanUtilities.Deinitialize();
+
+        hitman.InDeadlockMode = false;
+        hitman.StartTransition(new(0f, 0f, 0f, 0f));
+        hitman.Overlay?.gameObject.SetActive(false);
+
+        HudManager.Instance?.AlertFlash?.SetOverlay(false);
+        SoundManager.Instance.PlaySound(LaunchpadAssets.DeadlockFadeOut.LoadAsset(), false);
+        SoundManager.Instance.StopSound(LaunchpadAssets.DeadlockAmbience.LoadAsset());
+
+        if (HitmanUtilities.MarkedPlayers != null && HitmanUtilities.MarkedPlayers.Count > 0)
+        {
+            Coroutines.Start(HitmanUtilities.KillMarkedPlayers());
+        }
+    }
+
+    protected override void FixedUpdate(PlayerControl playerControl)
+    {
+        if (!playerControl.AmOwner || playerControl.Data.Role is not HitmanRole || !EffectActive || !HudManager.InstanceExists)
+        {
+            return;
+        }
+
+        if (HitmanUtilities.ClockTick == null)
+        {
+            HitmanUtilities.ClockTick = Coroutines.Start(HitmanUtilities.ClockTickRoutine());
+        }
+
+        if (HitmanUtilities.MarkedPlayers?.Count >= OptionGroupSingleton<HitmanOptions>.Instance.MarkLimit)
+        {
+            return;
+        }
+
+        HitmanUtilities.PlayerMarkCheck();
     }
 }
