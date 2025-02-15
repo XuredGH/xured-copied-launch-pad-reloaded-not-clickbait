@@ -17,13 +17,15 @@ public class SurgeonRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
     public CustomRoleConfiguration Configuration => new(this)
     {
         Icon = LaunchpadAssets.DissectButton,
-        //        UseVanillaKillButton = OptionGroupSingleton<SurgeonOptions>.Instance.StandardKill, NEEDS FIX
+        UseVanillaKillButton = false,
         OptionsScreenshot = LaunchpadAssets.SurgeonBanner,
     };
 
     public bool CanLocalPlayerSeeRole(PlayerControl player)
     {
+        if (PlayerControl.LocalPlayer.HasModifier<HackedModifier>()) return false;
         if (player.HasModifier<RevealedModifier>()) return true;
+
         return PlayerControl.LocalPlayer.Data.IsDead || PlayerControl.LocalPlayer.Data.Role.IsImpostor;
     }
 }

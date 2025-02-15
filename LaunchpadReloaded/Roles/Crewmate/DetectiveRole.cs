@@ -1,5 +1,7 @@
+using LaunchpadReloaded.Buttons.Crewmate;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Modifiers;
+using MiraAPI.Hud;
 using MiraAPI.Roles;
 using MiraAPI.Utilities;
 using System;
@@ -20,9 +22,29 @@ public class DetectiveRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
         OptionsScreenshot = LaunchpadAssets.DetectiveBanner,
     };
 
+    public override void OnDeath(DeathReason reason)
+    {
+        Deinitialize(Player);
+    }
+
+    public override void Deinitialize(PlayerControl targetPlayer)
+    {
+        if (!targetPlayer.AmOwner)
+        {
+            return;
+        }
+
+        if (CustomButtonSingleton<InstinctButton>.Instance.EffectActive)
+        {
+            CustomButtonSingleton<InstinctButton>.Instance.OnEffectEnd();
+        }
+    }
+
     public bool CanLocalPlayerSeeRole(PlayerControl player)
     {
+        if (PlayerControl.LocalPlayer.HasModifier<HackedModifier>()) return false;
         if (player.HasModifier<RevealedModifier>()) return true;
+
         return PlayerControl.LocalPlayer.Data.IsDead;
     }
 }

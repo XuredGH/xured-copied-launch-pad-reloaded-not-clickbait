@@ -22,7 +22,9 @@ public class HackerRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
 
     public bool CanLocalPlayerSeeRole(PlayerControl player)
     {
+        if (PlayerControl.LocalPlayer.HasModifier<HackedModifier>()) return false;
         if (player.HasModifier<RevealedModifier>()) return true;
+
         return PlayerControl.LocalPlayer.Data.IsDead || PlayerControl.LocalPlayer.Data.Role.IsImpostor;
     }
 }
