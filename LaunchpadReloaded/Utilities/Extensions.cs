@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Kino;
 using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
@@ -32,6 +33,20 @@ public static class Extensions
         {
             comp.RemoveModifier(mod);
         }
+    }
+
+    public static void SetBloomByMap(this Bloom bloom)
+    {
+        if (ShipStatus.Instance == null)
+        {
+            return;
+        }
+
+        bloom.ThresholdLinear = 
+            ShipStatus.Instance.TryCast<AirshipStatus>() || 
+            ShipStatus.Instance.Type is ShipStatus.MapType.Hq or ShipStatus.MapType.Fungle 
+                ? 1.3f :
+                0.95f;
     }
 
     public static void SetBodyType(this PlayerControl player, int bodyType)

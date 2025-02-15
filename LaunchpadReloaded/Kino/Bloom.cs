@@ -47,11 +47,11 @@ public class Bloom : MonoBehaviour
         set => _threshold = LinearToGamma(value);
     }
 
-    private float _threshold = LinearToGamma(0.78f);
+    private float _threshold = LinearToGamma(0.95f);
 
     /// Soft-knee coefficient
     /// Makes transition between under/over-threshold gradual.
-    public float SoftKnee { get; set; }
+    public float SoftKnee { get; set; } = 0.5f;
 
     /// Bloom radius
     /// Changes extent of veiling effects in a screen
@@ -65,7 +65,7 @@ public class Bloom : MonoBehaviour
         set => _intensity = value;
     }
 
-    private float _intensity = 2f;
+    private float _intensity = 1;
 
     /// High quality mode
     /// Controls filter quality and buffer resolution.
