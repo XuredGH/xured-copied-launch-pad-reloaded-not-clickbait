@@ -1,10 +1,8 @@
 ﻿using LaunchpadReloaded.Buttons.Impostor;
 using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Utilities;
 using MiraAPI.Hud;
 using MiraAPI.Roles;
-using MiraAPI.Utilities;
 using Reactor.Utilities;
 using System;
 using System.Collections;
@@ -25,14 +23,6 @@ public class HitmanRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
         OptionsScreenshot = LaunchpadAssets.JanitorBanner,
         UseVanillaKillButton = false,
     };
-
-    public bool CanLocalPlayerSeeRole(PlayerControl player)
-    {
-        if (PlayerControl.LocalPlayer.HasModifier<HackedModifier>()) return false;
-        if (player.HasModifier<RevealedModifier>()) return true;
-
-        return PlayerControl.LocalPlayer.Data.IsDead || PlayerControl.LocalPlayer.Data.Role.IsImpostor;
-    }
 
     public override void OnDeath(DeathReason reason)
     {

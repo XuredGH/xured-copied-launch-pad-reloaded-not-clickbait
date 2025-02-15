@@ -1,6 +1,5 @@
 using AmongUs.GameOptions;
 using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Options.Roles.Neutral;
 using MiraAPI.GameOptions;
 using MiraAPI.Roles;
@@ -95,13 +94,5 @@ public class ReaperRole(System.IntPtr ptr) : RoleBehaviour(ptr), ICustomRole
 
         var console = usable.TryCast<Console>();
         return !(console != null) || console.AllowImpostor;
-    }
-
-    public bool CanLocalPlayerSeeRole(PlayerControl player)
-    {
-        if (PlayerControl.LocalPlayer.HasModifier<HackedModifier>()) return false;
-        if (player.HasModifier<RevealedModifier>()) return true;
-
-        return PlayerControl.LocalPlayer.Data.IsDead;
     }
 }

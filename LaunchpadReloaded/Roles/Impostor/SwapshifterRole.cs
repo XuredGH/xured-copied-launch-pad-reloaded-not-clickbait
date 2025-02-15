@@ -1,9 +1,7 @@
 using LaunchpadReloaded.Buttons.Impostor;
 using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Modifiers;
 using MiraAPI.Hud;
 using MiraAPI.Roles;
-using MiraAPI.Utilities;
 using System;
 using UnityEngine;
 
@@ -37,13 +35,5 @@ public class SwapshifterRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
         {
             CustomButtonSingleton<SwapButton>.Instance.OnEffectEnd();
         }
-    }
-
-    public bool CanLocalPlayerSeeRole(PlayerControl player)
-    {
-        if (PlayerControl.LocalPlayer.HasModifier<HackedModifier>()) return false;
-        if (player.HasModifier<RevealedModifier>()) return true;
-
-        return PlayerControl.LocalPlayer.Data.IsDead || PlayerControl.LocalPlayer.Data.Role.IsImpostor;
     }
 }

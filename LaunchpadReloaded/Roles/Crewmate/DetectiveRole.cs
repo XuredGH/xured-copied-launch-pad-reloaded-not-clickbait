@@ -1,9 +1,7 @@
 using LaunchpadReloaded.Buttons.Crewmate;
 using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Modifiers;
 using MiraAPI.Hud;
 using MiraAPI.Roles;
-using MiraAPI.Utilities;
 using System;
 using UnityEngine;
 
@@ -38,13 +36,5 @@ public class DetectiveRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
         {
             CustomButtonSingleton<InstinctButton>.Instance.OnEffectEnd();
         }
-    }
-
-    public bool CanLocalPlayerSeeRole(PlayerControl player)
-    {
-        if (PlayerControl.LocalPlayer.HasModifier<HackedModifier>()) return false;
-        if (player.HasModifier<RevealedModifier>()) return true;
-
-        return PlayerControl.LocalPlayer.Data.IsDead;
     }
 }

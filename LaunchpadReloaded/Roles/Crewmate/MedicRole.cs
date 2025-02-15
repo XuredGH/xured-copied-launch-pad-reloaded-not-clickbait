@@ -1,7 +1,5 @@
 ﻿using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Modifiers;
 using MiraAPI.Roles;
-using MiraAPI.Utilities;
 using System;
 using UnityEngine;
 
@@ -19,12 +17,4 @@ public class MedicRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
         Icon = LaunchpadAssets.ReviveButton,
         OptionsScreenshot = LaunchpadAssets.MedicBanner,
     };
-
-    public bool CanLocalPlayerSeeRole(PlayerControl player)
-    {
-        if (PlayerControl.LocalPlayer.HasModifier<HackedModifier>()) return false;
-        if (player.HasModifier<RevealedModifier>()) return true;
-
-        return PlayerControl.LocalPlayer.Data.IsDead;
-    }
 }

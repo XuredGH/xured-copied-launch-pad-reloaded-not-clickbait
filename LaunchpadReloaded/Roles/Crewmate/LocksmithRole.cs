@@ -1,8 +1,6 @@
 ﻿using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Modifiers;
 using MiraAPI.Roles;
-using MiraAPI.Utilities;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,12 +21,4 @@ public class LocksmithRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
     };
 
     public List<SealedVentComponent> SealedVents { get; } = new List<SealedVentComponent>();
-
-    public bool CanLocalPlayerSeeRole(PlayerControl player)
-    {
-        if (PlayerControl.LocalPlayer.HasModifier<HackedModifier>()) return false;
-        if (player.HasModifier<RevealedModifier>()) return true;
-
-        return PlayerControl.LocalPlayer.Data.IsDead;
-    }
 }

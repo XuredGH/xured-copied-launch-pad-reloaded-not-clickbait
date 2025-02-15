@@ -1,8 +1,6 @@
 ﻿using Il2CppInterop.Runtime.Attributes;
 using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Modifiers;
 using MiraAPI.Roles;
-using MiraAPI.Utilities;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,12 +22,4 @@ public class BurrowerRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
 
     [HideFromIl2Cpp]
     public List<Vent> DugVents { get; } = [];
-
-    public bool CanLocalPlayerSeeRole(PlayerControl player)
-    {
-        if (PlayerControl.LocalPlayer.HasModifier<HackedModifier>()) return false;
-        if (player.HasModifier<RevealedModifier>()) return true;
-
-        return PlayerControl.LocalPlayer.Data.IsDead || PlayerControl.LocalPlayer.Data.Role.IsImpostor;
-    }
 }

@@ -1,11 +1,9 @@
 using AmongUs.GameOptions;
 using Il2CppSystem.Text;
 using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Options.Roles.Neutral;
 using MiraAPI.GameOptions;
 using MiraAPI.Roles;
-using MiraAPI.Utilities;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles.Neutral;
@@ -67,13 +65,5 @@ public class JesterRole(System.IntPtr ptr) : RoleBehaviour(ptr), ICustomRole
                 DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.FakeTasks, Il2CppSystem.Array.Empty<Il2CppSystem.Object>()),
                 "</color>"
         ]);
-    }
-
-    public bool CanLocalPlayerSeeRole(PlayerControl player)
-    {
-        if (PlayerControl.LocalPlayer.HasModifier<HackedModifier>()) return false;
-        if (player.HasModifier<RevealedModifier>()) return true;
-
-        return PlayerControl.LocalPlayer.Data.IsDead;
     }
 }

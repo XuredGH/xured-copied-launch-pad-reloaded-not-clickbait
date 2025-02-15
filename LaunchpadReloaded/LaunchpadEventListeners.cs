@@ -70,6 +70,13 @@ public static class LaunchpadEventListeners
             IsLocallyVisible = (player) =>
             {
                 var plrRole = player.Data.Role;
+                bool localHackedFlag = PlayerControl.LocalPlayer.HasModifier<HackedModifier>() && !PlayerControl.LocalPlayer.Data.Role.IsImpostor;
+                bool playerHackedFlag = player.HasModifier<HackedModifier>() && !player.Data.Role.IsImpostor;
+
+                if (localHackedFlag || playerHackedFlag)
+                {
+                    return false;
+                }
 
                 if (player.HasModifier<RevealedModifier>())
                 {

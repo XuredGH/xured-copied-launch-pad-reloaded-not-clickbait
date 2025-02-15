@@ -1,7 +1,5 @@
 using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Modifiers;
 using MiraAPI.Roles;
-using MiraAPI.Utilities;
 using System;
 using UnityEngine;
 
@@ -20,12 +18,4 @@ public class SurgeonRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
         UseVanillaKillButton = false,
         OptionsScreenshot = LaunchpadAssets.SurgeonBanner,
     };
-
-    public bool CanLocalPlayerSeeRole(PlayerControl player)
-    {
-        if (PlayerControl.LocalPlayer.HasModifier<HackedModifier>()) return false;
-        if (player.HasModifier<RevealedModifier>()) return true;
-
-        return PlayerControl.LocalPlayer.Data.IsDead || PlayerControl.LocalPlayer.Data.Role.IsImpostor;
-    }
 }
