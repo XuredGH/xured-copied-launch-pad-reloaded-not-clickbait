@@ -66,8 +66,7 @@ public static class GradientManager
         }
         
         gradData.GradientColor = colorId;
-        
-        pc.SetColor(pc.Data.DefaultOutfit.ColorId);
+        pc.RawSetColor(pc.CurrentOutfit.ColorId);
     }
 
     public static bool TryGetColor(byte id, out byte color)
