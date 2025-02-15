@@ -8,6 +8,9 @@ public static class LaunchpadAssets
 {
     public static readonly AssetBundle Bundle = AssetBundleManager.Load("assets");
 
+    // Shaders
+    public static readonly LoadableAsset<Shader> BloomShader = new LoadableBundleAsset<Shader>("Bloom.shader", Bundle);
+
     // Materials
     public static readonly LoadableAsset<Material> GradientMaterial = new LoadableBundleAsset<Material>("GradientPlayerMaterial", Bundle);
     public static readonly LoadableAsset<Material> MaskedGradientMaterial = new LoadableBundleAsset<Material>("MaskedGradientMaterial", Bundle);
@@ -36,6 +39,7 @@ public static class LaunchpadAssets
     public static readonly LoadableAsset<Sprite> FreezeButton = new LoadableResourceAsset("LaunchpadReloaded.Resources.Freeze.png");
     public static readonly LoadableAsset<Sprite> SoulButton = new LoadableResourceAsset("LaunchpadReloaded.Resources.StealSoul.png");
     public static readonly LoadableAsset<Sprite> GambleButton = new LoadableResourceAsset("LaunchpadReloaded.Resources.Gamble.png");
+    public static readonly LoadableAsset<Sprite> DeadlockButton = new LoadableResourceAsset("LaunchpadReloaded.Resources.Deadlock.png");
 
     public static readonly LoadableAsset<Sprite> NotepadSprite = new LoadableResourceAsset("LaunchpadReloaded.Resources.NotepadButton.png");
     public static readonly LoadableAsset<Sprite> NotepadActiveSprite = new LoadableResourceAsset("LaunchpadReloaded.Resources.NotepadButtonActive.png");
@@ -56,6 +60,7 @@ public static class LaunchpadAssets
     public static readonly LoadableAsset<Sprite> Bone = new LoadableResourceAsset("LaunchpadReloaded.Resources.Bone.png");
     public static readonly LoadableAsset<Sprite> Footstep = new LoadableResourceAsset("LaunchpadReloaded.Resources.Footstep.png");
     public static readonly LoadableAsset<Sprite> VentTape = new LoadableResourceAsset("LaunchpadReloaded.Resources.VentTape.png");
+    public static readonly LoadableAsset<Sprite> VentTapePolus = new LoadableResourceAsset("LaunchpadReloaded.Resources.VentTapePolus.png");
     public static readonly LoadableAsset<Sprite> KnifeHandSprite = new LoadableBundleAsset<Sprite>("KnifeHand.png", Bundle);
     public static readonly LoadableAsset<Sprite> NodeSprite = new LoadableBundleAsset<Sprite>("Node.png", Bundle);
     public static readonly LoadableAsset<Sprite> ScannerSprite = new LoadableBundleAsset<Sprite>("Scanner.png", Bundle);
@@ -63,6 +68,7 @@ public static class LaunchpadAssets
     public static readonly LoadableAsset<Sprite> DeadlockHonor = new LoadableResourceAsset("LaunchpadReloaded.Resources.DeadlockHonor.png");
     public static readonly LoadableAsset<Sprite> DeadlockTarget = new LoadableResourceAsset("LaunchpadReloaded.Resources.DeadlockTarget.png");
     public static readonly LoadableAsset<Sprite> DeadlockVignette = new LoadableResourceAsset("LaunchpadReloaded.Resources.DeadlockVignette.png");
+    public static readonly LoadableAsset<Sprite> FrozenBodyOverlay = new LoadableResourceAsset("LaunchpadReloaded.Resources.BodyFrozenOverlay.png");
 
     // Sounds
     public static readonly LoadableAsset<AudioClip> BeepSound = new LoadableBundleAsset<AudioClip>("Beep.wav", Bundle);

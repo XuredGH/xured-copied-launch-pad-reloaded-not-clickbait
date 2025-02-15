@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Options;
 using LaunchpadReloaded.Utilities;
 using MiraAPI.GameOptions;
@@ -29,6 +30,16 @@ public static class ShipStatusPatch
         {
             var nodePos = nodePositions[i];
             __instance.CreateNode(i, nodesParent.transform, nodePos);
+        }
+    }
+
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(ShipStatus.StartMeeting))]
+    public static void DisableFrozenBodyDeletionPatch()
+    {
+        foreach (var body in DeadBodyCacheComponent.GetFrozenBodies())
+        {
+            body.body.hideFlags = HideFlags.DontSave;
         }
     }
 

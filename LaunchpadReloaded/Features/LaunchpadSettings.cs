@@ -2,6 +2,11 @@
 using LaunchpadReloaded.API.Settings;
 using MiraAPI.PluginLoading;
 using System.Linq;
+using LaunchpadReloaded.Components;
+using LaunchpadReloaded.Utilities;
+using Reactor.Utilities.Extensions;
+using UnityEngine;
+using Object = Il2CppSystem.Object;
 
 namespace LaunchpadReloaded.Features;
 
@@ -9,6 +14,7 @@ public class LaunchpadSettings
 {
     public static LaunchpadSettings? Instance { get; private set; }
 
+    public readonly CustomSetting Bloom;
     public readonly CustomSetting LockedCamera;
     public readonly CustomSetting UniqueDummies;
 #if !ANDROID
@@ -31,6 +37,24 @@ public class LaunchpadSettings
             }
         };
 #endif
+        Bloom = new CustomSetting("Bloom", true)
+        {
+            ChangedEvent = enabled =>
+            {
+                if (!GameData.Instance || Camera.main == null)
+                {
+                    return;
+                }
+                var bloom = Camera.main.GetComponent<Bloom>();
+                if (bloom == null)
+                {
+                    bloom = Camera.main.gameObject.AddComponent<Bloom>();
+                }
+                bloom.enabled = enabled;
+                bloom.SetBloomByMap();
+            }
+        };
+        
         LockedCamera = new CustomSetting("Locked Camera", false);
         UniqueDummies = new CustomSetting("Unique Freeplay Dummies", true)
         {

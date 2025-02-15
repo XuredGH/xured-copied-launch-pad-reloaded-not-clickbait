@@ -1,8 +1,8 @@
-﻿using LaunchpadReloaded.Components;
-using LaunchpadReloaded.Features;
+﻿using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Networking.Roles;
 using LaunchpadReloaded.Options.Roles.Neutral;
 using LaunchpadReloaded.Roles.Neutral;
+using LaunchpadReloaded.Utilities;
 using MiraAPI.GameOptions;
 using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
@@ -27,17 +27,17 @@ public class CollectButton : BaseLaunchpadButton<DeadBody>
 
     public override DeadBody? GetTarget()
     {
-        return PlayerControl.LocalPlayer.GetNearestDeadBody(Distance);
+        return PlayerControl.LocalPlayer.GetNearestObjectOfType<DeadBody>(Distance, MiraAPI.Utilities.Helpers.CreateFilter(Constants.NotShipMask), "DeadBody");
     }
 
     public override bool IsTargetValid(DeadBody? target)
     {
-        return target != null && target.enabled && !target.gameObject.TryGetComponent<ReapedBodyComponent>(out _);
+        return target != null && !target.GetCacheComponent().IsReaped;
     }
 
     public override void SetOutline(bool active)
     {
-        if (Target == null || Target.Reported)
+        if (Target == null)
         {
             return;
         }

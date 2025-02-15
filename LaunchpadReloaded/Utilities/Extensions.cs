@@ -26,12 +26,31 @@ public static class Extensions
         return player.GetComponent<PlayerTagManager>();
     }
 
+    public static DeadBodyCacheComponent GetCacheComponent(this DeadBody body)
+    {
+        return body.gameObject.GetComponent<DeadBodyCacheComponent>();
+    }
+
     public static void ClearModifiers(this ModifierComponent comp)
     {
         foreach (var mod in comp.ActiveModifiers)
         {
             comp.RemoveModifier(mod);
         }
+    }
+
+    public static void SetBloomByMap(this Bloom bloom)
+    {
+        if (ShipStatus.Instance == null)
+        {
+            return;
+        }
+
+        bloom.ThresholdLinear = 
+            ShipStatus.Instance.TryCast<AirshipStatus>() || 
+            ShipStatus.Instance.Type is ShipStatus.MapType.Hq or ShipStatus.MapType.Fungle 
+                ? 1.3f :
+                0.95f;
     }
 
     public static void SetBodyType(this PlayerControl player, int bodyType)

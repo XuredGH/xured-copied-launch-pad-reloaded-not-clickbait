@@ -36,8 +36,8 @@ public class SwapButton : BaseLaunchpadButton
                 return;
             }
 
-            var currentPos2 = _currentTarget.GetTruePosition();
-            _currentTarget.NetTransform.RpcSnapTo(PlayerControl.LocalPlayer.GetTruePosition());
+            var currentPos2 = _currentTarget.transform.position;
+            _currentTarget.NetTransform.RpcSnapTo(PlayerControl.LocalPlayer.transform.position);
             PlayerControl.LocalPlayer.NetTransform.RpcSnapTo(currentPos2);
             PlayerControl.LocalPlayer.RpcShapeshift(PlayerControl.LocalPlayer, false);
 
@@ -54,9 +54,9 @@ public class SwapButton : BaseLaunchpadButton
         {
             _currentTarget = plr;
 
-            var currentPos = _currentTarget.GetTruePosition();
+            var currentPos = _currentTarget.transform.position;
 
-            _currentTarget.NetTransform.RpcSnapTo(PlayerControl.LocalPlayer.GetTruePosition());
+            _currentTarget.NetTransform.RpcSnapTo(PlayerControl.LocalPlayer.transform.position);
             PlayerControl.LocalPlayer.NetTransform.RpcSnapTo(currentPos);
 
             PlayerControl.LocalPlayer.RpcShapeshift(_currentTarget, false);

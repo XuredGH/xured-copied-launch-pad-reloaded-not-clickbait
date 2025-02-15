@@ -136,7 +136,7 @@ public class PlayerTagManager(IntPtr ptr) : MonoBehaviour(ptr)
         }
 
         var colorblind = Player.cosmetics.colorBlindText.gameObject.active;
-        var nameTextY = (colorblind ? 0.8f : 0.65f) + (columnCount > 0 ? columnCount * 0.27f : 0);
+        var nameTextY = (colorblind ? 0.85f : 0.69f) + (columnCount > 0 ? columnCount * 0.27f : 0);
         var holderY = 0.53f + (columnCount > 0 ? columnCount * 0.15f : 0);
 
         if (_inMeeting)

@@ -92,6 +92,7 @@ public static class LaunchpadEventListeners
 
         tagManager.AddTag(roleTag);
     }
+
     public static void EjectEvent(EjectionEvent @event)
     {
         foreach (var plr in PlayerControl.AllPlayerControls)
@@ -101,6 +102,11 @@ public static class LaunchpadEventListeners
             {
                 tagManager.MeetingEnd();
             }
+        }
+
+        foreach (var body in DeadBodyCacheComponent.GetFrozenBodies())
+        {
+            body.body.hideFlags = UnityEngine.HideFlags.None;
         }
     }
 
@@ -145,16 +151,17 @@ public static class LaunchpadEventListeners
             if (vent.IsSealed())
             {
                 @event.Cancel();
+                return;
             }
         }
 
         if (PlayerControl.LocalPlayer.Data.IsHacked() && @event.IsPrimaryConsole)
         {
             @event.Cancel();
+            return;
         }
 
-        if (HackerUtilities.AnyPlayerHacked() &&
-            @event.Usable.TryCast<SystemConsole>() || @event.Usable.TryCast<MapConsole>())
+        if (HackerUtilities.AnyPlayerHacked() && (@event.Usable.TryCast<SystemConsole>() || @event.Usable.TryCast<MapConsole>()))
         {
             @event.Cancel();
         }
