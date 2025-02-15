@@ -49,7 +49,7 @@ public class ReviveButton : BaseLaunchpadButton<DeadBody>
 
     public override bool IsTargetValid(DeadBody? target)
     {
-        return target != null && !target.Reported;
+        return target != null;
     }
 
     public override bool CanUse()

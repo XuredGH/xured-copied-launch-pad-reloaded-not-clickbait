@@ -1,12 +1,12 @@
-﻿using LaunchpadReloaded.Components;
-using LaunchpadReloaded.Features;
+﻿using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Options.Roles.Neutral;
 using LaunchpadReloaded.Roles.Neutral;
+using LaunchpadReloaded.Utilities;
 using MiraAPI.GameOptions;
-using MiraAPI.Utilities;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities;
 using System.Collections;
+using Helpers = MiraAPI.Utilities.Helpers;
 
 namespace LaunchpadReloaded.Networking.Roles;
 public static class ReaperRpc
@@ -39,7 +39,7 @@ public static class ReaperRpc
         var body = Helpers.GetBodyById(deadBody);
         if (body != null)
         {
-            body.gameObject.AddComponent<ReapedBodyComponent>();
+            body.GetCacheComponent().IsReaped = true;
 
             reaper.CollectedSouls += 1;
 

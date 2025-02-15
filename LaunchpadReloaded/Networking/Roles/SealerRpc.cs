@@ -42,9 +42,19 @@ public static class SealerRpc
         ventTape.layer = vent.gameObject.layer;
 
         SpriteRenderer rend = ventTape.AddComponent<SpriteRenderer>();
-        rend.sprite = LaunchpadAssets.VentTape.LoadAsset();
         rend.color = new UnityEngine.Color(1, 1, 1, 0.5f);
 
+        switch (ShipStatus.Instance.Type)
+        {
+            case ShipStatus.MapType.Pb:
+                rend.sprite = LaunchpadAssets.VentTapePolus.LoadAsset();
+                ventTape.transform.localPosition = new Vector3(0, 0, -0.05f);
+                ventTape.transform.localScale = new Vector3(1f, 1f, 1f);
+                break;
+            default:
+                rend.sprite = LaunchpadAssets.VentTape.LoadAsset();
+                break;
+        }
         //TODO; IMPLEMENT DIFFERENT TEXTURES FOR MAPS.
     }
 }

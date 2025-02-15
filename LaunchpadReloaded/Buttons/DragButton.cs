@@ -35,7 +35,7 @@ public class DragButton : BaseLaunchpadButton<DeadBody>
 
     public override bool IsTargetValid(DeadBody? target)
     {
-        return target != null && !target.Reported;
+        return target != null;
     }
 
     public override void SetOutline(bool active)

@@ -21,7 +21,7 @@ public class HitmanRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
     public ModdedRoleTeams Team => ModdedRoleTeams.Impostor;
     public CustomRoleConfiguration Configuration => new(this)
     {
-        Icon = LaunchpadAssets.DragButton,
+        Icon = LaunchpadAssets.DeadlockButton,
         OptionsScreenshot = LaunchpadAssets.JanitorBanner,
         UseVanillaKillButton = false,
     };

@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using Reactor.Utilities;
+﻿using Reactor.Utilities;
 using Reactor.Utilities.Attributes;
 using Reactor.Utilities.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Components;
@@ -17,7 +18,10 @@ public class DeadBodyCacheComponent(IntPtr ptr) : MonoBehaviour(ptr)
     public DeadBody body;
 
     public bool hidden;
-    
+
+    public bool IsFrozen = false;
+    public bool IsReaped = false;
+
     public void SetVisibility(bool visible)
     {
         hidden = !visible;
@@ -28,6 +32,11 @@ public class DeadBodyCacheComponent(IntPtr ptr) : MonoBehaviour(ptr)
         }
     }
 
+    public static List<DeadBodyCacheComponent> GetFrozenBodies()
+    {
+        return AllBodies.Where(body => body.IsFrozen == true).ToList();
+    }
+
     private void Awake()
     {
         if (!TryGetComponent(out body))
@@ -36,8 +45,7 @@ public class DeadBodyCacheComponent(IntPtr ptr) : MonoBehaviour(ptr)
             this.Destroy();
             return;
         }
-        Debug.LogError(body.ParentId);
-        
+
         AllBodies.Add(this);
     }
 

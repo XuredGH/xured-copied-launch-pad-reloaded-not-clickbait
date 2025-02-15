@@ -9,6 +9,7 @@ public static class LaunchpadPalette
     public static readonly Color SheriffColor = Palette.Orange;
     public static readonly Color MedicColor = Color.green;
     public static readonly Color MayorColor = new Color32(221, 176, 152, 255);
+    public static readonly Color CoronerColor = new Color32(167, 225, 242, 255);
     public static readonly Color DetectiveColor = new Color32(67, 166, 198, 255);
     public static readonly Color GamblerColor = new Color32(207, 181, 59, 255);
 

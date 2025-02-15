@@ -92,6 +92,7 @@ public static class LaunchpadEventListeners
 
         tagManager.AddTag(roleTag);
     }
+
     public static void EjectEvent(EjectionEvent @event)
     {
         foreach (var plr in PlayerControl.AllPlayerControls)
@@ -101,6 +102,11 @@ public static class LaunchpadEventListeners
             {
                 tagManager.MeetingEnd();
             }
+        }
+
+        foreach (var body in DeadBodyCacheComponent.GetFrozenBodies())
+        {
+            body.body.hideFlags = UnityEngine.HideFlags.None;
         }
     }
 

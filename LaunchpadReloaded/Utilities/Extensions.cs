@@ -26,6 +26,11 @@ public static class Extensions
         return player.GetComponent<PlayerTagManager>();
     }
 
+    public static DeadBodyCacheComponent GetCacheComponent(this DeadBody body)
+    {
+        return body.gameObject.GetComponent<DeadBodyCacheComponent>();
+    }
+
     public static void ClearModifiers(this ModifierComponent comp)
     {
         foreach (var mod in comp.ActiveModifiers)

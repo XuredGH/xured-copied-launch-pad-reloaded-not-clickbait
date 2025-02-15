@@ -36,14 +36,16 @@ public class Bloom(IntPtr cppPtr) : MonoBehaviour(cppPtr)
 
     /// Prefilter threshold (gamma-encoded)
     /// Filters out pixels under this level of brightness.
-    public float ThresholdGamma {
+    public float ThresholdGamma
+    {
         get => Mathf.Max(_threshold, 0);
         set => _threshold = value;
     }
 
     /// Prefilter threshold (linearly-encoded)
     /// Filters out pixels under this level of brightness.
-    public float ThresholdLinear {
+    public float ThresholdLinear
+    {
         get => GammaToLinear(ThresholdGamma);
         set => _threshold = LinearToGamma(value);
     }
@@ -61,7 +63,8 @@ public class Bloom(IntPtr cppPtr) : MonoBehaviour(cppPtr)
 
     /// Bloom intensity
     /// Blend factor of the result image.
-    public float Intensity {
+    public float Intensity
+    {
         get => Mathf.Max(_intensity, 0);
         set => _intensity = value;
     }
@@ -87,7 +90,7 @@ public class Bloom(IntPtr cppPtr) : MonoBehaviour(cppPtr)
     private const int KMaxIterations = 16;
     private readonly RenderTexture[] _blurBuffer1 = new RenderTexture[KMaxIterations];
     private readonly RenderTexture[] _blurBuffer2 = new RenderTexture[KMaxIterations];
-    
+
     private static readonly int Threshold = Shader.PropertyToID("_Threshold");
     private static readonly int Curve = Shader.PropertyToID("_Curve");
     private static readonly int PrefilterOffs = Shader.PropertyToID("_PrefilterOffs");
