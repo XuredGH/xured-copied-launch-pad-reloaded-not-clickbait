@@ -88,7 +88,6 @@ public class RevivedModifier : BaseModifier
                 return;
             }
 
-            playerState.PlayerIcon.cosmetics.visor.SetVisorColor(LaunchpadPalette.MedicColor);
             playerState.PlayerIcon.cosmetics.currentBodySprite.BodySprite.material.SetColor(_visorColor, LaunchpadPalette.MedicColor);
         }
     }

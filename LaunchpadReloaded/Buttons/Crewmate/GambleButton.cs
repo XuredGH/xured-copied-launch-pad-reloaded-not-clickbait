@@ -4,6 +4,7 @@ using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Options.Roles.Crewmate;
 using LaunchpadReloaded.Roles.Crewmate;
+using LaunchpadReloaded.Utilities;
 using MiraAPI.GameOptions;
 using MiraAPI.Networking;
 using MiraAPI.Utilities;
@@ -79,7 +80,7 @@ public class GambleButton : BaseLaunchpadButton<PlayerControl>
                 Target.RpcAddModifier<RevealedModifier>();
             }
 
-            playerMenu.Close();
+            playerMenu.BaseClose();
 
             ResetCooldownAndOrEffect();
         });

@@ -1,11 +1,11 @@
 ﻿using Il2CppSystem;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Modifiers;
-using LaunchpadReloaded.Networking.Roles;
 using LaunchpadReloaded.Options;
 using LaunchpadReloaded.Options.Roles.Impostor;
 using LaunchpadReloaded.Roles.Impostor;
 using MiraAPI.GameOptions;
+using MiraAPI.Networking;
 using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
 using UnityEngine;
@@ -24,6 +24,8 @@ public class InjectButton : BaseLaunchpadButton<PlayerControl>
 
     public override bool Enabled(RoleBehaviour? role) => role is SurgeonRole;
 
+    private PlayerControl? _injectedPlayer;
+
     public override PlayerControl? GetTarget()
     {
         return PlayerControl.LocalPlayer.GetClosestPlayer(OptionGroupSingleton<FunOptions>.Instance.FriendlyFire, 1.1f);
@@ -39,6 +41,27 @@ public class InjectButton : BaseLaunchpadButton<PlayerControl>
         Target?.cosmetics.SetOutline(active, new Nullable<Color>(LaunchpadPalette.SurgeonColor));
     }
 
+    public override bool CanUse()
+    {
+        return base.CanUse() && _injectedPlayer == null;
+    }
+
+    public override void OnEffectEnd()
+    {
+        if (_injectedPlayer is null
+            || _injectedPlayer.Data.IsDead || PlayerControl.LocalPlayer.Data.IsDead
+            || (_injectedPlayer.Data.Role.IsImpostor && !OptionGroupSingleton<FunOptions>.Instance.FriendlyFire) || !_injectedPlayer.HasModifier<PoisonModifier>()
+            || MeetingHud.Instance != null)
+        {
+            _injectedPlayer = null;
+            return;
+        }
+
+        _injectedPlayer.RpcRemoveModifier<PoisonModifier>();
+        PlayerControl.LocalPlayer.RpcCustomMurder(_injectedPlayer, resetKillTimer: false, createDeadBody: true, teleportMurderer: false, showKillAnim: false);
+        _injectedPlayer = null;
+    }
+
     protected override void OnClick()
     {
         if (Target == null)
@@ -46,8 +69,9 @@ public class InjectButton : BaseLaunchpadButton<PlayerControl>
             return;
         }
 
+        _injectedPlayer = Target;
+        _injectedPlayer.RpcAddModifier<PoisonModifier>();
         SoundManager.Instance.PlaySound(LaunchpadAssets.InjectSound.LoadAsset(), false, volume: 3);
-        PlayerControl.LocalPlayer.RpcPoison(Target, (int)OptionGroupSingleton<SurgeonOptions>.Instance.PoisonDelay);
 
         ResetTarget();
     }

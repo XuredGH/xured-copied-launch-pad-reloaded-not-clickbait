@@ -52,7 +52,7 @@ public static class MeetingHudPatches
             }
 
             var voteData = plr.GetModifier<VoteData>()!;
-            voteData.VotesRemaining = plr.HasModifier<RevivedModifier>() ? 0 : VotingTypesManager.GetVotes();
+            voteData.VotesRemaining = (plr.HasModifier<RevivedModifier>() || plr.Data.IsDead || plr.Data.Disconnected) ? 0 : VotingTypesManager.GetVotes();
             voteData.VotedPlayers.Clear();
 
             if (plr.Data.Role is MayorRole)
@@ -101,6 +101,11 @@ public static class MeetingHudPatches
     [HarmonyPatch(nameof(MeetingHud.Update))]
     public static void UpdatePatch(MeetingHud __instance)
     {
+        if (HackerUtilities.AnyPlayerHacked())
+        {
+            HackerUtilities.ForceEndHack();
+        }
+
         var voteData = PlayerControl.LocalPlayer.GetModifier<VoteData>();
         if (voteData == null || _typeText == null)
         {

@@ -10,7 +10,6 @@ public enum LaunchpadRpc : uint
     SyncAllColors,
     RemoveVote,
     PopulateResults,
-    Poison,
     Dissect,
     DigVent,
     SealVent,

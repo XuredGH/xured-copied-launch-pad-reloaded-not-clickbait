@@ -12,9 +12,4 @@ public class VoteData : BaseModifier
 
     public readonly List<byte> VotedPlayers = [];
     public int VotesRemaining = (int)OptionGroupSingleton<VotingOptions>.Instance.MaxVotes.Value;
-
-    public override void OnDeath(DeathReason reason)
-    {
-        ModifierComponent!.RemoveModifier(this);
-    }
 }

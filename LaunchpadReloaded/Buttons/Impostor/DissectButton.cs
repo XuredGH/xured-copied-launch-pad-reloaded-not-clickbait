@@ -37,7 +37,7 @@ public class DissectButton : BaseLaunchpadButton<DeadBody>
 
     public override void SetOutline(bool active)
     {
-        if (Target == null || Target.Reported)
+        if (Target == null)
         {
             return;
         }

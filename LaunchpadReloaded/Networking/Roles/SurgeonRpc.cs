@@ -1,7 +1,5 @@
 ﻿using LaunchpadReloaded.Features;
-using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Roles.Impostor;
-using MiraAPI.Utilities;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities;
 using System.Collections;
@@ -11,25 +9,16 @@ using Helpers = MiraAPI.Utilities.Helpers;
 namespace LaunchpadReloaded.Networking.Roles;
 public static class SurgeonRpc
 {
-    [MethodRpc((uint)LaunchpadRpc.Poison)]
-    public static void RpcPoison(this PlayerControl playerControl, PlayerControl victim, int time)
-    {
-        if (playerControl.Data.Role is not SurgeonRole)
-        {
-            playerControl.KickForCheating();
-            return;
-        }
-
-        var poison = new PoisonModifier(playerControl, time);
-        victim.GetModifierComponent()!.AddModifier(poison);
-    }
-
-    public static IEnumerator FadeOutBody(DeadBody body, PlayerControl plr)
+    public static IEnumerator FadeOutBody(DeadBody body, PlayerControl? plr)
     {
         var rend = body.gameObject.transform.FindChild("Sprite").GetComponent<SpriteRenderer>();
         yield return Utilities.Helpers.FadeOut(rend);
-        plr.cosmetics.CurrentPet.gameObject.SetActive(false);
         rend.transform.parent.gameObject.SetActive(false);
+
+        if (plr != null)
+        {
+            plr.cosmetics.CurrentPet.gameObject.SetActive(false);
+        }
     }
 
 
@@ -44,7 +33,7 @@ public static class SurgeonRpc
 
         var body = Helpers.GetBodyById(bodyId);
         var player = GameData.Instance.GetPlayerById(bodyId);
-        if (body != null && player != null)
+        if (body != null)
         {
             var bone = new GameObject("Bone").AddComponent<SpriteRenderer>();
             bone.sprite = LaunchpadAssets.Bone.LoadAsset();

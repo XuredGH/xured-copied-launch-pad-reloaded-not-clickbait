@@ -21,6 +21,46 @@ public static class Extensions
 {
     private static readonly ContactFilter2D Filter = ContactFilter2D.CreateLegacyFilter(Constants.NotShipMask, float.MinValue, float.MaxValue);
 
+    // Vanilla code to prevent crashes (Credits to Submerged)
+    public static void BaseClose(this Minigame self)
+    {
+        bool isComplete;
+        if (self.amClosing == Minigame.CloseState.Closing)
+        {
+            Object.Destroy(self.gameObject);
+            return;
+        }
+        if (self.CloseSound && Constants.ShouldPlaySfx())
+        {
+            SoundManager.Instance.PlaySound(self.CloseSound, false, 1f, null);
+        }
+        if (PlayerControl.LocalPlayer.Data.Role.TeamType == RoleTeamTypes.Crewmate)
+        {
+            GameManager.Instance.LogicMinigame.OnMinigameClose();
+        }
+        if (PlayerControl.LocalPlayer)
+        {
+            PlayerControl.HideCursorTemporarily();
+        }
+        self.amClosing = Minigame.CloseState.Closing;
+        self.logger.Info(string.Concat("Closing minigame ", self.GetType().Name));
+        IAnalyticsReporter analytics = DestroyableSingleton<DebugAnalytics>.Instance.Analytics;
+        NetworkedPlayerInfo data = PlayerControl.LocalPlayer.Data;
+        TaskTypes taskType = self.TaskType;
+        float realtimeSinceStartup = Time.realtimeSinceStartup - self.timeOpened;
+        PlayerTask myTask = self.MyTask;
+        if (myTask != null)
+        {
+            isComplete = myTask.IsComplete;
+        }
+        else
+        {
+            isComplete = false;
+        }
+        analytics.MinigameClosed(data, taskType, realtimeSinceStartup, isComplete);
+        self.StartCoroutine(self.CoDestroySelf());
+    }
+
     public static PlayerTagManager? GetTagManager(this PlayerControl player)
     {
         return player.GetComponent<PlayerTagManager>();
@@ -46,9 +86,9 @@ public static class Extensions
             return;
         }
 
-        bloom.ThresholdLinear = 
-            ShipStatus.Instance.TryCast<AirshipStatus>() || 
-            ShipStatus.Instance.Type is ShipStatus.MapType.Hq or ShipStatus.MapType.Fungle 
+        bloom.ThresholdLinear =
+            ShipStatus.Instance.TryCast<AirshipStatus>() ||
+            ShipStatus.Instance.Type is ShipStatus.MapType.Hq or ShipStatus.MapType.Fungle
                 ? 1.3f :
                 0.95f;
     }
@@ -176,7 +216,7 @@ public static class Extensions
         return vent.gameObject.TryGetComponent<SealedVentComponent>(out _);
     }
 
-    public static void Revive(this DeadBody body)
+    public static void Revive(this DeadBody body, PlayerControl sender)
     {
         var player = PlayerControl.AllPlayerControls.ToArray().FirstOrDefault(player => player.PlayerId == body.ParentId);
         if (player == null)
@@ -185,6 +225,12 @@ public static class Extensions
         }
 
         player.NetTransform.SnapTo(body.transform.position);
+
+        if (PhysicsHelpers.AnythingBetween(player.Collider, player.Collider.bounds.center, player.transform.position, Constants.ShipAndAllObjectsMask, false))
+        {
+            player.NetTransform.SnapTo(sender.transform.position);
+        }
+
         body.gameObject.Destroy();
         player.GetModifierComponent()!.AddModifier<RevivedModifier>();
     }

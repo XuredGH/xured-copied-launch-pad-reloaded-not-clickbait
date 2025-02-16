@@ -19,7 +19,7 @@ public static class GenericRpc
         var body = Helpers.GetBodyById(bodyId);
         if (body != null)
         {
-            body.Revive();
+            body.Revive(playerControl);
         }
         else
         {

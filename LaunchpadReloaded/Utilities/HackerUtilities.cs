@@ -72,6 +72,17 @@ public static class HackerUtilities
         return AmongUsClient.Instance.IsGameStarted && hacked;
     }
 
+    public static void ForceEndHack()
+    {
+        if (AmongUsClient.Instance.AmHost)
+        {
+            foreach (var player in PlayerControl.AllPlayerControls.ToArray().Where(plr => plr.HasModifier<HackedModifier>()))
+            {
+                player.RpcRemoveModifier<HackedModifier>();
+            }
+        }
+    }
+
     public static bool UsableWhenHacked(this IUsable? usable)
     {
         // allow sabotage related consoles
