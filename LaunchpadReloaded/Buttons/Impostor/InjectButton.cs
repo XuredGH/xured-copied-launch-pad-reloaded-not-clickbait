@@ -26,8 +26,7 @@ public class InjectButton : BaseLaunchpadButton<PlayerControl>
 
     public override PlayerControl? GetTarget()
     {
-        return PlayerControl.LocalPlayer.GetClosestPlayer(OptionGroupSingleton<FunOptions>.Instance.FriendlyFire,
-            GameOptionsManager.Instance.normalGameHostOptions.KillDistance);
+        return PlayerControl.LocalPlayer.GetClosestPlayer(OptionGroupSingleton<FunOptions>.Instance.FriendlyFire, 1.1f);
     }
 
     public override bool IsTargetValid(PlayerControl? target)

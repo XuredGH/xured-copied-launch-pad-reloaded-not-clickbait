@@ -26,8 +26,7 @@ public class GambleButton : BaseLaunchpadButton<PlayerControl>
 
     public override PlayerControl? GetTarget()
     {
-        return PlayerControl.LocalPlayer.GetClosestPlayer(true,
-            GameOptionsManager.Instance.normalGameHostOptions.KillDistance);
+        return PlayerControl.LocalPlayer.GetClosestPlayer(true, 1.1f);
     }
 
     public override bool CanUse()
