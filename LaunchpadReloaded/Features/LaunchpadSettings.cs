@@ -4,6 +4,7 @@ using MiraAPI.PluginLoading;
 using System.Linq;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Utilities;
+using Reactor.Utilities;
 using UnityEngine;
 using Object = Il2CppSystem.Object;
 
@@ -22,9 +23,15 @@ public class LaunchpadSettings
 
     private LaunchpadSettings()
     {
+        var configFile = PluginSingleton<LaunchpadReloadedPlugin>.Instance.GetConfigFile();
+        var buttonConfig = configFile.Bind("LP Settings", "Button Location", true, "Move buttons to the left side of the screen");
+        var bloomConfig = configFile.Bind("LP Settings", "Bloom", true, "Enable bloom effect");
+        var lockedCameraConfig = configFile.Bind("LP Settings", "Locked Camera", false, "Lock camera to player");
+        var uniqueDummiesConfig = configFile.Bind("LP Settings", "Unique Freeplay Dummies", true, "Give each dummy a unique name");
+        
 #if !ANDROID
         // TODO: update button location mid-game
-        ButtonLocation = new CustomSetting("Buttons On Left", true)
+        ButtonLocation = new CustomSetting("Buttons On Left", buttonConfig.Value)
         {
             ChangedEvent = val =>
             {
@@ -36,7 +43,7 @@ public class LaunchpadSettings
             }
         };
 #endif
-        Bloom = new CustomSetting("Bloom", true)
+        Bloom = new CustomSetting("Bloom", bloomConfig.Value)
         {
             ChangedEvent = enabled =>
             {
@@ -54,8 +61,8 @@ public class LaunchpadSettings
             }
         };
         
-        LockedCamera = new CustomSetting("Locked Camera", false);
-        UniqueDummies = new CustomSetting("Unique Freeplay Dummies", true)
+        LockedCamera = new CustomSetting("Locked Camera", lockedCameraConfig.Value);
+        UniqueDummies = new CustomSetting("Unique Freeplay Dummies", uniqueDummiesConfig.Value)
         {
             ChangedEvent = val =>
             {
