@@ -89,6 +89,12 @@ public class HackedModifier : TimedModifier
             return;
         }
 
+        if (Minigame.Instance != null)
+        {
+            Minigame.Instance.Close();
+            Minigame.Instance.Close();
+        }
+
         foreach (var node in HackNodeComponent.AllNodes)
         {
             node.isActive = true;
