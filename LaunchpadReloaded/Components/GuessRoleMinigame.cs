@@ -5,6 +5,7 @@ using MiraAPI.Utilities.Assets;
 using Reactor.Utilities.Attributes;
 using System;
 using System.Linq;
+using Il2CppInterop.Runtime.Attributes;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -38,7 +39,8 @@ public sealed class GuessRoleMinigame(IntPtr ptr) : Minigame(ptr)
         return minigame;
     }
 
-    public void SetRole(ShapeshifterPanel panel, RoleBehaviour roleBehaviour, Action onClick)
+    [HideFromIl2Cpp]
+    public static void SetRole(ShapeshifterPanel panel, RoleBehaviour roleBehaviour, Action onClick)
     {
         panel.shapeshift = onClick;
         panel.Button.ClickSound = HudManager.Instance.MapButton.ClickSound;
@@ -88,6 +90,7 @@ public sealed class GuessRoleMinigame(IntPtr ptr) : Minigame(ptr)
         }
     }
 
+    [HideFromIl2Cpp]
     public void Open(Func<RoleBehaviour, bool> roleMatch, Action<RoleBehaviour> clickHandler)
     {
         onClick = clickHandler;

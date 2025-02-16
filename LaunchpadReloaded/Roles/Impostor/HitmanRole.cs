@@ -6,6 +6,7 @@ using MiraAPI.Roles;
 using Reactor.Utilities;
 using System;
 using System.Collections;
+using Il2CppInterop.Runtime.Attributes;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles.Impostor;
@@ -50,6 +51,7 @@ public class HitmanRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
     public SpriteRenderer? _overlayRend { get; private set; }
     private IEnumerator? _transitionCoroutine = null;
 
+    [HideFromIl2Cpp]
     public void StartTransition(Color targetColor, Action? action = null)
     {
         if (_transitionCoroutine != null)

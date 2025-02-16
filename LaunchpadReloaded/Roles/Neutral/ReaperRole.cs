@@ -5,6 +5,7 @@ using MiraAPI.GameOptions;
 using MiraAPI.Roles;
 using MiraAPI.Utilities;
 using System.Text;
+using Il2CppInterop.Runtime.Attributes;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles.Neutral;
@@ -29,6 +30,7 @@ public class ReaperRole(System.IntPtr ptr) : RoleBehaviour(ptr), ICustomRole
         OptionsScreenshot = LaunchpadAssets.JesterBanner,
     };
 
+    [HideFromIl2Cpp]
     public StringBuilder SetTabText()
     {
         var sb = Helpers.CreateForRole(this);

@@ -3,6 +3,7 @@ using LaunchpadReloaded.Features;
 using MiraAPI.Roles;
 using System;
 using System.Collections.Generic;
+using Il2CppInterop.Runtime.Attributes;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles.Crewmate;
@@ -20,5 +21,6 @@ public class LocksmithRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
         OptionsScreenshot = LaunchpadAssets.MedicBanner,
     };
 
-    public List<SealedVentComponent> SealedVents { get; } = new List<SealedVentComponent>();
+    [HideFromIl2Cpp]
+    public List<SealedVentComponent> SealedVents { get; } = [];
 }

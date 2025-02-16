@@ -1,6 +1,9 @@
-﻿using BepInEx;
+﻿using System;
+using System.Collections;
+using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Unity.IL2CPP;
+using BepInEx.Unity.IL2CPP.Utils.Collections;
 using HarmonyLib;
 using LaunchpadReloaded.Features;
 using MiraAPI;
@@ -10,6 +13,9 @@ using Reactor;
 using Reactor.Networking;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities;
+using Reactor.Utilities.Attributes;
+using Reactor.Utilities.Extensions;
+using UnityEngine;
 
 namespace LaunchpadReloaded;
 
