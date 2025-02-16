@@ -61,8 +61,18 @@ public static class Helpers
     {
         Collider2D[] hitColliders = Physics2D.OverlapPointAll(position);
 
-        return hitColliders.Select(hitCollider => hitCollider.GetComponent<PlayerControl>()).FirstOrDefault();
+        foreach (Collider2D hitCollider in hitColliders)
+        {
+            PlayerControl playerControl = hitCollider.GetComponent<PlayerControl>();
+            if (playerControl != null)
+            {
+                return playerControl;
+            }
+        }
+
+        return null;
     }
+
     public static void AddMessage(string item, Sprite spr, AudioClip clip, Color color, Vector3 localPos, out LobbyNotificationMessage msg)
     {
         var popper = HudManager.Instance.Notifier;
@@ -91,7 +101,7 @@ public static class Helpers
         {
             yield break;
         }
-        
+
         var alphaVal = rend.color.a;
         var tmp = rend.color;
 
