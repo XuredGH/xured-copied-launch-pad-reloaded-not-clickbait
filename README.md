@@ -5,12 +5,12 @@ Launchpad is a mod for Among Us that adds in brand new roles, features, and game
 You can read about all of the features on the [wiki](https://launchpad.xtracube.dev/), but here are a couple of them:
 - Gradient Colors
 - Special voting modes
-- New game options
 - Feature-rich roles
+- New game options
 - Exciting gamemodes
 
 ## Compatibility
-- Launchpad is currently compatible with the 2024.3.5 versions of the game on PC.
+- Launchpad supports 2024.10.29 and 2024.11.26 on PC and Android.
 - Launchpad is **not** a host-only mod. Every player needs to install it to enjoy.
 - Launchpad does **not** work on normal Among Us servers. We host our own private game servers instead.
 
