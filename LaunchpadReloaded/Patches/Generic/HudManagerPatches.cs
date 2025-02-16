@@ -50,18 +50,6 @@ public static class HudManagerPatches
             return;
         }
 
-        if (!(local.Data.IsHacked() && !local.Data.Role.IsImpostor) && HackerUtilities.AnyPlayerHacked())
-        {
-            var newB = new StringBuilder();
-            newB.Append(Color.green.ToTextColor());
-            newB.Append(local.Data.Role.IsImpostor ?
-                "\n\n The crewmates are hacked! They will not be able to\ncomplete tasks or call meetings until they reverse the hack."
-                : "\n\nYou will still not be able to report bodies or \ncall meetings until all crewmates reverse the hack.");
-            newB.Append($"\n{HackerUtilities.CountHackedPlayers()} players are still hacked.");
-            newB.Append("</color>");
-            __instance.TaskPanel.SetTaskText(__instance.tasksString.ToString() + newB);
-        }
-
         if (HackerUtilities.AnyPlayerHacked())
         {
             __instance.ReportButton.SetActive(false);

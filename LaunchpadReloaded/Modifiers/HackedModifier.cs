@@ -48,7 +48,7 @@ public class HackedModifier : TimedModifier
             Player.cosmetics.gameObject.SetActive(false);
         }
 
-        if (!Player.AmOwner || IsImpostor)
+        if (!Player.AmOwner)
         {
             return;
         }
@@ -94,12 +94,12 @@ public class HackedModifier : TimedModifier
             node.isActive = true;
         }
 
+        _hackedText = MiraAPI.Utilities.Helpers.CreateTextLabel("HackedText", HudManager.Instance.transform, AspectPosition.EdgeAlignments.Top, new Vector3(0, 1, 0));
+
         if (IsImpostor)
         {
             return;
         }
-
-        _hackedText = MiraAPI.Utilities.Helpers.CreateTextLabel("HackedText", HudManager.Instance.transform, AspectPosition.EdgeAlignments.Top, new Vector3(0, 1, 0));
 
         Coroutines.Start(HackEffect());
     }
@@ -118,16 +118,6 @@ public class HackedModifier : TimedModifier
         Player.cosmetics.gameObject.SetActive(true);
         Player.SetName(Player.Data.PlayerName);
 
-        // remove hacked modifier from impostors when all crewmates fix hack
-        if (!Player.AmOwner && PlayerControl.LocalPlayer.Data.Role.IsImpostor)
-        {
-            var shouldRemove = HackerUtilities.CountHackedPlayers(false) < 1;
-            if (shouldRemove)
-            {
-                MiraAPI.Utilities.Extensions.RpcRemoveModifier<HackedModifier>(PlayerControl.LocalPlayer);
-            }
-        }
-
         if (!Player.AmOwner)
         {
             return;
@@ -139,17 +129,17 @@ public class HackedModifier : TimedModifier
             node.SetArrowActive(false);
         }
 
+        if (_hackedText != null)
+        {
+            _hackedText.gameObject.DestroyImmediate();
+        }
+
         if (IsImpostor)
         {
             return;
         }
 
         Coroutines.Stop(HackEffect());
-
-        if (_hackedText != null)
-        {
-            _hackedText.gameObject.DestroyImmediate();
-        }
     }
 
     public override void OnDeath(DeathReason reason)
@@ -206,9 +196,9 @@ public class HackedModifier : TimedModifier
 
     public override void OnTimerComplete()
     {
-        if (Player is not null && !IsImpostor && !TutorialManager.InstanceExists)
+        if (Player != null && !TutorialManager.InstanceExists)
         {
-            Player.RpcCustomMurder(Player, true, false, false, false, false, true);
+            Player.RpcCustomMurder(Player, true, false, false, false, false);
         }
     }
 }

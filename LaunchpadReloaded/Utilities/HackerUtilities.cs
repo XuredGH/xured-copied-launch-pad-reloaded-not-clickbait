@@ -51,14 +51,14 @@ public static class HackerUtilities
 
     public static readonly Func<PlayerControl?, bool> PlayerHacked = player => player?.GetModifier<HackedModifier>() is { DeActivating: false };
 
-    public static int CountHackedPlayers(bool includeImpostors = true)
+    public static int CountHackedPlayers()
     {
-        return PlayerControl.AllPlayerControls.ToArray().Count(x => PlayerHacked(x) && (includeImpostors || !x.Data.Role.IsImpostor));
+        return PlayerControl.AllPlayerControls.ToArray().Count(PlayerHacked);
     }
 
     public static bool AnyPlayerHacked()
     {
-        return PlayerControl.AllPlayerControls.ToArray().Any(x => PlayerHacked(x));
+        return PlayerControl.AllPlayerControls.ToArray().Any(PlayerHacked);
     }
 
     public static HackNodeComponent? GetClosestNode(Vector2 position)
@@ -68,8 +68,7 @@ public static class HackerUtilities
 
     public static bool IsHacked(this NetworkedPlayerInfo playerInfo)
     {
-        var hacked = playerInfo != null && playerInfo.Role != null && playerInfo.Role.IsImpostor == true ? CountHackedPlayers(false) > 0 : PlayerHacked(playerInfo.Object);
-        return AmongUsClient.Instance.IsGameStarted && hacked;
+        return AmongUsClient.Instance.IsGameStarted && PlayerHacked(playerInfo.Object);
     }
 
     public static void ForceEndHack()

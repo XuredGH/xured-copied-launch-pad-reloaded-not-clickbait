@@ -78,8 +78,8 @@ public static class LaunchpadEventListeners
             IsLocallyVisible = (player) =>
             {
                 var plrRole = player.Data.Role;
-                var localHackedFlag = PlayerControl.LocalPlayer.HasModifier<HackedModifier>() && !PlayerControl.LocalPlayer.Data.Role.IsImpostor;
-                var playerHackedFlag = player.HasModifier<HackedModifier>() && !player.Data.Role.IsImpostor;
+                var localHackedFlag = PlayerControl.LocalPlayer.HasModifier<HackedModifier>();
+                var playerHackedFlag = player.HasModifier<HackedModifier>();
 
                 if (localHackedFlag || playerHackedFlag)
                 {
@@ -96,7 +96,7 @@ public static class LaunchpadEventListeners
                     return true;
                 }
 
-                if (player.AmOwner || PlayerControl.LocalPlayer.Data.IsDead || PlayerControl.LocalPlayer.Data.Role.IsImpostor && plrRole.IsImpostor)
+                if (player.AmOwner || PlayerControl.LocalPlayer.Data.IsDead)
                 {
                     return true;
                 }
