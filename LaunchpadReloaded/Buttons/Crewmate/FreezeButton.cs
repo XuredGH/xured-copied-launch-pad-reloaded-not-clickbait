@@ -1,7 +1,9 @@
 ﻿using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Networking.Roles;
+using LaunchpadReloaded.Options.Roles.Crewmate;
 using LaunchpadReloaded.Roles.Crewmate;
 using LaunchpadReloaded.Utilities;
+using MiraAPI.GameOptions;
 using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
 using UnityEngine;
@@ -12,9 +14,9 @@ namespace LaunchpadReloaded.Buttons.Crewmate;
 public class FreezeButton : BaseLaunchpadButton<DeadBody>
 {
     public override string Name => "Freeze";
-    public override float Cooldown => 1;
+    public override float Cooldown => OptionGroupSingleton<CoronerOptions>.Instance.FreezeCooldown;
     public override float EffectDuration => 0;
-    public override int MaxUses => 0;
+    public override int MaxUses => (int)OptionGroupSingleton<CoronerOptions>.Instance.FreezeUses;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.FreezeButton;
     public override float Distance => PlayerControl.LocalPlayer.MaxReportDistance / 4f;
     public override bool TimerAffectedByPlayer => true;

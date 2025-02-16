@@ -15,6 +15,6 @@ public class ReaperOptions : AbstractOptionGroup
     [ModdedNumberOption("Collections To Win", 2, 8)]
     public float SoulCollections { get; set; } = 3;
 
-    [ModdedNumberOption("Collect Cooldown", 1, 60, 5, MiraNumberSuffixes.Seconds)]
-    public float CollectCooldown { get; set; } = 15;
+    [ModdedNumberOption("Collect Cooldown", 0, 60, 5, MiraNumberSuffixes.Seconds)]
+    public float CollectCooldown { get; set; } = 20;
 }
