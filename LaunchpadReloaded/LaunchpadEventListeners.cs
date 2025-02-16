@@ -22,6 +22,14 @@ public static class LaunchpadEventListeners
         MiraEventManager.RegisterEventHandler<StartMeetingEvent>(StartMeetingEvent);
         MiraEventManager.RegisterEventHandler<EjectionEvent>(EjectEvent);
         MiraEventManager.RegisterEventHandler<PlayerCanUseEvent>(CanUseEvent, 10);
+        MiraEventManager.RegisterEventHandler<EnterVentEvent>((@event) =>
+        {
+            if (@event.Player.HasModifier<DragBodyModifier>())
+            {
+                @event.Cancel();
+            }
+        });
+
         MiraEventManager.RegisterEventHandler<SetRoleEvent>(SetRoleEvent);
 
         MiraEventManager.RegisterEventHandler<PlayerOpenSabotageEvent>(@event =>
@@ -148,7 +156,11 @@ public static class LaunchpadEventListeners
 
         if (PlayerControl.LocalPlayer.HasModifier<DragBodyModifier>())
         {
-            @event.Cancel();
+            if (!@event.IsVent)
+            {
+                @event.Cancel();
+            }
+
             return;
         }
 

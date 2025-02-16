@@ -65,6 +65,7 @@ public class DragButton : BaseLaunchpadButton<DeadBody>
         }
 
         // can probably be improved but whatever
+        HudManager.Instance.ImpostorVentButton.SetDisabled();
         HudManager.Instance.KillButton.SetDisabled();
         HudManager.Instance.ReportButton.SetDisabled();
         HudManager.Instance.SabotageButton.SetDisabled();

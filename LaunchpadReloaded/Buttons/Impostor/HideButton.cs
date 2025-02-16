@@ -32,7 +32,7 @@ public class HideButton : BaseLaunchpadButton<DeadBody>
 
     public override bool IsTargetValid(DeadBody? target)
     {
-        return target != null && !target.Reported;
+        return target != null;
     }
 
     public override void SetOutline(bool active)
@@ -51,7 +51,6 @@ public class HideButton : BaseLaunchpadButton<DeadBody>
     public override bool CanUse()
     {
         return base.CanUse() &&
-               Target &&
                PlayerControl.LocalPlayer.HasModifier<DragBodyModifier>() &&
                VentTarget && !VentTarget.gameObject.GetComponent<VentBodyComponent>()
                && !VentTarget.IsSealed();

@@ -12,6 +12,7 @@ public class RevivedModifier : BaseModifier
 {
     public override string ModifierName => "Revived";
     private readonly int _visorColor = Shader.PropertyToID("_VisorColor");
+    private Color _ogVisorColor;
 
     private readonly PlayerTag _revivedTag = new()
     {
@@ -23,6 +24,27 @@ public class RevivedModifier : BaseModifier
 
     public override void OnActivate()
     {
+        var tagManager = Player.GetTagManager();
+
+        if (tagManager != null)
+        {
+            var existingTag = tagManager.GetTagByName(_revivedTag.Name);
+            if (existingTag.HasValue)
+            {
+                tagManager.RemoveTag(existingTag.Value);
+            }
+
+            tagManager.AddTag(_revivedTag);
+        }
+
+        _ogVisorColor = Player!.cosmetics.currentBodySprite.BodySprite.material.GetColor(_visorColor);
+        Player!.cosmetics.currentBodySprite.BodySprite.material.SetColor(_visorColor, LaunchpadPalette.MedicColor);
+
+        if (!Player.Data.IsDead)
+        {
+            return;
+        }
+
         Player!.Revive();
 
         Player.RemainingEmergencies = GameManager.Instance.LogicOptions.GetNumEmergencyMeetings();
@@ -37,19 +59,6 @@ public class RevivedModifier : BaseModifier
             HudManager.Instance.UseButton.gameObject.SetActive(true);
             Player.myTasks.RemoveAt(0);
         }
-
-        var tagManager = Player.GetTagManager();
-
-        if (tagManager != null)
-        {
-            var existingTag = tagManager.GetTagByName(_revivedTag.Name);
-            if (existingTag.HasValue)
-            {
-                tagManager.RemoveTag(existingTag.Value);
-            }
-
-            tagManager.AddTag(_revivedTag);
-        }
     }
 
     public override void OnDeactivate()
@@ -60,7 +69,10 @@ public class RevivedModifier : BaseModifier
         {
             tagManager.RemoveTag(_revivedTag);
         }
+
+        Player!.cosmetics.currentBodySprite.BodySprite.material.SetColor(_visorColor, _ogVisorColor);
     }
+
     public override void OnDeath(DeathReason reason)
     {
         ModifierComponent!.RemoveModifier(this);
@@ -68,9 +80,6 @@ public class RevivedModifier : BaseModifier
 
     public override void FixedUpdate()
     {
-        Player!.cosmetics.visor.SetVisorColor(LaunchpadPalette.MedicColor);
-        Player!.cosmetics.currentBodySprite.BodySprite.material.SetColor(_visorColor, LaunchpadPalette.MedicColor);
-
         if (MeetingHud.Instance)
         {
             var playerState = MeetingHud.Instance.playerStates.First(plr => plr.TargetPlayerId == Player!.PlayerId);
