@@ -64,6 +64,11 @@ public class GambleButton : BaseLaunchpadButton<PlayerControl>
                 return;
             }
 
+            if (playerMenu == null || PlayerControl.LocalPlayer == null || Target.Data == null || Target.Data.Role == null)
+            {
+                return;
+            }
+
             if (selectedRole.Role != Target.Data.Role.Role)
             {
                 PlayerControl.LocalPlayer.RpcCustomMurder(PlayerControl.LocalPlayer, resetKillTimer: false, teleportMurderer: false, showKillAnim: false, playKillSound: true);

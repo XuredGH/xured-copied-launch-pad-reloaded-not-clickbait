@@ -52,7 +52,7 @@ public static class MeetingHudPatches
             }
 
             var voteData = plr.GetModifier<VoteData>()!;
-            voteData.VotesRemaining = VotingTypesManager.GetVotes();
+            voteData.VotesRemaining = plr.HasModifier<RevivedModifier>() ? 0 : VotingTypesManager.GetVotes();
             voteData.VotedPlayers.Clear();
 
             if (plr.Data.Role is MayorRole)

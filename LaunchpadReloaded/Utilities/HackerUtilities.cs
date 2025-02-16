@@ -68,7 +68,7 @@ public static class HackerUtilities
 
     public static bool IsHacked(this NetworkedPlayerInfo playerInfo)
     {
-        var hacked = playerInfo.Role?.IsImpostor == true ? CountHackedPlayers(false) > 0 : PlayerHacked(playerInfo.Object);
+        var hacked = playerInfo != null && playerInfo.Role != null && playerInfo.Role.IsImpostor == true ? CountHackedPlayers(false) > 0 : PlayerHacked(playerInfo.Object);
         return AmongUsClient.Instance.IsGameStarted && hacked;
     }
 
