@@ -26,7 +26,7 @@ public static class VotingRpc
 
         if (!AmongUsClient.Instance.AmHost)
         {
-            var voteData = PlayerControl.LocalPlayer.GetModifier<VoteData>();
+            var voteData = PlayerControl.LocalPlayer.GetModifier<VoteData>()!;
             voteData.VotesRemaining += 1;
             voteData.VotedPlayers.Remove(votedFor);
         }

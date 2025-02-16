@@ -44,12 +44,12 @@ public class HitmanRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
         }
     }
 
-    public bool InDeadlockMode = false;
+    public bool InDeadlockMode;
     public GameObject? Overlay;
     public readonly Color OverlayColor = new(10f / 255f, 30f / 255f, 10f / 255f, 0.4f);
 
     public SpriteRenderer? _overlayRend { get; private set; }
-    private IEnumerator? _transitionCoroutine = null;
+    private IEnumerator? _transitionCoroutine;
 
     [HideFromIl2Cpp]
     public void StartTransition(Color targetColor, Action? action = null)
@@ -68,7 +68,7 @@ public class HitmanRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
 
         if (Overlay == null)
         {
-            Overlay = new("DeadlockTint");
+            Overlay = new GameObject("DeadlockTint");
             Overlay.gameObject.SetActive(false);
             Overlay.transform.SetParent(HudManager.Instance.transform, true);
 
@@ -76,11 +76,11 @@ public class HitmanRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
             _overlayRend.sprite = LaunchpadAssets.DeadlockVignette.LoadAsset();
             _overlayRend.color = OverlayColor;
 
-            Camera mainCamera = Camera.main;
-            float screenHeight = mainCamera.orthographicSize * 2f;
-            float screenWidth = screenHeight * mainCamera.aspect;
-            float spriteWidth = _overlayRend.sprite.bounds.size.x;
-            float spriteHeight = _overlayRend.sprite.bounds.size.y;
+            var mainCamera = Camera.main;
+            var screenHeight = mainCamera.orthographicSize * 2f;
+            var screenWidth = screenHeight * mainCamera.aspect;
+            var spriteWidth = _overlayRend.sprite.bounds.size.x;
+            var spriteHeight = _overlayRend.sprite.bounds.size.y;
 
             Overlay.transform.localScale = new Vector3(screenWidth / spriteWidth, screenHeight / spriteHeight, 1f);
             var position = HudManager.Instance.transform.position;

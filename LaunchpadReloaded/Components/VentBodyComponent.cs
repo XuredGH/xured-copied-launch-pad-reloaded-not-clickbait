@@ -9,7 +9,7 @@ namespace LaunchpadReloaded.Components;
 [RegisterInIl2Cpp]
 public class VentBodyComponent(IntPtr ptr) : MonoBehaviour(ptr)
 {
-    public DeadBody deadBody;
+    public DeadBody deadBody = null!;
 
     public void ExposeBody()
     {

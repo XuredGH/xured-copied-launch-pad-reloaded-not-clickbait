@@ -46,9 +46,12 @@ public static class MeetingHudPatches
 
             plr.GetModifierComponent()?.RemoveModifier<DragBodyModifier>();
 
-            if (!plr.HasModifier<VoteData>()) continue;
+            if (!plr.HasModifier<VoteData>())
+            {
+                continue;
+            }
 
-            var voteData = plr.GetModifier<VoteData>();
+            var voteData = plr.GetModifier<VoteData>()!;
             voteData.VotesRemaining = VotingTypesManager.GetVotes();
             voteData.VotedPlayers.Clear();
 
@@ -240,8 +243,8 @@ public static class MeetingHudPatches
             return false;
         }
 
-        bool hasVotes = voteData.VotesRemaining > 0;
-        bool hasVotedFor = voteData.VotedPlayers.Contains((byte)suspectStateIdx);
+        var hasVotes = voteData.VotesRemaining > 0;
+        var hasVotedFor = voteData.VotedPlayers.Contains((byte)suspectStateIdx);
 
         if (OptionGroupSingleton<VotingOptions>.Instance.AllowVotingForSamePerson.Value
             && hasVotes)

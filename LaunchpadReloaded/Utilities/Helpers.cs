@@ -32,13 +32,16 @@ public static class Helpers
     public static T? FindClosestObject<T>(List<T> objectList, Vector3 position) where T : MonoBehaviour
     {
         T? closest = null;
-        float closestDistanceSqr = Mathf.Infinity;
+        var closestDistanceSqr = Mathf.Infinity;
 
-        foreach (T obj in objectList)
+        foreach (var obj in objectList)
         {
-            if (obj == null) continue;
+            if (obj == null)
+            {
+                continue;
+            }
 
-            float sqrDistance = (obj.transform.position - position).sqrMagnitude;
+            var sqrDistance = (obj.transform.position - position).sqrMagnitude;
             if (sqrDistance < closestDistanceSqr)
             {
                 closestDistanceSqr = sqrDistance;
@@ -58,21 +61,12 @@ public static class Helpers
     {
         Collider2D[] hitColliders = Physics2D.OverlapPointAll(position);
 
-        foreach (Collider2D hitCollider in hitColliders)
-        {
-            PlayerControl playerControl = hitCollider.GetComponent<PlayerControl>();
-            if (playerControl != null)
-            {
-                return playerControl;
-            }
-        }
-
-        return null;
+        return hitColliders.Select(hitCollider => hitCollider.GetComponent<PlayerControl>()).FirstOrDefault();
     }
     public static void AddMessage(string item, Sprite spr, AudioClip clip, Color color, Vector3 localPos, out LobbyNotificationMessage msg)
     {
-        NotificationPopper popper = HudManager.Instance.Notifier;
-        LobbyNotificationMessage newMessage = GameObject.Instantiate(popper.notificationMessageOrigin, Vector3.zero, Quaternion.identity, popper.transform);
+        var popper = HudManager.Instance.Notifier;
+        var newMessage = Object.Instantiate(popper.notificationMessageOrigin, Vector3.zero, Quaternion.identity, popper.transform);
         newMessage.transform.localPosition = localPos;
         newMessage.SetUp(item, spr, color, new System.Action(() => popper.OnMessageDestroy(newMessage)));
         popper.lastMessageKey = -1;
@@ -91,21 +85,21 @@ public static class Helpers
         return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(str.ToLower());
     }
 
-    public static IEnumerator FadeOut(SpriteRenderer rend, float delay = 0.01f, float decrease = 0.01f)
+    public static IEnumerator FadeOut(SpriteRenderer? rend, float delay = 0.01f, float decrease = 0.01f)
     {
-        if (rend is null)
+        if (rend == null)
         {
-            yield return null;
+            yield break;
         }
-
-        float alphaVal = rend!.color.a;
-        Color tmp = rend.color;
+        
+        var alphaVal = rend.color.a;
+        var tmp = rend.color;
 
         while (alphaVal > 0)
         {
             alphaVal -= decrease;
             tmp.a = alphaVal;
-            rend!.color = tmp;
+            rend.color = tmp;
 
             yield return new WaitForSeconds(delay);
         }

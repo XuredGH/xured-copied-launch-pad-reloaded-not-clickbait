@@ -39,7 +39,7 @@ public static class ReaperRpc
         var body = Helpers.GetBodyById(deadBody);
         if (body != null)
         {
-            body.GetCacheComponent().IsReaped = true;
+            body.GetCacheComponent().isReaped = true;
 
             reaper.CollectedSouls += 1;
 

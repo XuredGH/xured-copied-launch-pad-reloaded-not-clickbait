@@ -147,12 +147,15 @@ public static class Extensions
     // Source: https://stackoverflow.com/a/78897981
     public static int GetColumnCount(this GridLayoutGroup grid)
     {
-        if (grid.transform.childCount <= 1) return grid.transform.childCount;
+        if (grid.transform.childCount <= 1)
+        {
+            return grid.transform.childCount;
+        }
 
-        float maxWidth = grid.GetComponent<RectTransform>().rect.width;
-        float cellWidth = grid.cellSize.x;
-        float cellSpacing = grid.spacing.x;
-        for (int i = 2; i < grid.transform.childCount; ++i)
+        var maxWidth = grid.GetComponent<RectTransform>().rect.width;
+        var cellWidth = grid.cellSize.x;
+        var cellSpacing = grid.spacing.x;
+        for (var i = 2; i < grid.transform.childCount; ++i)
         {
             if (i * cellWidth + (i - 1) * cellSpacing > maxWidth)
             {

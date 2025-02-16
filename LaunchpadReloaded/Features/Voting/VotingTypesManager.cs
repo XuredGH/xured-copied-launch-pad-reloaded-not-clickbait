@@ -51,7 +51,7 @@ public static class VotingTypesManager
     public static List<CustomVote> CalculateVotes()
     {
         return (from player in Helpers.GetAlivePlayers()
-                from vote in MiraAPI.Utilities.Extensions.GetModifier<VoteData>(player).VotedPlayers
+                from vote in MiraAPI.Utilities.Extensions.GetModifier<VoteData>(player)!.VotedPlayers
                 select new CustomVote(player.PlayerId, vote)).ToList();
     }
 

@@ -13,7 +13,7 @@ public class DragBodyModifier : BaseModifier
     public override bool HideOnUi => true;
 
     private byte BodyId { get; }
-    private DeadBody DeadBody { get; }
+    private DeadBody? DeadBody { get; }
 
     private float _prevSpeed;
 
@@ -54,7 +54,7 @@ public class DragBodyModifier : BaseModifier
             return;
         }
 
-        if (!DeadBody)
+        if (DeadBody == null || Player == null)
         {
             return;
         }

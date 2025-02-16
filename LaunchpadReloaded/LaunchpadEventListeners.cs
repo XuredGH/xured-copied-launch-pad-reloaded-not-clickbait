@@ -37,7 +37,7 @@ public static class LaunchpadEventListeners
     {
         if (@event.Player.AmOwner && NotepadHud.Instance != null)
         {
-            NotepadHud.Instance?.UpdateAspectPos();
+            NotepadHud.Instance.UpdateAspectPos();
         }
 
         var tagManager = @event.Player.GetTagManager();
@@ -62,7 +62,7 @@ public static class LaunchpadEventListeners
             name = "Ghost";
         }
 
-        var roleTag = new PlayerTag()
+        var roleTag = new PlayerTag
         {
             Name = "Role",
             Text = name,
@@ -70,8 +70,8 @@ public static class LaunchpadEventListeners
             IsLocallyVisible = (player) =>
             {
                 var plrRole = player.Data.Role;
-                bool localHackedFlag = PlayerControl.LocalPlayer.HasModifier<HackedModifier>() && !PlayerControl.LocalPlayer.Data.Role.IsImpostor;
-                bool playerHackedFlag = player.HasModifier<HackedModifier>() && !player.Data.Role.IsImpostor;
+                var localHackedFlag = PlayerControl.LocalPlayer.HasModifier<HackedModifier>() && !PlayerControl.LocalPlayer.Data.Role.IsImpostor;
+                var playerHackedFlag = player.HasModifier<HackedModifier>() && !player.Data.Role.IsImpostor;
 
                 if (localHackedFlag || playerHackedFlag)
                 {

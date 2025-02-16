@@ -8,8 +8,8 @@ namespace LaunchpadReloaded.Components;
 [RegisterInIl2Cpp]
 public class GradientColorComponent(IntPtr ptr) : MonoBehaviour(ptr)
 {
-    public SpriteRenderer renderer;
-    public Material mat;
+    public SpriteRenderer renderer = null!;
+    public Material mat = null!;
 
     public int primaryColor;
     public int secondaryColor;

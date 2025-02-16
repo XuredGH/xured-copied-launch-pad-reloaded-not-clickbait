@@ -8,18 +8,17 @@ using Reactor.Utilities.Extensions;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static Sentry.MeasurementUnit;
 
 namespace LaunchpadReloaded.Utilities;
 public static class HitmanUtilities
 {
-    public static float LastMarkTime = 0f;
+    public static float LastMarkTime;
     public static float OgShakeAmount;
     public static float OgShakePeriod;
     public static float OgSpeed;
 
     public static bool OgShake;
-    public static IEnumerator? ClockTick = null;
+    public static IEnumerator? ClockTick;
     public static IEnumerator? OverlayTick = null;
     public static List<PlayerControl>? MarkedPlayers;
 
@@ -91,29 +90,31 @@ public static class HitmanUtilities
 
     public static void ClearMarks()
     {
-        if (MarkedPlayers != null && MarkedPlayers.Count > 0)
+        if (MarkedPlayers is not { Count: > 0 })
         {
-            foreach (var plr in MarkedPlayers)
-            {
-                var mark = plr.transform.Find("Mark");
-                if (mark != null)
-                {
-                    mark.gameObject.Destroy();
-                }
-            }
-
-            MarkedPlayers.Clear();
-            MarkedPlayers = null;
+            return;
         }
+        
+        foreach (var plr in MarkedPlayers)
+        {
+            var mark = plr.transform.Find("Mark");
+            if (mark != null)
+            {
+                mark.gameObject.Destroy();
+            }
+        }
+
+        MarkedPlayers.Clear();
+        MarkedPlayers = null;
     }
 
     public static IEnumerator KillMarkedPlayers()
     {
         var origCount = MarkedPlayers!.Count;
 
-        while (MarkedPlayers!.Count > 0)
+        while (MarkedPlayers.Count > 0)
         {
-            PlayerControl player = MarkedPlayers[0];
+            var player = MarkedPlayers[0];
             MarkedPlayers.RemoveAt(0);
 
             if (player != null)
@@ -140,8 +141,8 @@ public static class HitmanUtilities
 
     public static IEnumerator TransitionColor(Color targetColor, SpriteRenderer rend, float time = 1f, System.Action? action = null)
     {
-        Color startColor = rend.color;
-        float elapsedTime = 0f;
+        var startColor = rend.color;
+        var elapsedTime = 0f;
 
         while (elapsedTime < time)
         {
@@ -160,7 +161,7 @@ public static class HitmanUtilities
 
         while (HudManager.InstanceExists && button.EffectActive)
         {
-            float tickInterval = Mathf.Lerp(1.5f, 0.2f, (button.EffectDuration - button.Timer) / button.EffectDuration);
+            var tickInterval = Mathf.Lerp(1.5f, 0.2f, (button.EffectDuration - button.Timer) / button.EffectDuration);
             SoundManager.Instance.StopSound(LaunchpadAssets.DeadlockClockLeft.LoadAsset());
             SoundManager.Instance.PlaySound(LaunchpadAssets.DeadlockClockLeft.LoadAsset(), false, 0.5f);
             yield return new WaitForSeconds(tickInterval);
@@ -174,15 +175,22 @@ public static class HitmanUtilities
     {
         var button = CustomButtonSingleton<DeadlockButton>.Instance;
         var role = PlayerControl.LocalPlayer.Data.Role as HitmanRole;
+        if (role == null)
+        {
+            yield break;
+        }
 
         while (HudManager.InstanceExists && button.EffectActive)
         {
-            float progress = (button.EffectDuration - button.Timer) / button.EffectDuration;
-            float newAlpha = Mathf.Lerp(0.4f, 1f, progress);
+            var progress = (button.EffectDuration - button.Timer) / button.EffectDuration;
+            var newAlpha = Mathf.Lerp(0.4f, 1f, progress);
 
-            Color newColor = role.OverlayColor;
+            var newColor = role.OverlayColor;
             newColor.a = newAlpha;
-            role._overlayRend.color = newColor;
+            if (role._overlayRend != null)
+            {
+                role._overlayRend.color = newColor;
+            }
 
             yield return null;
         }

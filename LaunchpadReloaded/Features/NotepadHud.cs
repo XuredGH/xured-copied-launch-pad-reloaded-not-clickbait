@@ -7,15 +7,15 @@ namespace LaunchpadReloaded.Features;
 public class NotepadHud
 {
     public static NotepadHud? Instance { get; private set; }
-    public GameObject NotepadButton { get; private set; }
-    public GameObject Notepad { get; private set; }
+    public GameObject NotepadButton { get; private set; } = null!;
+    public GameObject Notepad { get; private set; } = null!;
 
-    private HudManager __hud;
-    private AspectPosition __buttonAspectPos;
+    private readonly HudManager _hud;
+    private AspectPosition _buttonAspectPos = null!;
 
     public NotepadHud(HudManager hud)
     {
-        __hud = hud;
+        _hud = hud;
         Instance = this;
 
         CreateNotepad();
@@ -25,11 +25,10 @@ public class NotepadHud
 
     public void UpdateAspectPos()
     {
-        __buttonAspectPos.DistanceFromEdge =
-            (MeetingHud.Instance || HudManager.Instance.Chat.chatButton.gameObject.active || PlayerControl.LocalPlayer.Data.IsDead)
+        _buttonAspectPos.DistanceFromEdge = MeetingHud.Instance || HudManager.Instance.Chat.chatButton.gameObject.active || PlayerControl.LocalPlayer.Data.IsDead
             ? new Vector3(2.75f, 0.505f, -400f) : new Vector3(2.15f, 0.505f, -400f);
 
-        __buttonAspectPos.AdjustPosition();
+        _buttonAspectPos.AdjustPosition();
     }
     public void Destroy()
     {
@@ -41,10 +40,10 @@ public class NotepadHud
 
     private void CreateNotepadButton()
     {
-        NotepadButton = Object.Instantiate(__hud.SettingsButton.gameObject, __hud.SettingsButton.transform.parent);
+        NotepadButton = Object.Instantiate(_hud.SettingsButton.gameObject, _hud.SettingsButton.transform.parent);
         NotepadButton.name = "NotepadButton";
 
-        __buttonAspectPos = NotepadButton.GetComponent<AspectPosition>();
+        _buttonAspectPos = NotepadButton.GetComponent<AspectPosition>();
         var activeSprite = NotepadButton.transform.FindChild("Active").GetComponent<SpriteRenderer>();
         var inactiveSprite = NotepadButton.transform.FindChild("Inactive").GetComponent<SpriteRenderer>();
         var textbox = Notepad.transform.FindChild("Textbox");
@@ -56,7 +55,7 @@ public class NotepadHud
 
         activeSprite.transform.localPosition = inactiveSprite.transform.localPosition = new Vector3(0.005f, 0.025f, 0f);
 
-        passiveButton.ClickSound = __hud.MapButton.ClickSound;
+        passiveButton.ClickSound = _hud.MapButton.ClickSound;
         passiveButton.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
         passiveButton.OnClick.AddListener((UnityAction)(() =>
         {
@@ -99,6 +98,6 @@ public class NotepadHud
             tmpTextBox.GiveFocus();
         }));
 
-        closeButton.ClickSound = __hud.MapButton.ClickSound;
+        closeButton.ClickSound = _hud.MapButton.ClickSound;
     }
 }

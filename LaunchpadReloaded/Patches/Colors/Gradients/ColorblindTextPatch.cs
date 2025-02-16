@@ -1,7 +1,6 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Utilities;
-using Reactor.Utilities;
 
 namespace LaunchpadReloaded.Patches.Colors.Gradients;
 

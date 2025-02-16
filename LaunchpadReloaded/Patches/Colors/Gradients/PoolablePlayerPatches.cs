@@ -3,7 +3,6 @@ using HarmonyLib;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Utilities;
 using MiraAPI.Utilities;
-using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
 
 namespace LaunchpadReloaded.Patches.Colors.Gradients;

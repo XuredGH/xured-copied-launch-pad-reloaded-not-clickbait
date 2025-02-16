@@ -15,12 +15,12 @@ public class DeadBodyCacheComponent(IntPtr ptr) : MonoBehaviour(ptr)
 {
     public static readonly List<DeadBodyCacheComponent> AllBodies = [];
 
-    public DeadBody body;
+    public DeadBody body = null!;
 
     public bool hidden;
 
-    public bool IsFrozen = false;
-    public bool IsReaped = false;
+    public bool isFrozen;
+    public bool isReaped;
 
     public void SetVisibility(bool visible)
     {
@@ -34,7 +34,7 @@ public class DeadBodyCacheComponent(IntPtr ptr) : MonoBehaviour(ptr)
 
     public static List<DeadBodyCacheComponent> GetFrozenBodies()
     {
-        return AllBodies.Where(body => body.IsFrozen == true).ToList();
+        return AllBodies.Where(body => body.isFrozen == true).ToList();
     }
 
     private void Awake()

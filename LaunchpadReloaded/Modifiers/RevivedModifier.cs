@@ -11,19 +11,19 @@ namespace LaunchpadReloaded.Modifiers;
 public class RevivedModifier : BaseModifier
 {
     public override string ModifierName => "Revived";
-    private readonly int VisorColor = Shader.PropertyToID("_VisorColor");
+    private readonly int _visorColor = Shader.PropertyToID("_VisorColor");
 
-    private PlayerTag RevivedTag = new PlayerTag()
+    private readonly PlayerTag _revivedTag = new()
     {
         Name = "RevivedTag",
         Text = "Revived",
         Color = LaunchpadPalette.MedicColor,
-        IsLocallyVisible = (plr) => true,
+        IsLocallyVisible = _ => true,
     };
 
     public override void OnActivate()
     {
-        Player.Revive();
+        Player!.Revive();
 
         Player.RemainingEmergencies = GameManager.Instance.LogicOptions.GetNumEmergencyMeetings();
         RoleManager.Instance.SetRole(Player, RoleTypes.Crewmate);
@@ -42,13 +42,13 @@ public class RevivedModifier : BaseModifier
 
         if (tagManager != null)
         {
-            var existingTag = tagManager.GetTagByName(RevivedTag.Name);
+            var existingTag = tagManager.GetTagByName(_revivedTag.Name);
             if (existingTag.HasValue)
             {
                 tagManager.RemoveTag(existingTag.Value);
             }
 
-            tagManager.AddTag(RevivedTag);
+            tagManager.AddTag(_revivedTag);
         }
     }
 
@@ -58,7 +58,7 @@ public class RevivedModifier : BaseModifier
 
         if (tagManager != null)
         {
-            tagManager.RemoveTag(RevivedTag);
+            tagManager.RemoveTag(_revivedTag);
         }
     }
     public override void OnDeath(DeathReason reason)
@@ -69,15 +69,18 @@ public class RevivedModifier : BaseModifier
     public override void FixedUpdate()
     {
         Player!.cosmetics.visor.SetVisorColor(LaunchpadPalette.MedicColor);
-        Player!.cosmetics.currentBodySprite.BodySprite.material.SetColor(VisorColor, LaunchpadPalette.MedicColor);
+        Player!.cosmetics.currentBodySprite.BodySprite.material.SetColor(_visorColor, LaunchpadPalette.MedicColor);
 
         if (MeetingHud.Instance)
         {
             var playerState = MeetingHud.Instance.playerStates.First(plr => plr.TargetPlayerId == Player!.PlayerId);
-            if (playerState is null) return;
+            if (playerState is null)
+            {
+                return;
+            }
 
             playerState.PlayerIcon.cosmetics.visor.SetVisorColor(LaunchpadPalette.MedicColor);
-            playerState.PlayerIcon.cosmetics.currentBodySprite.BodySprite.material.SetColor(VisorColor, LaunchpadPalette.MedicColor);
+            playerState.PlayerIcon.cosmetics.currentBodySprite.BodySprite.material.SetColor(_visorColor, LaunchpadPalette.MedicColor);
         }
     }
 }

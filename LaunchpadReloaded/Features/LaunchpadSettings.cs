@@ -4,7 +4,6 @@ using MiraAPI.PluginLoading;
 using System.Linq;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Utilities;
-using Reactor.Utilities.Extensions;
 using UnityEngine;
 using Object = Il2CppSystem.Object;
 

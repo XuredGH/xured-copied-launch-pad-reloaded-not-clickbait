@@ -32,7 +32,7 @@ public class CollectButton : BaseLaunchpadButton<DeadBody>
 
     public override bool IsTargetValid(DeadBody? target)
     {
-        return target != null && !target.GetCacheComponent().IsReaped;
+        return target != null && !target.GetCacheComponent().isReaped;
     }
 
     public override void SetOutline(bool active)

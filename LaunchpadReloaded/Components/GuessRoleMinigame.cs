@@ -14,9 +14,9 @@ namespace LaunchpadReloaded.Components;
 [RegisterInIl2Cpp]
 public sealed class GuessRoleMinigame(IntPtr ptr) : Minigame(ptr)
 {
-    private ShapeshifterPanel panelPrefab;
-    private Action<RoleBehaviour> onClick;
-    private Scroller scroller;
+    private ShapeshifterPanel _panelPrefab = null!;
+    private Action<RoleBehaviour> _onClick = null!;
+    private Scroller _scroller = null!;
 
     public void Awake()
     {
@@ -26,10 +26,10 @@ public sealed class GuessRoleMinigame(IntPtr ptr) : Minigame(ptr)
         closeButton.OnClick.AddListener((UnityAction)(() => Close()));
         outsideButton.OnClick.AddListener((UnityAction)(() => Close()));
 
-        panelPrefab = transform.FindChild("Panel").gameObject.GetComponent<ShapeshifterPanel>();
-        scroller = transform.FindChild("Scroller").gameObject.GetComponent<Scroller>();
+        _panelPrefab = transform.FindChild("Panel").gameObject.GetComponent<ShapeshifterPanel>();
+        _scroller = transform.FindChild("Scroller").gameObject.GetComponent<Scroller>();
 
-        transform.localScale = new UnityEngine.Vector3(1.2f, 1.2f, 1.2f);
+        transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
     }
 
     public static GuessRoleMinigame Create()
@@ -56,7 +56,7 @@ public sealed class GuessRoleMinigame(IntPtr ptr) : Minigame(ptr)
         var roleIcon = panel.transform.FindChild("RoleIcon").gameObject.GetComponent<SpriteRenderer>();
         Sprite? sprite = null;
 
-        if (CustomRoleManager.GetCustomRoleBehaviour(roleBehaviour.Role, out ICustomRole? customRole))
+        if (CustomRoleManager.GetCustomRoleBehaviour(roleBehaviour.Role, out var customRole))
         {
             var icon = customRole?.Configuration.Icon;
             if (icon == MiraAssets.Empty || icon == null)
@@ -93,17 +93,17 @@ public sealed class GuessRoleMinigame(IntPtr ptr) : Minigame(ptr)
     [HideFromIl2Cpp]
     public void Open(Func<RoleBehaviour, bool> roleMatch, Action<RoleBehaviour> clickHandler)
     {
-        onClick = clickHandler;
+        _onClick = clickHandler;
 
-        var roles = RoleManager.Instance.AllRoles.Where(role => roleMatch(role));
+        var roles = RoleManager.Instance.AllRoles.Where(roleMatch).ToArray();
 
         foreach (var role in roles)
         {
-            var shapeshifterPanel = Instantiate(panelPrefab, scroller.Inner);
-            SetRole(shapeshifterPanel, role, () => { onClick(role); });
+            var shapeshifterPanel = Instantiate(_panelPrefab, _scroller.Inner);
+            SetRole(shapeshifterPanel, role, () => { _onClick(role); });
         }
 
-        scroller.SetBounds(new FloatRange(0, roles.Count() * 0.5f - 2), new FloatRange(0, 0));
+        _scroller.SetBounds(new FloatRange(0, roles.Length * 0.5f - 2), new FloatRange(0, 0));
         Begin(null);
     }
 }

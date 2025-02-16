@@ -2,7 +2,6 @@
 using LaunchpadReloaded.Features;
 using Reactor.Utilities.Attributes;
 using Reactor.Utilities.Extensions;
-using System.Linq;
 using LaunchpadReloaded.Modifiers;
 using MiraAPI.Utilities;
 using TMPro;
@@ -10,19 +9,20 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [RegisterInIl2Cpp]
+// ReSharper disable once CheckNamespace
 public class NodeMinigame(nint ptr) : Minigame(ptr)
 {
-    public Collider2D[] Sliders;
-    private Controller myController = new();
-    public FloatRange SliderX = new(-0.65f, 1.85f);
-    private int sliderId;
-    public TextMeshPro statusText;
-    public TextMeshPro nodeIdText;
-    private HackNodeComponent node;
+    public FloatRange sliderX = new(-0.65f, 1.85f);
+    public Collider2D[] sliders = null!;
+    public TextMeshPro statusText = null!;
+    public TextMeshPro nodeIdText = null!;
+    private HackNodeComponent _node = null!;
+    private readonly Controller _myController = new();
+    private int _sliderId;
 
     public void Open(HackNodeComponent node)
     {
-        this.node = node;
+        _node = node;
         nodeIdText.text = $"node_{node.id}";
 
         statusText.text = "disabled";
@@ -33,12 +33,12 @@ public class NodeMinigame(nint ptr) : Minigame(ptr)
     private void Awake()
     {
         var miniGame = GetComponent<DivertPowerMinigame>();
-        Sliders = miniGame.Sliders;
+        sliders = miniGame.Sliders;
         OpenSound = miniGame.OpenSound;
         CloseSound = miniGame.CloseSound;
         miniGame.Destroy();
 
-        sliderId = 0;
+        _sliderId = 0;
 
         var outsideBtn = transform.FindChild("BackgroundCloseButton/OutsideCloseButton").GetComponent<PassiveButton>();
         var closeBtn = transform.FindChild("CloseButton").GetComponent<ButtonBehavior>();
@@ -55,20 +55,20 @@ public class NodeMinigame(nint ptr) : Minigame(ptr)
             Close();
         }));
 
-        for (var i = 0; i < Sliders.Length; i++)
+        for (var i = 0; i < sliders.Length; i++)
         {
-            if (i != sliderId)
+            if (i != _sliderId)
             {
-                Sliders[i].GetComponent<SpriteRenderer>().color = new Color(0, 0.5188679f, 0.1322604f);
+                sliders[i].GetComponent<SpriteRenderer>().color = new Color(0, 0.5188679f, 0.1322604f);
             }
         }
     }
 
     private void FixedUpdate()
     {
-        myController.Update();
+        _myController.Update();
 
-        if (!node.isActive && amClosing == CloseState.None)
+        if (!_node.isActive && amClosing == CloseState.None)
         {
             statusText.text = "enabled";
             statusText.color = Color.green;
@@ -77,18 +77,24 @@ public class NodeMinigame(nint ptr) : Minigame(ptr)
             return;
         }
 
-        if (amClosing != CloseState.None) return;
+        if (amClosing != CloseState.None)
+        {
+            return;
+        }
 
 
-        if (sliderId == Sliders.Length) return;
+        if (_sliderId == sliders.Length)
+        {
+            return;
+        }
 
-        var collider2D2 = Sliders[sliderId];
+        var collider2D2 = sliders[_sliderId];
         Vector2 vector2 = collider2D2.transform.localPosition;
-        var dragState = myController.CheckDrag(collider2D2);
+        var dragState = _myController.CheckDrag(collider2D2);
         if (dragState == DragState.Dragging)
         {
-            var vector3 = myController.DragPosition - (Vector2)collider2D2.transform.parent.position;
-            vector3.x = SliderX.Clamp(vector3.x);
+            var vector3 = _myController.DragPosition - (Vector2)collider2D2.transform.parent.position;
+            vector3.x = sliderX.Clamp(vector3.x);
             vector2.x = vector3.x;
             collider2D2.transform.localPosition = vector2;
             return;
@@ -99,16 +105,16 @@ public class NodeMinigame(nint ptr) : Minigame(ptr)
             return;
         }
 
-        if (SliderX.max - vector2.x < 0.05f)
+        if (sliderX.max - vector2.x < 0.05f)
         {
-            sliderId += 1;
+            _sliderId += 1;
             collider2D2.GetComponent<SpriteRenderer>().color = new Color(0, 0.5188679f, 0.1322604f);
 
             SoundManager.Instance.PlaySoundImmediate(LaunchpadAssets.BeepSound.LoadAsset(), false, 0.8f);
 
-            if (sliderId != Sliders.Length)
+            if (_sliderId != sliders.Length)
             {
-                Sliders[sliderId].GetComponent<SpriteRenderer>().color = new Color(0, 1, 0.2549479f);
+                sliders[_sliderId].GetComponent<SpriteRenderer>().color = new Color(0, 1, 0.2549479f);
             }
             else
             {

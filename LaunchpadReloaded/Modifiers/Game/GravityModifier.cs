@@ -38,7 +38,7 @@ public sealed class GravityModifier : LPModifier
     {
         if (detectionCircle != null)
         {
-            GameObject.Destroy(detectionCircle.gameObject);
+            Object.Destroy(detectionCircle.gameObject);
         }
     }
 }

@@ -35,13 +35,13 @@ public static class SealerRpc
 
         sealer.SealedVents.Add(seal);
 
-        GameObject ventTape = new GameObject("VentTape");
+        var ventTape = new GameObject("VentTape");
         ventTape.transform.SetParent(vent.transform);
         ventTape.transform.localPosition = new Vector3(0, -0.05f, -0.05f);
         ventTape.transform.localScale = new Vector3(0.55f, 0.35f, 0.4f);
         ventTape.layer = vent.gameObject.layer;
 
-        SpriteRenderer rend = ventTape.AddComponent<SpriteRenderer>();
+        var rend = ventTape.AddComponent<SpriteRenderer>();
         rend.color = new UnityEngine.Color(1, 1, 1, 0.5f);
 
         switch (ShipStatus.Instance.Type)

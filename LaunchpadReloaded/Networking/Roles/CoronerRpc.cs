@@ -20,7 +20,7 @@ public static class CoronerRpc
         var body = Helpers.GetBodyById(deadBody);
         if (body != null)
         {
-            body.GetCacheComponent().IsFrozen = true;
+            body.GetCacheComponent().isFrozen = true;
 
             var bodyOverlay = new GameObject("FreezeOverlay").AddComponent<SpriteRenderer>();
             bodyOverlay.sprite = LaunchpadAssets.FrozenBodyOverlay.LoadAsset();

@@ -18,7 +18,10 @@ public static class OptionsMenuPatches
     [HarmonyPatch(nameof(OptionsMenuBehaviour.ToggleColorBlind))]
     public static void ChangeColorblindPatch(OptionsMenuBehaviour __instance)
     {
-        if (PlayerControl.LocalPlayer == null) return;
+        if (PlayerControl.LocalPlayer == null)
+        {
+            return;
+        }
 
         foreach (var plr in PlayerControl.AllPlayerControls)
         {

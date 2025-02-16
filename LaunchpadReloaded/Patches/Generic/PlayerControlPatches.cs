@@ -24,7 +24,7 @@ public static class PlayerControlPatches
         __instance.waitingForShapeshiftResponse = false;
         if (__instance.CurrentOutfitType == PlayerOutfitType.MushroomMixup)
         {
-            __instance.logger.Info("Ignoring shapeshift message for " + ((targetPlayer == null) ? "null player" : targetPlayer.PlayerId.ToString()) + " because of mushroom mixup", null);
+            __instance.logger.Info("Ignoring shapeshift message for " + (targetPlayer == null ? "null player" : targetPlayer.PlayerId.ToString()) + " because of mushroom mixup", null);
 
             if (__instance.AmOwner && __instance.Data.Role is ShapeshifterRole)
             {
@@ -34,7 +34,7 @@ public static class PlayerControlPatches
 
             return false;
         }
-        NetworkedPlayerInfo targetPlayerInfo = targetPlayer.Data;
+        var targetPlayerInfo = targetPlayer.Data;
         NetworkedPlayerInfo.PlayerOutfit newOutfit;
         if (targetPlayerInfo.PlayerId == __instance.Data.PlayerId)
         {
@@ -45,7 +45,7 @@ public static class PlayerControlPatches
             newOutfit = targetPlayer.Data.Outfits[PlayerOutfitType.Default];
         }
 
-        Action changeOutfit = new Action(() =>
+        var changeOutfit = new Action(() =>
         {
             if (targetPlayerInfo.PlayerId == __instance.Data.PlayerId)
             {
@@ -115,7 +115,7 @@ public static class PlayerControlPatches
             {
                 PlayerControl.HideCursorTemporarily();
             }
-            RoleEffectAnimation roleEffectAnimation = Object.Instantiate(DestroyableSingleton<RoleManager>.Instance.shapeshiftAnim, __instance.gameObject.transform);
+            var roleEffectAnimation = Object.Instantiate(DestroyableSingleton<RoleManager>.Instance.shapeshiftAnim, __instance.gameObject.transform);
             roleEffectAnimation.SetMaskLayerBasedOnWhoShouldSee(__instance.AmOwner);
             roleEffectAnimation.SetMaterialColor(__instance.Data.Outfits[PlayerOutfitType.Default].ColorId);
             if (__instance.cosmetics.FlipX)
@@ -134,7 +134,7 @@ public static class PlayerControlPatches
                 }
             });
 
-            float shapeshiftScale = __instance.MyPhysics.Animations.ShapeshiftScale;
+            var shapeshiftScale = __instance.MyPhysics.Animations.ShapeshiftScale;
             if (AprilFoolsMode.ShouldLongAround())
             {
                 __instance.cosmetics.ShowLongModeParts(false);

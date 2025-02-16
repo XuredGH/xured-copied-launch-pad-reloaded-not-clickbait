@@ -15,32 +15,30 @@ namespace LaunchpadReloaded.Components;
 [RegisterInIl2Cpp]
 public class PlayerTagManager(IntPtr ptr) : MonoBehaviour(ptr)
 {
-    public PlayerControl Player;
-    public PlayerVoteArea? VoteArea;
+    public PlayerControl player = null!;
+    public PlayerVoteArea? voteArea;
 
-    public Transform TagHolder;
-    public GameObject TagTemplate;
-    public GridLayoutGroup GridLayout;
+    public Transform tagHolder = null!;
+    public GameObject tagTemplate = null!;
+    public GridLayoutGroup gridLayout = null!;
 
-    public Transform MeetingTagHolder;
+    public Transform meetingTagHolder = null!;
 
-    public Dictionary<PlayerTag, GameObject> Tags;
-    private Dictionary<PlayerTag, GameObject> _oldTags;
+    public readonly Dictionary<PlayerTag, GameObject> Tags = [];
+    private readonly Dictionary<PlayerTag, GameObject> _oldTags = [];
 
-    private bool _inMeeting = false;
+    private bool _inMeeting;
 
     public void Awake()
     {
-        Tags = new();
-        _oldTags = new();
-        Player = GetComponent<PlayerControl>();
+        player = GetComponent<PlayerControl>();
 
-        TagHolder = Instantiate(LaunchpadAssets.PlayerTags.LoadAsset(), Player.transform).transform;
-        GridLayout = TagHolder.GetComponent<GridLayoutGroup>();
+        tagHolder = Instantiate(LaunchpadAssets.PlayerTags.LoadAsset(), player.transform).transform;
+        gridLayout = tagHolder.GetComponent<GridLayoutGroup>();
 
-        TagTemplate = TagHolder.transform.GetChild(0).gameObject;
-        TagTemplate.SetActive(false);
-        TagTemplate.transform.SetParent(Player.transform); // Just to store it as a template
+        tagTemplate = tagHolder.transform.GetChild(0).gameObject;
+        tagTemplate.SetActive(false);
+        tagTemplate.transform.SetParent(player.transform); // Just to store it as a template
 
         UpdatePosition();
     }
@@ -52,13 +50,13 @@ public class PlayerTagManager(IntPtr ptr) : MonoBehaviour(ptr)
         {
             _inMeeting = true;
 
-            VoteArea = meeting.playerStates.FirstOrDefault(plr => plr.TargetPlayerId == Player.PlayerId);
+            voteArea = meeting.playerStates.FirstOrDefault(plr => plr.TargetPlayerId == player.PlayerId);
 
-            if (VoteArea != null)
+            if (voteArea != null)
             {
-                MeetingTagHolder = Instantiate(LaunchpadAssets.PlayerTags.LoadAsset(), VoteArea.transform).transform;
-                MeetingTagHolder.transform.GetChild(0).gameObject.DestroyImmediate();
-                MeetingTagHolder.gameObject.layer = VoteArea.gameObject.layer;
+                meetingTagHolder = Instantiate(LaunchpadAssets.PlayerTags.LoadAsset(), voteArea.transform).transform;
+                meetingTagHolder.transform.GetChild(0).gameObject.DestroyImmediate();
+                meetingTagHolder.gameObject.layer = voteArea.gameObject.layer;
 
                 Dictionary<PlayerTag, GameObject> toAdd = new();
 
@@ -66,9 +64,8 @@ public class PlayerTagManager(IntPtr ptr) : MonoBehaviour(ptr)
                 {
                     _oldTags.Add(tagPair.Key, tagPair.Value);
 
-                    var cloneTag = Instantiate(tagPair.Value);
-                    cloneTag.transform.SetParent(MeetingTagHolder, false);
-                    cloneTag.layer = MeetingTagHolder.gameObject.layer;
+                    var cloneTag = Instantiate(tagPair.Value, meetingTagHolder, false);
+                    cloneTag.layer = meetingTagHolder.gameObject.layer;
                     cloneTag.transform.GetChild(0).gameObject.layer = cloneTag.layer;
 
                     toAdd.Add(tagPair.Key, cloneTag);
@@ -77,7 +74,7 @@ public class PlayerTagManager(IntPtr ptr) : MonoBehaviour(ptr)
                 Tags.Clear();
                 Tags.AddRange(toAdd);
 
-                MeetingTagHolder.transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
+                meetingTagHolder.transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
 
                 UpdatePosition();
             }
@@ -104,13 +101,13 @@ public class PlayerTagManager(IntPtr ptr) : MonoBehaviour(ptr)
     {
         foreach (var tagPair in Tags)
         {
-            if (tagPair.Value == null)
+            if (!tagPair.Value)
             {
                 continue;
             }
 
-            bool visible = tagPair.Key.IsLocallyVisible(Player)
-                && (_inMeeting ? VoteArea!.NameText.gameObject.active : Player.cosmetics.nameText.gameObject.active);
+            var visible = tagPair.Key.IsLocallyVisible(player)
+                          && (_inMeeting ? voteArea!.NameText.gameObject.active : player.cosmetics.nameText.gameObject.active);
 
             if (tagPair.Value.active == false && visible)
             {
@@ -123,69 +120,63 @@ public class PlayerTagManager(IntPtr ptr) : MonoBehaviour(ptr)
 
     public int GetActiveCount()
     {
-        return Tags.Keys.Where(obj => obj.IsLocallyVisible(Player)).Count();
+        return Tags.Keys.Count(obj => obj.IsLocallyVisible(player));
     }
 
     public void UpdatePosition()
     {
-        var columnCount = Mathf.CeilToInt((float)GetActiveCount() / GridLayout.constraintCount);
+        var columnCount = Mathf.CeilToInt((float)GetActiveCount() / gridLayout.constraintCount);
 
         if (columnCount <= 0)
         {
             return;
         }
 
-        var colorblind = Player.cosmetics.colorBlindText.gameObject.active;
-        var nameTextY = (colorblind ? 0.85f : 0.69f) + (columnCount > 0 ? columnCount * 0.27f : 0);
-        var holderY = 0.53f + (columnCount > 0 ? columnCount * 0.15f : 0);
+        var colorblind = player.cosmetics.colorBlindText.gameObject.active;
+        var nameTextY = (colorblind ? 0.85f : 0.69f) + columnCount * 0.27f;
+        var holderY = 0.53f + columnCount * 0.15f;
 
         if (_inMeeting)
         {
-            var nameTextPos = VoteArea!.NameText.transform.localPosition;
+            var nameTextPos = voteArea!.NameText.transform.localPosition;
 
-            holderY = -0.07f + (columnCount > 0 ? columnCount * -0.05f : 0);
-            nameTextY = 0.025f + (columnCount > 0 ? columnCount * 0.1f : 0);
+            holderY = -0.07f + columnCount * -0.05f;
+            nameTextY = 0.025f + columnCount * 0.1f;
 
-            VoteArea!.ColorBlindName.transform.localPosition = new Vector3(-0.9058f, -0.1666f, -0.01f);
-            VoteArea!.NameText.transform.localPosition = new Vector3(nameTextPos.x, nameTextY, nameTextPos.z);
-            MeetingTagHolder.transform.localPosition = new Vector3(nameTextPos.x, holderY, 0);
+            voteArea!.ColorBlindName.transform.localPosition = new Vector3(-0.9058f, -0.1666f, -0.01f);
+            voteArea!.NameText.transform.localPosition = new Vector3(nameTextPos.x, nameTextY, nameTextPos.z);
+            meetingTagHolder.transform.localPosition = new Vector3(nameTextPos.x, holderY, 0);
         }
         else
         {
-            TagHolder.transform.localPosition = new Vector3(0, holderY, -0.35f);
-            Player.cosmetics.nameTextContainer.transform.localPosition = new Vector3(0, nameTextY, -0.5f);
+            tagHolder.transform.localPosition = new Vector3(0, holderY, -0.35f);
+            player.cosmetics.nameTextContainer.transform.localPosition = new Vector3(0, nameTextY, -0.5f);
         }
     }
 
-    public PlayerTag? GetTagByName(string name)
+    public PlayerTag? GetTagByName(string tagName)
     {
-        if (Tags == null)
-        {
-            return null;
-        }
-
-        return Tags.Keys.FirstOrDefault(tag => tag.Name == name);
+        return Tags.Keys.FirstOrDefault(playerTag => playerTag.Name == tagName);
     }
 
-    public void RemoveTag(PlayerTag plrTag)
+    public void RemoveTag(PlayerTag tagStruct)
     {
-        if (!Tags.ContainsKey(plrTag))
+        if (!Tags.TryGetValue(tagStruct, out var playerTag))
         {
             return;
         }
 
-        var tag = Tags[plrTag];
-        tag.gameObject.DestroyImmediate();
-        Tags.Remove(plrTag);
+        playerTag.gameObject.DestroyImmediate();
+        Tags.Remove(tagStruct);
 
         UpdatePosition();
     }
 
     public void ClearTags()
     {
-        foreach (var tag in Tags)
+        foreach (var plrTag in Tags)
         {
-            RemoveTag(tag.Key);
+            RemoveTag(plrTag.Key);
         }
     }
 
@@ -196,7 +187,7 @@ public class PlayerTagManager(IntPtr ptr) : MonoBehaviour(ptr)
             return;
         }
 
-        var newTag = Instantiate(TagTemplate, TagHolder.transform);
+        var newTag = Instantiate(tagTemplate, tagHolder.transform);
         var bgRend = newTag.GetComponent<SpriteRenderer>();
         var tagText = newTag.transform.GetChild(0).GetComponent<TextMeshPro>();
         tagText.text = plrTag.Text;
@@ -214,10 +205,7 @@ public class PlayerTagManager(IntPtr ptr) : MonoBehaviour(ptr)
     }
 }
 
-public struct PlayerTag(string name, string text, Color color)
+public record struct PlayerTag(string Name, string Text, Color Color)
 {
-    public string Name { get; set; } = name;
-    public string Text { get; set; } = text;
-    public Color Color { get; set; } = color;
-    public Func<PlayerControl, bool> IsLocallyVisible { get; set; }
+    public Func<PlayerControl, bool> IsLocallyVisible { get; set; } = _ => false;
 }

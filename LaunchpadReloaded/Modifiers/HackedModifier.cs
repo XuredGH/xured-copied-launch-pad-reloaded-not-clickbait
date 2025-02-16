@@ -25,12 +25,12 @@ public class HackedModifier : TimedModifier
     public override bool AutoStart => true;
     public override float Duration => OptionGroupSingleton<HackerOptions>.Instance.HackDuration;
 
-    public bool IsImpostor = false;
+    public bool IsImpostor;
     public bool DeActivating;
 
-    private TextMeshPro? _hackedText = null;
-    private HackNodeComponent? _lastCloseNode = null;
-    private HackNodeComponent? _closestNode = null;
+    private TextMeshPro? _hackedText;
+    private HackNodeComponent? _lastCloseNode;
+    private HackNodeComponent? _closestNode;
 
     public override void FixedUpdate()
     {
@@ -70,8 +70,8 @@ public class HackedModifier : TimedModifier
 
     public override void OnActivate()
     {
-        GradientManager.SetGradientEnabled(Player, false);
-        Player.cosmetics.SetColor(15);
+        GradientManager.SetGradientEnabled(Player!, false);
+        Player!.cosmetics.SetColor(15);
         Player.cosmetics.gameObject.SetActive(false);
 
         if (!Player.AmOwner)

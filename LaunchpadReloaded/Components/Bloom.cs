@@ -85,7 +85,7 @@ public class Bloom(IntPtr cppPtr) : MonoBehaviour(cppPtr)
 
     private readonly Shader _shader = LaunchpadAssets.BloomShader.LoadAsset();
 
-    private Material _material;
+    private Material _material = null!;
 
     private const int KMaxIterations = 16;
     private readonly RenderTexture[] _blurBuffer1 = new RenderTexture[KMaxIterations];
@@ -176,7 +176,7 @@ public class Bloom(IntPtr cppPtr) : MonoBehaviour(cppPtr)
                 last.width / 2, last.height / 2, 0, rtFormat
             );
 
-            pass = (level == 0) ? (AntiFlicker ? 3 : 2) : 4;
+            pass = level == 0 ? AntiFlicker ? 3 : 2 : 4;
             Graphics.Blit(last, _blurBuffer1[level], _material, pass);
 
             last = _blurBuffer1[level];
@@ -206,13 +206,17 @@ public class Bloom(IntPtr cppPtr) : MonoBehaviour(cppPtr)
         for (var i = 0; i < KMaxIterations; i++)
         {
             if (_blurBuffer1[i] != null)
+            {
                 RenderTexture.ReleaseTemporary(_blurBuffer1[i]);
+            }
 
             if (_blurBuffer2[i] != null)
+            {
                 RenderTexture.ReleaseTemporary(_blurBuffer2[i]);
+            }
 
-            _blurBuffer1[i] = null;
-            _blurBuffer2[i] = null;
+            _blurBuffer1[i] = null!;
+            _blurBuffer2[i] = null!;
         }
 
         RenderTexture.ReleaseTemporary(prefiltered);

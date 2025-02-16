@@ -46,7 +46,7 @@ public class GambleButton : BaseLaunchpadButton<PlayerControl>
             return;
         }
 
-        GuessRoleMinigame playerMenu = GuessRoleMinigame.Create();
+        var playerMenu = GuessRoleMinigame.Create();
         playerMenu.Open(role => !role.IsDead, selectedRole =>
         {
             if (selectedRole.Role != Target.Data.Role.Role)

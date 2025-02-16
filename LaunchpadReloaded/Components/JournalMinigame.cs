@@ -12,10 +12,10 @@ namespace LaunchpadReloaded.Components;
 [RegisterInIl2Cpp]
 public class JournalMinigame(nint ptr) : Minigame(ptr)
 {
-    public TextMeshPro deadPlayerInfo;
-    public PassiveButton closeButton;
-    public PassiveButton outsideButton;
-    public SpriteRenderer deadBodyIcon;
+    public TextMeshPro deadPlayerInfo = null!;
+    public PassiveButton closeButton = null!;
+    public PassiveButton outsideButton = null!;
+    public SpriteRenderer deadBodyIcon = null!;
 
     private void Awake()
     {

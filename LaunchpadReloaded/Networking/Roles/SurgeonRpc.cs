@@ -26,7 +26,7 @@ public static class SurgeonRpc
 
     public static IEnumerator FadeOutBody(DeadBody body, PlayerControl plr)
     {
-        SpriteRenderer rend = body.gameObject.transform.FindChild("Sprite").GetComponent<SpriteRenderer>();
+        var rend = body.gameObject.transform.FindChild("Sprite").GetComponent<SpriteRenderer>();
         yield return Utilities.Helpers.FadeOut(rend);
         plr.cosmetics.CurrentPet.gameObject.SetActive(false);
         rend.transform.parent.gameObject.SetActive(false);

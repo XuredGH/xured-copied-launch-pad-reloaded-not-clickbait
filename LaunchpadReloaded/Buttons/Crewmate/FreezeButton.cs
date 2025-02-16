@@ -34,7 +34,7 @@ public class FreezeButton : BaseLaunchpadButton<DeadBody>
 
     public override bool IsTargetValid(DeadBody? target)
     {
-        return target != null && !target.GetCacheComponent().IsFrozen;
+        return target != null && !target.GetCacheComponent().isFrozen;
     }
 
     public override void SetOutline(bool active)

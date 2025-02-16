@@ -23,7 +23,7 @@ public class SwapButton : BaseLaunchpadButton
         return role is SwapshifterRole;
     }
 
-    private PlayerControl? _currentTarget = null;
+    private PlayerControl? _currentTarget;
 
     public override void OnEffectEnd()
     {
@@ -48,7 +48,7 @@ public class SwapButton : BaseLaunchpadButton
     protected override void OnClick()
     {
 
-        CustomPlayerMenu playerMenu = CustomPlayerMenu.Create();
+        var playerMenu = CustomPlayerMenu.Create();
         playerMenu.Begin(plr => !plr.AmOwner && !plr.Data.IsDead && !plr.Data.Disconnected &&
         (!plr.Data.Role.IsImpostor || OptionGroupSingleton<SwapshifterOptions>.Instance.CanSwapImpostors), plr =>
         {
