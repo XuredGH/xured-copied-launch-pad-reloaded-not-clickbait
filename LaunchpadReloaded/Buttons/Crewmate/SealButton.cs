@@ -13,10 +13,10 @@ namespace LaunchpadReloaded.Buttons.Crewmate;
 
 public class SealButton : BaseLaunchpadButton<Vent>
 {
-    public override string Name => "Seal Vent";
-    public override float Cooldown => OptionGroupSingleton<LocksmithOptions>.Instance.SealVentCooldown;
+    public override string Name => "Seal";
+    public override float Cooldown => OptionGroupSingleton<SealerOptions>.Instance.SealVentCooldown;
     public override float EffectDuration => 0;
-    public override int MaxUses => (int)OptionGroupSingleton<LocksmithOptions>.Instance.SealVentUses;
+    public override int MaxUses => (int)OptionGroupSingleton<SealerOptions>.Instance.SealVentUses;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.SealButton;
     public override bool TimerAffectedByPlayer => true;
     public override bool AffectedByHack => false;
@@ -24,7 +24,7 @@ public class SealButton : BaseLaunchpadButton<Vent>
 
     public override bool Enabled(RoleBehaviour? role)
     {
-        return role is LocksmithRole;
+        return role is SealerRole;
     }
 
     public override Vent? GetTarget()

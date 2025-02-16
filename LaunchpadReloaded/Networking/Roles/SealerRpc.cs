@@ -13,7 +13,7 @@ public static class SealerRpc
     [MethodRpc((uint)LaunchpadRpc.SealVent)]
     public static void RpcSealVent(this PlayerControl playerControl, int ventId)
     {
-        if (playerControl.Data.Role is not LocksmithRole sealer)
+        if (playerControl.Data.Role is not SealerRole sealer)
         {
             playerControl.KickForCheating();
             return;
@@ -25,7 +25,7 @@ public static class SealerRpc
             return;
         }
 
-        if (OptionGroupSingleton<LocksmithOptions>.Instance.SealReveal && vent.gameObject.TryGetComponent<VentBodyComponent>(out var body))
+        if (OptionGroupSingleton<SealerOptions>.Instance.SealReveal && vent.gameObject.TryGetComponent<VentBodyComponent>(out var body))
         {
             body.ExposeBody();
         }
@@ -46,10 +46,17 @@ public static class SealerRpc
 
         switch (ShipStatus.Instance.Type)
         {
+            case ShipStatus.MapType.Fungle:
+                rend.sprite = LaunchpadAssets.VentTapePolus.LoadAsset();
+                ventTape.transform.localPosition = new Vector3(0.05f, -0.13f, -0.05f);
+                ventTape.transform.localScale = new Vector3(2, 1.75f, 1f);
+                rend.color = new UnityEngine.Color(1, 1, 1, 0.65f);
+                break;
             case ShipStatus.MapType.Pb:
                 rend.sprite = LaunchpadAssets.VentTapePolus.LoadAsset();
-                ventTape.transform.localPosition = new Vector3(0, 0, -0.05f);
-                ventTape.transform.localScale = new Vector3(1f, 1f, 1f);
+                ventTape.transform.localPosition = new Vector3(0.01f, 0, -0.05f);
+                ventTape.transform.localScale = new Vector3(1.5f, 1.3f, 1f);
+                rend.color = new UnityEngine.Color(1, 1, 1, 0.65f);
                 break;
             default:
                 rend.sprite = LaunchpadAssets.VentTape.LoadAsset();

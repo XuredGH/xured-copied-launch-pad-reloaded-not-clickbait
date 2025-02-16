@@ -6,11 +6,11 @@ using System;
 
 namespace LaunchpadReloaded.Options.Roles.Crewmate;
 
-public class LocksmithOptions : AbstractOptionGroup
+public class SealerOptions : AbstractOptionGroup
 {
-    public override string GroupName => "Locksmith";
+    public override string GroupName => "Sealer";
 
-    public override Type AdvancedRole => typeof(LocksmithRole);
+    public override Type AdvancedRole => typeof(SealerRole);
 
     [ModdedNumberOption("Seal Vent Cooldown", 0, 120, 5, MiraNumberSuffixes.Seconds)]
     public float SealVentCooldown { get; set; } = 35;

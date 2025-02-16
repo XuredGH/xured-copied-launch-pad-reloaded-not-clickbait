@@ -1,11 +1,11 @@
-﻿using LaunchpadReloaded.Features;
+﻿using Il2CppInterop.Runtime.Attributes;
+using LaunchpadReloaded.Features;
 using MiraAPI.Roles;
 using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
 using Reactor.Utilities.Attributes;
 using System;
 using System.Linq;
-using Il2CppInterop.Runtime.Attributes;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -18,13 +18,16 @@ public sealed class GuessRoleMinigame(IntPtr ptr) : Minigame(ptr)
     private Action<RoleBehaviour> _onClick = null!;
     private Scroller _scroller = null!;
 
+    private PassiveButton _closeButton;
+    private PassiveButton _outsideCloseButton;
+
     public void Awake()
     {
-        var outsideButton = transform.FindChild("Background/OutsideCloseButton").GetComponent<PassiveButton>();
-        var closeButton = transform.FindChild("CloseButton").GetComponent<PassiveButton>();
+        _outsideCloseButton = transform.FindChild("Background/OutsideCloseButton").GetComponent<PassiveButton>();
+        _closeButton = transform.FindChild("CloseButton").GetComponent<PassiveButton>();
 
-        closeButton.OnClick.AddListener((UnityAction)(() => Close()));
-        outsideButton.OnClick.AddListener((UnityAction)(() => Close()));
+        _closeButton.OnClick.AddListener((UnityAction)(() => Close()));
+        _outsideCloseButton.OnClick.AddListener((UnityAction)(() => Close()));
 
         _panelPrefab = transform.FindChild("Panel").gameObject.GetComponent<ShapeshifterPanel>();
         _scroller = transform.FindChild("Scroller").gameObject.GetComponent<Scroller>();
@@ -91,9 +94,19 @@ public sealed class GuessRoleMinigame(IntPtr ptr) : Minigame(ptr)
     }
 
     [HideFromIl2Cpp]
-    public void Open(Func<RoleBehaviour, bool> roleMatch, Action<RoleBehaviour> clickHandler)
+    public void Open(Func<RoleBehaviour, bool> roleMatch, Action<RoleBehaviour?> clickHandler)
     {
         _onClick = clickHandler;
+
+        _closeButton.OnClick.AddListener((UnityAction)(() =>
+        {
+            clickHandler(null);
+        }));
+
+        _outsideCloseButton.OnClick.AddListener((UnityAction)(() =>
+        {
+            clickHandler(null);
+        }));
 
         var roles = RoleManager.Instance.AllRoles.Where(roleMatch).ToArray();
 

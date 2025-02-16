@@ -47,10 +47,27 @@ public class SwapButton : BaseLaunchpadButton
 
     protected override void OnClick()
     {
+        SetTimerPaused(true);
+
         var playerMenu = CustomPlayerMenu.Create();
         playerMenu.Begin(plr => !plr.AmOwner && !plr.Data.IsDead && !plr.Data.Disconnected &&
         (!plr.Data.Role.IsImpostor || OptionGroupSingleton<SwapshifterOptions>.Instance.CanSwapImpostors), plr =>
         {
+            SetTimerPaused(false);
+
+            if (plr == null)
+            {
+                EffectActive = false;
+                SetTimer(0);
+
+                if (LimitedUses)
+                {
+                    UsesLeft++;
+                    Button?.SetUsesRemaining(UsesLeft);
+                }
+                return;
+            }
+
             _currentTarget = plr;
 
             var currentPos = _currentTarget.transform.position;

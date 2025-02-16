@@ -34,7 +34,6 @@ public class MapButton : BaseLaunchpadButton
 
     public override void OnEffectEnd()
     {
-        base.OnEffectEnd();
         if (MapBehaviour.Instance.IsOpen)
         {
             HudManager.Instance.ToggleMapVisible(null);

@@ -46,9 +46,25 @@ public class GambleButton : BaseLaunchpadButton<PlayerControl>
             return;
         }
 
+        SetTimerPaused(true);
+
         var playerMenu = GuessRoleMinigame.Create();
         playerMenu.Open(role => !role.IsDead, selectedRole =>
         {
+            SetTimerPaused(false);
+
+            if (selectedRole == null)
+            {
+                SetTimer(0);
+
+                if (LimitedUses)
+                {
+                    UsesLeft++;
+                    Button?.SetUsesRemaining(UsesLeft);
+                }
+                return;
+            }
+
             if (selectedRole.Role != Target.Data.Role.Role)
             {
                 PlayerControl.LocalPlayer.RpcCustomMurder(PlayerControl.LocalPlayer, resetKillTimer: false, teleportMurderer: false, showKillAnim: false, playKillSound: true);
