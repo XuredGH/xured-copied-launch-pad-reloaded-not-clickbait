@@ -25,7 +25,10 @@ public class NotepadHud
 
     public void UpdateAspectPos()
     {
-        __buttonAspectPos.DistanceFromEdge = (MeetingHud.Instance || HudManager.Instance.Chat.chatButton.gameObject.active) ? new Vector3(2.75f, 0.505f, -400f) : new Vector3(2.15f, 0.505f, -400f);
+        __buttonAspectPos.DistanceFromEdge =
+            (MeetingHud.Instance || HudManager.Instance.Chat.chatButton.gameObject.active || PlayerControl.LocalPlayer.Data.IsDead)
+            ? new Vector3(2.75f, 0.505f, -400f) : new Vector3(2.15f, 0.505f, -400f);
+
         __buttonAspectPos.AdjustPosition();
     }
     public void Destroy()
