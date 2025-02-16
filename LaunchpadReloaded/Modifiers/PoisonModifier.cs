@@ -23,7 +23,7 @@ public class PoisonModifier : TimedModifier
 
     public override void OnTimerComplete()
     {
-        if (Player is null || Killer is null || Player.Data.IsDead || Killer.Data.IsDead || MeetingHud.Instance is not null)
+        if (Player is null || Killer is null || Player.Data.IsDead || Killer.Data.IsDead || Player.Data.Role.IsImpostor || MeetingHud.Instance is not null)
         {
             return;
         }

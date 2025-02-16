@@ -16,7 +16,7 @@ public class SwapButton : BaseLaunchpadButton
     public override int MaxUses => (int)OptionGroupSingleton<SwapshifterOptions>.Instance.SwapUses;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.SwapButton;
     public override bool TimerAffectedByPlayer => true;
-    public override bool AffectedByHack => false;
+    public override bool AffectedByHack => true;
 
     public override bool Enabled(RoleBehaviour? role)
     {
@@ -29,7 +29,7 @@ public class SwapButton : BaseLaunchpadButton
     {
         if (_currentTarget != null)
         {
-            if (_currentTarget.Data.IsDead || _currentTarget.Data.Disconnected)
+            if (_currentTarget.Data.IsDead || _currentTarget.Data.Disconnected || PlayerControl.LocalPlayer.Data.IsDead)
             {
                 PlayerControl.LocalPlayer.RpcShapeshift(PlayerControl.LocalPlayer, false);
                 _currentTarget = null;
@@ -47,7 +47,6 @@ public class SwapButton : BaseLaunchpadButton
 
     protected override void OnClick()
     {
-
         var playerMenu = CustomPlayerMenu.Create();
         playerMenu.Begin(plr => !plr.AmOwner && !plr.Data.IsDead && !plr.Data.Disconnected &&
         (!plr.Data.Role.IsImpostor || OptionGroupSingleton<SwapshifterOptions>.Instance.CanSwapImpostors), plr =>

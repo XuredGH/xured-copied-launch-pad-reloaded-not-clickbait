@@ -24,8 +24,6 @@ public static class PlayerControlPatches
         __instance.waitingForShapeshiftResponse = false;
         if (__instance.CurrentOutfitType == PlayerOutfitType.MushroomMixup)
         {
-            __instance.logger.Info("Ignoring shapeshift message for " + (targetPlayer == null ? "null player" : targetPlayer.PlayerId.ToString()) + " because of mushroom mixup", null);
-
             if (__instance.AmOwner && __instance.Data.Role is ShapeshifterRole)
             {
                 DestroyableSingleton<HudManager>.Instance.AbilityButton.SetFromSettings(__instance.Data.Role.Ability);
@@ -50,7 +48,6 @@ public static class PlayerControlPatches
             if (targetPlayerInfo.PlayerId == __instance.Data.PlayerId)
             {
                 __instance.RawSetOutfit(newOutfit, PlayerOutfitType.Default);
-                __instance.logger.Info(string.Format("Player {0} Shapeshift is reverting", __instance.PlayerId), null);
 
                 var playerModComponent = __instance.GetModifierComponent();
 
@@ -64,6 +61,8 @@ public static class PlayerControlPatches
                     {
                         playerModComponent.AddModifier(mod);
                     }
+
+                    modStorage.Modifiers.Clear();
                 }
 
                 __instance.shapeshiftTargetPlayerId = -1;
@@ -77,7 +76,6 @@ public static class PlayerControlPatches
             else
             {
                 __instance.RawSetOutfit(newOutfit, PlayerOutfitType.Shapeshifted);
-                __instance.logger.Info(string.Format("Player {0} is shapeshifting into {1}", __instance.PlayerId, targetPlayer.PlayerId), null);
                 __instance.shapeshiftTargetPlayerId = (int)targetPlayer.PlayerId;
 
                 var playerModifiers = __instance.GetModifierComponent()?.ActiveModifiers.ToList();
@@ -93,6 +91,11 @@ public static class PlayerControlPatches
 
                     foreach (var mod in targetModifiers)
                     {
+                        if (mod is RevealedModifier)
+                        {
+                            return;
+                        }
+
                         playerModComponent.AddModifier(mod);
                     }
                 }

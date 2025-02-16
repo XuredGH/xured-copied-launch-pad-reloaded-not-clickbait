@@ -139,6 +139,11 @@ public static class LaunchpadEventListeners
             PlayerControl.LocalPlayer.RpcRemoveModifier<DragBodyModifier>();
         }
 
+        if (PlayerControl.LocalPlayer.Data.Role is SwapshifterRole swap && CustomButtonSingleton<SwapButton>.Instance.EffectActive)
+        {
+            CustomButtonSingleton<SwapButton>.Instance.OnEffectEnd();
+        }
+
         if (PlayerControl.LocalPlayer.Data.Role is HitmanRole hitman && hitman.InDeadlockMode && HitmanUtilities.MarkedPlayers != null)
         {
             HitmanUtilities.ClearMarks();

@@ -42,7 +42,11 @@ public class HackedModifier : TimedModifier
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#!?$(???#@)$@@@@0000");
         Player!.cosmetics.SetName(randomString);
         Player.cosmetics.SetNameMask(true);
-        Player.cosmetics.gameObject.SetActive(false);
+
+        if (Player.cosmetics.gameObject.activeSelf)
+        {
+            Player.cosmetics.gameObject.SetActive(false);
+        }
 
         if (!Player.AmOwner || IsImpostor)
         {
@@ -72,6 +76,12 @@ public class HackedModifier : TimedModifier
     {
         GradientManager.SetGradientEnabled(Player!, false);
         Player!.cosmetics.SetColor(15);
+
+        if (Player.cosmetics.CurrentPet != null)
+        {
+            Player.cosmetics.CurrentPet.gameObject.SetActive(false);
+        }
+
         Player.cosmetics.gameObject.SetActive(false);
 
         if (!Player.AmOwner)
@@ -99,6 +109,12 @@ public class HackedModifier : TimedModifier
         DeActivating = true;
         GradientManager.SetGradientEnabled(Player!, true);
         Player!.cosmetics.SetColor((byte)Player.Data.DefaultOutfit.ColorId);
+
+        if (Player.cosmetics.CurrentPet != null)
+        {
+            Player.cosmetics.CurrentPet.gameObject.SetActive(true);
+        }
+
         Player.cosmetics.gameObject.SetActive(true);
         Player.SetName(Player.Data.PlayerName);
 
