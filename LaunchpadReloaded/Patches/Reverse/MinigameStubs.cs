@@ -13,12 +13,4 @@ public static class MinigameStubs
     {
         // nothing needed
     }
-
-    [HarmonyReversePatch]
-    [HarmonyPatch(typeof(Minigame), nameof(Minigame.Close), typeof(bool))]
-    [MethodImpl(MethodImplOptions.NoInlining)]
-    public static void Close(Minigame instance, bool allowMovement)
-    {
-        // nothing needed
-    }
 }
