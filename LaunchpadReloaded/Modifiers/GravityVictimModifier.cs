@@ -30,6 +30,11 @@ public class GravityVictimModifier : BaseModifier
 
     public override void Update()
     {
+        if (Player == null || gravityGuy == null)
+        {
+            return;
+        }
+
         var distance = Vector2.Distance(Player!.GetTruePosition(), gravityGuy!.GetTruePosition());
         var clamp = Math.Clamp(distance, 0.3f, ogSpeed - 0.6f);
 
