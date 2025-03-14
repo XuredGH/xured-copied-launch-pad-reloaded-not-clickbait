@@ -3,7 +3,7 @@ using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Roles.Crewmate;
 using LaunchpadReloaded.Roles.Impostor;
 using MiraAPI.Hud;
-using MiraAPI.Utilities;
+using MiraAPI.Modifiers;
 using Reactor.Networking.Attributes;
 
 namespace LaunchpadReloaded.Networking.Roles;

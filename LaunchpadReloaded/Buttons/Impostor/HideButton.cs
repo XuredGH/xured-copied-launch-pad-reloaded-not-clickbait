@@ -5,6 +5,7 @@ using LaunchpadReloaded.Networking;
 using LaunchpadReloaded.Networking.Roles;
 using LaunchpadReloaded.Roles.Impostor;
 using LaunchpadReloaded.Utilities;
+using MiraAPI.Modifiers;
 using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
 using UnityEngine;

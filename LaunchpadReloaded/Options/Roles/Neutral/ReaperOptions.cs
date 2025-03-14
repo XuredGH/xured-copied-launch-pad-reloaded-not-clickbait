@@ -2,15 +2,12 @@
 using MiraAPI.GameOptions;
 using MiraAPI.GameOptions.Attributes;
 using MiraAPI.Utilities;
-using System;
 
 namespace LaunchpadReloaded.Options.Roles.Neutral;
 
-public class ReaperOptions : AbstractOptionGroup
+public class ReaperOptions : AbstractOptionGroup<ReaperRole>
 {
     public override string GroupName => "Reaper";
-
-    public override Type AdvancedRole => typeof(ReaperRole);
 
     [ModdedNumberOption("Collections To Win", 2, 8)]
     public float SoulCollections { get; set; } = 3;

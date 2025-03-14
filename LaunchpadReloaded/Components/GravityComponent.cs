@@ -1,7 +1,7 @@
 ﻿using LaunchpadReloaded.Modifiers;
-using MiraAPI.Utilities;
 using Reactor.Utilities.Attributes;
 using System;
+using MiraAPI.Modifiers;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Components;
@@ -21,7 +21,7 @@ public class GravityComponent(IntPtr ptr) : MonoBehaviour(ptr)
 
         if (!player.HasModifier<GravityVictimModifier>())
         {
-            player.GetModifierComponent()!.AddModifier(new GravityVictimModifier(gravityGuy!));
+            player.GetModifierComponent().AddModifier(new GravityVictimModifier(gravityGuy!));
         }
     }
 
@@ -35,7 +35,7 @@ public class GravityComponent(IntPtr ptr) : MonoBehaviour(ptr)
 
         if (player.HasModifier<GravityVictimModifier>())
         {
-            player.GetModifierComponent()!.RemoveModifier<GravityVictimModifier>();
+            player.GetModifierComponent().RemoveModifier<GravityVictimModifier>();
         }
     }
 }

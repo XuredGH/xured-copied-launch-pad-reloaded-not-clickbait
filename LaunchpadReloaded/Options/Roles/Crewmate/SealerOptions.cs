@@ -2,15 +2,12 @@
 using MiraAPI.GameOptions;
 using MiraAPI.GameOptions.Attributes;
 using MiraAPI.Utilities;
-using System;
 
 namespace LaunchpadReloaded.Options.Roles.Crewmate;
 
-public class SealerOptions : AbstractOptionGroup
+public class SealerOptions : AbstractOptionGroup<SealerRole>
 {
     public override string GroupName => "Sealer";
-
-    public override Type AdvancedRole => typeof(SealerRole);
 
     [ModdedNumberOption("Seal Vent Cooldown", 0, 120, 5, MiraNumberSuffixes.Seconds)]
     public float SealVentCooldown { get; set; } = 35;

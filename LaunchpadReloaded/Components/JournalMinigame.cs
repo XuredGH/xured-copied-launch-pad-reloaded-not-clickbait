@@ -1,8 +1,8 @@
 ﻿using LaunchpadReloaded.Modifiers;
-using MiraAPI.Utilities;
 using Reactor.Utilities.Attributes;
 using System;
 using System.Linq;
+using MiraAPI.Modifiers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;

@@ -2,15 +2,12 @@
 using MiraAPI.GameOptions;
 using MiraAPI.GameOptions.Attributes;
 using MiraAPI.Utilities;
-using System;
 
 namespace LaunchpadReloaded.Options.Roles.Impostor;
 
-public class JanitorOptions : AbstractOptionGroup
+public class JanitorOptions : AbstractOptionGroup<JanitorRole>
 {
     public override string GroupName => "Janitor";
-
-    public override Type AdvancedRole => typeof(JanitorRole);
 
     [ModdedNumberOption("Hide Bodies Cooldown", 0, 120, 5, MiraNumberSuffixes.Seconds)]
     public float HideCooldown { get; set; } = 5f;

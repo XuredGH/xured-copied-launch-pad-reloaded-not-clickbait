@@ -2,15 +2,12 @@
 using MiraAPI.GameOptions;
 using MiraAPI.GameOptions.Attributes;
 using MiraAPI.Utilities;
-using System;
 
 namespace LaunchpadReloaded.Options.Roles.Impostor;
 
-public class HitmanOptions : AbstractOptionGroup
+public class HitmanOptions : AbstractOptionGroup<HitmanRole>
 {
     public override string GroupName => "Hitman";
-
-    public override Type AdvancedRole => typeof(HitmanRole);
 
     [ModdedNumberOption("Deadlock Cooldown", 20, 120, 5, MiraNumberSuffixes.Seconds)]
     public float DeadlockCooldown { get; set; } = 40;

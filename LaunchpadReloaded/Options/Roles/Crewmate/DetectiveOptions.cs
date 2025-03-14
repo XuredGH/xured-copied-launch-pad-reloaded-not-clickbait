@@ -2,15 +2,12 @@
 using MiraAPI.GameOptions;
 using MiraAPI.GameOptions.Attributes;
 using MiraAPI.Utilities;
-using System;
 
 namespace LaunchpadReloaded.Options.Roles.Crewmate;
 
-public class DetectiveOptions : AbstractOptionGroup
+public class DetectiveOptions : AbstractOptionGroup<DetectiveRole>
 {
     public override string GroupName => "Detective";
-
-    public override Type AdvancedRole => typeof(DetectiveRole);
 
     [ModdedToggleOption("Hide Suspects")]
     public bool HideSuspects { get; set; } = false;

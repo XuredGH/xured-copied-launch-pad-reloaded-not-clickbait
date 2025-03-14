@@ -2,8 +2,8 @@
 using MiraAPI.GameOptions;
 using MiraAPI.Modifiers.Types;
 using MiraAPI.PluginLoading;
-using MiraAPI.Utilities;
 using System.Linq;
+using MiraAPI.Modifiers;
 
 namespace LaunchpadReloaded.Modifiers;
 
@@ -20,7 +20,7 @@ public abstract class LPModifier : GameModifier
             return true;
         }
 
-        return role.Player.GetModifierComponent()!.ActiveModifiers.OfType<LPModifier>().Count() < OptionGroupSingleton<GameModifierOptions>.Instance.ModifierLimit;
+        return role.Player.GetModifierComponent().ActiveModifiers.OfType<LPModifier>().Count() < OptionGroupSingleton<GameModifierOptions>.Instance.ModifierLimit;
     }
 
     public override void OnDeath(DeathReason reason)

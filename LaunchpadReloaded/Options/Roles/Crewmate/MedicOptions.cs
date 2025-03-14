@@ -2,15 +2,12 @@
 using MiraAPI.GameOptions;
 using MiraAPI.GameOptions.Attributes;
 using MiraAPI.Utilities;
-using System;
 
 namespace LaunchpadReloaded.Options.Roles.Crewmate;
 
-public class MedicOptions : AbstractOptionGroup
+public class MedicOptions : AbstractOptionGroup<MedicRole>
 {
     public override string GroupName => "Medic";
-
-    public override Type AdvancedRole => typeof(MedicRole);
 
     [ModdedToggleOption("Only Allow Reviving in MedBay/Laboratory")]
     public bool OnlyAllowInMedbay { get; set; } = false;

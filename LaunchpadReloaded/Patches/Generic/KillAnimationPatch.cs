@@ -4,9 +4,9 @@ using MiraAPI.GameOptions;
 using MiraAPI.Networking;
 using System.Linq;
 using LaunchpadReloaded.Modifiers;
-using MiraAPI.Utilities;
 using LaunchpadReloaded.Options.Roles.Crewmate;
 using LaunchpadReloaded.Roles.Crewmate;
+using MiraAPI.Modifiers;
 
 namespace LaunchpadReloaded.Patches.Generic;
 
@@ -21,7 +21,7 @@ public static class KillAnimationPatch
             .Append(source);
 
         var deathData = new DeathData(DateTime.UtcNow, source, suspects);
-        target.GetModifierComponent()!.AddModifier(deathData);
+        target.GetModifierComponent().AddModifier(deathData);
     }
 
     [HarmonyPostfix]

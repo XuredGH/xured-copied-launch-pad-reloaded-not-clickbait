@@ -2,15 +2,12 @@
 using MiraAPI.GameOptions;
 using MiraAPI.GameOptions.Attributes;
 using MiraAPI.Utilities;
-using System;
 
 namespace LaunchpadReloaded.Options.Roles.Crewmate;
 
-public class GamblerOptions : AbstractOptionGroup
+public class GamblerOptions : AbstractOptionGroup<GamblerRole>
 {
     public override string GroupName => "Gambler";
-
-    public override Type AdvancedRole => typeof(GamblerRole);
 
     [ModdedNumberOption("Gamble Cooldown", 0, 60, 5, MiraNumberSuffixes.Seconds)]
     public float GambleCooldown { get; set; } = 25;

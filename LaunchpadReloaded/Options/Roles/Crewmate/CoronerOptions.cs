@@ -2,15 +2,12 @@
 using MiraAPI.GameOptions;
 using MiraAPI.GameOptions.Attributes;
 using MiraAPI.Utilities;
-using System;
 
 namespace LaunchpadReloaded.Options.Roles.Crewmate;
 
-public class CoronerOptions : AbstractOptionGroup
+public class CoronerOptions : AbstractOptionGroup<CoronerRole>
 {
     public override string GroupName => "Coroner";
-
-    public override Type AdvancedRole => typeof(CoronerRole);
 
     [ModdedNumberOption("Freeze Cooldown", 0, 50, 5, MiraNumberSuffixes.Seconds)]
     public float FreezeCooldown { get; set; } = 15;

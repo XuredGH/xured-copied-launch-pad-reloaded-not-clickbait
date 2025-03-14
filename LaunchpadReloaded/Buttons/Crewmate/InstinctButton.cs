@@ -3,9 +3,9 @@ using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Options.Roles.Crewmate;
 using LaunchpadReloaded.Roles.Crewmate;
 using MiraAPI.GameOptions;
-using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
 using System.Linq;
+using MiraAPI.Modifiers;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons.Crewmate;
@@ -29,7 +29,7 @@ public class InstinctButton : BaseLaunchpadButton
     {
         foreach (var player in PlayerControl.AllPlayerControls.ToArray().Where(plr => plr.HasModifier<FootstepsModifier>()))
         {
-            player.GetModifierComponent()!.RemoveModifier<FootstepsModifier>();
+            player.GetModifierComponent().RemoveModifier<FootstepsModifier>();
         }
     }
 
@@ -37,7 +37,7 @@ public class InstinctButton : BaseLaunchpadButton
     {
         foreach (var player in PlayerControl.AllPlayerControls.ToArray().Where(plr => !plr.Data.IsDead))
         {
-            player.GetModifierComponent()!.AddModifier<FootstepsModifier>();
+            player.GetModifierComponent().AddModifier<FootstepsModifier>();
         }
     }
 }

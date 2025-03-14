@@ -1,8 +1,8 @@
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Modifiers;
 using MiraAPI.Roles;
-using MiraAPI.Utilities;
 using System;
+using MiraAPI.Modifiers;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles.Impostor;

@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Modifiers;
-using MiraAPI.Utilities;
+using MiraAPI.Modifiers;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Patches.Roles.Medic;

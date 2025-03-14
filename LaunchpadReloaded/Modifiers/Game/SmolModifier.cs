@@ -1,6 +1,6 @@
 ﻿using LaunchpadReloaded.Options.Modifiers;
 using MiraAPI.GameOptions;
-using MiraAPI.Utilities;
+using MiraAPI.Modifiers;
 
 namespace LaunchpadReloaded.Modifiers.Fun;
 

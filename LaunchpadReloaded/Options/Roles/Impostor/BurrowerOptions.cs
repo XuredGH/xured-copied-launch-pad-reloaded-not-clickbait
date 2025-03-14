@@ -2,15 +2,12 @@
 using MiraAPI.GameOptions;
 using MiraAPI.GameOptions.Attributes;
 using MiraAPI.Utilities;
-using System;
 
 namespace LaunchpadReloaded.Options.Roles.Impostor;
 
-public class BurrowerOptions : AbstractOptionGroup
+public class BurrowerOptions : AbstractOptionGroup<BurrowerRole>
 {
     public override string GroupName => "Burrower";
-
-    public override Type AdvancedRole => typeof(BurrowerRole);
 
     [ModdedNumberOption("Vent Dig Cooldown", 0, 120, 5, MiraNumberSuffixes.Seconds)]
     public float VentDigCooldown { get; set; } = 35;

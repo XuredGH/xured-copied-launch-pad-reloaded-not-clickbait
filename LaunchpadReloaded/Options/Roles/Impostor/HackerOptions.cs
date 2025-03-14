@@ -2,15 +2,12 @@
 using MiraAPI.GameOptions;
 using MiraAPI.GameOptions.Attributes;
 using MiraAPI.Utilities;
-using System;
 
 namespace LaunchpadReloaded.Options.Roles.Impostor;
 
-public class HackerOptions : AbstractOptionGroup
+public class HackerOptions : AbstractOptionGroup<HackerRole>
 {
     public override string GroupName => "Hacker";
-
-    public override Type AdvancedRole => typeof(HackerRole);
 
     [ModdedNumberOption("Hack Cooldown", 10, 300, 10, MiraNumberSuffixes.Seconds)]
     public float HackCooldown { get; set; } = 60;

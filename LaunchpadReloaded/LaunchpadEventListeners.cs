@@ -10,8 +10,8 @@ using MiraAPI.Events.Vanilla.Map;
 using MiraAPI.Events.Vanilla.Meeting;
 using MiraAPI.Events.Vanilla.Usables;
 using MiraAPI.Hud;
+using MiraAPI.Modifiers;
 using MiraAPI.Roles;
-using MiraAPI.Utilities;
 
 namespace LaunchpadReloaded;
 
@@ -19,7 +19,7 @@ public static class LaunchpadEventListeners
 {
     public static void Initialize()
     {
-        MiraEventManager.RegisterEventHandler<StartMeetingEvent>(StartMeetingEvent);
+        MiraEventManager.RegisterEventHandler<ReportBodyEvent>(ReportBodyEvent);
         MiraEventManager.RegisterEventHandler<EjectionEvent>(EjectEvent);
         MiraEventManager.RegisterEventHandler<PlayerCanUseEvent>(CanUseEvent, 10);
         MiraEventManager.RegisterEventHandler<EnterVentEvent>((@event) =>
@@ -126,11 +126,11 @@ public static class LaunchpadEventListeners
     }
 
     // prevent meetings during hack
-    public static void StartMeetingEvent(StartMeetingEvent meetingEvent)
+    public static void ReportBodyEvent(ReportBodyEvent bodyEvent)
     {
-        if (HackerUtilities.AnyPlayerHacked() || meetingEvent.Reporter.HasModifier<DragBodyModifier>())
+        if (HackerUtilities.AnyPlayerHacked() || bodyEvent.Reporter.HasModifier<DragBodyModifier>())
         {
-            meetingEvent.Cancel();
+            bodyEvent.Cancel();
             return;
         }
 

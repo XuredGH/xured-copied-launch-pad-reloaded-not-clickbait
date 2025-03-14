@@ -4,7 +4,6 @@ using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Options;
 using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
-using MiraAPI.Utilities;
 using PowerTools;
 using Reactor.Utilities.Extensions;
 using System;
@@ -192,7 +191,7 @@ public static class Extensions
         }
 
         body.gameObject.Destroy();
-        player.GetModifierComponent()!.AddModifier<RevivedModifier>();
+        player.GetModifierComponent().AddModifier<RevivedModifier>();
     }
 
     public static void HideBody(this DeadBody body)

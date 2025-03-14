@@ -1,7 +1,7 @@
 ﻿using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Modifiers;
-using MiraAPI.Utilities;
+using MiraAPI.Modifiers;
 using Reactor.Utilities.Attributes;
 using Reactor.Utilities.Extensions;
 using TMPro;

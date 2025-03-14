@@ -2,15 +2,12 @@
 using MiraAPI.GameOptions;
 using MiraAPI.GameOptions.Attributes;
 using MiraAPI.Utilities;
-using System;
 
 namespace LaunchpadReloaded.Options.Roles.Impostor;
 
-public class SurgeonOptions : AbstractOptionGroup
+public class SurgeonOptions : AbstractOptionGroup<SurgeonRole>
 {
     public override string GroupName => "Surgeon";
-
-    public override Type AdvancedRole => typeof(SurgeonRole);
 
     [ModdedNumberOption("Inject Cooldown", 0, 60, 5, MiraNumberSuffixes.Seconds)]
     public float InjectCooldown { get; set; } = 10f;

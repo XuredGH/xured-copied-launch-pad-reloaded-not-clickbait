@@ -2,15 +2,12 @@
 using MiraAPI.GameOptions;
 using MiraAPI.GameOptions.Attributes;
 using MiraAPI.Utilities;
-using System;
 
 namespace LaunchpadReloaded.Options.Roles.Impostor;
 
-public class SwapshifterOptions : AbstractOptionGroup
+public class SwapshifterOptions : AbstractOptionGroup<SwapshifterRole>
 {
     public override string GroupName => "Swapshifter";
-
-    public override Type AdvancedRole => typeof(SwapshifterRole);
 
     [ModdedNumberOption("Swap Cooldown", 0, 120, 5, MiraNumberSuffixes.Seconds)]
     public float SwapCooldown { get; set; } = 30;
