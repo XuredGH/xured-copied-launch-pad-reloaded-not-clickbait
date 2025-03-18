@@ -1,6 +1,8 @@
 <h1 align="center">🚀 Launchpad: Reloaded</h1>
 <p align="center">
   <img src="LaunchpadBanner.png" alt="Cover" width="60%" height="60%"/>
+  <br><br>
+  <a href="https://discord.gg/FYYqJU2bvp" target="_blank"><img src="https://dcbadge.limes.pink/api/server/FYYqJU2bvp"/></a>
 </p>
 
 # ❔ About Us
@@ -22,7 +24,7 @@ You can read about all of the features on the [wiki](https://launchpad.xtracube.
 
 ## 📥 Installation
 
-- 🚀 Download the latest version using the Launcher app (available in our Discord server).
+- 🚀 Download the latest version using the Launcher app (available in our [Discord](https://discord.gg/FYYqJU2bvp) server).
 - 🛠️ For manual installation, you must also download:
   
   - Unity.Il2Cpp win-x86 BepInEx build
