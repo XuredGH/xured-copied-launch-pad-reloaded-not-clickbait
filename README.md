@@ -1,3 +1,5 @@
+![Banner](https://github.com/All-Of-Us-Mods/LaunchpadReloaded/blob/master/LaunchpadBanner.png)
+
 # Launchpad: Reloaded
 Launchpad is a mod for Among Us that adds in brand new roles, features, and gamemodes! It is designed so that the roles and features stay somewhat consistent with the original game and don't feel out of place!
 
