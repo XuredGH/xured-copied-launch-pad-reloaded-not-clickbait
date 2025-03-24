@@ -1,4 +1,6 @@
-﻿using Reactor.Utilities.Extensions;
+﻿using LaunchpadReloaded.Options;
+using MiraAPI.GameOptions;
+using Reactor.Utilities.Extensions;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -21,7 +23,7 @@ public class NotepadHud
         CreateNotepad();
         CreateNotepadButton();
         UpdateAspectPos();
-        SetNotepadButtonVisible(LaunchpadSettings.Instance?.Notepad.Enabled ?? true);
+        SetNotepadButtonVisible(OptionGroupSingleton<GeneralOptions>.Instance.Notepad);
     }
 
     public void UpdateAspectPos()
