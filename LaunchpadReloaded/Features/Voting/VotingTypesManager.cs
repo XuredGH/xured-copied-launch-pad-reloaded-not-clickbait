@@ -1,12 +1,11 @@
-﻿using LaunchpadReloaded.Modifiers;
-using LaunchpadReloaded.Options;
+﻿using LaunchpadReloaded.Options;
 using LaunchpadReloaded.Utilities;
 using MiraAPI.GameOptions;
 using Reactor.Utilities.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Reactor.Utilities;
+using MiraAPI.Voting;
 using TMPro;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -48,21 +47,13 @@ public static class VotingTypesManager
         }
     }
 
-    #region Vote calculations
-    public static List<CustomVote> CalculateVotes()
-    {
-        return (from player in Helpers.GetAlivePlayers()
-                from vote in MiraAPI.Utilities.Extensions.GetModifier<VoteData>(player)!.VotedPlayers
-                select new CustomVote(player.PlayerId, vote)).ToList();
-    }
-
     public static Dictionary<byte, float> GetChancePercents(List<CustomVote> votes)
     {
         var dict = new Dictionary<byte, float>();
 
-        foreach (var pair in CalculateNumVotes(votes))
+        foreach (var pair in VotingUtils.CalculateNumVotes(votes))
         {
-            dict[pair.Key] = (float)pair.Value / votes.Count * 100;
+            dict[pair.Key] = pair.Value / votes.Count * 100;
         }
 
         return dict;
@@ -80,61 +71,8 @@ public static class VotingTypesManager
         return plrs[rand.Next(plrs.Count)];
     }
 
-    public static Dictionary<byte, int> CalculateNumVotes(IEnumerable<CustomVote> votes)
-    {
-        var dictionary = new Dictionary<byte, int>();
-
-        foreach (var vote in votes)
-        {
-            if (!dictionary.TryAdd(vote.Suspect, 1))
-            {
-                dictionary[vote.Suspect] += 1;
-            }
-        }
-
-        return dictionary;
-    }
-
-    #endregion
-
-    #region Populate results 
     public static void HandlePopulateResults(List<CustomVote> votes)
     {
-        MeetingHud.Instance.TitleText.text = DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.MeetingVotingResults, Il2CppSystem.Array.Empty<Il2CppSystem.Object>());
-
-        if (!OptionGroupSingleton<VotingOptions>.Instance.HideVotingIcons.Value)
-        {
-            var delays = new Dictionary<byte, int>();
-            var num = 0;
-
-            for (var i = 0; i < MeetingHud.Instance.playerStates.Length; i++)
-            {
-                var playerVoteArea = MeetingHud.Instance.playerStates[i];
-                playerVoteArea.ClearForResults();
-                foreach (var vote in votes)
-                {
-                    var playerById = GameData.Instance.GetPlayerById(vote.Voter);
-                    if (playerById == null)
-                    {
-                        Logger<LaunchpadReloadedPlugin>.Error($"Couldn't find player info for voter: {vote.Voter}");
-                    }
-                    else if (i == 0 && vote.Suspect == (byte)SpecialVotes.Skip)
-                    {
-                        MeetingHud.Instance.BloopAVoteIcon(playerById, num, MeetingHud.Instance.SkippedVoting.transform);
-                        num++;
-                    }
-                    else if (vote.Suspect == playerVoteArea.TargetPlayerId)
-                    {
-                        if (!delays.TryAdd(vote.Suspect, 0))
-                        {
-                            delays[vote.Suspect]++;
-                        }
-                        MeetingHud.Instance.BloopAVoteIcon(playerById, delays[vote.Suspect], playerVoteArea.transform);
-                    }
-                }
-            }
-        }
-
         if (!UseChance() && !OptionGroupSingleton<VotingOptions>.Instance.ShowPercentages.Value)
         {
             return;
@@ -170,8 +108,7 @@ public static class VotingTypesManager
             tmp.transform.localPosition = new Vector3(0, 0, 0);
         }
     }
-    #endregion
 
-    public static bool UseChance() => SelectedType == VotingTypes.Chance || SelectedType == VotingTypes.Combined;
+    public static bool UseChance() => SelectedType is VotingTypes.Chance or VotingTypes.Combined;
     public static bool CanVoteMultiple() => SelectedType is VotingTypes.Multiple or VotingTypes.Combined;
 }

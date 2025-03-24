@@ -38,12 +38,11 @@ public class LaunchpadSettings
             }
         };
 #if !ANDROID
-        // TODO: update button location mid-game
         ButtonLocation = new CustomSetting("Buttons On Left", buttonConfig.Value)
         {
             ChangedEvent = val =>
             {
-                var plugin = MiraPluginManager.GetPluginByGuid(LaunchpadReloadedPlugin.Id);
+                var plugin = MiraPluginManager.GetPluginByGuid(LaunchpadReloadedPlugin.Id)!;
                 foreach (var button in plugin.GetButtons())
                 {
                     button.SetButtonLocation(val ? MiraAPI.Hud.ButtonLocation.BottomLeft : MiraAPI.Hud.ButtonLocation.BottomRight);

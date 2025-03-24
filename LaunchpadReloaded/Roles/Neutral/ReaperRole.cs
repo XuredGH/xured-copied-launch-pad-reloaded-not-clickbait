@@ -3,7 +3,6 @@ using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Options.Roles.Neutral;
 using MiraAPI.GameOptions;
 using MiraAPI.Roles;
-using MiraAPI.Utilities;
 using System.Text;
 using Il2CppInterop.Runtime.Attributes;
 using LaunchpadReloaded.Roles.Afterlife.Outcast;
@@ -19,7 +18,7 @@ public class ReaperRole(System.IntPtr ptr) : RoleBehaviour(ptr), IOutcastRole
     public Color RoleColor => LaunchpadPalette.ReaperColor;
     public override bool IsDead => false;
 
-    public int CollectedSouls;
+    public int collectedSouls;
 
     public CustomRoleConfiguration Configuration => new(this)
     {
@@ -33,8 +32,8 @@ public class ReaperRole(System.IntPtr ptr) : RoleBehaviour(ptr), IOutcastRole
     [HideFromIl2Cpp]
     public StringBuilder SetTabText()
     {
-        var sb = Helpers.CreateForRole(this);
-        sb.Append($"\n<b>{CollectedSouls}/{OptionGroupSingleton<ReaperOptions>.Instance.SoulCollections} souls collected.");
+        var sb = CustomRoleUtils.CreateForRole(this);
+        sb.Append($"\n<b>{collectedSouls}/{OptionGroupSingleton<ReaperOptions>.Instance.SoulCollections} souls collected.");
         return sb;
     }
 

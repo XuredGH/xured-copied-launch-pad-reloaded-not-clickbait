@@ -6,9 +6,9 @@ using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Networking.Color;
 using LaunchpadReloaded.Roles.Impostor;
 using LaunchpadReloaded.Utilities;
-using MiraAPI.Utilities;
 using Reactor.Networking.Rpc;
 using System.Linq;
+using MiraAPI.Modifiers;
 using UnityEngine;
 using Action = System.Action;
 
@@ -214,7 +214,6 @@ public static class PlayerControlPatches
     public static void StartPostfix(PlayerControl __instance)
     {
         __instance.gameObject.AddComponent<PlayerGradientData>();
-        __instance.GetModifierComponent()!.AddModifier<VoteData>();
         __instance.gameObject.AddComponent<PlayerTagManager>();
     }
 

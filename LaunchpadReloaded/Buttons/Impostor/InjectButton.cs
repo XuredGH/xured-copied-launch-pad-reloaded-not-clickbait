@@ -34,7 +34,7 @@ public class InjectButton : BaseLaunchpadButton<PlayerControl>
 
     public override bool IsTargetValid(PlayerControl? target)
     {
-        return base.IsTargetValid(target) && !target.HasModifier<PoisonModifier>();
+        return target != null && !target.HasModifier<PoisonModifier>();
     }
 
     public override void SetOutline(bool active)

@@ -1,17 +1,12 @@
 ﻿using HarmonyLib;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Features.Voting;
-using LaunchpadReloaded.Modifiers;
-using LaunchpadReloaded.Networking.Voting;
 using LaunchpadReloaded.Options;
-using LaunchpadReloaded.Options.Roles.Crewmate;
-using LaunchpadReloaded.Roles.Crewmate;
 using LaunchpadReloaded.Utilities;
 using MiraAPI.GameOptions;
-using MiraAPI.Utilities;
-using Reactor.Networking.Rpc;
 using Reactor.Utilities.Extensions;
 using System.Linq;
+using MiraAPI.Utilities;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -32,33 +27,6 @@ public static class MeetingHudPatches
         if (NotepadHud.Instance != null)
         {
             NotepadHud.Instance.UpdateAspectPos();
-        }
-
-        foreach (var plr in PlayerControl.AllPlayerControls)
-        {
-            var state = __instance.playerStates.FirstOrDefault(state => state.TargetPlayerId == plr.PlayerId);
-            var tagManager = plr.GetTagManager();
-
-            if (state != null && tagManager != null)
-            {
-                tagManager.MeetingStart();
-            }
-
-            plr.GetModifierComponent()?.RemoveModifier<DragBodyModifier>();
-
-            if (!plr.HasModifier<VoteData>())
-            {
-                continue;
-            }
-
-            var voteData = plr.GetModifier<VoteData>()!;
-            voteData.VotesRemaining = (plr.HasModifier<RevivedModifier>() || plr.Data.IsDead || plr.Data.Disconnected) ? 0 : VotingTypesManager.GetVotes();
-            voteData.VotedPlayers.Clear();
-
-            if (plr.Data.Role is MayorRole)
-            {
-                voteData.VotesRemaining += (int)OptionGroupSingleton<MayorOptions>.Instance.ExtraVotes;
-            }
         }
 
         if (_typeText == null)
@@ -106,7 +74,7 @@ public static class MeetingHudPatches
             HackerUtilities.ForceEndHack();
         }
 
-        var voteData = PlayerControl.LocalPlayer.GetModifier<VoteData>();
+        var voteData = PlayerControl.LocalPlayer.GetVoteData();
         if (voteData == null || _typeText == null)
         {
             return;
@@ -127,14 +95,12 @@ public static class MeetingHudPatches
                 var num2 = __instance.discussionTimer - logicOptionsNormal.GetDiscussionTime();
                 if (AmongUsClient.Instance.AmHost && num2 >= votingTime)
                 {
-                    foreach (var player in Helpers.GetAlivePlayers()
-                                 .Where(x => x.GetModifier<VoteData>()!.VotesRemaining > 0))
+                    foreach (var player in Helpers.GetAlivePlayers().Where(x => x.GetVoteData().VotesRemaining > 0))
                     {
                         __instance.CastVote(player.PlayerId, (byte)SpecialVotes.Confirm);
                     }
                 }
             }
-
         }
 
         if (PlayerControl.LocalPlayer.Data.IsDead)
@@ -162,7 +128,7 @@ public static class MeetingHudPatches
         {
             case MeetingHud.VoteStates.Voted:
             case MeetingHud.VoteStates.NotVoted:
-                if (PlayerControl.LocalPlayer.GetModifier<VoteData>()!.VotesRemaining == 0)
+                if (PlayerControl.LocalPlayer.GetVoteData().VotesRemaining == 0)
                 {
                     _typeText.gameObject.SetActive(false);
                     if (_confirmVotes != null)
@@ -201,229 +167,5 @@ public static class MeetingHudPatches
                 _typeText.gameObject.SetActive(false);
                 break;
         }
-    }
-
-    [HarmonyPrefix]
-    [HarmonyPatch(nameof(MeetingHud.CheckForEndVoting))]
-    public static bool EndCheck(MeetingHud __instance)
-    {
-        if (Helpers.GetAlivePlayers().Where(plr => plr.HasModifier<VoteData>()).Any(plr => plr.GetModifier<VoteData>()!.VotesRemaining > 0))
-        {
-            return false;
-        }
-
-        NetworkedPlayerInfo? exiled;
-        bool isTie;
-        
-        var votes = VotingTypesManager.CalculateVotes();
-
-        if (VotingTypesManager.UseChance())
-        {
-            isTie = false;
-            var playerId = VotingTypesManager.GetVotedPlayerByChance(votes);
-            exiled = GameData.Instance.GetPlayerById(playerId);
-        }
-        else
-        {
-            var max = VotingTypesManager.CalculateNumVotes(votes).MaxPair(out isTie);
-            exiled = GameData.Instance.AllPlayers.ToArray().FirstOrDefault(v => !isTie && v.PlayerId == max.Key);
-        }
-
-        if (exiled is null || exiled.IsDead || exiled.Disconnected)
-        {
-            exiled = null;
-        }
-
-        __instance.RpcVotingComplete(new MeetingHud.VoterState[__instance.playerStates.Length], exiled, isTie);
-
-        return false;
-    }
-
-
-    [HarmonyPrefix]
-    [HarmonyPatch(nameof(MeetingHud.Select))]
-    public static bool SelectPatch(MeetingHud __instance, int suspectStateIdx)
-    {
-        var voteData = PlayerControl.LocalPlayer.GetModifier<VoteData>();
-        if (voteData == null)
-        {
-            return false;
-        }
-
-        var hasVotes = voteData.VotesRemaining > 0;
-        var hasVotedFor = voteData.VotedPlayers.Contains((byte)suspectStateIdx);
-
-        if (OptionGroupSingleton<VotingOptions>.Instance.AllowVotingForSamePerson.Value
-            && hasVotes)
-        {
-            return true;
-        }
-
-        return hasVotes && !hasVotedFor;
-    }
-
-
-
-    [HarmonyPrefix]
-    [HarmonyPatch(nameof(MeetingHud.HandleDisconnect), [typeof(PlayerControl), typeof(DisconnectReasons)])]
-    public static bool HandleDisconnect(MeetingHud __instance, [HarmonyArgument(0)] PlayerControl pc)
-    {
-        if (!AmongUsClient.Instance.AmHost || __instance.playerStates is null || !pc || !GameData.Instance)
-        {
-            return false;
-        }
-
-        var playerVoteArea = __instance.playerStates.First(pv => pv.TargetPlayerId == pc.PlayerId);
-        playerVoteArea.AmDead = true;
-        playerVoteArea.Overlay.gameObject.SetActive(true);
-
-        foreach (var player in Helpers.GetAlivePlayers())
-        {
-            var pva = __instance.playerStates.First(pv => pv.TargetPlayerId == player.PlayerId);
-            var voteData = player.GetModifier<VoteData>();
-
-            if (pva.AmDead || voteData == null || !voteData.VotedPlayers.Contains(pc.PlayerId))
-            {
-                continue;
-            }
-
-            voteData.VotedPlayers.Remove(pc.PlayerId);
-            voteData.VotesRemaining += 1;
-
-            VotingRpc.RpcRemoveVote(PlayerControl.LocalPlayer, player.PlayerId, pc.PlayerId);
-        }
-
-        __instance.SetDirtyBit(1U);
-        __instance.CheckForEndVoting();
-
-        if (__instance.state == MeetingHud.VoteStates.Results)
-        {
-            __instance.SetupProceedButton();
-        }
-
-        return false;
-    }
-
-
-    [HarmonyPrefix]
-    [HarmonyPatch(nameof(MeetingHud.PopulateResults))]
-    public static bool PopulateResultsPatch(MeetingHud __instance)
-    {
-        if (!AmongUsClient.Instance.AmHost)
-        {
-            return false;
-        }
-
-        var votes = VotingTypesManager.CalculateVotes();
-
-        Rpc<PopulateResultsRpc>.Instance.Send(votes.ToArray());
-        return false;
-    }
-
-    private static void HandleVote(VoteData voteData, byte suspectIdx)
-    {
-        switch (suspectIdx)
-        {
-            case (byte)SpecialVotes.Confirm:
-                voteData.VotesRemaining = 0;
-                break;
-            default:
-                voteData.VotesRemaining--;
-                voteData.VotedPlayers.Add(suspectIdx);
-                break;
-        }
-    }
-
-    [HarmonyPrefix]
-    [HarmonyPatch(nameof(MeetingHud.CastVote))]
-    public static bool CastVotePatch(MeetingHud __instance, [HarmonyArgument(0)] byte playerId,
-        [HarmonyArgument(1)] byte suspectIdx)
-    {
-        var plr = GameData.Instance.GetPlayerById(playerId);
-
-        if (plr is null || !plr.Object.HasModifier<VoteData>())
-        {
-            return false;
-        }
-
-        var voteData = plr.Object.GetModifier<VoteData>();
-        if (voteData == null || voteData.VotesRemaining == 0 ||
-            (voteData.VotedPlayers.Contains(suspectIdx) &&
-             !OptionGroupSingleton<VotingOptions>.Instance.AllowVotingForSamePerson.Value))
-        {
-            return false;
-        }
-
-        HandleVote(voteData, suspectIdx);
-
-        __instance.SetDirtyBit(1U);
-        __instance.CheckForEndVoting();
-
-        if (voteData.VotesRemaining != 0)
-        {
-            return false;
-        }
-
-        __instance.playerStates.First(x => x.TargetPlayerId == playerId).SetVote(suspectIdx);
-        PlayerControl.LocalPlayer.RpcSendChatNote(playerId, ChatNoteTypes.DidVote);
-
-        return false;
-    }
-
-    [HarmonyPostfix]
-    [HarmonyPatch(nameof(MeetingHud.CmdCastVote))]
-    public static void CmdCastVotePatch(MeetingHud __instance, [HarmonyArgument(0)] byte playerId,
-        [HarmonyArgument(1)] byte suspectIdx)
-    {
-
-        var plr = GameData.Instance.GetPlayerById(playerId);
-        var voteData = plr.Object.GetModifier<VoteData>();
-
-        if (!AmongUsClient.Instance.AmHost)
-        {
-            if (voteData == null || voteData.VotesRemaining == 0 ||
-                (voteData.VotedPlayers.Contains(suspectIdx) &&
-                 !OptionGroupSingleton<VotingOptions>.Instance.AllowVotingForSamePerson.Value))
-            {
-                return;
-            }
-
-            HandleVote(voteData, suspectIdx);
-
-            if (voteData.VotesRemaining == 0)
-            {
-                __instance.playerStates.First(x => x.TargetPlayerId == playerId).SetVote(suspectIdx);
-            }
-        }
-
-        if (PlayerControl.LocalPlayer.PlayerId != playerId)
-        {
-            return;
-        }
-
-        SoundManager.Instance.PlaySound(__instance.VoteLockinSound, false);
-
-        foreach (var playerVoteArea in __instance.playerStates)
-        {
-            playerVoteArea.ClearButtons();
-        }
-
-        __instance.SkipVoteButton.ClearButtons();
-
-        var localVoteData = PlayerControl.LocalPlayer.GetModifier<VoteData>();
-        if (localVoteData != null && localVoteData.VotesRemaining == 0)
-        {
-            __instance.SkipVoteButton.voteComplete = true;
-            __instance.SkipVoteButton.gameObject.SetActive(false);
-        }
-    }
-
-    [HarmonyPrefix]
-    [HarmonyPatch(nameof(MeetingHud.Confirm))]
-    public static bool ConfirmPatch(MeetingHud __instance, [HarmonyArgument(0)] byte suspect)
-    {
-        __instance.CmdCastVote(PlayerControl.LocalPlayer.PlayerId, suspect);
-
-        return false;
     }
 }

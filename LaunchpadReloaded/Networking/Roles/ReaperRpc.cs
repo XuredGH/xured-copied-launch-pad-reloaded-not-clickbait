@@ -41,7 +41,7 @@ public static class ReaperRpc
         {
             body.GetCacheComponent().isReaped = true;
 
-            reaper.CollectedSouls += 1;
+            reaper.collectedSouls += 1;
 
             if (playerControl.AmOwner)
             {
@@ -50,7 +50,7 @@ public static class ReaperRpc
                 //reaper.UpdateSoulsCollected();
             }
 
-            if (reaper.CollectedSouls == OptionGroupSingleton<ReaperOptions>.Instance.SoulCollections
+            if (reaper.collectedSouls == OptionGroupSingleton<ReaperOptions>.Instance.SoulCollections
                 && (AmongUsClient.Instance.AmHost || TutorialManager.InstanceExists))
             {
                 GameManager.Instance.RpcEndGame((GameOverReason)GameOverReasons.ReaperWins, false);

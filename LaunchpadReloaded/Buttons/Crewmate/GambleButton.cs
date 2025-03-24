@@ -31,8 +31,9 @@ public class GambleButton : BaseLaunchpadButton<PlayerControl>
 
     public override bool CanUse()
     {
-        return base.CanUse() && !Target.HasModifier<RevealedModifier>();
+        return base.CanUse() && Target != null && !Target.HasModifier<RevealedModifier>();
     }
+
     public override void SetOutline(bool active)
     {
         Target?.cosmetics.SetOutline(active, new Nullable<Color>(LaunchpadPalette.GamblerColor));
