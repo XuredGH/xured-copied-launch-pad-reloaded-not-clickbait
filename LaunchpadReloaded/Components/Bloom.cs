@@ -32,6 +32,27 @@ namespace LaunchpadReloaded.Components;
 [RegisterInIl2Cpp]
 public class Bloom(IntPtr cppPtr) : MonoBehaviour(cppPtr)
 {
+    public void SetBloomByMap()
+    {
+        if (ShipStatus.Instance == null)
+        {
+            return;
+        }
+
+        // Use custom bloom settings if enabled.
+        if (LaunchpadSettings.Instance?.UseCustomBloomSettings.Enabled == true)
+        {
+            ThresholdLinear = LaunchpadSettings.Instance.BloomThreshold.Value;
+            return;
+        }
+
+        ThresholdLinear =
+            ShipStatus.Instance.TryCast<AirshipStatus>() ||
+            ShipStatus.Instance.Type is ShipStatus.MapType.Hq or ShipStatus.MapType.Fungle
+                ? 1.3f :
+                0.95f;
+    }
+
     #region Public Properties
 
     /// Prefilter threshold (gamma-encoded)

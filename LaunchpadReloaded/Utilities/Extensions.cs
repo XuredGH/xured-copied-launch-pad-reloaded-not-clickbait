@@ -38,20 +38,6 @@ public static class Extensions
         }
     }
 
-    public static void SetBloomByMap(this Bloom bloom)
-    {
-        if (ShipStatus.Instance == null)
-        {
-            return;
-        }
-
-        bloom.ThresholdLinear =
-            ShipStatus.Instance.TryCast<AirshipStatus>() ||
-            ShipStatus.Instance.Type is ShipStatus.MapType.Hq or ShipStatus.MapType.Fungle
-                ? 1.3f :
-                0.95f;
-    }
-
     public static void SetBodyType(this PlayerControl player, int bodyType)
     {
         if (bodyType == 6)

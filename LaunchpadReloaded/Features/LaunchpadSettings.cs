@@ -2,8 +2,8 @@
 using LaunchpadReloaded.API.Settings;
 using MiraAPI.PluginLoading;
 using System.Linq;
+using BepInEx.Configuration;
 using LaunchpadReloaded.Components;
-using LaunchpadReloaded.Utilities;
 using Reactor.Utilities;
 using Object = Il2CppSystem.Object;
 
@@ -13,12 +13,15 @@ public class LaunchpadSettings
 {
     public static LaunchpadSettings? Instance { get; private set; }
 
-    public readonly CustomSetting Bloom;
-    public readonly CustomSetting LockedCamera;
-    public readonly CustomSetting UniqueDummies;
+    public CustomSetting Bloom { get; }
+    public CustomSetting UseCustomBloomSettings { get; }
+    public CustomSetting LockedCamera { get; }
+    public CustomSetting UniqueDummies { get; }
 #if !ANDROID
-    public readonly CustomSetting ButtonLocation;
+    public CustomSetting ButtonLocation { get; }
 #endif
+
+    public ConfigEntry<float> BloomThreshold { get; }
 
     private LaunchpadSettings()
     {
@@ -43,22 +46,17 @@ public class LaunchpadSettings
 #endif
         Bloom = new CustomSetting("Bloom", bloomConfig.Value)
         {
-            ChangedEvent = enabled =>
-            {
-                if (!HudManager.InstanceExists)
-                {
-                    return;
-                }
-                var bloom = HudManager.Instance.PlayerCam.GetComponent<Bloom>();
-                if (bloom == null)
-                {
-                    bloom = HudManager.Instance.PlayerCam.gameObject.AddComponent<Bloom>();
-                }
-                bloom.enabled = enabled;
-                bloom.SetBloomByMap();
-            }
+            ChangedEvent = SetBloom
         };
-        
+
+        UseCustomBloomSettings = new CustomSetting("Use Custom Bloom Settings", false)
+        {
+            ChangedEvent = _ => { SetBloom(Bloom.Enabled); }
+        };
+
+        BloomThreshold = configFile.Bind("LP Settings", "Custom Bloom Threshold", 1.2f, "Bloom threshold (linear)");
+        BloomThreshold.SettingChanged += (_, _) => { SetBloom(Bloom.Enabled); };
+
         LockedCamera = new CustomSetting("Locked Camera", lockedCameraConfig.Value);
         UniqueDummies = new CustomSetting("Unique Freeplay Dummies", uniqueDummiesConfig.Value)
         {
@@ -84,6 +82,21 @@ public class LaunchpadSettings
                 }
             }
         };
+    }
+
+    public static void SetBloom(bool enabled)
+    {
+        if (!HudManager.InstanceExists)
+        {
+            return;
+        }
+        var bloom = HudManager.Instance.PlayerCam.GetComponent<Bloom>();
+        if (bloom == null)
+        {
+            bloom = HudManager.Instance.PlayerCam.gameObject.AddComponent<Bloom>();
+        }
+        bloom.enabled = enabled;
+        bloom.SetBloomByMap();
     }
 
     public static void Initialize()
