@@ -15,7 +15,7 @@ public static class AnimatorPatch
     {
         if (PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer.Data.Role is HitmanRole
             {
-                InDeadlockMode: true
+                inDeadlockMode: true
             })
         {
             __instance.speed *= GlobalSpeedMultiplier;

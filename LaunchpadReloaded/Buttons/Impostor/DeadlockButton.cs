@@ -31,8 +31,8 @@ public class DeadlockButton : BaseLaunchpadButton
 
         HitmanUtilities.Initialize();
 
-        hitman.InDeadlockMode = true;
-        hitman.Overlay?.gameObject.SetActive(true);
+        hitman.inDeadlockMode = true;
+        hitman.overlay?.gameObject.SetActive(true);
         hitman.StartTransition(hitman.OverlayColor);
 
         DataManager.Settings.Gameplay.ScreenShake = true;
@@ -72,8 +72,8 @@ public class DeadlockButton : BaseLaunchpadButton
 
         HitmanUtilities.Deinitialize();
 
-        hitman.InDeadlockMode = false;
-        hitman.StartTransition(new Color(0f, 0f, 0f, 0f), () => hitman.Overlay?.gameObject.SetActive(false));
+        hitman.inDeadlockMode = false;
+        hitman.StartTransition(new Color(0f, 0f, 0f, 0f), () => hitman.overlay?.gameObject.SetActive(false));
 
         HudManager.Instance?.AlertFlash?.SetOverlay(false);
         SoundManager.Instance.PlaySound(LaunchpadAssets.DeadlockFadeOut.LoadAsset(), false);

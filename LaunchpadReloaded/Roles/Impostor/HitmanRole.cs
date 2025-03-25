@@ -25,6 +25,13 @@ public class HitmanRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
         UseVanillaKillButton = false,
     };
 
+    public bool inDeadlockMode;
+    public GameObject? overlay;
+    public readonly Color OverlayColor = new(10f / 255f, 30f / 255f, 10f / 255f, 0.4f);
+
+    public SpriteRenderer? OverlayRend { get; private set; }
+    private IEnumerator? _transitionCoroutine;
+
     public override void OnDeath(DeathReason reason)
     {
         Deinitialize(Player);
@@ -44,13 +51,6 @@ public class HitmanRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
         }
     }
 
-    public bool InDeadlockMode;
-    public GameObject? Overlay;
-    public readonly Color OverlayColor = new(10f / 255f, 30f / 255f, 10f / 255f, 0.4f);
-
-    public SpriteRenderer? _overlayRend { get; private set; }
-    private IEnumerator? _transitionCoroutine;
-
     [HideFromIl2Cpp]
     public void StartTransition(Color targetColor, Action? action = null)
     {
@@ -59,40 +59,40 @@ public class HitmanRole(IntPtr ptr) : ImpostorRole(ptr), ICustomRole
             Coroutines.Stop(_transitionCoroutine);
         }
 
-        _transitionCoroutine = Coroutines.Start(HitmanUtilities.TransitionColor(targetColor, _overlayRend!, 1f, action));
+        _transitionCoroutine = Coroutines.Start(HitmanUtilities.TransitionColor(targetColor, OverlayRend!, 1f, action));
     }
 
     public override void SpawnTaskHeader(PlayerControl playerControl)
     {
-        Overlay = GameObject.Find("DeadlockTint");
+        overlay = GameObject.Find("DeadlockTint");
 
-        if (Overlay == null)
+        if (overlay == null)
         {
-            Overlay = new GameObject("DeadlockTint");
-            Overlay.gameObject.SetActive(false);
-            Overlay.transform.SetParent(HudManager.Instance.transform, true);
+            overlay = new GameObject("DeadlockTint");
+            overlay.gameObject.SetActive(false);
+            overlay.transform.SetParent(HudManager.Instance.transform, true);
 
-            _overlayRend = Overlay.AddComponent<SpriteRenderer>();
-            _overlayRend.sprite = LaunchpadAssets.DeadlockVignette.LoadAsset();
-            _overlayRend.color = OverlayColor;
+            OverlayRend = overlay.AddComponent<SpriteRenderer>();
+            OverlayRend.sprite = LaunchpadAssets.DeadlockVignette.LoadAsset();
+            OverlayRend.color = OverlayColor;
 
-            var mainCamera = Camera.main;
+            var mainCamera = Camera.main!;
             var screenHeight = mainCamera.orthographicSize * 2f;
             var screenWidth = screenHeight * mainCamera.aspect;
-            var spriteWidth = _overlayRend.sprite.bounds.size.x;
-            var spriteHeight = _overlayRend.sprite.bounds.size.y;
+            var spriteWidth = OverlayRend.sprite.bounds.size.x;
+            var spriteHeight = OverlayRend.sprite.bounds.size.y;
 
-            Overlay.transform.localScale = new Vector3(screenWidth / spriteWidth, screenHeight / spriteHeight, 1f);
+            overlay.transform.localScale = new Vector3(screenWidth / spriteWidth, screenHeight / spriteHeight, 1f);
             var position = HudManager.Instance.transform.position;
-            Overlay.transform.localPosition = new Vector3(position.x, position.y, 20f);
+            overlay.transform.localPosition = new Vector3(position.x, position.y, 20f);
         }
     }
 
     public void FixedUpdate()
     {
-        if (Overlay != null && Player.AmOwner)
+        if (overlay && Player.AmOwner)
         {
-            Overlay.transform.position = HudManager.Instance.FullScreen.transform.position;
+            overlay!.transform.position = HudManager.Instance.FullScreen.transform.position;
         }
     }
 }

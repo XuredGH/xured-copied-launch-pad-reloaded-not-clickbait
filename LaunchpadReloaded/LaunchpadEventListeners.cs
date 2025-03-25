@@ -144,7 +144,7 @@ public static class LaunchpadEventListeners
             CustomButtonSingleton<SwapButton>.Instance.OnEffectEnd();
         }
 
-        if (PlayerControl.LocalPlayer.Data.Role is HitmanRole hitman && hitman.InDeadlockMode && HitmanUtilities.MarkedPlayers != null)
+        if (PlayerControl.LocalPlayer.Data.Role is HitmanRole hitman && hitman.inDeadlockMode && HitmanUtilities.MarkedPlayers != null)
         {
             HitmanUtilities.ClearMarks();
             CustomButtonSingleton<DeadlockButton>.Instance.OnEffectEnd();

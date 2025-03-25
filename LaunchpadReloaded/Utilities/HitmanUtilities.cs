@@ -187,9 +187,9 @@ public static class HitmanUtilities
 
             var newColor = role.OverlayColor;
             newColor.a = newAlpha;
-            if (role._overlayRend != null)
+            if (role.OverlayRend != null)
             {
-                role._overlayRend.color = newColor;
+                role.OverlayRend.color = newColor;
             }
 
             yield return null;
