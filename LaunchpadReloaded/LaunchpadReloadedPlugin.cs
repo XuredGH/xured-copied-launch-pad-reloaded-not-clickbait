@@ -3,6 +3,7 @@ using BepInEx.Configuration;
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using LaunchpadReloaded.Features;
+using LaunchpadReloaded.Patches;
 using MiraAPI;
 using MiraAPI.PluginLoading;
 using MiraAPI.Utilities;
@@ -17,6 +18,7 @@ namespace LaunchpadReloaded;
 [BepInProcess("Among Us.exe")]
 [BepInDependency(ReactorPlugin.Id)]
 [BepInDependency(MiraApiPlugin.Id)]
+[BepInDependency(CrowdedModPatch.CrowdedId, BepInDependency.DependencyFlags.SoftDependency)]
 [ReactorModFlags(ModFlags.RequireOnAllClients)]
 public partial class LaunchpadReloadedPlugin : BasePlugin, IMiraPlugin
 {
