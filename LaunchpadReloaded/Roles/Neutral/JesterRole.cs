@@ -1,8 +1,10 @@
 using AmongUs.GameOptions;
 using Il2CppSystem.Text;
 using LaunchpadReloaded.Features;
+using LaunchpadReloaded.GameOver;
 using LaunchpadReloaded.Options.Roles.Neutral;
 using LaunchpadReloaded.Roles.Afterlife.Outcast;
+using MiraAPI.GameEnd;
 using MiraAPI.GameOptions;
 using MiraAPI.Roles;
 using UnityEngine;
@@ -33,7 +35,7 @@ public class JesterRole(System.IntPtr ptr) : RoleBehaviour(ptr), IOutcastRole
 
     public override bool DidWin(GameOverReason reason)
     {
-        return reason == (GameOverReason)GameOverReasons.JesterWins;
+        return reason == CustomGameOver.GameOverReason<JesterGameOver>();
     }
 
     public string GetCustomEjectionMessage(NetworkedPlayerInfo exiled)

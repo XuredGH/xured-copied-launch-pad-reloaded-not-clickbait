@@ -3,16 +3,19 @@ using System.Linq;
 using LaunchpadReloaded.Buttons.Impostor;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
+using LaunchpadReloaded.GameOver;
 using LaunchpadReloaded.Modifiers;
 using LaunchpadReloaded.Options.Roles.Crewmate;
 using LaunchpadReloaded.Roles.Crewmate;
 using LaunchpadReloaded.Roles.Impostor;
+using LaunchpadReloaded.Roles.Neutral;
 using LaunchpadReloaded.Utilities;
 using MiraAPI.Events;
 using MiraAPI.Events.Vanilla.Gameplay;
 using MiraAPI.Events.Vanilla.Map;
 using MiraAPI.Events.Vanilla.Meeting;
 using MiraAPI.Events.Vanilla.Usables;
+using MiraAPI.GameEnd;
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Modifiers;
@@ -106,6 +109,17 @@ public static class GenericEvents
     [RegisterEvent]
     public static void EjectEvent(EjectionEvent @event)
     {
+        if (NotepadHud.Instance != null)
+        {
+            NotepadHud.Instance.UpdateAspectPos();
+        }
+
+        if (@event.ExileController.initData.networkedPlayer != null && @event.ExileController.initData.networkedPlayer.Role != null
+                                                        && @event.ExileController.initData.networkedPlayer.Role is JesterRole)
+        {
+            CustomGameOver.Trigger<JesterGameOver>([@event.ExileController.initData.networkedPlayer]);
+        }
+        
         foreach (var plr in PlayerControl.AllPlayerControls)
         {
             var tagManager = plr.GetTagManager();

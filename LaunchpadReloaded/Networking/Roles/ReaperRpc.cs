@@ -6,6 +6,9 @@ using MiraAPI.GameOptions;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities;
 using System.Collections;
+using LaunchpadReloaded.GameOver;
+using MiraAPI.GameEnd;
+using MiraAPI.Utilities;
 using Helpers = MiraAPI.Utilities.Helpers;
 
 namespace LaunchpadReloaded.Networking.Roles;
@@ -37,24 +40,21 @@ public static class ReaperRpc
         }
 
         var body = Helpers.GetBodyById(deadBody);
-        if (body != null)
+        if (body == null) return;
+        body.GetCacheComponent().isReaped = true;
+
+        reaper.collectedSouls += 1;
+
+        if (playerControl.AmOwner)
         {
-            body.GetCacheComponent().isReaped = true;
+            SoundManager.Instance.PlaySound(LaunchpadAssets.ReaperSound.LoadAsset(), false, 3f);
+            Coroutines.Start(CoCollectEffects(body));
+        }
 
-            reaper.collectedSouls += 1;
-
-            if (playerControl.AmOwner)
-            {
-                SoundManager.Instance.PlaySound(LaunchpadAssets.ReaperSound.LoadAsset(), false, 3f);
-                Coroutines.Start(CoCollectEffects(body));
-                //reaper.UpdateSoulsCollected();
-            }
-
-            if (reaper.collectedSouls == OptionGroupSingleton<ReaperOptions>.Instance.SoulCollections
-                && (AmongUsClient.Instance.AmHost || TutorialManager.InstanceExists))
-            {
-                GameManager.Instance.RpcEndGame((GameOverReason)GameOverReasons.ReaperWins, false);
-            }
+        if (reaper.collectedSouls >= OptionGroupSingleton<ReaperOptions>.Instance.SoulCollections
+            && PlayerControl.LocalPlayer.IsHost())
+        {
+            CustomGameOver.Trigger<ReaperGameOver>([reaper.Player.Data]);
         }
     }
 }

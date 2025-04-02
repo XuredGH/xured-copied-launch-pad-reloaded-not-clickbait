@@ -5,7 +5,9 @@ using MiraAPI.GameOptions;
 using MiraAPI.Roles;
 using System.Text;
 using Il2CppInterop.Runtime.Attributes;
+using LaunchpadReloaded.GameOver;
 using LaunchpadReloaded.Roles.Afterlife.Outcast;
+using MiraAPI.GameEnd;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Roles.Neutral;
@@ -42,48 +44,9 @@ public class ReaperRole(System.IntPtr ptr) : RoleBehaviour(ptr), IOutcastRole
         // remove default task hint
     }
 
-    /*
-    private GameObject _display;
-    private TextMeshPro _displayText;
-
-    public void UpdateSoulsCollected()
-    {
-        if (_display != null)
-        {
-            _displayText.text = $"{CollectedSouls}/{OptionGroupSingleton<ReaperOptions>.Instance.SoulCollections} Souls";
-        }
-    }
-    
-        public override void SpawnTaskHeader(PlayerControl playerControl)
-        {
-            if (playerControl.AmOwner)
-            {
-                _display = Instantiate(LaunchpadAssets.ReaperDisplay.LoadAsset(), HudManager.Instance.transform);
-                var aspectPosition = _display.AddComponent<AspectPosition>();
-                aspectPosition.Alignment = AspectPosition.EdgeAlignments.Top;
-                aspectPosition.DistanceFromEdge = new Vector3(0, 0.8f, 0);
-                aspectPosition.AdjustPosition();
-
-                _display.transform.localPosition = new Vector3(_display.transform.localPosition.x, _display.transform.localPosition.y, 20);
-                _displayText = _display.transform.GetChild(0).gameObject.GetComponent<TextMeshPro>();
-                _displayText.font = HudManager.Instance.TaskPanel.taskText.font;
-                _displayText.fontMaterial = HudManager.Instance.TaskPanel.taskText.fontMaterial;
-
-                UpdateSoulsCollected();
-            }
-        }
-
-    public override void Deinitialize(PlayerControl targetPlayer)
-    {
-        if (targetPlayer.AmOwner && _display != null)
-        {
-            _display.gameObject.DestroyImmediate();
-        }
-    }*/
-
     public override bool DidWin(GameOverReason reason)
     {
-        return reason == (GameOverReason)GameOverReasons.ReaperWins;
+        return reason == CustomGameOver.GameOverReason<ReaperGameOver>();
     }
 
     public override bool CanUse(IUsable usable)
