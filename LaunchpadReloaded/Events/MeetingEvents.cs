@@ -66,7 +66,11 @@ public static class MeetingEvents
             }
 
             var voteData = player.Object.GetVoteData();
-            voteData.VotesRemaining = VotingTypesManager.GetVotes();
+
+            if (VotingTypesManager.SelectedType is VotingTypes.Multiple or VotingTypes.Combined)
+            {
+                voteData.VotesRemaining += VotingTypesManager.GetDynamicVotes() - 1;
+            }
 
             if (player.Role is MayorRole)
             {

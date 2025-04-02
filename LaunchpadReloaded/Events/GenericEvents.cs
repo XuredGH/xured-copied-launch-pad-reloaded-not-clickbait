@@ -1,7 +1,11 @@
-﻿using LaunchpadReloaded.Buttons.Impostor;
+﻿using System;
+using System.Linq;
+using LaunchpadReloaded.Buttons.Impostor;
 using LaunchpadReloaded.Components;
 using LaunchpadReloaded.Features;
 using LaunchpadReloaded.Modifiers;
+using LaunchpadReloaded.Options.Roles.Crewmate;
+using LaunchpadReloaded.Roles.Crewmate;
 using LaunchpadReloaded.Roles.Impostor;
 using LaunchpadReloaded.Utilities;
 using MiraAPI.Events;
@@ -9,38 +13,29 @@ using MiraAPI.Events.Vanilla.Gameplay;
 using MiraAPI.Events.Vanilla.Map;
 using MiraAPI.Events.Vanilla.Meeting;
 using MiraAPI.Events.Vanilla.Usables;
+using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Modifiers;
 using MiraAPI.Roles;
+using Type = Il2CppSystem.Type;
 
 namespace LaunchpadReloaded;
 
-public static class LaunchpadEventListeners
+public static class GenericEvents
 {
-    public static void Initialize()
+    [RegisterEvent]
+    public static void AfterMurderEvent(AfterMurderEvent @event)
     {
-        MiraEventManager.RegisterEventHandler<ReportBodyEvent>(ReportBodyEvent);
-        MiraEventManager.RegisterEventHandler<EjectionEvent>(EjectEvent);
-        MiraEventManager.RegisterEventHandler<PlayerCanUseEvent>(CanUseEvent, 10);
-        MiraEventManager.RegisterEventHandler<EnterVentEvent>((@event) =>
-        {
-            if (@event.Player.HasModifier<DragBodyModifier>())
-            {
-                @event.Cancel();
-            }
-        });
+        var suspects = PlayerControl.AllPlayerControls.ToArray()
+            .Where(pc => pc != @event.Target && pc != @event.Source && !pc.Data.IsDead && pc.Data.Role is not DetectiveRole)
+            .Take((int)OptionGroupSingleton<DetectiveOptions>.Instance.SuspectCount)
+            .Append(@event.Source);
 
-        MiraEventManager.RegisterEventHandler<SetRoleEvent>(SetRoleEvent);
-
-        MiraEventManager.RegisterEventHandler<PlayerOpenSabotageEvent>(@event =>
-        {
-            if (PlayerControl.LocalPlayer.HasModifier<DragBodyModifier>())
-            {
-                @event.Cancel();
-            }
-        });
+        var deathData = new DeathData(DateTime.UtcNow, @event.Source, suspects);
+        @event.Target.GetModifierComponent().AddModifier(deathData);
     }
 
+    [RegisterEvent]
     public static void SetRoleEvent(SetRoleEvent @event)
     {
         if (@event.Player.AmOwner && NotepadHud.Instance != null)
@@ -108,6 +103,7 @@ public static class LaunchpadEventListeners
         tagManager.AddTag(roleTag);
     }
 
+    [RegisterEvent]
     public static void EjectEvent(EjectionEvent @event)
     {
         foreach (var plr in PlayerControl.AllPlayerControls)
@@ -125,7 +121,7 @@ public static class LaunchpadEventListeners
         }
     }
 
-    // prevent meetings during hack
+    [RegisterEvent]
     public static void ReportBodyEvent(ReportBodyEvent bodyEvent)
     {
         if (HackerUtilities.AnyPlayerHacked() || bodyEvent.Reporter.HasModifier<DragBodyModifier>())
@@ -144,14 +140,14 @@ public static class LaunchpadEventListeners
             CustomButtonSingleton<SwapButton>.Instance.OnEffectEnd();
         }
 
-        if (PlayerControl.LocalPlayer.Data.Role is HitmanRole hitman && hitman.inDeadlockMode && HitmanUtilities.MarkedPlayers != null)
+        if (PlayerControl.LocalPlayer.Data.Role is HitmanRole { inDeadlockMode: true } && HitmanUtilities.MarkedPlayers != null)
         {
             HitmanUtilities.ClearMarks();
             CustomButtonSingleton<DeadlockButton>.Instance.OnEffectEnd();
         }
     }
 
-    // prevent tasks during hack
+    [RegisterEvent(-10)]
     public static void CanUseEvent(PlayerCanUseEvent @event)
     {
         if (PlayerControl.LocalPlayer == null)

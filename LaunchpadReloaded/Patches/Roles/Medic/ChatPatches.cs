@@ -12,7 +12,7 @@ namespace LaunchpadReloaded.Patches.Roles.Medic;
 [HarmonyPatch(typeof(ChatController))]
 public static class ChatPatches
 {
-    //[HarmonyPostfix]
+    [HarmonyPostfix]
     [HarmonyPatch(nameof(ChatController.Update))]
     public static void UpdatePatch(ChatController __instance)
     {

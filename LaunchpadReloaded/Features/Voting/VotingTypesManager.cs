@@ -16,7 +16,7 @@ public static class VotingTypesManager
 {
     public static VotingTypes SelectedType => OptionGroupSingleton<VotingOptions>.Instance.VotingType;
 
-    public static readonly byte[] RecommendedVotes =
+    private static readonly byte[] RecommendedVotes =
     [
         1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5
     ];
@@ -32,22 +32,7 @@ public static class VotingTypesManager
                     RecommendedVotes.Length)],
             OptionGroupSingleton<VotingOptions>.Instance.MaxVotes.Value);
 
-    public static int GetVotes()
-    {
-        switch (SelectedType)
-        {
-            case VotingTypes.Combined:
-            case VotingTypes.Multiple:
-                return GetDynamicVotes();
-
-            case VotingTypes.Chance:
-            case VotingTypes.Classic:
-            default:
-                return 1;
-        }
-    }
-
-    public static Dictionary<byte, float> GetChancePercents(List<CustomVote> votes)
+    private static Dictionary<byte, float> GetChancePercents(List<CustomVote> votes)
     {
         var dict = new Dictionary<byte, float>();
 

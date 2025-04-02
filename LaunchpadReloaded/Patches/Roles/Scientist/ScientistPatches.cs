@@ -9,12 +9,10 @@ public static class ScientistPatches
     [HarmonyPatch(nameof(ScientistRole.RefreshAbilityButton))]
     public static bool Prefix()
     {
-        if (PlayerControl.LocalPlayer.Data.IsHacked())
-        {
-            DestroyableSingleton<HudManager>.Instance.AbilityButton.SetDisabled();
-            return false;
-        }
+        if (!PlayerControl.LocalPlayer.Data.IsHacked()) return true;
 
-        return true;
+        DestroyableSingleton<HudManager>.Instance.AbilityButton.SetDisabled();
+        return false;
+
     }
 }
