@@ -95,7 +95,7 @@ public static class MeetingHudPatches
                 var num2 = __instance.discussionTimer - logicOptionsNormal.GetDiscussionTime();
                 if (AmongUsClient.Instance.AmHost && num2 >= votingTime)
                 {
-                    foreach (var player in Helpers.GetAlivePlayers().Where(x => x.GetVoteData().VotesRemaining > 0))
+                    foreach (var player in MiraAPI.Utilities.Helpers.GetAlivePlayers().Where(x => x.GetVoteData().VotesRemaining > 0))
                     {
                         __instance.CastVote(player.PlayerId, (byte)SpecialVotes.Confirm);
                     }

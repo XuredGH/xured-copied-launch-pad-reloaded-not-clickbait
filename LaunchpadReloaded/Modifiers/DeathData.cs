@@ -4,20 +4,13 @@ using System.Collections.Generic;
 
 namespace LaunchpadReloaded.Modifiers;
 
-public class DeathData : BaseModifier
+public class DeathData(DateTime deathTime, PlayerControl killer, IEnumerable<PlayerControl> suspects)
+    : BaseModifier
 {
     public override string ModifierName => "DeathData";
-
     public override bool HideOnUi => true;
 
-    public DateTime DeathTime { get; }
-    public PlayerControl Killer { get; }
-    public IEnumerable<PlayerControl> Suspects { get; }
-
-    public DeathData(DateTime deathTime, PlayerControl killer, IEnumerable<PlayerControl> suspects)
-    {
-        DeathTime = deathTime;
-        Killer = killer;
-        Suspects = suspects;
-    }
+    public DateTime DeathTime { get; } = deathTime;
+    public PlayerControl Killer { get; } = killer;
+    public IEnumerable<PlayerControl> Suspects { get; } = suspects;
 }

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using MiraAPI.Modifiers;
+using MiraAPI.Utilities;
 using UnityEngine;
 
 namespace LaunchpadReloaded.Utilities;
@@ -14,8 +15,8 @@ public static class HackerUtilities
     public static readonly Dictionary<ShipStatus.MapType, Vector3[]> MapNodePositions = new()
     {
         [ShipStatus.MapType.Ship] = [
-            new Vector3(-3.9285f, 5.6983f, 0.0057f),
-            new Vector3(12.1729f, -6.5887f, -0.0066f),
+            new(-3.9285f, 5.6983f, 0.0057f),
+            new(12.1729f, -6.5887f, -0.0066f),
             new Vector3(-19.7123f, -6.8006f, -0.0068f),
             new Vector3(-12.3633f, -14.6075f, -0.0146f) ],
         [ShipStatus.MapType.Pb] = [
@@ -40,30 +41,20 @@ public static class HackerUtilities
     };
 
     public static readonly Vector3[] AirshipPositions = [
-        new Vector3(-5.0792f, 10.9539f, 0.011f),
-        new Vector3(16.856f, 14.7769f, 0.0148f),
-        new Vector3(37.3283f, -3.7612f, -0.0038f),
-        new Vector3(19.8862f, -3.9247f, -0.0039f),
-        new Vector3(-13.1688f, -14.4867f, -0.0145f),
-        new Vector3(-14.2747f, -4.8171f, -0.0048f),
-        new Vector3(1.4743f, -2.5041f, -0.0025f),
+        new(-5.0792f, 10.9539f, 0.011f),
+        new(16.856f, 14.7769f, 0.0148f),
+        new(37.3283f, -3.7612f, -0.0038f),
+        new(19.8862f, -3.9247f, -0.0039f),
+        new(-13.1688f, -14.4867f, -0.0145f),
+        new(-14.2747f, -4.8171f, -0.0048f),
+        new(1.4743f, -2.5041f, -0.0025f),
     ];
 
-    public static readonly Func<PlayerControl?, bool> PlayerHacked = player => player?.GetModifier<HackedModifier>() is { DeActivating: false };
-
-    public static int CountHackedPlayers()
-    {
-        return PlayerControl.AllPlayerControls.ToArray().Count(PlayerHacked);
-    }
+    private static readonly Func<PlayerControl?, bool> PlayerHacked = player => player?.GetModifier<HackedModifier>() is { DeActivating: false };
 
     public static bool AnyPlayerHacked()
     {
         return PlayerControl.AllPlayerControls.ToArray().Any(PlayerHacked);
-    }
-
-    public static HackNodeComponent? GetClosestNode(Vector2 position)
-    {
-        return Helpers.FindClosestObject(HackNodeComponent.AllNodes, position);
     }
 
     public static bool IsHacked(this NetworkedPlayerInfo playerInfo)
@@ -73,34 +64,24 @@ public static class HackerUtilities
 
     public static void ForceEndHack()
     {
-        if (AmongUsClient.Instance.AmHost)
+        if (!PlayerControl.LocalPlayer.IsHost()) return;
+        foreach (var player in PlayerControl.AllPlayerControls.ToArray().Where(plr => plr.HasModifier<HackedModifier>()))
         {
-            foreach (var player in PlayerControl.AllPlayerControls.ToArray().Where(plr => plr.HasModifier<HackedModifier>()))
-            {
-                player.RpcRemoveModifier<HackedModifier>();
-            }
+            player.RpcRemoveModifier<HackedModifier>();
         }
     }
 
-    public static bool UsableWhenHacked(this IUsable? usable)
+    public static bool IsSabotageConsole(this IUsable? usable)
     {
-        // allow sabotage related consoles
         if (usable?.TryCast<Console>() is { } console)
         {
             return console.FindTask(PlayerControl.LocalPlayer).TryCast<SabotageTask>();
         }
 
-        // disable emergency button
-        if (usable?.TryCast<SystemConsole>() is { } systemConsole)
-        {
-            return !systemConsole.MinigamePrefab.TryCast<EmergencyMinigame>();
-        }
-
-        // disable all other consoles
-        return !usable?.TryCast<Console>();
+        return false;
     }
 
-    public static HackNodeComponent CreateNode(this ShipStatus shipStatus, int id, Transform parent, Vector3 position)
+    public static void CreateNode(this ShipStatus shipStatus, int id, Transform parent, Vector3 position)
     {
         var node = new GameObject("Node");
         node.transform.SetParent(parent, false);
@@ -122,6 +103,5 @@ public static class HackerUtilities
         nodeComponent.id = id;
 
         node.SetActive(true);
-        return nodeComponent;
     }
 }

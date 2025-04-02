@@ -22,7 +22,7 @@ namespace LaunchpadReloaded;
 [ReactorModFlags(ModFlags.RequireOnAllClients)]
 public partial class LaunchpadReloadedPlugin : BasePlugin, IMiraPlugin
 {
-    public Harmony Harmony { get; } = new(Id);
+    private Harmony Harmony { get; } = new(Id);
     public ConfigFile GetConfigFile()
     {
         return Config;

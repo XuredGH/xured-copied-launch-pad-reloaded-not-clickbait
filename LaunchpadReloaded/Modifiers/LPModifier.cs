@@ -15,20 +15,13 @@ public abstract class LPModifier : GameModifier
 
     public override bool IsModifierValidOn(RoleBehaviour role)
     {
-        if (OptionGroupSingleton<GameModifierOptions>.Instance.ModifierLimit == 0)
-        {
-            return true;
-        }
-
+        if (OptionGroupSingleton<GameModifierOptions>.Instance.ModifierLimit == 0) return true;
         return role.Player.GetModifierComponent().ActiveModifiers.OfType<LPModifier>().Count() < OptionGroupSingleton<GameModifierOptions>.Instance.ModifierLimit;
     }
 
     public override void OnDeath(DeathReason reason)
     {
-        if (RemoveOnDeath)
-        {
-            ModifierComponent!.RemoveModifier(this);
-        }
+        if (!RemoveOnDeath) return;
+        ModifierComponent!.RemoveModifier(this);
     }
-
 }

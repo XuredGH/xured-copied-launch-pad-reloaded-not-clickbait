@@ -38,7 +38,7 @@ public class HackedModifier : TimedModifier
 
         IsImpostor = Player!.Data.Role.IsImpostor;
 
-        var randomString = Helpers.RandomString(Helpers.Random.Next(4, 6),
+        var randomString = MiraAPI.Utilities.Helpers.RandomString(Helpers.Random.Next(4, 6),
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#!?$(???#@)$@@@@0000");
         Player!.cosmetics.SetName(randomString);
         Player.cosmetics.SetNameMask(true);
@@ -53,7 +53,7 @@ public class HackedModifier : TimedModifier
             return;
         }
 
-        _closestNode = Helpers.FindClosestObject(HackNodeComponent.AllNodes, PlayerControl.LocalPlayer.transform.position);
+        _closestNode = MiraAPI.Utilities.Helpers.FindClosestObjectOfType(HackNodeComponent.AllNodes, PlayerControl.LocalPlayer.transform.position);
 
         if (_closestNode != null && _lastCloseNode != _closestNode)
         {

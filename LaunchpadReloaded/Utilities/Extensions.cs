@@ -18,8 +18,6 @@ namespace LaunchpadReloaded.Utilities;
 
 public static class Extensions
 {
-    private static readonly ContactFilter2D Filter = ContactFilter2D.CreateLegacyFilter(Constants.NotShipMask, float.MinValue, float.MaxValue);
-
     public static PlayerTagManager? GetTagManager(this PlayerControl player)
     {
         return player.GetComponent<PlayerTagManager>();
@@ -28,14 +26,6 @@ public static class Extensions
     public static DeadBodyCacheComponent GetCacheComponent(this DeadBody body)
     {
         return body.gameObject.GetComponent<DeadBodyCacheComponent>();
-    }
-
-    public static void ClearModifiers(this ModifierComponent comp)
-    {
-        foreach (var mod in comp.ActiveModifiers)
-        {
-            comp.RemoveModifier(mod);
-        }
     }
 
     public static void SetBodyType(this PlayerControl player, int bodyType)
@@ -90,67 +80,6 @@ public static class Extensions
         data.playerId = playerId;
     }
 
-    public static KeyValuePair<byte, int> MaxPair(this Dictionary<byte, int> self, out bool tie)
-    {
-        tie = true;
-        var result = new KeyValuePair<byte, int>(byte.MaxValue, int.MinValue);
-        foreach (var keyValuePair in self)
-        {
-            if (keyValuePair.Value > result.Value)
-            {
-                result = keyValuePair;
-                tie = false;
-            }
-            else if (keyValuePair.Value == result.Value)
-            {
-                tie = true;
-            }
-        }
-        return result;
-    }
-
-    public static KeyValuePair<byte, float> MaxPair(this Dictionary<byte, float> self, out bool tie)
-    {
-        tie = true;
-        var result = new KeyValuePair<byte, float>(byte.MaxValue, int.MinValue);
-        foreach (var keyValuePair in self)
-        {
-            if (keyValuePair.Value > result.Value)
-            {
-                result = keyValuePair;
-                tie = false;
-            }
-            else if (Math.Abs(keyValuePair.Value - result.Value) < .05)
-            {
-                tie = true;
-            }
-        }
-        return result;
-    }
-
-
-    // Source: https://stackoverflow.com/a/78897981
-    public static int GetColumnCount(this GridLayoutGroup grid)
-    {
-        if (grid.transform.childCount <= 1)
-        {
-            return grid.transform.childCount;
-        }
-
-        var maxWidth = grid.GetComponent<RectTransform>().rect.width;
-        var cellWidth = grid.cellSize.x;
-        var cellSpacing = grid.spacing.x;
-        for (var i = 2; i < grid.transform.childCount; ++i)
-        {
-            if (i * cellWidth + (i - 1) * cellSpacing > maxWidth)
-            {
-                return i - 1;
-            }
-        }
-
-        return grid.transform.childCount;
-    }
-
     public static bool ButtonTimerEnabled(this PlayerControl playerControl)
     {
         return (playerControl.moveable || playerControl.petting) && playerControl is { inVent: false, shapeshifting: false } && (!DestroyableSingleton<HudManager>.InstanceExists || !DestroyableSingleton<HudManager>.Instance.IsIntroDisplayed) && !MeetingHud.Instance && !PlayerCustomizationMenu.Instance && !ExileController.Instance && !IntroCutscene.Instance;
@@ -190,10 +119,5 @@ public static class Extensions
     {
         body.GetComponent<DeadBodyCacheComponent>().SetVisibility(true);
         body.Reported = reported;
-    }
-
-    public static bool IsOverride(this MethodInfo methodInfo)
-    {
-        return methodInfo.GetBaseDefinition() != methodInfo;
     }
 }

@@ -24,7 +24,7 @@ public class FootstepsModifier : BaseModifier
     public override void OnActivate()
     {
         _currentSteps = new Dictionary<GameObject, SpriteRenderer>();
-        _lastPos = Player!.transform.position;
+        _lastPos = Player.transform.position;
     }
 
     public override void OnDeactivate()
@@ -35,13 +35,13 @@ public class FootstepsModifier : BaseModifier
         }
     }
 
-    public static IEnumerator FootstepFadeout(GameObject obj, SpriteRenderer rend)
+    private static IEnumerator FootstepFadeout(GameObject obj, SpriteRenderer rend)
     {
         yield return Helpers.FadeOut(rend, 0.0001f, 0.05f);
         obj.DestroyImmediate();
     }
 
-    public static IEnumerator FootstepDisappear(GameObject obj, SpriteRenderer rend)
+    private static IEnumerator FootstepDisappear(GameObject obj, SpriteRenderer rend)
     {
         yield return new WaitForSeconds(OptionGroupSingleton<DetectiveOptions>.Instance.FootstepsDuration);
         yield return FootstepFadeout(obj, rend);
@@ -51,7 +51,7 @@ public class FootstepsModifier : BaseModifier
 
     public override void FixedUpdate()
     {
-        if (Vector3.Distance(_lastPos, Player!.transform.position) < 1)
+        if (Vector3.Distance(_lastPos, Player.transform.position) < 1)
         {
             return;
         }

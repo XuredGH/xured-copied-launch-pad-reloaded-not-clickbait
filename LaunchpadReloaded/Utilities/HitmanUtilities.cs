@@ -12,12 +12,12 @@ using UnityEngine;
 namespace LaunchpadReloaded.Utilities;
 public static class HitmanUtilities
 {
-    public static float LastMarkTime;
-    public static float OgShakeAmount;
-    public static float OgShakePeriod;
-    public static float OgSpeed;
+    private static float LastMarkTime;
+    private static float OgShakeAmount;
+    private static float OgShakePeriod;
+    private static float OgSpeed;
 
-    public static bool OgShake;
+    private static bool OgShake;
     public static IEnumerator? ClockTick;
     public static IEnumerator? OverlayTick = null;
     public static List<PlayerControl>? MarkedPlayers;
@@ -25,7 +25,7 @@ public static class HitmanUtilities
     public static void Initialize()
     {
         ClockTick = null;
-        MarkedPlayers = new();
+        MarkedPlayers = [];
 
         var followerCam = HudManager.Instance.PlayerCam;
         OgShakeAmount = followerCam.shakeAmount;
@@ -52,26 +52,24 @@ public static class HitmanUtilities
 
     public static void PlayerMarkCheck()
     {
-        if (Input.GetMouseButtonDown(0) && Time.unscaledTime - LastMarkTime >= 1)
+        if (!Input.GetMouseButtonDown(0) || !(Time.unscaledTime - LastMarkTime >= 1)) return;
+        var mousePos = Camera.main!.ScreenToWorldPoint(Input.mousePosition);
+        var plr = Helpers.GetPlayerToPoint(new Vector3(mousePos.x, mousePos.y, 0));
+
+        if (MarkedPlayers == null || plr == null)
         {
-            var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            var plr = Helpers.GetPlayerToPoint(new Vector3(mousePos.x, mousePos.y, 0));
-
-            if (MarkedPlayers == null || plr == null)
-            {
-                return;
-            }
-
-            if (MarkedPlayers.Contains(plr) || plr == PlayerControl.LocalPlayer)
-            {
-                return;
-            }
-
-            CreatePlayerMark(plr);
+            return;
         }
+
+        if (MarkedPlayers.Contains(plr) || plr == PlayerControl.LocalPlayer)
+        {
+            return;
+        }
+
+        CreatePlayerMark(plr);
     }
 
-    public static void CreatePlayerMark(PlayerControl plr)
+    private static void CreatePlayerMark(PlayerControl plr)
     {
         LastMarkTime = Time.unscaledTime;
         MarkedPlayers?.Add(plr);
@@ -94,14 +92,12 @@ public static class HitmanUtilities
         {
             return;
         }
-        
+
         foreach (var plr in MarkedPlayers)
         {
             var mark = plr.transform.Find("Mark");
-            if (mark != null)
-            {
-                mark.gameObject.Destroy();
-            }
+            if (!mark) continue;
+            mark.gameObject.Destroy();
         }
 
         MarkedPlayers.Clear();
@@ -117,15 +113,13 @@ public static class HitmanUtilities
             var player = MarkedPlayers[0];
             MarkedPlayers.RemoveAt(0);
 
-            if (player != null)
+            if (player)
             {
-                PlayerControl.LocalPlayer.RpcCustomMurder(player, resetKillTimer: false, createDeadBody: true, teleportMurderer: false, showKillAnim: true);
+                PlayerControl.LocalPlayer.RpcCustomMurder(player, resetKillTimer: false, createDeadBody: true,
+                    teleportMurderer: false, showKillAnim: true);
 
                 var mark = player.transform.Find("Mark");
-                if (mark != null)
-                {
-                    mark.gameObject.Destroy();
-                }
+                if (mark) mark.gameObject.Destroy();
             }
 
             yield return new WaitForSeconds(0.2f);
@@ -133,9 +127,8 @@ public static class HitmanUtilities
 
         if (origCount > 0)
         {
-            Helpers.AddMessage($"  <size=130%>- (x{origCount})</size>",
-                LaunchpadAssets.DeadlockHonor.LoadAsset(), LaunchpadAssets.DeadlockKillConfirmal.LoadAsset(), Color.red,
-                new Vector3(0f, 1.4f, -2f), out _);
+            MiraAPI.Utilities.Helpers.CreateAndShowNotification($"  <size=130%>- (x{origCount})</size>", Color.red, new Vector3(0f, 1.4f, -2f),
+                 LaunchpadAssets.DeadlockKillConfirmal.LoadAsset(), LaunchpadAssets.DeadlockHonor.LoadAsset());
         }
     }
 

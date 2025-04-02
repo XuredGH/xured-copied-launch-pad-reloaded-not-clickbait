@@ -164,7 +164,7 @@ public static class GenericEvents
     [RegisterEvent(-10)]
     public static void CanUseEvent(PlayerCanUseEvent @event)
     {
-        if (PlayerControl.LocalPlayer == null)
+        if (!PlayerControl.LocalPlayer)
         {
             return;
         }
@@ -189,13 +189,13 @@ public static class GenericEvents
             }
         }
 
-        if (PlayerControl.LocalPlayer.Data.IsHacked() && @event.IsPrimaryConsole)
+        if (PlayerControl.LocalPlayer.Data.IsHacked() && @event.IsPrimaryConsole && !@event.Usable.IsSabotageConsole())
         {
             @event.Cancel();
             return;
         }
 
-        if (HackerUtilities.AnyPlayerHacked() && (@event.Usable.TryCast<SystemConsole>() || @event.Usable.TryCast<MapConsole>()))
+        if (HackerUtilities.AnyPlayerHacked() && !@event.Usable.IsSabotageConsole() && (@event.Usable.TryCast<SystemConsole>() || @event.Usable.TryCast<MapConsole>()))
         {
             @event.Cancel();
         }

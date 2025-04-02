@@ -30,7 +30,7 @@ public class DragBodyModifier : BaseModifier
 
     public override void OnActivate()
     {
-        _prevSpeed = Player!.MyPhysics.Speed;
+        _prevSpeed = Player.MyPhysics.Speed;
         if (Player != null)
         {
             Player.MyPhysics.Speed = OptionGroupSingleton<JanitorOptions>.Instance.DragSpeed;
@@ -39,7 +39,7 @@ public class DragBodyModifier : BaseModifier
 
     public override void OnDeactivate()
     {
-        if (Player == null)
+        if (!Player)
         {
             return;
         }
@@ -54,11 +54,11 @@ public class DragBodyModifier : BaseModifier
             return;
         }
 
-        if (DeadBody == null || Player == null)
+        if (!DeadBody || !Player)
         {
             return;
         }
 
-        DeadBody.transform.position = Vector3.Lerp(DeadBody.transform.position, Player.transform.position, 5f * Time.deltaTime);
+        DeadBody!.transform.position = Vector3.Lerp(DeadBody.transform.position, Player.transform.position, 5f * Time.deltaTime);
     }
 }

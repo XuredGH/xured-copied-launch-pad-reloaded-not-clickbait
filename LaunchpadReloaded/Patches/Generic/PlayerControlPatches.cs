@@ -55,7 +55,7 @@ public static class PlayerControlPatches
                     && __instance.gameObject.TryGetComponent<ModifierStorageComponent>(out var modStorage)
                     && modStorage.Modifiers != null)
                 {
-                    playerModComponent.ClearModifiers();
+                    __instance.ClearModifiers();
 
                     foreach (var mod in modStorage.Modifiers)
                     {
@@ -87,7 +87,7 @@ public static class PlayerControlPatches
 
                 if (playerModifiers != null && targetModifiers != null && playerModComponent != null)
                 {
-                    playerModComponent.ClearModifiers();
+                    __instance.ClearModifiers();
 
                     foreach (var mod in targetModifiers)
                     {
