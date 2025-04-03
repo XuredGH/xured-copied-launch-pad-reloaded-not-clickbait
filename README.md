@@ -18,7 +18,7 @@ You can read about all of the features on the [wiki](https://launchpad.xtracube.
 - ✅ Exciting Gamemodes
 
 ## 🔧 Compatibility
-- ✔️ Supports 2024.10.29, 2024.11.26, and 2025.3.25 (16.0.0) on PC (Android support coming soon™).
+- ✔️ Supports 2025.3.25 (16.0.0) on PC (Android support coming soon™).
 - ❗️ Launchpad is **NOT** a host-only mod. Every player needs to install it to enjoy.
 - 🔒 Launchpad does **NOT** work on normal Among Us servers. We host our own private game servers instead.
 
