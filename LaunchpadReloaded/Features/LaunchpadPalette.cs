@@ -20,6 +20,8 @@ public static class LaunchpadPalette
     public static readonly Color BurrowerColor = new Color32(111, 78, 55, 255);
     public static readonly Color SwapperColor = Palette.Purple;
     public static readonly Color HitmanColor = new Color32(182, 32, 32, 255);
+    public static readonly Color DevourerColor = new Color32(255, 192, 203, 255);
+
 
     // Neutrals
     public static readonly Color JesterColor = new Color32(170, 51, 106, 255);
