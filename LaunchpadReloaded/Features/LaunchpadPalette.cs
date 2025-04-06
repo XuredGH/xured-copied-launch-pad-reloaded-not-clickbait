@@ -24,4 +24,5 @@ public static class LaunchpadPalette
     // Neutrals
     public static readonly Color JesterColor = new Color32(170, 51, 106, 255);
     public static readonly Color ReaperColor = new Color32(81, 131, 142, 255);
+    public static readonly Color ChickenColor = new Color32(25, 25, 112, 255);
 }
