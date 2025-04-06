@@ -33,7 +33,7 @@ public partial class LaunchpadReloadedPlugin : BasePlugin, IMiraPlugin
     {
         Harmony.PatchAll();
 
-        ReactorCredits.Register("Xuredpad", Version.Truncate(2, "") ?? Version, true, ReactorCredits.AlwaysShow);
+        ReactorCredits.Register("Xuredpad", Version.Truncate(6, "") ?? Version, true, ReactorCredits.AlwaysShow);
 
         LaunchpadSettings.Initialize();
 
