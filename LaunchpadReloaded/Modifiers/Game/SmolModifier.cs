@@ -9,7 +9,7 @@ public sealed class SmolModifier : LPModifier
     public override string ModifierName => "Smol";
     public override int GetAssignmentChance() => (int)OptionGroupSingleton<GameModifierOptions>.Instance.SmolChance;
     public override int GetAmountPerGame() => 1;
-    public override bool IsModifierValidOn(RoleBehaviour role) => base.IsModifierValidOn(role) && !role.Player.HasModifier<GiantModifier>();
+    public override bool IsModifierValidOn(RoleBehaviour role) => base.IsModifierValidOn(role) && !role.Player.HasModifier<HumongousModifier>() && !role.Player.HasModifier<BabyModifier>() && !role.Player.HasModifier<GiantModifier>();
 
     public override void OnActivate()
     {
