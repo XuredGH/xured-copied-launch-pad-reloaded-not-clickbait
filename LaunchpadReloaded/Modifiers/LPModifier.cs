@@ -15,8 +15,7 @@ public abstract class LPModifier : GameModifier
 
     public override bool IsModifierValidOn(RoleBehaviour role)
     {
-        if (OptionGroupSingleton<GameModifierOptions>.Instance.ModifierLimit == 0) return true;
-        return role.Player.GetModifierComponent().ActiveModifiers.OfType<LPModifier>().Count() < OptionGroupSingleton<GameModifierOptions>.Instance.ModifierLimit;
+        return role.Player.GetModifierComponent().ActiveModifiers.OfType<LPModifier>().Count() < 1;
     }
 
     public override void OnDeath(DeathReason reason)

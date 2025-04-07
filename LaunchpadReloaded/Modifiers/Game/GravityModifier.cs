@@ -25,7 +25,7 @@ public sealed class GravityModifier : LPModifier
         detectionCircle.transform.localPosition = new Vector3(0, 0, 0);
 
         var collider = detectionCircle.AddComponent<CircleCollider2D>();
-        collider.radius = OptionGroupSingleton<GameModifierOptions>.Instance.GravityFieldRadius.Value;
+        collider.radius = 2f; //fix OptionGroupSingleton<GameModifierOptions>.Instance.GravityFieldRadius.Value;
         collider.isTrigger = true;
 
         var gravityComp = detectionCircle.AddComponent<GravityComponent>();
