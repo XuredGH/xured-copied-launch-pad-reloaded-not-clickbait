@@ -11,15 +11,24 @@ public static class MedscanPatch
     [HarmonyPostfix]
     public static void OverrideSizePatch(MedScanMinigame __instance)
     {
+        if (PlayerControl.LocalPlayer.HasModifier<HumongousModifier>())
+        {
+            __instance.completeString = __instance.completeString.Replace("3' 6\"", "7' 9\"").Replace("92lb", "734lb");
+        }
+
         if (PlayerControl.LocalPlayer.HasModifier<GiantModifier>())
         {
             __instance.completeString = __instance.completeString.Replace("3' 6\"", "5' 8\"").Replace("92lb", "184lb");
         }
 
-
         if (PlayerControl.LocalPlayer.HasModifier<SmolModifier>())
         {
             __instance.completeString = __instance.completeString.Replace("3' 6\"", "1' 8\"").Replace("92lb", "46lb");
+        }
+
+        if (PlayerControl.LocalPlayer.HasModifier<BabyModifier>())
+        {
+            __instance.completeString = __instance.completeString.Replace("3' 6\"", "0' 1\"").Replace("92lb", "1lb");
         }
     }
 }
