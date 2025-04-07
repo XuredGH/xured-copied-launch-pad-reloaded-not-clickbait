@@ -16,6 +16,8 @@ public static class ChatPatches
     [HarmonyPatch(nameof(ChatController.Update))]
     public static void UpdatePatch(ChatController __instance)
     {
+        if (!PlayerControl.LocalPlayer || !PlayerControl.LocalPlayer.GetModifierComponent()) return;
+        
         if (PlayerControl.LocalPlayer?.HasModifier<RevivedModifier>() == true)
         {
             __instance.sendRateMessageText.gameObject.SetActive(true);

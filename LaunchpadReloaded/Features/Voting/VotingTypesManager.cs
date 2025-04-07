@@ -70,7 +70,7 @@ public static class VotingTypesManager
         skipText.GetComponentInChildren<TextTranslatorTMP>().Destroy();
 
         chances.TryGetValue((byte)SpecialVotes.Skip, out var skips);
-        skipText.GetComponentInChildren<TextMeshPro>().text += "\n<size=110%>" + Math.Round(skips, 0) + "%</size>";
+        skipText.GetComponentInChildren<TextMeshPro>().text = "Skipped\nVoting\n<size=110%>" + Math.Round(skips, 0) + "%</size>";
 
         foreach (var voteArea in MeetingHud.Instance.playerStates)
         {
