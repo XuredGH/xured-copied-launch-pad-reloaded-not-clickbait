@@ -12,7 +12,5 @@ using System;
  
      public override Func<bool> GroupVisible =>
          () => OptionGroupSingleton<GameModifierOptions>.Instance.GravityChance > 0;
- 
-     [ModdedNumberOption("Gravity Field Radius", 0.5f, 10f, 0.5f, suffixType: MiraNumberSuffixes.None)]
-     public float GravityFieldRadius { get; set; } = 2f;
+
  }
