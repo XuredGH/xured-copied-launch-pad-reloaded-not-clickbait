@@ -20,6 +20,7 @@ using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Modifiers;
 using MiraAPI.Roles;
+using Rewired;
 using Type = Il2CppSystem.Type;
 
 namespace LaunchpadReloaded;
@@ -114,8 +115,7 @@ public static class GenericEvents
             NotepadHud.Instance.UpdateAspectPos();
         }
 
-        if (@event.ExileController.initData.networkedPlayer != null && @event.ExileController.initData.networkedPlayer.Role != null
-                                                        && @event.ExileController.initData.networkedPlayer.Role is JesterRole)
+        if (@event.ExileController.initData.networkedPlayer != null && @event.ExileController.initData.networkedPlayer.Role != null && @event.ExileController.initData.networkedPlayer.Role is JesterRole)
         {
             CustomGameOver.Trigger<JesterGameOver>([@event.ExileController.initData.networkedPlayer]);
         }

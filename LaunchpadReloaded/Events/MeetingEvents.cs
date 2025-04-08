@@ -33,8 +33,7 @@ public static class MeetingEvents
          if (!voteData || voteData.VotesRemaining == 0) return;
          
          var hasVotedFor = voteData.VotedFor((byte)@event.TargetId);
-         var mayorOverride = PlayerControl.LocalPlayer.HasModifier<MayorModifier>() &&
-                             OptionGroupSingleton<MayorOptions>.Instance.AllowVotingTwice;
+         var mayorOverride = PlayerControl.LocalPlayer.HasModifier<MayorModifier>() && OptionGroupSingleton<MayorOptions>.Instance.AllowVotingTwice;
          var voteMultiple = mayorOverride || OptionGroupSingleton<VotingOptions>.Instance.AllowVotingForSamePerson;
  
          if (voteMultiple && hasVotedFor)
@@ -54,8 +53,7 @@ public static class MeetingEvents
         }
         
 
-         var mayorOverride = @event.Player.HasModifier<MayorModifier>() &&
-                             OptionGroupSingleton<MayorOptions>.Instance.AllowVotingTwice;
+         var mayorOverride = @event.Player.HasModifier<MayorModifier>() && OptionGroupSingleton<MayorOptions>.Instance.AllowVotingTwice;
          var voteMultiple = mayorOverride || OptionGroupSingleton<VotingOptions>.Instance.AllowVotingForSamePerson;
  
          if (@event.VoteData.VotesRemaining > 0 && voteMultiple && @event.VoteData.VotedFor(@event.TargetId))

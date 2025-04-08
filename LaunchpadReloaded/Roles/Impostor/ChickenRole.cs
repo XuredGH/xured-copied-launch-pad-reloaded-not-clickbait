@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace LaunchpadReloaded.Roles.Neutral;
 
-public class ChickenRole(System.IntPtr ptr) : RoleBehaviour(ptr), IOutcastRole
+public class ChickenRole(System.IntPtr ptr) : ImpostorRole(ptr), IOutcastRole
 {
     public string RoleName => "Chicken";
     public string RoleDescription => "Peck everyone to win";
@@ -22,11 +22,11 @@ public class ChickenRole(System.IntPtr ptr) : RoleBehaviour(ptr), IOutcastRole
     public CustomRoleConfiguration Configuration => new(this)
     {
         TasksCountForProgress = false,
+        UseVanillaKillButton = true,
         CanUseVent = OptionGroupSingleton<ChickenOptions>.Instance.CanUseVents,
         GhostRole = (RoleTypes)RoleId.Get<OutcastGhostRole>(),
         Icon = LaunchpadAssets.JesterIcon,
         OptionsScreenshot = LaunchpadAssets.JesterBanner,
-        UseVanillaKillButton = true,
     };
 
     public override void AppendTaskHint(StringBuilder taskStringBuilder)
@@ -36,7 +36,7 @@ public class ChickenRole(System.IntPtr ptr) : RoleBehaviour(ptr), IOutcastRole
 
     public override bool DidWin(GameOverReason reason)
     {
-        return reason == CustomGameOver.GameOverReason<JesterGameOver>();
+        return reason == CustomGameOver.GameOverReason<ChickenGameOver>();
     }
     
     public override bool CanUse(IUsable usable)
