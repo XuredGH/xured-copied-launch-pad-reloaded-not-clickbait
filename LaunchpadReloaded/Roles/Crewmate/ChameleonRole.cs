@@ -64,4 +64,24 @@ public class ChameleonRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
             }
         }
     }
+
+    public override void OnDeath(DeathReason reason)
+    {
+        Deinitialize(Player);
+    }
+
+    public override void Deinitialize(PlayerControl playerControl)
+    {
+        if (!playerControl.AmOwner)
+        {
+            return;
+        }
+
+        GameObject pet = playerControl.cosmetics.currentPet.gameObject;
+        SpriteRenderer petsprite = pet.GetComponent<SpriteRenderer>();
+        Color originalColor = petsprite.color;
+        petsprite.color = new Color(originalColor.r, originalColor.g, originalColor.b, 1f);
+
+    }
+
 }

@@ -20,6 +20,9 @@ public class GameModifierOptions : AbstractOptionGroup
     [ModdedNumberOption("Gravity Field Chance", 0f, 100f, 10f, suffixType: MiraNumberSuffixes.Percent)]
     public float GravityChance { get; set; } = 0f;
 
+    [ModdedNumberOption("Flash Chance", 0f, 100f, 10f, suffixType: MiraNumberSuffixes.Percent)]
+    public float FlashChance { get; set; } = 0f;
+
     [ModdedNumberOption("Gravity Field Radius", 0.5f, 10f, 0.5f, suffixType: MiraNumberSuffixes.None)]
      public float GravityFieldRadius { get; set; } = 2f;
 }
