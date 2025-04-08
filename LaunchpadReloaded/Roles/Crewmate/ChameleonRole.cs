@@ -9,7 +9,7 @@ namespace LaunchpadReloaded.Roles.Crewmate;
 public class ChameleonRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
 {
     public string RoleName => "Chameleon";
-    public string RoleDescription => "Become invisible when not moving.";
+    public string RoleDescription => "Become invisible when not moving.\nYou also have a pet chameleon.";
     public string RoleLongDescription => RoleDescription;
     public Color RoleColor => LaunchpadPalette.ChameleonColor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Crewmate;
@@ -29,7 +29,15 @@ public class ChameleonRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
             rend.color = Color.Lerp(rend.color, new Color(1, 1, 1, 1), Time.deltaTime * 4f);
 
             GameObject pet = playerControl.cosmetics.currentPet.gameObject;
-            pet.SetActive(true);
+            SpriteRenderer petsprite = pet.GetComponent<SpriteRenderer>();
+
+            Color originalColor = petsprite.color; // This is the pet's real color (including RGB)
+            float targetAlpha = 1f; // Set this to your desired opacity, 1f = fully visible
+            float fadeSpeed = 4f;
+
+            // Lerp only the alpha, keep the RGB the same
+            float newAlpha = Mathf.Lerp(originalColor.a, targetAlpha, Time.deltaTime * fadeSpeed);
+            petsprite.color = new Color(originalColor.r, originalColor.g, originalColor.b, newAlpha);
 
             foreach (var cosmetic in playerControl.cosmetics.transform.GetComponentsInChildren<SpriteRenderer>())
             {
@@ -44,7 +52,17 @@ public class ChameleonRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
             rend.color = Color.Lerp(rend.color, new Color(1, 1, 1, playerControl.AmOwner ? 0.3f : 0), Time.deltaTime * 4f);
 
             GameObject pet = playerControl.cosmetics.currentPet.gameObject;
-            pet.SetActive(false);
+            SpriteRenderer petsprite = pet.GetComponent<SpriteRenderer>();
+
+            Color originalColor = petsprite.color; // This is the pet's real color (including RGB)
+            float targetAlpha = 0.3f; // Set this to your desired opacity, 1f = fully visible
+            float fadeSpeed = 4f;
+
+            // Lerp only the alpha, keep the RGB the same
+            float newAlpha = Mathf.Lerp(originalColor.a, targetAlpha, Time.deltaTime * fadeSpeed);
+            petsprite.color = new Color(originalColor.r, originalColor.g, originalColor.b, newAlpha);
+            
+
 
             foreach (var cosmetic in playerControl.cosmetics.transform.GetComponentsInChildren<SpriteRenderer>())
             {
