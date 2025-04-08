@@ -9,7 +9,7 @@ namespace LaunchpadReloaded.Roles.Crewmate;
 public class ChameleonRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
 {
     public string RoleName => "Chameleon";
-    public string RoleDescription => "Become invisible when not moving.\nYou also have a pet chameleon.";
+    public string RoleDescription => "Become invisible when not moving.";
     public string RoleLongDescription => RoleDescription;
     public Color RoleColor => LaunchpadPalette.ChameleonColor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Crewmate;
@@ -30,12 +30,9 @@ public class ChameleonRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
 
             GameObject pet = playerControl.cosmetics.currentPet.gameObject;
             SpriteRenderer petsprite = pet.GetComponent<SpriteRenderer>();
-
-            Color originalColor = petsprite.color; // This is the pet's real color (including RGB)
-            float targetAlpha = 1f; // Set this to your desired opacity, 1f = fully visible
+            Color originalColor = petsprite.color;
+            float targetAlpha = 1f;
             float fadeSpeed = 4f;
-
-            // Lerp only the alpha, keep the RGB the same
             float newAlpha = Mathf.Lerp(originalColor.a, targetAlpha, Time.deltaTime * fadeSpeed);
             petsprite.color = new Color(originalColor.r, originalColor.g, originalColor.b, newAlpha);
 
@@ -53,12 +50,9 @@ public class ChameleonRole(IntPtr ptr) : CrewmateRole(ptr), ICustomRole
 
             GameObject pet = playerControl.cosmetics.currentPet.gameObject;
             SpriteRenderer petsprite = pet.GetComponent<SpriteRenderer>();
-
-            Color originalColor = petsprite.color; // This is the pet's real color (including RGB)
-            float targetAlpha = 0.3f; // Set this to your desired opacity, 1f = fully visible
+            Color originalColor = petsprite.color;
+            float targetAlpha = 0.3f;
             float fadeSpeed = 4f;
-
-            // Lerp only the alpha, keep the RGB the same
             float newAlpha = Mathf.Lerp(originalColor.a, targetAlpha, Time.deltaTime * fadeSpeed);
             petsprite.color = new Color(originalColor.r, originalColor.g, originalColor.b, newAlpha);
             
