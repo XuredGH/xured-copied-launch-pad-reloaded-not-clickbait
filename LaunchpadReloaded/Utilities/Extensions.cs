@@ -13,6 +13,16 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
+using System.Collections.Generic;
+using System.Linq;
+using Hazel;
+using Reactor.Networking.Attributes;
+using UnityEngine;
+using Reactor.Utilities;
+using AmongUs.GameOptions;
+using MiraAPI.Networking;
+using MiraAPI.Roles;
+using System.Collections;
 
 namespace LaunchpadReloaded.Utilities;
 
@@ -119,5 +129,55 @@ public static class Extensions
     {
         body.GetComponent<DeadBodyCacheComponent>().SetVisibility(true);
         body.Reported = reported;
+    }
+
+    // retrieves playercontrol instance by id
+    // https://github.com/eDonnes124/Town-Of-Us-R/blob/master/source/Patches/Utils.cs#L219
+
+    public static PlayerControl PlayerById(byte id)
+    {
+         foreach (var player in PlayerControl.AllPlayerControls)
+            if (player.PlayerId == id)
+                return player;
+        return null;
+    }
+
+    // maps a victim to its killer
+    // https://github.com/CallOfCreator/NewMod/blob/main/NewMod/Utilities/Utils.cs
+
+    public static Dictionary<PlayerControl, PlayerControl> PlayerKiller = new Dictionary<PlayerControl, PlayerControl>();
+
+    public static void RecordOnKill(PlayerControl killer, PlayerControl victim)
+    {
+        if (PlayerKiller.ContainsKey(killer))
+        {
+            PlayerKiller[victim] = killer;
+        }
+        else
+        {
+            PlayerKiller.Add(victim, killer);
+        }
+    }
+
+    // https://github.com/CallOfCreator/NewMod/blob/main/NewMod/Utilities/Utils.cs
+    // gets... a persons killer
+
+    public static PlayerControl GetKiller(PlayerControl victim)
+    {
+        return PlayerKiller.TryGetValue(victim, out var killer) ? killer : null;
+    }
+
+    // https://github.com/CallOfCreator/NewMod/blob/main/NewMod/Utilities/Utils.cs
+    // random player
+
+    public static PlayerControl GetRandomPlayer()
+    {
+        var players = PlayerControl.AllPlayerControls.ToArray().Where(p => !p.Data.IsDead && !p.Data.Disconnected).ToList();
+
+        if (players.Count > 0)
+        {
+            return players[UnityEngine.Random.RandomRange(0, players.Count)];
+        }
+        return null;
     }
 }

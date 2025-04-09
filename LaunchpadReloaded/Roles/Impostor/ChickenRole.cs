@@ -18,6 +18,7 @@ public class ChickenRole(System.IntPtr ptr) : ImpostorRole(ptr), IOutcastRole
     public string RoleLongDescription => "";
     public Color RoleColor => LaunchpadPalette.ChickenColor;
     public override bool IsDead => false;
+    public ModdedRoleTeams Team => ModdedRoleTeams.Impostor;
 
     public CustomRoleConfiguration Configuration => new(this)
     {
@@ -32,11 +33,6 @@ public class ChickenRole(System.IntPtr ptr) : ImpostorRole(ptr), IOutcastRole
     public override void AppendTaskHint(StringBuilder taskStringBuilder)
     {
         // remove default task hint
-    }
-
-    public override bool DidWin(GameOverReason reason)
-    {
-        return reason == CustomGameOver.GameOverReason<ChickenGameOver>();
     }
     
     public override bool CanUse(IUsable usable)

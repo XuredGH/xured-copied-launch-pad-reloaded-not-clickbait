@@ -13,11 +13,12 @@ using UnityEngine;
 
 namespace LaunchpadReloaded.Buttons.Impostor;
 
-public class EatButton : BaseLaunchpadButton<PlayerControl>
+public class SelfKillButton : BaseLaunchpadButton<PlayerControl>
 {
-    public override string Name => "Devour";
-    public override float Cooldown => OptionGroupSingleton<DevourerOptions>.Instance.EatCooldown;
-    public override float EffectDuration => OptionGroupSingleton<DevourerOptions>.Instance.DevouredTime;
+    public override string Name => "'Kill'";
+    public override float Cooldown => OptionGroupSingleton<SurgeonOptions>.Instance.InjectCooldown;
+    public override float EffectDuration => OptionGroupSingleton<SurgeonOptions>.Instance.PoisonDelay;
+    public override int MaxUses => (int)OptionGroupSingleton<SurgeonOptions>.Instance.InjectUses;
     public override LoadableAsset<Sprite> Sprite => LaunchpadAssets.InjectButton;
     public override bool TimerAffectedByPlayer => true;
     public override bool AffectedByHack => false;
@@ -31,12 +32,12 @@ public class EatButton : BaseLaunchpadButton<PlayerControl>
 
     public override bool IsTargetValid(PlayerControl? target)
     {
-        return target != null && !target.HasModifier<EatenModifier>();
+        return target != null;
     }
 
     public override void SetOutline(bool active)
     {
-        Target?.cosmetics.SetOutline(active, new Nullable<Color>(LaunchpadPalette.DevourerColor));
+        Target?.cosmetics.SetOutline(active, new Nullable<Color>(Color.red));
     }
 
     public override bool CanUse()
@@ -46,6 +47,6 @@ public class EatButton : BaseLaunchpadButton<PlayerControl>
 
     protected override void OnClick()
     {
-        Target?.RpcAddModifier<EatenModifier>();
+        PlayerControl.LocalPlayer.RpcCustomMurder(PlayerControl.LocalPlayer, createDeadBody: true, teleportMurderer: true, playKillSound: true, resetKillTimer: true, showKillAnim: true);
     }
 }

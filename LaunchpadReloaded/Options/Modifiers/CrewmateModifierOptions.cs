@@ -20,4 +20,7 @@ using MiraAPI.GameOptions;
  
      [ModdedNumberOption("Vendetta Chance", 0f, 100f, 10f, suffixType: MiraNumberSuffixes.Percent)]
      public float VendettaChance { get; set; } = 0f;
+
+     [ModdedNumberOption("Kill Distance (used by explosive modifier)", min: 5f, max: 20f, increment: 1f, MiraNumberSuffixes.None)]
+    public float KillDistance { get; set; } = 10f;
  }

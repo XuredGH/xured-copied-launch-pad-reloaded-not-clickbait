@@ -38,7 +38,7 @@ public static class DiscordManagerPatch
     [HarmonyPatch(typeof(ActivityManager), nameof(ActivityManager.UpdateActivity))]
     public static void ActivityManagerUpdateActivityPrefix(ActivityManager __instance, [HarmonyArgument(0)] Activity activity)
     {
-        activity.Details += " All Of Us: Launchpad";
-        activity.State += " | dsc.gg/allofus";
+        activity.Details += " Xuredpad";
+        activity.State += " | fork of Launchpad";
     }
 }
