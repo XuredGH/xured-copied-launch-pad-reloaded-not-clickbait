@@ -16,9 +16,9 @@ public static class MedscanPatch
             __instance.completeString = __instance.completeString.Replace("3' 6\"", "7' 9\"").Replace("92lb", "734lb");
         }
 
-        if (PlayerControl.LocalPlayer.HasModifier<GiantModifier>())
+        if (PlayerControl.LocalPlayer.HasModifier<ShortModifier>())
         {
-            __instance.completeString = __instance.completeString.Replace("3' 6\"", "5' 8\"").Replace("92lb", "184lb");
+            __instance.completeString = __instance.completeString.Replace("3' 6\"", "0' 0.1\"").Replace("92lb", "1lb");
         }
 
         if (PlayerControl.LocalPlayer.HasModifier<SmolModifier>())
